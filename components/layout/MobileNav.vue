@@ -42,5 +42,9 @@ const emit = defineEmits<{ 'update:modelValue': [boolean] }>()
         {{ $t(link.label) }}
       </NuxtLink>
     </nav>
+
+    <div class="mt-4 border-t border-ink/5 pt-4">
+      <LanguageSwitcher />
+    </div>
   </AppDrawer>
 </template>

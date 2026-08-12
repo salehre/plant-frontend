@@ -41,6 +41,8 @@ const navLinks = [
       </nav>
 
       <div class="flex items-center gap-2">
+        <LanguageSwitcher class="hidden sm:flex" />
+
         <AppButton
           variant="secondary"
           size="sm"

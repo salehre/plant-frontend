@@ -68,5 +68,48 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.user = null
     },
+
+    /**
+     * فاز بازیابی رمز - قدم ۱: کاربر ایمیلش رو می‌ده.
+     * Phase 3: اینجا واقعاً به /api/forgot-password درخواست زده می‌شه و بک‌اند یک ایمیل
+     * حاوی لینک بازیابی (با توکن یک‌بارمصرف) می‌فرسته. فعلاً چون بک‌اند واقعی وصل نیست،
+     * فرض می‌کنیم ایمیل ارسال شده و کاربر مستقیم (با ایمیلش در query) به صفحه‌ی
+     * reset-password هدایت می‌شه تا فلوی UI کامل تست‌پذیر باشه.
+     */
+    async forgotPassword(email: string) {
+      this.loading = true
+      this.error = ''
+      try {
+        await simulateDelay(500)
+        if (!email.includes('@')) {
+          this.error = 'ایمیل معتبر نیست.'
+          return false
+        }
+        return true
+      }
+      finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * فاز بازیابی رمز - قدم ۲: کاربر رمز جدیدش رو انتخاب می‌کنه.
+     * Phase 3: به‌جای email، توکن بازیابی (از لینک ایمیل) به بک‌اند فرستاده می‌شه.
+     */
+    async resetPassword(email: string, _newPassword: string) {
+      this.loading = true
+      this.error = ''
+      try {
+        await simulateDelay(500)
+        if (!email) {
+          this.error = 'درخواست بازیابی نامعتبر است، دوباره تلاش کن.'
+          return false
+        }
+        return true
+      }
+      finally {
+        this.loading = false
+      }
+    },
   },
 })
