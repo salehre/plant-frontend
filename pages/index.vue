@@ -14,11 +14,9 @@ function onSearch() {
 
 <template>
   <div>
-    <!-- Hero - «شیشه روی برگ»: عکس تمام‌صفحه‌ی برگ + کارت شیشه‌ای روش، مستقل از دارک‌مود
-         (مثل layouts/auth.vue) چون یه لحظه‌ی بصری خاصه، نه یه سکشن محتوایی معمولی. -->
     <section class="hero-leaves relative overflow-hidden px-4 py-10 sm:py-16">
       <img
-        src="https://images.unsplash.com/photo-1545165375-1b744b9ed444?w=1600"
+        src="/public/images/bg-image/spring.webp"
         alt=""
         class="absolute inset-0 size-full object-cover"
       >
