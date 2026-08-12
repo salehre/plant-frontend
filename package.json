@@ -1,0 +1,39 @@
+{
+  "name": "plant-platform-frontend",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxi typecheck"
+  },
+  "dependencies": {
+    "@nuxt/icon": "^1.10.3",
+    "@nuxt/image": "^1.9.0",
+    "@nuxtjs/i18n": "^10.5.0",
+    "@nuxtjs/tailwindcss": "^6.13.1",
+    "@pinia/nuxt": "^1.0.1",
+    "@vee-validate/zod": "^4.14.7",
+    "@vueuse/core": "^12.4.0",
+    "@vueuse/nuxt": "^12.4.0",
+    "nuxt": "^4.5.1",
+    "pinia": "^4.0.2",
+    "vazirmatn": "^33.0.3",
+    "vee-validate": "^4.14.7",
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.120",
+    "@iconify-json/svg-spinners": "^1.2.4",
+    "@nuxt/eslint": "^0.7.4",
+    "@types/node": "^26.1.2",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2",
+    "vue-tsc": "^3.3.8"
+  }
+}

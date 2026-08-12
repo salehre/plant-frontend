@@ -1,0 +1,52 @@
+import type { Disease } from '~/types/disease.types'
+
+export const mockDiseases: Disease[] = [
+  {
+    id: 'd1',
+    slug: 'leaf-spot-fungal',
+    name: 'لکه برگی قارچی',
+    category: 'fungal',
+    symptoms: ['لکه‌های قهوه‌ای یا سیاه روی برگ', 'حاشیه زرد دور لکه‌ها', 'ریزش برگ‌های آلوده'],
+    causes: ['رطوبت بیش‌ازحد روی برگ', 'تهویه ضعیف', 'آبیاری از بالای برگ'],
+    treatment: ['حذف برگ‌های آلوده', 'کاهش رطوبت اطراف گیاه', 'استفاده از قارچ‌کش مناسب در صورت گسترش'],
+    image: 'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=600',
+    severity: 'medium',
+  },
+  {
+    id: 'd2',
+    slug: 'spider-mites',
+    name: 'کنه تارتن',
+    category: 'pest',
+    symptoms: ['تارهای ریز زیر برگ', 'نقاط زرد کمرنگ روی سطح برگ', 'ضعف عمومی گیاه'],
+    causes: ['هوای خشک و گرم', 'عدم بازرسی دوره‌ای گیاه'],
+    treatment: ['شست‌وشوی برگ‌ها با آب', 'افزایش رطوبت محیط', 'استفاده از روغن نیم یا صابون حشره‌کش'],
+    image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=600',
+    severity: 'high',
+  },
+  {
+    id: 'd3',
+    slug: 'root-rot',
+    name: 'پوسیدگی ریشه',
+    category: 'environmental',
+    symptoms: ['زرد شدن و افتادگی برگ‌ها', 'بوی نامطبوع از خاک', 'نرم و سیاه شدن ریشه‌ها'],
+    causes: ['آبیاری بیش‌ازحد', 'خاک بدون زهکش مناسب', 'گلدان بدون سوراخ زهکشی'],
+    treatment: ['کاهش دفعات آبیاری', 'تعویض خاک و هرس ریشه‌های پوسیده', 'استفاده از گلدان با زهکش مناسب'],
+    image: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600',
+    severity: 'high',
+  },
+  {
+    id: 'd4',
+    slug: 'nutrient-deficiency',
+    name: 'کمبود مواد غذایی',
+    category: 'nutrient',
+    symptoms: ['زرد شدن یکنواخت برگ‌های قدیمی', 'رشد کند', 'کوچک ماندن برگ‌های جدید'],
+    causes: ['کمبود نیتروژن یا آهن در خاک', 'عدم کوددهی طولانی‌مدت'],
+    treatment: ['استفاده از کود مایع متعادل هر ۲ هفته', 'بررسی pH خاک'],
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600',
+    severity: 'low',
+  },
+]
+
+export function findDiseaseBySlug(slug: string): Disease | undefined {
+  return mockDiseases.find(d => d.slug === slug)
+}

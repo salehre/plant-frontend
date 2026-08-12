@@ -1,0 +1,43 @@
+{
+  "nav": {
+    "home": "Home",
+    "identify": "Identify Plant",
+    "catalog": "Plant Encyclopedia",
+    "dashboard": "Dashboard",
+    "myPlants": "My Plants",
+    "careCalendar": "Care Calendar",
+    "profile": "Profile",
+    "compare": "Compare Plants",
+    "climate": "Right Plant for Your City",
+    "community": "Plant Lovers Community"
+  },
+  "common": {
+    "search": "Search",
+    "searchPlaceholder": "Search for a plant name...",
+    "loading": "Loading...",
+    "seeAll": "See all",
+    "seeMore": "See more",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "delete": "Delete",
+    "close": "Close",
+    "all": "All"
+  },
+  "home": {
+    "heroTitle": "Every leaf is a clue",
+    "heroSubtitle": "Snap a photo, identify your plant, take charge of its care.",
+    "identifyCta": "Identify plant by photo",
+    "featuredPlants": "Featured Plants",
+    "popularDiseases": "Common Plant Problems"
+  },
+  "identify": {
+    "title": "Identify Plant",
+    "subtitle": "Upload a clear photo of a leaf or the whole plant to identify it.",
+    "uploadCta": "Upload Photo",
+    "cameraCta": "Take Photo",
+    "analyzing": "Analyzing image...",
+    "tryAgain": "Try Again",
+    "confidence": "Confidence"
+  }
+}

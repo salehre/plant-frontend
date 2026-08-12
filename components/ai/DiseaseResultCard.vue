@@ -1,0 +1,57 @@
+<script setup lang="ts">
+// 🧊 فریز‌شده برای فاز ۲ (طبق mvp-alignment-checklist.md).
+// Health Check/Disease Detection از MVP فعلی کنار گذاشته شده؛ این کامپوننت جایی
+// استفاده نمی‌شه، فقط برای وقتی که آن فیچر برگرده نگه داشته شده - حذفش نکن.
+import type { DiseaseDetectionResult } from '~/types/identify.types'
+
+const props = defineProps<{ result: DiseaseDetectionResult }>()
+
+const severityMap = {
+  low: { label: 'خفیف', class: 'bg-status-info/10 text-status-info' },
+  medium: { label: 'متوسط', class: 'bg-status-warning/10 text-status-warning' },
+  high: { label: 'جدی', class: 'bg-status-danger/10 text-status-danger' },
+}
+</script>
+
+<template>
+  <div class="rounded-lg border border-status-danger/20 bg-surface p-5 shadow-card">
+    <div class="flex items-center justify-between">
+      <h3 class="flex items-center gap-2 font-bold text-ink">
+        <Icon
+          name="lucide:shield-alert"
+          class="size-5 text-status-danger"
+        />
+        {{ props.result.diseaseName }}
+      </h3>
+      <span
+        class="rounded-full px-2.5 py-1 text-xs font-medium"
+        :class="severityMap[props.result.severity].class"
+      >
+        {{ severityMap[props.result.severity].label }}
+      </span>
+    </div>
+
+    <p class="mt-3 text-sm leading-relaxed text-ink-muted">
+      {{ props.result.description }}
+    </p>
+
+    <div class="mt-4">
+      <p class="mb-2 text-sm font-medium text-ink">
+        مراحل درمان پیشنهادی
+      </p>
+      <ul class="flex flex-col gap-1.5">
+        <li
+          v-for="(step, i) in props.result.treatmentSteps"
+          :key="i"
+          class="flex items-start gap-2 text-sm text-ink-muted"
+        >
+          <Icon
+            name="lucide:check"
+            class="mt-0.5 size-4 shrink-0 text-primary-600"
+          />
+          {{ step }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
