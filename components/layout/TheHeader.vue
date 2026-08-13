@@ -1,5 +1,10 @@
 <script setup lang="ts">
 const uiStore = useUiStore()
+const { locale, setLocale } = useI18n()
+
+function toggleLocale() {
+  setLocale(locale.value === 'fa' ? 'en' : 'fa')
+}
 
 // MVP scope: Identify / Explore(Catalog) / Profile
 // my-plants, care-calendar, community, climate, dashboard از نویگیشن فریز شدن
@@ -41,7 +46,14 @@ const navLinks = [
       </nav>
 
       <div class="flex items-center gap-2">
-        <LanguageSwitcher class="hidden sm:flex" />
+        <button
+          type="button"
+          class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+          :aria-label="locale === 'fa' ? 'Switch language to English' : 'تغییر زبان به فارسی'"
+          @click="toggleLocale"
+        >
+          {{ locale === 'fa' ? 'EN' : 'فا' }}
+        </button>
 
         <AppButton
           variant="secondary"

@@ -8,30 +8,27 @@ definePageMeta({ layout: 'auth' })
 const authStore = useAuthStore()
 const uiStore = useUiStore()
 
+// رمز عبور این‌جا گرفته نمی‌شه؛ فقط بعد از وریفای ایمیل (verify-email → set-password)
+// کاربر صاحب حساب می‌شه. اینطوری نمی‌شه با یه ایمیل غیرواقعی حساب نیمه‌ساز با رمز ساخت.
 const schema = toTypedSchema(
-  z.object({
-    name: z.string().min(2, 'اسم باید حداقل ۲ حرف باشد'),
-    email: z.string().min(1, 'ایمیل را وارد کن').email('ایمیل معتبر نیست'),
-    password: z.string().min(6, 'رمز عبور باید حداقل ۶ کاراکتر باشد'),
-    passwordConfirm: z.string(),
-  }).refine(data => data.password === data.passwordConfirm, {
-    message: 'تکرار رمز عبور مطابقت ندارد',
-    path: ['passwordConfirm'],
-  }),
+    z.object({
+      name: z.string().min(2, 'اسم باید حداقل ۲ حرف باشد'),
+      email: z.string().min(1, 'ایمیل را وارد کن').email('ایمیل معتبر نیست'),
+    }),
 )
 
 const { handleSubmit, defineField, errors } = useForm({ validationSchema: schema })
 
 const [name, nameAttrs] = defineField('name')
 const [email, emailAttrs] = defineField('email')
-const [password, passwordAttrs] = defineField('password')
-const [passwordConfirm, passwordConfirmAttrs] = defineField('passwordConfirm')
 
 const onSubmit = handleSubmit(async (values) => {
-  const ok = await authStore.register(values.name, values.email, values.password)
-  if (ok) {
-    uiStore.showToast('حساب تو با موفقیت ساخته شد 🌱')
-    navigateTo('/dashboard')
+  const code = await authStore.register(values.name, values.email)
+  if (code) {
+    // dev-only: چون ایمیل واقعی وصل نیست، کد رو همین‌جا نشون می‌دیم تا فلو قابل تست باشه.
+    // Phase 3 این toast حذف می‌شه؛ کد واقعاً فقط توی ایمیل کاربر می‌ره.
+    uiStore.showToast(`کد تایید ارسال شد (dev: ${code})`)
+    navigateTo({ path: '/auth/verify-email', query: { email: values.email } })
   }
 })
 </script>
@@ -46,23 +43,23 @@ const onSubmit = handleSubmit(async (values) => {
     </p>
 
     <form
-      class="flex flex-col gap-4"
-      novalidate
-      @submit="onSubmit"
+        class="flex flex-col gap-4"
+        novalidate
+        @submit="onSubmit"
     >
       <div>
         <label class="glass-label">اسم</label>
         <input
-          v-model="name"
-          v-bind="nameAttrs"
-          type="text"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.name }"
-          placeholder="اسم و فامیل"
+            v-model="name"
+            v-bind="nameAttrs"
+            type="text"
+            class="glass-input"
+            :class="{ 'glass-input--error': errors.name }"
+            placeholder="اسم و فامیل"
         >
         <p
-          v-if="errors.name"
-          class="mt-1 text-xs text-red-200"
+            v-if="errors.name"
+            class="mt-1 text-xs text-red-200"
         >
           {{ errors.name }}
         </p>
@@ -71,72 +68,43 @@ const onSubmit = handleSubmit(async (values) => {
       <div>
         <label class="glass-label">ایمیل</label>
         <input
-          v-model="email"
-          v-bind="emailAttrs"
-          type="email"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.email }"
-          placeholder="you@example.com"
+            v-model="email"
+            v-bind="emailAttrs"
+            type="email"
+            class="glass-input"
+            :class="{ 'glass-input--error': errors.email }"
+            placeholder="you@example.com"
         >
         <p
-          v-if="errors.email"
-          class="mt-1 text-xs text-red-200"
+            v-if="errors.email"
+            class="mt-1 text-xs text-red-200"
         >
           {{ errors.email }}
         </p>
       </div>
 
-      <div>
-        <label class="glass-label">رمز عبور</label>
-        <input
-          v-model="password"
-          v-bind="passwordAttrs"
-          type="password"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.password }"
-          placeholder="••••••••"
-        >
-        <p
-          v-if="errors.password"
-          class="mt-1 text-xs text-red-200"
-        >
-          {{ errors.password }}
-        </p>
-      </div>
-
-      <div>
-        <label class="glass-label">تکرار رمز عبور</label>
-        <input
-          v-model="passwordConfirm"
-          v-bind="passwordConfirmAttrs"
-          type="password"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.passwordConfirm }"
-          placeholder="••••••••"
-        >
-        <p
-          v-if="errors.passwordConfirm"
-          class="mt-1 text-xs text-red-200"
-        >
-          {{ errors.passwordConfirm }}
-        </p>
-      </div>
+      <p
+          v-if="authStore.error"
+          class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
+      >
+        {{ authStore.error }}
+      </p>
 
       <AppButton
-        type="submit"
-        variant="accent"
-        block
-        :loading="authStore.loading"
+          type="submit"
+          variant="accent"
+          block
+          :loading="authStore.loading"
       >
-        ثبت‌نام
+        ادامه
       </AppButton>
     </form>
 
     <p class="mt-5 text-center text-sm text-white/70">
       قبلاً حساب ساختی؟
       <NuxtLink
-        to="/auth/login"
-        class="font-medium text-accent-200 hover:text-accent-100"
+          to="/auth/login"
+          class="font-medium text-accent-200 hover:text-accent-100"
       >
         وارد شو
       </NuxtLink>

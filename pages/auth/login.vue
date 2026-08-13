@@ -19,6 +19,10 @@ const { handleSubmit, defineField, errors } = useForm({ validationSchema: schema
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
 
+// بعد از رمز عبور جدید (forgot-password) کاربر این‌جا با پیام موفقیت فرود میاد -
+// برخلاف ثبت‌نام که چون از قبل لاگین شده، مستقیم می‌ره داشبورد.
+const justReset = route.query.reset === 'true'
+
 const onSubmit = handleSubmit(async (values) => {
   const ok = await authStore.login(values.email, values.password)
   if (ok) {
@@ -36,6 +40,13 @@ const onSubmit = handleSubmit(async (values) => {
     </h1>
     <p class="mb-6 text-sm text-white/70">
       برای مدیریت گیاهانت وارد شو.
+    </p>
+
+    <p
+      v-if="justReset"
+      class="mb-4 rounded-lg border border-emerald-300/30 bg-emerald-500/15 p-2 text-sm text-emerald-100"
+    >
+      رمز عبورت با موفقیت تغییر کرد، حالا وارد شو.
     </p>
 
     <form
