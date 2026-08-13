@@ -18,6 +18,7 @@ const { handleSubmit, defineField, errors } = useForm({ validationSchema: schema
 
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
+const showPassword = ref(false)
 
 // بعد از رمز عبور جدید (forgot-password) کاربر این‌جا با پیام موفقیت فرود میاد -
 // برخلاف ثبت‌نام که چون از قبل لاگین شده، مستقیم می‌ره داشبورد.
@@ -82,14 +83,27 @@ const onSubmit = handleSubmit(async (values) => {
             رمز عبور را فراموش کردی؟
           </NuxtLink>
         </div>
-        <input
-          v-model="password"
-          v-bind="passwordAttrs"
-          type="password"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.password }"
-          placeholder="••••••••"
-        >
+        <div class="relative">
+          <input
+            v-model="password"
+            v-bind="passwordAttrs"
+            :type="showPassword ? 'text' : 'password'"
+            class="glass-input pe-10"
+            :class="{ 'glass-input--error': errors.password }"
+            placeholder="••••••••"
+          >
+          <button
+            type="button"
+            class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
+            :aria-label="showPassword ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+            @click="showPassword = !showPassword"
+          >
+            <Icon
+              :name="showPassword ? 'lucide:eye-off' : 'lucide:eye'"
+              class="size-4"
+            />
+          </button>
+        </div>
         <p
           v-if="errors.password"
           class="mt-1 text-xs text-red-200"

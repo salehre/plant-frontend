@@ -96,17 +96,19 @@ async function resendCode() {
 
 // ─── قدم ۳: رمز جدید ───
 const passwordSchema = toTypedSchema(
-    z.object({
-      password: z.string().min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد'),
-      passwordConfirm: z.string(),
-    }).refine(data => data.password === data.passwordConfirm, {
-      message: 'تکرار رمز عبور مطابقت ندارد',
-      path: ['passwordConfirm'],
-    }),
+  z.object({
+    password: z.string().min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد'),
+    passwordConfirm: z.string(),
+  }).refine(data => data.password === data.passwordConfirm, {
+    message: 'تکرار رمز عبور مطابقت ندارد',
+    path: ['passwordConfirm'],
+  }),
 )
 const { handleSubmit: handlePasswordSubmit, defineField: definePasswordField, errors: passwordErrors } = useForm({ validationSchema: passwordSchema })
 const [password, passwordAttrs] = definePasswordField('password')
 const [passwordConfirm, passwordConfirmAttrs] = definePasswordField('passwordConfirm')
+const showPassword = ref(false)
+const showPasswordConfirm = ref(false)
 
 const onPasswordSubmit = handlePasswordSubmit(async (values) => {
   const ok = await authStore.resetPassword(submittedEmail.value, digits.value.join(''), values.password)
@@ -129,10 +131,10 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
   <div>
     <div class="mb-6 flex gap-2">
       <div
-          v-for="s in 3"
-          :key="s"
-          class="h-1.5 flex-1 rounded-full transition-colors duration-300"
-          :class="s <= stepNumber ? 'bg-accent-300' : 'bg-white/15'"
+        v-for="s in 3"
+        :key="s"
+        class="h-1.5 flex-1 rounded-full transition-colors duration-300"
+        :class="s <= stepNumber ? 'bg-accent-300' : 'bg-white/15'"
       />
     </div>
 
@@ -145,40 +147,40 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
       </p>
 
       <form
-          class="flex flex-col gap-4"
-          novalidate
-          @submit="onEmailSubmit"
+        class="flex flex-col gap-4"
+        novalidate
+        @submit="onEmailSubmit"
       >
         <div>
           <label class="glass-label">ایمیل</label>
           <input
-              v-model="email"
-              v-bind="emailAttrs"
-              type="email"
-              class="glass-input"
-              :class="{ 'glass-input--error': emailErrors.email }"
-              placeholder="you@example.com"
+            v-model="email"
+            v-bind="emailAttrs"
+            type="email"
+            class="glass-input"
+            :class="{ 'glass-input--error': emailErrors.email }"
+            placeholder="you@example.com"
           >
           <p
-              v-if="emailErrors.email"
-              class="mt-1 text-xs text-red-200"
+            v-if="emailErrors.email"
+            class="mt-1 text-xs text-red-200"
           >
             {{ emailErrors.email }}
           </p>
         </div>
 
         <p
-            v-if="authStore.error"
-            class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
+          v-if="authStore.error"
+          class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
         >
           {{ authStore.error }}
         </p>
 
         <AppButton
-            type="submit"
-            variant="accent"
-            block
-            :loading="authStore.loading"
+          type="submit"
+          variant="accent"
+          block
+          :loading="authStore.loading"
         >
           ارسال کد بازیابی
         </AppButton>
@@ -195,40 +197,40 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
 
       <div class="flex flex-col gap-5">
         <div
-            class="flex justify-center gap-2"
-            dir="ltr"
+          class="flex justify-center gap-2"
+          dir="ltr"
         >
           <input
-              v-for="(_, i) in 6"
-              :key="i"
-              :ref="el => (digitRefs[i] = el as HTMLInputElement)"
-              v-model="digits[i]"
-              type="text"
-              inputmode="numeric"
-              maxlength="1"
-              autocomplete="one-time-code"
-              class="h-12 w-11 rounded-xl border-2 border-white/20 bg-white/10 text-center text-xl font-bold text-white outline-none backdrop-blur-sm transition-colors duration-150 focus-visible:border-accent-300/70 focus-visible:bg-white/15"
-              :class="{ 'border-red-300/60 bg-red-500/10': authStore.error, 'border-accent-300/70': digits[i] && !authStore.error }"
-              @input="onDigitInput(i, $event)"
-              @keydown="onKeyDown(i, $event)"
-              @paste="onPaste"
-              @focus="($event.target as HTMLInputElement).select()"
+            v-for="(_, i) in 6"
+            :key="i"
+            :ref="el => (digitRefs[i] = el as HTMLInputElement)"
+            v-model="digits[i]"
+            type="text"
+            inputmode="numeric"
+            maxlength="1"
+            autocomplete="one-time-code"
+            class="h-12 w-11 rounded-xl border-2 border-white/20 bg-white/10 text-center text-xl font-bold text-white outline-none backdrop-blur-sm transition-colors duration-150 focus-visible:border-accent-300/70 focus-visible:bg-white/15"
+            :class="{ 'border-red-300/60 bg-red-500/10': authStore.error, 'border-accent-300/70': digits[i] && !authStore.error }"
+            @input="onDigitInput(i, $event)"
+            @keydown="onKeyDown(i, $event)"
+            @paste="onPaste"
+            @focus="($event.target as HTMLInputElement).select()"
           >
         </div>
 
         <p
-            v-if="authStore.error"
-            class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-center text-sm text-red-100"
+          v-if="authStore.error"
+          class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-center text-sm text-red-100"
         >
           {{ authStore.error }}
         </p>
 
         <AppButton
-            type="button"
-            variant="accent"
-            block
-            :disabled="!isCodeComplete"
-            @click="continueToPassword"
+          type="button"
+          variant="accent"
+          block
+          :disabled="!isCodeComplete"
+          @click="continueToPassword"
         >
           تایید کد
         </AppButton>
@@ -239,11 +241,11 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             <span class="font-bold tabular-nums text-accent-200">{{ formatCountdown }}</span>
           </span>
           <button
-              v-else
-              type="button"
-              class="font-medium text-accent-200 hover:text-accent-100 disabled:opacity-60"
-              :disabled="resending"
-              @click="resendCode"
+            v-else
+            type="button"
+            class="font-medium text-accent-200 hover:text-accent-100 disabled:opacity-60"
+            :disabled="resending"
+            @click="resendCode"
           >
             ارسال دوباره کد
           </button>
@@ -260,23 +262,36 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
       </p>
 
       <form
-          class="flex flex-col gap-4"
-          novalidate
-          @submit="onPasswordSubmit"
+        class="flex flex-col gap-4"
+        novalidate
+        @submit="onPasswordSubmit"
       >
         <div>
           <label class="glass-label">رمز عبور جدید</label>
-          <input
+          <div class="relative">
+            <input
               v-model="password"
               v-bind="passwordAttrs"
-              type="password"
-              class="glass-input"
+              :type="showPassword ? 'text' : 'password'"
+              class="glass-input pe-10"
               :class="{ 'glass-input--error': passwordErrors.password }"
               placeholder="••••••••"
-          >
+            >
+            <button
+              type="button"
+              class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
+              :aria-label="showPassword ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+              @click="showPassword = !showPassword"
+            >
+              <Icon
+                :name="showPassword ? 'lucide:eye-off' : 'lucide:eye'"
+                class="size-4"
+              />
+            </button>
+          </div>
           <p
-              v-if="passwordErrors.password"
-              class="mt-1 text-xs text-red-200"
+            v-if="passwordErrors.password"
+            class="mt-1 text-xs text-red-200"
           >
             {{ passwordErrors.password }}
           </p>
@@ -284,27 +299,40 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
 
         <div>
           <label class="glass-label">تکرار رمز عبور</label>
-          <input
+          <div class="relative">
+            <input
               v-model="passwordConfirm"
               v-bind="passwordConfirmAttrs"
-              type="password"
-              class="glass-input"
+              :type="showPasswordConfirm ? 'text' : 'password'"
+              class="glass-input pe-10"
               :class="{ 'glass-input--error': passwordErrors.passwordConfirm }"
               placeholder="••••••••"
-          >
+            >
+            <button
+              type="button"
+              class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
+              :aria-label="showPasswordConfirm ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+              @click="showPasswordConfirm = !showPasswordConfirm"
+            >
+              <Icon
+                :name="showPasswordConfirm ? 'lucide:eye-off' : 'lucide:eye'"
+                class="size-4"
+              />
+            </button>
+          </div>
           <p
-              v-if="passwordErrors.passwordConfirm"
-              class="mt-1 text-xs text-red-200"
+            v-if="passwordErrors.passwordConfirm"
+            class="mt-1 text-xs text-red-200"
           >
             {{ passwordErrors.passwordConfirm }}
           </p>
         </div>
 
         <AppButton
-            type="submit"
-            variant="accent"
-            block
-            :loading="authStore.loading"
+          type="submit"
+          variant="accent"
+          block
+          :loading="authStore.loading"
         >
           ذخیره رمز جدید
         </AppButton>
@@ -314,8 +342,8 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
     <p class="mt-5 text-center text-sm text-white/70">
       رمزت را یادت آمد؟
       <NuxtLink
-          to="/auth/login"
-          class="font-medium text-accent-200 hover:text-accent-100"
+        to="/auth/login"
+        class="font-medium text-accent-200 hover:text-accent-100"
       >
         وارد شو
       </NuxtLink>

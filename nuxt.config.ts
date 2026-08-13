@@ -57,12 +57,6 @@ export default defineNuxtConfig({
     typeCheck: false,
   },
 
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
-
   i18n: {
     locales: [
       { code: 'fa', iso: 'fa-IR', dir: 'rtl', name: 'فارسی', file: 'fa.json' },

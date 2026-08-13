@@ -7,20 +7,15 @@ definePageMeta({ layout: 'auth' })
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
-const route = useRoute()
 
-// Phase 3: به‌جای email در query، یک توکن یک‌بارمصرف از لینک ایمیل خونده می‌شه
-// و اعتبارش سمت بک‌اند چک می‌شه. فعلاً (بدون بک‌اند واقعی) ایمیلِ همون کاربری که
-// از forgot-password اومده رو نگه می‌داریم تا بشه فلو رو کامل تست کرد.
-const email = computed(() => (route.query.email as string) || '')
-
-if (!email.value) {
-  navigateTo('/auth/forgot-password')
+// بدون verified بودن ایمیل (از قدم قبل)، این صفحه معنی نداره؛ برگرد به ثبت‌نام.
+if (!authStore.pendingRegistration?.verified) {
+  navigateTo('/auth/register')
 }
 
 const schema = toTypedSchema(
   z.object({
-    password: z.string().min(6, 'رمز عبور باید حداقل ۶ کاراکتر باشد'),
+    password: z.string().min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد'),
     passwordConfirm: z.string(),
   }).refine(data => data.password === data.passwordConfirm, {
     message: 'تکرار رمز عبور مطابقت ندارد',
@@ -32,12 +27,14 @@ const { handleSubmit, defineField, errors } = useForm({ validationSchema: schema
 
 const [password, passwordAttrs] = defineField('password')
 const [passwordConfirm, passwordConfirmAttrs] = defineField('passwordConfirm')
+const showPassword = ref(false)
+const showPasswordConfirm = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  const ok = await authStore.resetPassword(email.value, values.password)
+  const ok = await authStore.setPassword(values.password)
   if (ok) {
-    uiStore.showToast('رمز عبورت با موفقیت تغییر کرد 🌿')
-    navigateTo('/auth/login')
+    uiStore.showToast(`خوش اومدی ${authStore.user?.name} 🌿`)
+    navigateTo('/dashboard')
   }
 })
 </script>
@@ -45,10 +42,10 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div>
     <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-      انتخاب رمز عبور جدید
+      تنظیم رمز عبور
     </h1>
     <p class="mb-6 text-sm text-white/70">
-      یک رمز عبور جدید برای حسابت انتخاب کن.
+      یک رمز عبور قوی برای حسابت انتخاب کن.
     </p>
 
     <form
@@ -57,15 +54,28 @@ const onSubmit = handleSubmit(async (values) => {
       @submit="onSubmit"
     >
       <div>
-        <label class="glass-label">رمز عبور جدید</label>
-        <input
-          v-model="password"
-          v-bind="passwordAttrs"
-          type="password"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.password }"
-          placeholder="••••••••"
-        >
+        <label class="glass-label">رمز عبور</label>
+        <div class="relative">
+          <input
+            v-model="password"
+            v-bind="passwordAttrs"
+            :type="showPassword ? 'text' : 'password'"
+            class="glass-input pe-10"
+            :class="{ 'glass-input--error': errors.password }"
+            placeholder="••••••••"
+          >
+          <button
+            type="button"
+            class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
+            :aria-label="showPassword ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+            @click="showPassword = !showPassword"
+          >
+            <Icon
+              :name="showPassword ? 'lucide:eye-off' : 'lucide:eye'"
+              class="size-4"
+            />
+          </button>
+        </div>
         <p
           v-if="errors.password"
           class="mt-1 text-xs text-red-200"
@@ -75,15 +85,28 @@ const onSubmit = handleSubmit(async (values) => {
       </div>
 
       <div>
-        <label class="glass-label">تکرار رمز عبور جدید</label>
-        <input
-          v-model="passwordConfirm"
-          v-bind="passwordConfirmAttrs"
-          type="password"
-          class="glass-input"
-          :class="{ 'glass-input--error': errors.passwordConfirm }"
-          placeholder="••••••••"
-        >
+        <label class="glass-label">تکرار رمز عبور</label>
+        <div class="relative">
+          <input
+            v-model="passwordConfirm"
+            v-bind="passwordConfirmAttrs"
+            :type="showPasswordConfirm ? 'text' : 'password'"
+            class="glass-input pe-10"
+            :class="{ 'glass-input--error': errors.passwordConfirm }"
+            placeholder="••••••••"
+          >
+          <button
+            type="button"
+            class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
+            :aria-label="showPasswordConfirm ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+            @click="showPasswordConfirm = !showPasswordConfirm"
+          >
+            <Icon
+              :name="showPasswordConfirm ? 'lucide:eye-off' : 'lucide:eye'"
+              class="size-4"
+            />
+          </button>
+        </div>
         <p
           v-if="errors.passwordConfirm"
           class="mt-1 text-xs text-red-200"
@@ -105,17 +128,8 @@ const onSubmit = handleSubmit(async (values) => {
         block
         :loading="authStore.loading"
       >
-        ثبت رمز عبور جدید
+        تکمیل ثبت‌نام
       </AppButton>
     </form>
-
-    <p class="mt-5 text-center text-sm text-white/70">
-      <NuxtLink
-        to="/auth/login"
-        class="font-medium text-accent-200 hover:text-accent-100"
-      >
-        بازگشت به ورود
-      </NuxtLink>
-    </p>
   </div>
 </template>

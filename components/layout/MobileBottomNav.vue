@@ -9,10 +9,10 @@
 const route = useRoute()
 
 const items = [
-  { to: '/', label: 'nav.home', icon: 'lucide:home' },
-  { to: '/identify', label: 'nav.identify', icon: 'lucide:scan-line' },
-  { to: '/plants', label: 'nav.catalog', icon: 'lucide:sprout' },
-  { to: '/profile', label: 'nav.profile', icon: 'lucide:user' },
+  { to: '/', icon: 'lucide:home' },
+  { to: '/identify', icon: 'lucide:scan-line' },
+  { to: '/plants', icon: 'lucide:sprout' },
+  { to: '/profile', icon: 'lucide:user' },
 ]
 
 function isActive(to: string) {
@@ -76,7 +76,6 @@ function isActive(to: string) {
           :name="item.icon"
           class="size-5"
         />
-        <span class="text-[11px] font-medium">{{ $t(item.label) }}</span>
       </NuxtLink>
     </nav>
   </div>
