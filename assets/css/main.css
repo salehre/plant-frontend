@@ -6,40 +6,40 @@
 
 @layer base {
   :root {
-    --color-surface: 255 255 255;
-    --color-bg: 250 248 245;
-    --color-ink: 31 36 24;
-    --color-ink-muted: 107 117 99;
+    --color-surface: 255 255 255; /* #ffffff */
+    --color-bg: 250 248 245; /* #faf8f5 */
+    --color-ink: 31 36 24; /* #1f2418 */
+    --color-ink-muted: 107 117 99; /* #6b7563 */
 
     /* تم پیش‌فرض (قبل از هیدریت شدن پلاگین theme.client.ts) = forest */
-    --color-brand: 15 61 46;
-    --color-primary-50: 241 249 246;
-    --color-primary-100: 215 239 231;
-    --color-primary-200: 175 222 207;
-    --color-primary-300: 125 202 177;
-    --color-primary-400: 74 181 146;
-    --color-primary-500: 53 130 105;
-    --color-primary-600: 43 105 85;
-    --color-primary-700: 34 83 67;
-    --color-primary-800: 28 69 56;
-    --color-primary-900: 15 61 46;
-    --color-accent-50: 250 242 235;
-    --color-accent-100: 240 219 199;
-    --color-accent-200: 226 186 146;
-    --color-accent-300: 213 156 98;
-    --color-accent-400: 205 135 66;
-    --color-accent-500: 203 130 58;
-    --color-accent-600: 165 105 44;
-    --color-accent-700: 129 82 34;
-    --color-accent-800: 93 59 25;
-    --color-accent-900: 60 38 16;
+    --color-brand: 15 61 46; /* #0f3d2e */
+    --color-primary-50: 241 249 246; /* #f1f9f6 */
+    --color-primary-100: 215 239 231; /* #d7efe7 */
+    --color-primary-200: 175 222 207; /* #afdecf */
+    --color-primary-300: 125 202 177; /* #7dcab1 */
+    --color-primary-400: 74 181 146; /* #4ab592 */
+    --color-primary-500: 53 130 105; /* #358269 */
+    --color-primary-600: 43 105 85; /* #2b6955 */
+    --color-primary-700: 34 83 67; /* #225343 */
+    --color-primary-800: 28 69 56; /* #1c4538 */
+    --color-primary-900: 15 61 46; /* #0f3d2e */
+    --color-accent-50: 250 242 235; /* #faf2eb */
+    --color-accent-100: 240 219 199; /* #f0dbc7 */
+    --color-accent-200: 226 186 146; /* #e2ba92 */
+    --color-accent-300: 213 156 98; /* #d59c62 */
+    --color-accent-400: 205 135 66; /* #cd8742 */
+    --color-accent-500: 203 130 58; /* #cb823a */
+    --color-accent-600: 165 105 44; /* #a5692c */
+    --color-accent-700: 129 82 34; /* #815222 */
+    --color-accent-800: 93 59 25; /* #5d3b19 */
+    --color-accent-900: 60 38 16; /* #3c2610 */
   }
 
   .dark {
-    --color-surface: 32 36 28;
-    --color-bg: 22 25 19;
-    --color-ink: 237 240 231;
-    --color-ink-muted: 163 172 153;
+    --color-surface: 32 36 28; /* #20241c */
+    --color-bg: 22 25 19; /* #161913 */
+    --color-ink: 237 240 231; /* #edf0e7 */
+    --color-ink-muted: 163 172 153; /* #a3ac99 */
   }
 
   /* ۴ تم رنگی برند - با attribute «data-theme» روی <html> فعال می‌شن (نگاه کن به
@@ -47,99 +47,99 @@
      تم هم روی حالت روشن هم تیره کار می‌کنه، چون فقط primary/accent رو عوض
      می‌کنن، نه surface/bg/ink. */
   [data-theme='wine'] {
-    --color-brand: 90 30 42;
-    --color-primary-50: 249 241 242;
-    --color-primary-100: 238 216 220;
-    --color-primary-200: 221 176 185;
-    --color-primary-300: 200 126 141;
-    --color-primary-400: 178 77 97;
-    --color-primary-500: 129 55 70;
-    --color-primary-600: 104 44 56;
-    --color-primary-700: 90 30 42;
-    --color-primary-800: 68 29 37;
-    --color-primary-900: 54 23 29;
-    --color-accent-50: 250 245 235;
-    --color-accent-100: 241 226 198;
-    --color-accent-200: 227 200 145;
-    --color-accent-300: 215 175 96;
-    --color-accent-400: 207 159 63;
-    --color-accent-500: 205 155 55;
-    --color-accent-600: 167 125 42;
-    --color-accent-700: 131 98 33;
-    --color-accent-800: 94 70 23;
-    --color-accent-900: 61 46 15;
+    --color-brand: 90 30 42; /* #5a1e2a */
+    --color-primary-50: 249 241 242; /* #f9f1f2 */
+    --color-primary-100: 238 216 220; /* #eed8dc */
+    --color-primary-200: 221 176 185; /* #ddb0b9 */
+    --color-primary-300: 200 126 141; /* #c87e8d */
+    --color-primary-400: 178 77 97; /* #b24d61 */
+    --color-primary-500: 129 55 70; /* #813746 */
+    --color-primary-600: 104 44 56; /* #682c38 */
+    --color-primary-700: 90 30 42; /* #5a1e2a */
+    --color-primary-800: 68 29 37; /* #441d25 */
+    --color-primary-900: 54 23 29; /* #36171d */
+    --color-accent-50: 250 245 235; /* #faf5eb */
+    --color-accent-100: 241 226 198; /* #f1e2c6 */
+    --color-accent-200: 227 200 145; /* #e3c891 */
+    --color-accent-300: 215 175 96; /* #d7af60 */
+    --color-accent-400: 207 159 63; /* #cf9f3f */
+    --color-accent-500: 205 155 55; /* #cd9b37 */
+    --color-accent-600: 167 125 42; /* #a77d2a */
+    --color-accent-700: 131 98 33; /* #836221 */
+    --color-accent-800: 94 70 23; /* #5e4617 */
+    --color-accent-900: 61 46 15; /* #3d2e0f */
   }
 
   [data-theme='forest'] {
-    --color-brand: 15 61 46;
-    --color-primary-50: 241 249 246;
-    --color-primary-100: 215 239 231;
-    --color-primary-200: 175 222 207;
-    --color-primary-300: 125 202 177;
-    --color-primary-400: 74 181 146;
-    --color-primary-500: 53 130 105;
-    --color-primary-600: 43 105 85;
-    --color-primary-700: 34 83 67;
-    --color-primary-800: 28 69 56;
-    --color-primary-900: 15 61 46;
-    --color-accent-50: 250 242 235;
-    --color-accent-100: 240 219 199;
-    --color-accent-200: 226 186 146;
-    --color-accent-300: 213 156 98;
-    --color-accent-400: 205 135 66;
-    --color-accent-500: 203 130 58;
-    --color-accent-600: 165 105 44;
-    --color-accent-700: 129 82 34;
-    --color-accent-800: 93 59 25;
-    --color-accent-900: 60 38 16;
+    --color-brand: 15 61 46; /* #0f3d2e */
+    --color-primary-50: 241 249 246; /* #f1f9f6 */
+    --color-primary-100: 215 239 231; /* #d7efe7 */
+    --color-primary-200: 175 222 207; /* #afdecf */
+    --color-primary-300: 125 202 177; /* #7dcab1 */
+    --color-primary-400: 74 181 146; /* #4ab592 */
+    --color-primary-500: 53 130 105; /* #358269 */
+    --color-primary-600: 43 105 85; /* #2b6955 */
+    --color-primary-700: 34 83 67; /* #225343 */
+    --color-primary-800: 28 69 56; /* #1c4538 */
+    --color-primary-900: 15 61 46; /* #0f3d2e */
+    --color-accent-50: 250 242 235; /* #faf2eb */
+    --color-accent-100: 240 219 199; /* #f0dbc7 */
+    --color-accent-200: 226 186 146; /* #e2ba92 */
+    --color-accent-300: 213 156 98; /* #d59c62 */
+    --color-accent-400: 205 135 66; /* #cd8742 */
+    --color-accent-500: 203 130 58; /* #cb823a */
+    --color-accent-600: 165 105 44; /* #a5692c */
+    --color-accent-700: 129 82 34; /* #815222 */
+    --color-accent-800: 93 59 25; /* #5d3b19 */
+    --color-accent-900: 60 38 16; /* #3c2610 */
   }
 
   [data-theme='brown'] {
-    --color-brand: 90 46 10;
-    --color-primary-50: 249 244 241;
-    --color-primary-100: 239 226 215;
-    --color-primary-200: 222 197 175;
-    --color-primary-300: 202 159 125;
-    --color-primary-400: 181 122 74;
-    --color-primary-500: 130 88 53;
-    --color-primary-600: 105 71 43;
-    --color-primary-700: 83 56 34;
-    --color-primary-800: 90 46 10;
-    --color-primary-900: 54 37 22;
-    --color-accent-50: 239 246 245;
-    --color-accent-100: 210 229 226;
-    --color-accent-200: 168 204 199;
-    --color-accent-300: 130 181 175;
-    --color-accent-400: 104 166 158;
-    --color-accent-500: 98 163 154;
-    --color-accent-600: 77 132 124;
-    --color-accent-700: 60 103 97;
-    --color-accent-800: 43 74 70;
-    --color-accent-900: 28 48 46;
+    --color-brand: 90 46 10; /* #5a2e0a */
+    --color-primary-50: 249 244 241; /* #f9f4f1 */
+    --color-primary-100: 239 226 215; /* #efe2d7 */
+    --color-primary-200: 222 197 175; /* #dec5af */
+    --color-primary-300: 202 159 125; /* #ca9f7d */
+    --color-primary-400: 181 122 74; /* #b57a4a */
+    --color-primary-500: 130 88 53; /* #825835 */
+    --color-primary-600: 105 71 43; /* #69472b */
+    --color-primary-700: 83 56 34; /* #533822 */
+    --color-primary-800: 90 46 10; /* #5a2e0a */
+    --color-primary-900: 54 37 22; /* #362516 */
+    --color-accent-50: 239 246 245; /* #eff6f5 */
+    --color-accent-100: 210 229 226; /* #d2e5e2 */
+    --color-accent-200: 168 204 199; /* #a8ccc7 */
+    --color-accent-300: 130 181 175; /* #82b5af */
+    --color-accent-400: 104 166 158; /* #68a69e */
+    --color-accent-500: 98 163 154; /* #62a39a */
+    --color-accent-600: 77 132 124; /* #4d847c */
+    --color-accent-700: 60 103 97; /* #3c6761 */
+    --color-accent-800: 43 74 70; /* #2b4a46 */
+    --color-accent-900: 28 48 46; /* #1c302e */
   }
 
   [data-theme='navy'] {
-    --color-brand: 7 23 57;
-    --color-primary-50: 241 243 249;
-    --color-primary-100: 216 223 238;
-    --color-primary-200: 176 191 221;
-    --color-primary-300: 126 150 200;
-    --color-primary-400: 77 109 178;
-    --color-primary-500: 55 79 129;
-    --color-primary-600: 44 63 104;
-    --color-primary-700: 35 50 82;
-    --color-primary-800: 29 41 68;
-    --color-primary-900: 7 23 57;
-    --color-accent-50: 250 245 234;
-    --color-accent-100: 241 228 197;
-    --color-accent-200: 229 203 143;
-    --color-accent-300: 217 180 94;
-    --color-accent-400: 209 165 61;
-    --color-accent-500: 208 161 53;
-    --color-accent-600: 169 130 40;
-    --color-accent-700: 132 102 31;
-    --color-accent-800: 95 73 22;
-    --color-accent-900: 62 48 15;
+    --color-brand: 7 23 57; /* #071739 */
+    --color-primary-50: 241 243 249; /* #f1f3f9 */
+    --color-primary-100: 216 223 238; /* #d8dfee */
+    --color-primary-200: 176 191 221; /* #b0bfdd */
+    --color-primary-300: 126 150 200; /* #7e96c8 */
+    --color-primary-400: 77 109 178; /* #4d6db2 */
+    --color-primary-500: 55 79 129; /* #374f81 */
+    --color-primary-600: 44 63 104; /* #2c3f68 */
+    --color-primary-700: 35 50 82; /* #233252 */
+    --color-primary-800: 29 41 68; /* #1d2944 */
+    --color-primary-900: 7 23 57; /* #071739 */
+    --color-accent-50: 250 245 234; /* #faf5ea */
+    --color-accent-100: 241 228 197; /* #f1e4c5 */
+    --color-accent-200: 229 203 143; /* #e5cb8f */
+    --color-accent-300: 217 180 94; /* #d9b45e */
+    --color-accent-400: 209 165 61; /* #d1a53d */
+    --color-accent-500: 208 161 53; /* #d0a135 */
+    --color-accent-600: 169 130 40; /* #a98228 */
+    --color-accent-700: 132 102 31; /* #84661f */
+    --color-accent-800: 95 73 22; /* #5f4916 */
+    --color-accent-900: 62 48 15; /* #3e300f */
   }
 
   html {
