@@ -6,11 +6,6 @@ function toggleLocale() {
   setLocale(locale.value === 'fa' ? 'en' : 'fa')
 }
 
-// MVP scope: Identify / Explore(Catalog) / Profile
-// my-plants, care-calendar, community, climate, dashboard از نویگیشن فریز شدن
-// (کد این صفحات حذف نشده، فقط از مسیر کاربر MVP خارج شده - رجوع به mvp-alignment-checklist.md)
-// Profile دیگه پشت Auth نیست (MVP بدون لاگین کار می‌کنه)، پس دیگه نیازی به
-// user-menu/logout این‌جا نیست - authStore برای فاز بعد (my-garden/community) نگه داشته شده.
 const navLinks = [
   { to: '/', label: 'nav.home' },
   { to: '/identify', label: 'nav.identify' },
@@ -47,6 +42,24 @@ const navLinks = [
 
       <div class="flex items-center gap-2">
         <button
+          type="button"
+          role="switch"
+          :aria-checked="uiStore.darkMode"
+          class="relative h-6 w-11 shrink-0 rounded-full transition-colors"
+          :class="uiStore.darkMode ? 'bg-primary-600' : 'bg-ink/15'"
+          @click="uiStore.toggleDarkMode"
+        >
+          <span
+            class="absolute top-0.5 flex size-5 items-center justify-center rounded-full bg-white shadow transition-all"
+            :class="uiStore.darkMode ? 'start-[22px]' : 'start-0.5'"
+          >
+            <Icon
+              :name="uiStore.darkMode ? 'lucide:moon' : 'lucide:sun'"
+              class="size-3.5 text-primary-600"
+            />
+          </span>
+        </button>
+        <button
             type="button"
             class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
             :aria-label="locale === 'fa' ? 'Switch language to English' : 'تغییر زبان به فارسی'"
@@ -54,19 +67,6 @@ const navLinks = [
         >
           {{ locale === 'fa' ? 'EN' : 'فا' }}
         </button>
-
-        <AppButton
-            variant="secondary"
-            size="sm"
-            class="hidden sm:inline-flex"
-            @click="navigateTo('/identify')"
-        >
-          <Icon
-              name="lucide:scan-line"
-              class="size-4"
-          />
-          {{ $t('identify.title') }}
-        </AppButton>
 
         <NuxtLink
             to="/profile"

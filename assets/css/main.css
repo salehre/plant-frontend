@@ -1,4 +1,84 @@
-@import 'vazirmatn/Vazirmatn-font-face.css';
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-Thin.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-ExtraLight.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-Light.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-Regular.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-Medium.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-SemiBold.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-Bold.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-ExtraBold.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('/fonts/vazir/Vazirmatn-FD-Black.woff2') format('woff2'),
+    url('/fonts/vazir/Vazirmatn-FD-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -11,7 +91,6 @@
     --color-ink: 31 36 24; /* #1f2418 */
     --color-ink-muted: 107 117 99; /* #6b7563 */
 
-    /* تم پیش‌فرض (قبل از هیدریت شدن پلاگین theme.client.ts) = forest */
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
     --color-primary-100: 215 239 231; /* #d7efe7 */
@@ -42,10 +121,6 @@
     --color-ink-muted: 163 172 153; /* #a3ac99 */
   }
 
-  /* ۴ تم رنگی برند - با attribute «data-theme» روی <html> فعال می‌شن (نگاه کن به
-     stores/ui.store.ts، متد applyThemeAttribute). مستقل از dark/light هستن: هر
-     تم هم روی حالت روشن هم تیره کار می‌کنه، چون فقط primary/accent رو عوض
-     می‌کنن، نه surface/bg/ink. */
   [data-theme='wine'] {
     --color-brand: 90 30 42; /* #5a1e2a */
     --color-primary-50: 253 243 245; /* #fdf3f5 */
@@ -159,7 +234,6 @@
     @apply bg-primary-200 text-primary-900;
   }
 
-  /* focus ring قابل مشاهده برای دسترسی‌پذیری */
   :focus-visible {
     outline: 2px solid theme('colors.primary.500');
     outline-offset: 2px;
@@ -168,8 +242,6 @@
 }
 
 @layer components {
-  /* استایل ورودی‌ها روی زمینه‌ی شیشه‌ای (صفحات auth) - جدا از input معمولی چون
-     زمینه‌ی تیره و بلورشده داره، نه surface سفید/تیره‌ی معمول اپ */
   .glass-label {
     @apply mb-1 block text-sm font-medium text-white/90;
   }

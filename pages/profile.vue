@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { themes } from '~/stores/ui.store'
 
-// MVP بدون Auth کار می‌کنه (طبق تصمیم دیتامدل: به‌جای اکانت واقعی، از localStorage روی
-// همین دستگاه استفاده می‌کنیم) - پس این صفحه دیگه پشت middleware auth نیست و از layout
-// ساده‌ی default استفاده می‌کنه، نه دشبورد سنگین که به my-plants/care-calendar وابسته بود.
 definePageMeta({ layout: 'default' })
 
 const uiStore = useUiStore()
