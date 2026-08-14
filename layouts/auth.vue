@@ -44,12 +44,6 @@ const mistStyle = computed(() => ({
         :style="mistStyle"
     />
 
-    <div class="pointer-events-none absolute inset-0 overflow-hidden">
-      <div class="glow-blob glow-blob--green" />
-      <div class="glow-blob glow-blob--gold" />
-      <div class="glow-blob glow-blob--green-2" />
-    </div>
-
     <div class="relative z-10 w-full max-w-md">
       <NuxtLink
           to="/"
@@ -87,39 +81,6 @@ const mistStyle = computed(() => ({
   transition: background 0.6s ease;
 }
 
-.glow-blob {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(70px);
-  opacity: 0.5;
-  animation: drift ease-in-out infinite;
-}
-.glow-blob--green {
-  top: -80px;
-  left: -60px;
-  width: 320px;
-  height: 320px;
-  background: #66a459;
-  animation-duration: 22s;
-}
-.glow-blob--gold {
-  right: -50px;
-  bottom: -90px;
-  width: 300px;
-  height: 300px;
-  background: #d1993f;
-  animation-duration: 26s;
-  animation-delay: -6s;
-}
-.glow-blob--green-2 {
-  left: 6%;
-  bottom: 12%;
-  width: 220px;
-  height: 220px;
-  background: #3b6430;
-  animation-duration: 19s;
-  animation-delay: -3s;
-}
 @keyframes drift {
   0%,
   100% {
@@ -127,11 +88,6 @@ const mistStyle = computed(() => ({
   }
   50% {
     transform: translate(28px, -22px) scale(1.08);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .glow-blob {
-    animation: none;
   }
 }
 </style>
