@@ -54,7 +54,7 @@ function removePlant(id: string, nickname: string) {
   <div>
     <div class="mb-6 flex items-center justify-between">
       <h1 class="text-2xl font-bold text-ink">
-        {{ $t('nav.myPlants') }}
+        {{ $t('myPlants') }}
       </h1>
       <AppButton
         variant="primary"

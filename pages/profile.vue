@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { themes } from '~/stores/ui.store'
+const { locale, setLocale } = useI18n()
+
+function toggleLocale() {
+  setLocale(locale.value === 'fa' ? 'en' : 'fa')
+}
 
 definePageMeta({ layout: 'default' })
 
@@ -38,25 +43,20 @@ function clearHistory() {
         تنظیمات
       </h2>
       <div class="flex items-center justify-between rounded-lg bg-surface px-4 py-3 shadow-card">
-        <div class="flex items-center gap-2 text-sm text-ink">
+        <div class="flex items-center gap-1 text-sm text-ink">
           <Icon
-            :name="uiStore.darkMode ? 'lucide:moon' : 'lucide:sun'"
-            class="size-4 text-primary-600"
+            name="material-symbols:language"
+            class="size-5 text-primary-600"
           />
-          حالت تیره
+        {{ $t("swich_language") }}
         </div>
         <button
-          type="button"
-          role="switch"
-          :aria-checked="uiStore.darkMode"
-          class="relative h-6 w-11 shrink-0 rounded-full transition-colors"
-          :class="uiStore.darkMode ? 'bg-primary-600' : 'bg-ink/15'"
-          @click="uiStore.toggleDarkMode"
+            type="button"
+            class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+            :aria-label="locale === 'fa' ? 'Switch language to English' : 'تغییر زبان به فارسی'"
+            @click="toggleLocale"
         >
-          <span
-            class="absolute top-0.5 size-5 rounded-full bg-white shadow transition-all"
-            :class="uiStore.darkMode ? 'start-[22px]' : 'start-0.5'"
-          />
+          {{ locale === 'fa' ? 'EN' : 'فا' }}
         </button>
       </div>
 

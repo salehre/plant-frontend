@@ -11,7 +11,7 @@ function plantNickname(userPlantId: string) {
 <template>
   <div class="flex flex-col gap-8">
     <h1 class="text-2xl font-bold text-ink">
-      {{ $t('nav.careCalendar') }}
+      {{ $t('careCalendar') }}
     </h1>
 
     <CareCalendar :tasks="[...userPlantsStore.todayTasks, ...userPlantsStore.upcomingTasks]" />

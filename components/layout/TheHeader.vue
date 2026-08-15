@@ -1,16 +1,12 @@
 <script setup lang="ts">
 const uiStore = useUiStore()
-const { locale, setLocale } = useI18n()
 
-function toggleLocale() {
-  setLocale(locale.value === 'fa' ? 'en' : 'fa')
-}
 
 const navLinks = [
-  { to: '/', label: 'nav.home' },
-  { to: '/identify', label: 'nav.identify' },
-  { to: '/plants', label: 'nav.catalog' },
-  { to: '/profile', label: 'nav.profile' },
+  { to: '/', label: 'home' },
+  { to: '/identify', label: 'identify' },
+  { to: '/plants', label: 'catalog' },
+  { to: '/profile', label: 'profile' },
 ]
 </script>
 
@@ -58,14 +54,6 @@ const navLinks = [
               class="size-3.5 text-primary-600"
             />
           </span>
-        </button>
-        <button
-            type="button"
-            class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
-            :aria-label="locale === 'fa' ? 'Switch language to English' : 'تغییر زبان به فارسی'"
-            @click="toggleLocale"
-        >
-          {{ locale === 'fa' ? 'EN' : 'فا' }}
         </button>
 
         <NuxtLink

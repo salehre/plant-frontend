@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const links = [
-  { to: '/dashboard', label: 'nav.dashboard', icon: 'lucide:layout-dashboard' },
-  { to: '/my-plants', label: 'nav.myPlants', icon: 'lucide:sprout' },
-  { to: '/care-calendar', label: 'nav.careCalendar', icon: 'lucide:calendar-check' },
-  { to: '/profile', label: 'nav.profile', icon: 'lucide:user' },
+  { to: '/dashboard', label: 'dashboard', icon: 'lucide:layout-dashboard' },
+  { to: '/my-plants', label: 'myPlants', icon: 'lucide:sprout' },
+  { to: '/care-calendar', label: 'careCalendar', icon: 'lucide:calendar-check' },
+  { to: '/profile', label: 'profile', icon: 'lucide:user' },
 ]
 </script>
 
