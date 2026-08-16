@@ -1,11 +1,18 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const items = [
-  { to: '/', icon: 'lucide:home', label: 'خانه', badge: undefined as number | undefined },
-  { to: '/identify', icon: 'lucide:scan-line', label: 'شناسایی', badge: undefined as number | undefined },
-  { to: '/plants', icon: 'lucide:sprout', label: 'گیاهان', badge: undefined as number | undefined },
-  { to: '/profile', icon: 'lucide:user', label: 'پروفایل', badge: undefined as number | undefined },
+interface NavItem {
+  to: string
+  icon: string
+  label: string
+  badge?: number
+}
+
+const items: NavItem[] = [
+  { to: '/', icon: 'lucide:home', label: 'خانه' },
+  { to: '/identify', icon: 'lucide:scan-line', label: 'شناسایی' },
+  { to: '/plants', icon: 'lucide:sprout', label: 'گیاهان' },
+  { to: '/profile', icon: 'lucide:user', label: 'پروفایل' },
 ]
 
 function isActive(to: string) {
@@ -17,7 +24,13 @@ const activeIndex = computed(() => {
   return idx === -1 ? 0 : idx
 })
 
-interface Spring { value: number, velocity: number, target: number }
+// ---------- Spring physics ----------
+
+interface Spring {
+  value: number
+  velocity: number
+  target: number
+}
 
 function makeSpring(value = 0): Spring {
   return { value, velocity: 0, target: value }
@@ -30,6 +43,12 @@ function stepSpring(s: Spring, stiffness: number, dampingRatio: number, dt: numb
   s.value += s.velocity * dt
 }
 
+function springSettled(s: Spring, posEps = 0.05, velEps = 2) {
+  return Math.abs(s.value - s.target) < posEps && Math.abs(s.velocity) < velEps
+}
+
+// ---------- Refs ----------
+
 const navRef = ref<HTMLElement | null>(null)
 const itemRefs = ref<HTMLElement[]>([])
 const pillRef = ref<HTMLElement | null>(null)
@@ -40,11 +59,35 @@ function setItemRef(el: any, index: number) {
   if (node) itemRefs.value[index] = node as HTMLElement
 }
 
+// ---------- Springs ----------
+
 const posSpring = makeSpring(0)
 const widthSpring = makeSpring(0)
 const scaleXSpring = makeSpring(1)
 const scaleYSpring = makeSpring(1)
 const pressSpring = makeSpring(1)
+
+// pendingIndex = index the pill is animating toward optimistically,
+// before the route has actually changed (set on pointerdown).
+const pendingIndex = ref<number | null>(null)
+const displayActiveIndex = computed(() => pendingIndex.value ?? activeIndex.value)
+
+// Safety-net timer: if a pointerdown never resolves into a real
+// navigation (tap swallowed, event lost, etc.) we clear the pending
+// state so the UI can't get stuck highlighting the wrong item.
+let pendingFallbackTimer: number | null = null
+
+function clearPendingFallbackTimer() {
+  if (pendingFallbackTimer != null) {
+    window.clearTimeout(pendingFallbackTimer)
+    pendingFallbackTimer = null
+  }
+}
+
+function clearPending() {
+  pendingIndex.value = null
+  clearPendingFallbackTimer()
+}
 
 let pillH = 0
 let pillTop = 0
@@ -101,7 +144,6 @@ function tick(now: number) {
 
   stepSpring(posSpring, 1000, 1, dt)
   stepSpring(widthSpring, 900, 0.78, dt)
-
   stepSpring(pressSpring, 300, 0.6, dt)
 
   const speed = Math.abs(posSpring.velocity) // px/s
@@ -115,9 +157,10 @@ function tick(now: number) {
   applyFrame()
 
   const settled
-    = Math.abs(posSpring.value - posSpring.target) < 0.05 && Math.abs(posSpring.velocity) < 2
-      && Math.abs(widthSpring.value - widthSpring.target) < 0.05 && Math.abs(widthSpring.velocity) < 2
-      && Math.abs(scaleXSpring.value - 1) < 0.002 && Math.abs(scaleYSpring.value - 1) < 0.002
+    = springSettled(posSpring)
+      && springSettled(widthSpring)
+      && Math.abs(scaleXSpring.value - 1) < 0.002
+      && Math.abs(scaleYSpring.value - 1) < 0.002
       && Math.abs(pressSpring.value - pressSpring.target) < 0.002
 
   if (settled) {
@@ -127,8 +170,12 @@ function tick(now: number) {
   rafId = requestAnimationFrame(tick)
 }
 
+// ---------- Pointer interaction ----------
+
 function onPointerDown(index: number, e: PointerEvent) {
+  pendingIndex.value = index
   pressSpring.target = 1.1
+
   const el = itemRefs.value[index]
   const nav = navRef.value
   if (el && nav) {
@@ -137,13 +184,56 @@ function onPointerDown(index: number, e: PointerEvent) {
     posSpring.target = elRect.left - navRect.left
     widthSpring.target = elRect.width
   }
+
   triggerFeedback(e)
   ensureLoop()
+
+  // Fallback: if navigation never actually happens (e.g. the click
+  // gets swallowed somewhere), don't leave the pill stuck forever.
+  clearPendingFallbackTimer()
+  pendingFallbackTimer = window.setTimeout(() => {
+    if (pendingIndex.value === index && activeIndex.value !== index) {
+      clearPending()
+      measureAndSetTarget(false)
+    }
+  }, 800)
 }
 
 function onPointerUp() {
+  // Intentionally does NOT clear pendingIndex: we want the pill to
+  // stay put while the route transition completes, rather than
+  // springing back and then forward again. pendingIndex is cleared
+  // once activeIndex actually matches it (see watcher below), or by
+  // the cancel handler / fallback timer if the tap didn't go through.
   pressSpring.target = 1
   ensureLoop()
+}
+
+function onPointerLeave() {
+  // NOTE: on touch devices, many mobile browsers synthesize a
+  // pointerleave/pointerout right after pointerup on every single
+  // tap (touch has no real "hover" concept, so once the finger
+  // lifts the pointer is considered to have "left" the element).
+  // If we treated that as a real cancellation here, pendingIndex
+  // would get cleared on *every* tap, causing the pill to snap back
+  // and then jump forward again once the route actually changes.
+  // So pointerleave only releases the press animation — it must NOT
+  // touch pendingIndex. Genuine cancellations are handled by
+  // onPointerCancel, and truly stuck taps are caught by the
+  // fallback timer in onPointerDown.
+  pressSpring.target = 1
+  ensureLoop()
+}
+
+function onPointerCancel() {
+  // A genuinely cancelled/aborted pointer interaction (common on
+  // mobile: scroll, viewport shift from the URL bar, etc.) means no
+  // navigation is coming — clear the optimistic state immediately
+  // and let the pill snap back to the real active item.
+  clearPending()
+  pressSpring.target = 1
+  ensureLoop()
+  measureAndSetTarget(false)
 }
 
 function triggerFeedback(e: PointerEvent) {
@@ -158,20 +248,38 @@ function triggerFeedback(e: PointerEvent) {
   fb.classList.add('is-active')
 }
 
-watch(activeIndex, () => nextTick(() => measureAndSetTarget(false)))
+// ---------- Watchers ----------
+
+watch(activeIndex, () => {
+  nextTick(() => measureAndSetTarget(false))
+})
+
+watch(activeIndex, (val) => {
+  if (pendingIndex.value !== null && val === pendingIndex.value) {
+    clearPending()
+  }
+})
+
+// ---------- Lifecycle ----------
 
 let resizeObserver: ResizeObserver | null = null
+let onWindowResize: (() => void) | null = null
 
 onMounted(() => {
   nextTick(() => measureAndSetTarget(true))
+
   resizeObserver = new ResizeObserver(() => measureAndSetTarget(true))
   if (navRef.value) resizeObserver.observe(navRef.value)
-  window.addEventListener('resize', () => measureAndSetTarget(true))
+
+  onWindowResize = () => measureAndSetTarget(true)
+  window.addEventListener('resize', onWindowResize)
 })
 
 onBeforeUnmount(() => {
   if (rafId != null) cancelAnimationFrame(rafId)
+  clearPendingFallbackTimer()
   resizeObserver?.disconnect()
+  if (onWindowResize) window.removeEventListener('resize', onWindowResize)
 })
 </script>
 
@@ -182,7 +290,7 @@ onBeforeUnmount(() => {
   >
     <nav
       ref="navRef"
-      class="jelly-nav relative isolate flex w-full max-w-md items-center justify-between gap-1 overflow-hidden rounded-full px-3 py-2.5 shadow-[0_8px_28px_-6px_rgba(0,0,0,0.45)]"
+      class="jelly-nav relative isolate flex w-full max-w-[330px] items-center justify-between gap-0.5 overflow-hidden rounded-full px-2 py-1.5 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.18)]"
       aria-label="ناوبری اصلی"
     >
       <span
@@ -201,17 +309,17 @@ onBeforeUnmount(() => {
         :ref="(el) => setItemRef(el, index)"
         :to="item.to"
         :aria-label="item.label"
-        class="relative z-10 flex items-center justify-center gap-1.5 rounded-full px-4 py-2.5 transition-colors"
-        :class="isActive(item.to) ? 'text-white' : 'text-ink-muted hover:text-ink'"
+        class="jelly-item relative z-10 flex items-center justify-center gap-1 rounded-full px-3.5 py-2.5 transition-colors"
+        :class="index === displayActiveIndex ? 'text-white' : 'text-ink-muted hover:text-ink'"
         @pointerdown="onPointerDown(index, $event)"
         @pointerup="onPointerUp"
-        @pointercancel="onPointerUp"
-        @pointerleave="onPointerUp"
+        @pointercancel="onPointerCancel"
+        @pointerleave="onPointerLeave"
       >
-        <span class="relative shrink-0">
+        <span class="relative flex shrink-0 items-center justify-center">
           <Icon
             :name="item.icon"
-            class="size-5"
+            class="size-6"
           />
           <span
             v-if="item.badge"
@@ -227,9 +335,16 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .jelly-nav {
-  background-color: rgb(20 18 16 / 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: rgb(255 255 255 / 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.jelly-item {
+  /* Prevents mobile browsers from turning taps into scroll/zoom
+     gestures, which is what causes stray pointercancel events. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .jelly-pill {
@@ -249,7 +364,7 @@ onBeforeUnmount(() => {
   height: 15px;
   padding: 0 3px;
   background: #ef4444;
-  box-shadow: 0 0 0 2px rgb(20 18 16 / 0.92);
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.55);
 }
 
 .jelly-feedback {
