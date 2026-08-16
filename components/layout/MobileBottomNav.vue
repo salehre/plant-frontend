@@ -1,11 +1,14 @@
 <script setup lang="ts">
 const route = useRoute()
 
+// `badge` is optional — wire it up to a real count (unread messages,
+// notifications, etc.) from a store/composable when you have one; it stays
+// hidden when omitted or falsy.
 const items = [
-  { to: '/', icon: 'lucide:home' },
-  { to: '/identify', icon: 'lucide:scan-line' },
-  { to: '/plants', icon: 'lucide:sprout' },
-  { to: '/profile', icon: 'lucide:user' },
+  { to: '/', icon: 'lucide:home', label: 'خانه', badge: undefined as number | undefined },
+  { to: '/identify', icon: 'lucide:scan-line', label: 'شناسایی', badge: undefined as number | undefined },
+  { to: '/plants', icon: 'lucide:sprout', label: 'گیاهان', badge: undefined as number | undefined },
+  { to: '/profile', icon: 'lucide:user', label: 'پروفایل', badge: undefined as number | undefined },
 ]
 
 function isActive(to: string) {
@@ -19,11 +22,11 @@ const activeIndex = computed(() => {
 
 /* =========================================================================
    Jelly physics
-   Real spring simulation (not a fixed CSS keyframe):
-   - `pos`   : critically-damped spring -> smooth move, no positional overshoot
-   - `scaleX`/`scaleY` : driven by pos's own velocity (fast move => stretch),
-                         each is itself a lightly-underdamped spring so it
-                         settles with a tiny wobble, like real jelly.
+   - `pos`/`width` : critically-damped springs -> the pill smoothly slides
+                     AND grows/shrinks to wrap the active item's icon+label,
+                     no positional/size overshoot.
+   - `scaleX`/`scaleY` : driven by pos's velocity (fast move => stretch),
+                         lightly underdamped so it settles with a tiny wobble.
    - `press` : inflates the pill on pointerdown and snaps toward the touch.
    ========================================================================= */
 
@@ -33,7 +36,6 @@ function makeSpring(value = 0): Spring {
   return { value, velocity: 0, target: value }
 }
 
-// advances a spring by dt (seconds) given stiffness + damping ratio
 function stepSpring(s: Spring, stiffness: number, dampingRatio: number, dt: number) {
   const damping = dampingRatio * 2 * Math.sqrt(stiffness)
   const force = -stiffness * (s.value - s.target) - damping * s.velocity
@@ -44,7 +46,6 @@ function stepSpring(s: Spring, stiffness: number, dampingRatio: number, dt: numb
 const navRef = ref<HTMLElement | null>(null)
 const itemRefs = ref<HTMLElement[]>([])
 const pillRef = ref<HTMLElement | null>(null)
-const clipRef = ref<HTMLElement | null>(null)
 const feedbackRef = ref<HTMLElement | null>(null)
 
 function setItemRef(el: any, index: number) {
@@ -53,19 +54,16 @@ function setItemRef(el: any, index: number) {
 }
 
 const posSpring = makeSpring(0)
+const widthSpring = makeSpring(0)
 const scaleXSpring = makeSpring(1)
 const scaleYSpring = makeSpring(1)
 const pressSpring = makeSpring(1)
 
-let pillW = 0
 let pillH = 0
 let pillTop = 0
-let navW = 0
-let navH = 0
 let initialized = false
 let rafId: number | null = null
 let lastTime = 0
-let pressed = false
 
 function measureAndSetTarget(instant = false) {
   const nav = navRef.value
@@ -75,17 +73,17 @@ function measureAndSetTarget(instant = false) {
   const navRect = nav.getBoundingClientRect()
   const elRect = el.getBoundingClientRect()
 
-  navW = navRect.width
-  navH = navRect.height
-  pillW = elRect.width
   pillH = elRect.height
   pillTop = elRect.top - navRect.top
 
   posSpring.target = elRect.left - navRect.left
+  widthSpring.target = elRect.width
 
   if (instant || !initialized) {
     posSpring.value = posSpring.target
     posSpring.velocity = 0
+    widthSpring.value = widthSpring.target
+    widthSpring.velocity = 0
     initialized = true
     applyFrame()
   }
@@ -94,20 +92,13 @@ function measureAndSetTarget(instant = false) {
 
 function applyFrame() {
   const pill = pillRef.value
-  const clip = clipRef.value
-  if (!pill || !clip) return
+  if (!pill) return
 
-  pill.style.width = `${pillW}px`
+  pill.style.width = `${widthSpring.value}px`
   pill.style.height = `${pillH}px`
   pill.style.top = `${pillTop}px`
   pill.style.left = `${posSpring.value}px`
   pill.style.transform = `scaleX(${scaleXSpring.value}) scaleY(${scaleYSpring.value})`
-
-  const left = posSpring.value
-  const right = navW - left - pillW
-  const top = pillTop
-  const bottom = navH - pillTop - pillH
-  clip.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round 999px)`
 }
 
 function ensureLoop() {
@@ -121,15 +112,17 @@ function tick(now: number) {
   const dt = Math.min((now - lastTime) / 1000, 1 / 30)
   lastTime = now
 
-  // 1) position: critically damped, no overshoot
+  // position + width: critically damped, no overshoot
   stepSpring(posSpring, 1000, 1, dt)
+  // slight elastic settle on width growth for a satisfying "grow" feel
+  stepSpring(widthSpring, 900, 0.78, dt)
 
-  // 2) press inflation
+  // press inflation
   stepSpring(pressSpring, 300, 0.6, dt)
 
-  // 3) stretch/squash target driven by current speed
+  // stretch/squash target driven by current sliding speed
   const speed = Math.abs(posSpring.velocity) // px/s
-  const stretch = Math.min(speed / 2200, 0.4)
+  const stretch = Math.min(speed / 2200, 0.35)
   scaleXSpring.target = pressSpring.value + stretch
   scaleYSpring.target = pressSpring.value - stretch * 0.6
 
@@ -140,6 +133,7 @@ function tick(now: number) {
 
   const settled
     = Math.abs(posSpring.value - posSpring.target) < 0.05 && Math.abs(posSpring.velocity) < 2
+      && Math.abs(widthSpring.value - widthSpring.target) < 0.05 && Math.abs(widthSpring.velocity) < 2
       && Math.abs(scaleXSpring.value - 1) < 0.002 && Math.abs(scaleYSpring.value - 1) < 0.002
       && Math.abs(pressSpring.value - pressSpring.target) < 0.002
 
@@ -151,8 +145,7 @@ function tick(now: number) {
 }
 
 function onPointerDown(index: number, e: PointerEvent) {
-  pressed = true
-  pressSpring.target = 1.14
+  pressSpring.target = 1.1
   // snap toward the touched tab immediately, before the route even changes
   const el = itemRefs.value[index]
   const nav = navRef.value
@@ -160,13 +153,13 @@ function onPointerDown(index: number, e: PointerEvent) {
     const navRect = nav.getBoundingClientRect()
     const elRect = el.getBoundingClientRect()
     posSpring.target = elRect.left - navRect.left
+    widthSpring.target = elRect.width
   }
   triggerFeedback(e)
   ensureLoop()
 }
 
 function onPointerUp() {
-  pressed = false
   pressSpring.target = 1
   ensureLoop()
 }
@@ -179,7 +172,6 @@ function triggerFeedback(e: PointerEvent) {
   fb.style.left = `${e.clientX - navRect.left}px`
   fb.style.top = `${e.clientY - navRect.top}px`
   fb.classList.remove('is-active')
-  // force reflow so the animation restarts on rapid taps
   void fb.offsetWidth
   fb.classList.add('is-active')
 }
@@ -206,45 +198,9 @@ onBeforeUnmount(() => {
     class="fixed inset-x-0 z-40 flex justify-center px-4 md:hidden"
     style="bottom: calc(1.25rem + env(safe-area-inset-bottom));"
   >
-    <svg
-      width="0"
-      height="0"
-      class="absolute"
-    >
-      <defs>
-        <filter
-          id="glass-distortion-nav"
-          x="0%"
-          y="0%"
-          width="100%"
-          height="100%"
-        >
-          <feTurbulence
-            type="fractalNoise"
-            base-frequency="0.015 0.015"
-            num-octaves="2"
-            seed="92"
-            result="noise"
-          />
-          <feGaussianBlur
-            in="noise"
-            std-deviation="2"
-            result="blurred"
-          />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="blurred"
-            scale="95"
-            x-channel-selector="R"
-            y-channel-selector="G"
-          />
-        </filter>
-      </defs>
-    </svg>
-
     <nav
       ref="navRef"
-      class="glass-bottom-nav relative isolate flex items-center gap-1 rounded-full px-2 py-2 shadow-[0_8px_28px_-6px_rgba(0,0,0,0.35)]"
+      class="jelly-nav relative isolate flex items-center gap-1 overflow-hidden rounded-full px-2 py-2 shadow-[0_8px_28px_-6px_rgba(0,0,0,0.45)]"
       aria-label="ناوبری اصلی"
     >
       <!-- touch feedback ripple -->
@@ -253,100 +209,89 @@ onBeforeUnmount(() => {
         class="jelly-feedback pointer-events-none absolute rounded-full"
       />
 
-      <!-- the jelly pill itself (colored shape, squashes & stretches) -->
+      <!-- the jelly pill: solid, themed capsule that slides + grows/shrinks
+           to wrap whichever item is active -->
       <div
         ref="pillRef"
         class="jelly-pill pointer-events-none absolute rounded-full"
       />
 
-      <!-- base row: icons in inactive/muted color -->
       <NuxtLink
         v-for="(item, index) in items"
         :key="item.to"
         :ref="(el) => setItemRef(el, index)"
         :to="item.to"
-        class="relative z-10 flex min-w-[68px] flex-col items-center gap-0.5 rounded-full px-3 py-1.5 text-ink-muted transition-colors"
-        :class="isActive(item.to) ? 'text-primary-700' : 'hover:text-ink'"
+        class="relative z-10 flex items-center gap-1.5 rounded-full px-3 py-2 transition-colors"
+        :class="isActive(item.to) ? 'text-white' : 'text-ink-muted hover:text-ink'"
         @pointerdown="onPointerDown(index, $event)"
         @pointerup="onPointerUp"
         @pointercancel="onPointerUp"
         @pointerleave="onPointerUp"
       >
-        <Icon
-          :name="item.icon"
-          class="size-5"
-        />
-      </NuxtLink>
-
-      <!-- clipped duplicate row: only visible inside the pill window, in the
-           "active" color, giving the icon-color-swap as the pill covers it -->
-      <div
-        ref="clipRef"
-        class="jelly-clip pointer-events-none absolute inset-0 flex items-center gap-1 px-2 py-2"
-        aria-hidden="true"
-      >
-        <div
-          v-for="item in items"
-          :key="item.to"
-          class="flex min-w-[68px] flex-col items-center gap-0.5 rounded-full px-3 py-1.5 text-primary-700"
-        >
+        <span class="relative shrink-0">
           <Icon
             :name="item.icon"
             class="size-5"
           />
-        </div>
-      </div>
+          <span
+            v-if="item.badge"
+            class="jelly-badge absolute flex items-center justify-center rounded-full text-[10px] font-bold text-white"
+          >
+            {{ item.badge > 9 ? '9+' : item.badge }}
+          </span>
+        </span>
+
+        <Transition name="jelly-label">
+          <span
+            v-if="isActive(item.to)"
+            class="whitespace-nowrap text-sm font-medium"
+          >
+            {{ item.label }}
+          </span>
+        </Transition>
+      </NuxtLink>
     </nav>
   </div>
 </template>
 
 <style scoped>
-.glass-bottom-nav {
-  background-color: rgb(var(--color-surface) / 0.55);
-}
-
-.glass-bottom-nav::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: 9999px;
-  box-shadow: inset 0 0 12px -6px rgba(255, 255, 255, 0.5);
-  pointer-events: none;
-}
-
-.glass-bottom-nav::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: 9999px;
+.jelly-nav {
+  background-color: rgb(20 18 16 / 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  filter: url(#glass-distortion-nav);
-  -webkit-filter: url(#glass-distortion-nav);
-  isolation: isolate;
-  pointer-events: none;
 }
 
-/* ---- jelly pill: solid raised shape behind the active tab ---- */
+/* ---- jelly pill: solid themed capsule behind the active tab ---- */
 .jelly-pill {
   z-index: 1;
-  top: 0;
-  left: 0;
-  background: rgb(var(--color-surface-2, 255 255 255) / 0.92);
+  background: rgb(var(--color-primary-500));
   box-shadow:
-    0 2px 6px -1px rgba(0, 0, 0, 0.18),
-    inset 0 0 0 1px rgb(255 255 255 / 0.6);
+    0 3px 10px -2px rgb(var(--color-primary-500) / 0.55),
+    inset 0 1px 0 0 rgb(255 255 255 / 0.25);
   transform-origin: center;
-  will-change: left, transform;
+  will-change: left, width, transform;
 }
 
-/* ---- clipped duplicate row: reveals active-colored icon only where the
-   pill currently covers, via clip-path (kept unscaled so icons never
-   distort) ---- */
-.jelly-clip {
-  z-index: 2;
+/* ---- badge ---- */
+.jelly-badge {
+  top: -5px;
+  right: -6px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  background: #ef4444;
+  box-shadow: 0 0 0 2px rgb(20 18 16 / 0.92);
+}
+
+/* ---- label reveal ---- */
+.jelly-label-enter-active,
+.jelly-label-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.jelly-label-enter-from,
+.jelly-label-leave-to {
+  opacity: 0;
 }
 
 /* ---- touch feedback: a soft ripple where the finger lands ---- */
@@ -358,9 +303,9 @@ onBeforeUnmount(() => {
   margin-top: -2px;
   background: radial-gradient(
     circle,
-    rgb(var(--color-primary-700) / 0.35) 0%,
-    rgb(var(--color-primary-700) / 0.15) 45%,
-    rgb(var(--color-primary-700) / 0) 70%
+    rgb(var(--color-primary-500) / 0.35) 0%,
+    rgb(var(--color-primary-500) / 0.15) 45%,
+    rgb(var(--color-primary-500) / 0) 70%
   );
   opacity: 0;
   transform: scale(1);
@@ -377,7 +322,7 @@ onBeforeUnmount(() => {
   }
   100% {
     opacity: 0;
-    transform: scale(28);
+    transform: scale(24);
   }
 }
 
