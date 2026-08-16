@@ -1,9 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
 
-// `badge` is optional — wire it up to a real count (unread messages,
-// notifications, etc.) from a store/composable when you have one; it stays
-// hidden when omitted or falsy.
 const items = [
   { to: '/', icon: 'lucide:home', label: 'خانه', badge: undefined as number | undefined },
   { to: '/identify', icon: 'lucide:scan-line', label: 'شناسایی', badge: undefined as number | undefined },
@@ -19,16 +16,6 @@ const activeIndex = computed(() => {
   const idx = items.findIndex(item => isActive(item.to))
   return idx === -1 ? 0 : idx
 })
-
-/* =========================================================================
-   Jelly physics
-   - `pos`/`width` : critically-damped springs -> the pill smoothly slides
-                     AND grows/shrinks to wrap the active item's icon+label,
-                     no positional/size overshoot.
-   - `scaleX`/`scaleY` : driven by pos's velocity (fast move => stretch),
-                         lightly underdamped so it settles with a tiny wobble.
-   - `press` : inflates the pill on pointerdown and snaps toward the touch.
-   ========================================================================= */
 
 interface Spring { value: number, velocity: number, target: number }
 
@@ -112,15 +99,11 @@ function tick(now: number) {
   const dt = Math.min((now - lastTime) / 1000, 1 / 30)
   lastTime = now
 
-  // position + width: critically damped, no overshoot
   stepSpring(posSpring, 1000, 1, dt)
-  // slight elastic settle on width growth for a satisfying "grow" feel
   stepSpring(widthSpring, 900, 0.78, dt)
 
-  // press inflation
   stepSpring(pressSpring, 300, 0.6, dt)
 
-  // stretch/squash target driven by current sliding speed
   const speed = Math.abs(posSpring.velocity) // px/s
   const stretch = Math.min(speed / 2200, 0.35)
   scaleXSpring.target = pressSpring.value + stretch
@@ -146,7 +129,6 @@ function tick(now: number) {
 
 function onPointerDown(index: number, e: PointerEvent) {
   pressSpring.target = 1.1
-  // snap toward the touched tab immediately, before the route even changes
   const el = itemRefs.value[index]
   const nav = navRef.value
   if (el && nav) {
@@ -195,22 +177,19 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="fixed inset-x-0 z-40 flex justify-center px-4 md:hidden"
+    class="fixed inset-x-0 z-40 flex justify-center px-3 md:hidden"
     style="bottom: calc(1.25rem + env(safe-area-inset-bottom));"
   >
     <nav
       ref="navRef"
-      class="jelly-nav relative isolate flex items-center gap-1 overflow-hidden rounded-full px-2 py-2 shadow-[0_8px_28px_-6px_rgba(0,0,0,0.45)]"
+      class="jelly-nav relative isolate flex w-full max-w-md items-center justify-between gap-1 overflow-hidden rounded-full px-3 py-2.5 shadow-[0_8px_28px_-6px_rgba(0,0,0,0.45)]"
       aria-label="ناوبری اصلی"
     >
-      <!-- touch feedback ripple -->
       <span
         ref="feedbackRef"
         class="jelly-feedback pointer-events-none absolute rounded-full"
       />
 
-      <!-- the jelly pill: solid, themed capsule that slides + grows/shrinks
-           to wrap whichever item is active -->
       <div
         ref="pillRef"
         class="jelly-pill pointer-events-none absolute rounded-full"
@@ -221,7 +200,8 @@ onBeforeUnmount(() => {
         :key="item.to"
         :ref="(el) => setItemRef(el, index)"
         :to="item.to"
-        class="relative z-10 flex items-center gap-1.5 rounded-full px-3 py-2 transition-colors"
+        :aria-label="item.label"
+        class="relative z-10 flex items-center justify-center gap-1.5 rounded-full px-4 py-2.5 transition-colors"
         :class="isActive(item.to) ? 'text-white' : 'text-ink-muted hover:text-ink'"
         @pointerdown="onPointerDown(index, $event)"
         @pointerup="onPointerUp"
@@ -240,15 +220,6 @@ onBeforeUnmount(() => {
             {{ item.badge > 9 ? '9+' : item.badge }}
           </span>
         </span>
-
-        <Transition name="jelly-label">
-          <span
-            v-if="isActive(item.to)"
-            class="whitespace-nowrap text-sm font-medium"
-          >
-            {{ item.label }}
-          </span>
-        </Transition>
       </NuxtLink>
     </nav>
   </div>
@@ -261,7 +232,6 @@ onBeforeUnmount(() => {
   -webkit-backdrop-filter: blur(10px);
 }
 
-/* ---- jelly pill: solid themed capsule behind the active tab ---- */
 .jelly-pill {
   z-index: 1;
   background: rgb(var(--color-primary-500));
@@ -272,7 +242,6 @@ onBeforeUnmount(() => {
   will-change: left, width, transform;
 }
 
-/* ---- badge ---- */
 .jelly-badge {
   top: -5px;
   right: -6px;
@@ -283,18 +252,6 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 0 2px rgb(20 18 16 / 0.92);
 }
 
-/* ---- label reveal ---- */
-.jelly-label-enter-active,
-.jelly-label-leave-active {
-  transition: opacity 0.15s ease;
-}
-
-.jelly-label-enter-from,
-.jelly-label-leave-to {
-  opacity: 0;
-}
-
-/* ---- touch feedback: a soft ripple where the finger lands ---- */
 .jelly-feedback {
   z-index: 0;
   width: 4px;
