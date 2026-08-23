@@ -9,6 +9,9 @@ useHead(() => ({
 
 <template>
   <div>
+    <ClientOnly>
+      <VitePwaManifest />
+    </ClientOnly>
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />

@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/eslint',
     '@vueuse/nuxt',
+    '@vite-pwa/nuxt',
   ],
 
   // یک ورودی روی خودِ components/ کافیه: اسکن Nuxt پیش‌فرض recursive هست،
@@ -71,5 +72,23 @@ export default defineNuxtConfig({
   image: {
     quality: 80,
     format: ['webp'],
+  },
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'پلنت',
+      short_name: 'پلنت',
+      description: 'اپلیکیشن نگهداری و شناسایی گیاهان',
+      lang: 'fa',
+      dir: 'rtl',
+      theme_color: '#ffffff',
+      icons: [
+          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+        { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+      ],
+    },
+    devOptions: {
+      enabled: true,
+    },
   },
 })
