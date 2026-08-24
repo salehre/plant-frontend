@@ -1,6 +1,8 @@
 <script setup lang="ts">
-// lang/dir روی <html> باید با زبان انتخاب‌شده هماهنگ باشه (نه ثابت fa/rtl)،
-// چون حالا en هم به‌عنوان لوکیل فعاله؛ useLocaleHead این رو از تنظیمات هر locale می‌سازه.
+import { Toaster } from 'vue-sonner'
+import 'vue-sonner/style.css'
+
+
 const i18nHead = useLocaleHead()
 useHead(() => ({
   htmlAttrs: i18nHead.value.htmlAttrs,
@@ -12,6 +14,7 @@ useHead(() => ({
     <ClientOnly>
       <VitePwaManifest />
     </ClientOnly>
+    <Toaster rich-colors dir="rtl" position="bottom-right" />
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />

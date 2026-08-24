@@ -7,6 +7,5 @@
         <slot />
       </main>
     </div>
-    <AppToast />
   </div>
 </template>

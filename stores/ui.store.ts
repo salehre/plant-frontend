@@ -1,10 +1,6 @@
 import { defineStore } from 'pinia'
+import { toast } from 'vue-sonner'
 
-export interface ToastItem {
-  id: number
-  message: string
-  type: 'success' | 'error' | 'info'
-}
 
 // ۴ تم برند اپ - هرکدوم فقط رنگ‌های primary/accent رو عوض می‌کنن (نگاه کن به
 // main.css، بلاک‌های [data-theme]) و مستقل از دارک‌مود هستن. label برای UI
@@ -20,7 +16,6 @@ export type ThemeKey = typeof themes[number]['key']
 
 export const useUiStore = defineStore('ui', {
   state: () => ({
-    toasts: [] as ToastItem[],
     mobileNavOpen: false,
     // ترجیح دارک‌مود روی همین دستگاه ذخیره می‌شه (localStorage)، نه سرور - چون MVP بدون Auth کار می‌کنه
     darkMode: useLocalStorage<boolean>('bargyar-dark-mode', false),
@@ -29,12 +24,8 @@ export const useUiStore = defineStore('ui', {
     theme: useLocalStorage<ThemeKey>('bargyar-theme', 'forest'),
   }),
   actions: {
-    showToast(message: string, type: ToastItem['type'] = 'success') {
-      const id = Date.now()
-      this.toasts.push({ id, message, type })
-      setTimeout(() => {
-        this.toasts = this.toasts.filter(t => t.id !== id)
-      }, 3500)
+    showToast(message: string, type: 'success' | 'error' | 'info' = 'success') {
+      toast[type === 'info' ? 'message' : type](message)
     },
     toggleDarkMode() {
       this.darkMode = !this.darkMode

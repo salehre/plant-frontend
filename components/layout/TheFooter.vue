@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const year = new Date().getFullYear()
 </script>
 
 <template>
@@ -88,7 +87,7 @@ const year = new Date().getFullYear()
         </div>
       </div>
       <div class="mt-8 border-t border-ink/5 pt-6 text-center text-xs text-ink-muted">
-        © {{ toPersianDigits(year) }} برگ‌یار. تمام حقوق محفوظ است.
+        powered By <span class="text-primary-700"> Saleh Rezaei</span>
       </div>
     </div>
   </footer>

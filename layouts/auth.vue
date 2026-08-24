@@ -62,8 +62,6 @@ const mistStyle = computed(() => ({
         </div>
       </LiquidGlassPanel>
     </div>
-
-    <AppToast />
   </div>
 </template>
 

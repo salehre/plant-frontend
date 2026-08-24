@@ -2,7 +2,6 @@
 import MobileBottomNav from '~/components/layout/MobileBottomNav.vue'
 import TheHeader from '~/components/layout/TheHeader.vue'
 import TheFooter from '~/components/layout/TheFooter.vue'
-import AppToast from '~/components/ui/AppToast.vue'
 </script>
 
 <template>
@@ -13,6 +12,5 @@ import AppToast from '~/components/ui/AppToast.vue'
     </main>
     <TheFooter />
     <MobileBottomNav />
-    <AppToast />
   </div>
 </template>
