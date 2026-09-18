@@ -7,7 +7,7 @@ const props = defineProps<{ plant: Plant }>()
 <template>
   <NuxtLink
     :to="`/plants/${props.plant.slug}`"
-    class="group flex flex-col overflow-hidden rounded-lg bg-surface shadow-card transition-shadow hover:shadow-card-hover"
+    class="glass-card group flex flex-col overflow-hidden"
   >
     <div class="relative aspect-square overflow-hidden bg-primary-50">
       <img
