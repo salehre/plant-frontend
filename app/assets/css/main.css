@@ -1,48 +1,48 @@
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-Thin.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-Thin.woff2') format('woff2');
   font-weight: 100;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-ExtraLight.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-ExtraLight.woff2') format('woff2');
   font-weight: 200;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-Light.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-Light.woff2') format('woff2');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-Regular.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-Regular.woff2') format('woff2');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-Medium.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-Medium.woff2') format('woff2');
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-SemiBold.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-SemiBold.woff2') format('woff2');
   font-weight: 600;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-Bold.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-Bold.woff2') format('woff2');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Peyda';
-  src: url('~/public/fonts/peyda/PeydaWeb-ExtraBold.woff2') format('woff2');
+  src: url('/fonts/peyda/PeydaWeb-ExtraBold.woff2') format('woff2');
   font-weight: 800;
 }
 
@@ -52,10 +52,10 @@
 
 @layer base {
   :root {
-    --color-surface: 255 255 255; /* #ffffff */
-    --color-bg: 250 248 245; /* #faf8f5 */
-    --color-ink: 31 36 24; /* #1f2418 */
-    --color-ink-muted: 107 117 99; /* #6b7563 */
+    --color-surface: 247 248 248; /* #f7f8f8 - derived from brand */
+    --color-bg: 238 241 240; /* #eef1f0 - derived from brand */
+    --color-ink: 12 48 36; /* #0c3024 - derived from brand */
+    --color-ink-muted: 81 100 94; /* #51645e - derived from brand */
 
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
@@ -80,14 +80,12 @@
     --color-accent-900: 60 38 16; /* #3c2610 */
   }
 
-  .dark {
-    --color-surface: 32 36 28; /* #20241c */
-    --color-bg: 22 25 19; /* #161913 */
-    --color-ink: 237 240 231; /* #edf0e7 */
-    --color-ink-muted: 163 172 153; /* #a3ac99 */
-  }
-
   [data-theme='wine'] {
+    --color-surface: 249 247 248; /* #f9f7f8 - derived from brand */
+    --color-bg: 243 239 240; /* #f3eff0 - derived from brand */
+    --color-ink: 70 23 33; /* #461721 - derived from brand */
+    --color-ink-muted: 112 87 92; /* #70575c - derived from brand */
+
     --color-brand: 90 30 42; /* #5a1e2a */
     --color-primary-50: 253 243 245; /* #fdf3f5 */
     --color-primary-100: 251 223 230; /* #fbdfe6 */
@@ -112,6 +110,11 @@
   }
 
   [data-theme='forest'] {
+    --color-surface: 247 248 248; /* #f7f8f8 - derived from brand */
+    --color-bg: 238 241 240; /* #eef1f0 - derived from brand */
+    --color-ink: 12 48 36; /* #0c3024 - derived from brand */
+    --color-ink-muted: 81 100 94; /* #51645e - derived from brand */
+
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
     --color-primary-100: 215 239 231; /* #d7efe7 */
@@ -136,6 +139,11 @@
   }
 
   [data-theme='brown'] {
+    --color-surface: 249 248 246; /* #f9f8f6 - derived from brand */
+    --color-bg: 243 240 238; /* #f3f0ee - derived from brand */
+    --color-ink: 70 36 8; /* #462408 - derived from brand */
+    --color-ink-muted: 112 94 78; /* #705e4e - derived from brand */
+
     --color-brand: 90 46 10; /* #5a2e0a */
     --color-primary-50: 253 244 237; /* #fdf4ed */
     --color-primary-100: 251 225 201; /* #fbe1c9 */
@@ -160,6 +168,11 @@
   }
 
   [data-theme='navy'] {
+    --color-surface: 246 247 248; /* #f6f7f8 - derived from brand */
+    --color-bg: 238 239 241; /* #eeeff1 - derived from brand */
+    --color-ink: 5 18 44; /* #05122c - derived from brand */
+    --color-ink-muted: 77 84 98; /* #4d5462 - derived from brand */
+
     --color-brand: 7 23 57; /* #071739 */
     --color-primary-50: 241 243 249; /* #f1f3f9 */
     --color-primary-100: 216 223 238; /* #d8dfee */
@@ -186,10 +199,6 @@
   html {
     font-family: 'Peyda', sans-serif !important;
     color-scheme: light;
-  }
-
-  html.dark {
-    color-scheme: dark;
   }
 
   body {

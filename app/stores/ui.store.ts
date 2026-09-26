@@ -17,25 +17,13 @@ export type ThemeKey = typeof themes[number]['key']
 export const useUiStore = defineStore('ui', {
   state: () => ({
     mobileNavOpen: false,
-    // ترجیح دارک‌مود روی همین دستگاه ذخیره می‌شه (localStorage)، نه سرور - چون MVP بدون Auth کار می‌کنه
-    darkMode: useLocalStorage<boolean>('bargyar-dark-mode', false),
-    // تم رنگی انتخابی هم مثل دارک‌مود روی همین دستگاه ذخیره می‌شه؛ پیش‌فرض forest
+    // تم رنگی انتخابی روی همین دستگاه ذخیره می‌شه (localStorage)؛ پیش‌فرض forest
     // (نزدیک‌ترین تم به هویت اصلی سبز اپ) تا با اولین بار بازکردن اپ هماهنگ باشه.
     theme: useLocalStorage<ThemeKey>('bargyar-theme', 'forest'),
   }),
   actions: {
     showToast(message: string, type: 'success' | 'error' | 'info' = 'success') {
       toast[type === 'info' ? 'message' : type](message)
-    },
-    toggleDarkMode() {
-      this.darkMode = !this.darkMode
-      this.applyDarkModeClass()
-    },
-    /** روی <html> کلاس dark رو اعمال می‌کنه؛ در app.vue و بعد از toggle صدا زده می‌شه */
-    applyDarkModeClass() {
-      if (import.meta.client) {
-        document.documentElement.classList.toggle('dark', this.darkMode)
-      }
     },
     setTheme(theme: ThemeKey) {
       this.theme = theme
