@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f735a1df-3114-4aed-b584-3befc7ea24fd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/app.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ai/CameraCapture.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ai/ConfidenceScore.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ai/DiseaseResultCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ai/ImageUploader.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ai/PredictionCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/community/PostCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/community/UserProfileCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/dashboard/CareCalendar.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/dashboard/GrowthChart.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/dashboard/PlantWidget.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/dashboard/TaskCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/layout/MobileBottomNav.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/layout/TheFooter.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/layout/TheHeader.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/layout/TheSidebar.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/CareInfoCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/CompareTable.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/DetailSectionCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/PlantCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/PlantDetailFull.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/PlantDetailHeader.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/PlantGallery.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/RequirementBadge.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/SearchSuggestions.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/plant/WishlistButton.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/AppButton.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/AppDrawer.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/AppDropdown.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/AppModal.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/AppSkeleton.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/LiquidGlassPanel.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composables/useAsyncAction.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composables/useWishlistPlants.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/error.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/i18n/locales/en.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/i18n/locales/fa.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/layouts/auth.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/layouts/dashboard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/layouts/default.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleware/auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/nuxt.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/nuxt.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/auth/forgot-password.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/auth/login.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/auth/register.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/auth/set-password.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/auth/verify-Email.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/care-calendar.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/climate/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/community/[id].vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/community/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/compare/[...slugs].vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/dashboard/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/identify.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my-plants/[id].vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/my-plants/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/plants/[slug].vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/plants/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/profile.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/testdetail.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/analytics.client.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/dark-mode.client.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/api/client.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/mock/climate.mock.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/mock/community.mock.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/mock/diseases.mock.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/mock/identify.mock.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/mock/plants.mock.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/plant.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/auth.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/community.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/history.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/identify.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/plant.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/ui.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/userPlants.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/wishlist.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/climate.types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/community.types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/disease.types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/identify.types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/plant.types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/user.types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/delay.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/formatters.ts" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;salehre&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/salehre/plant-frontend.git&quot;,
+    &quot;accountId&quot;: &quot;967af809-8981-4be5-829b-a2f7c9f66630&quot;
+  }
+}</component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="$PROJECT_DIR$/../../xampp/php/php.exe" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="3JXn5qqeMx7FFkSHPdGo8GFn2W2" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git.auto.fetch.suggestion.counter&quot;: &quot;2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/projects/plant-frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\projects\\plant-frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-PS-261.25134.104" />
+        <option value="bundled-php-predefined-a98d8de5180a-6bbb74dbab74-com.jetbrains.php.sharedIndexes-PS-261.25134.104" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f735a1df-3114-4aed-b584-3befc7ea24fd" name="Changes" comment="" />
+      <created>1789816099842</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1789816099842</updated>
+      <workItem from="1789816101004" duration="2936000" />
+      <workItem from="1790428137349" duration="454000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

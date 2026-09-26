@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-
+  ssr: false,
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
@@ -12,9 +12,6 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
   ],
 
-  // یک ورودی روی خودِ components/ کافیه: اسکن Nuxt پیش‌فرض recursive هست،
-  // پس هر زیرپوشه‌ی جدید (فعلی یا آینده) خودکار شناسایی می‌شه و دیگه لازم نیست
-  // به‌ازای هر پوشه‌ی تازه، دستی یک ورودی این‌جا اضافه بشه.
   components: [
     { path: '~/components', pathPrefix: false },
   ],
@@ -34,7 +31,6 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  // فلگ سراسری برای سوییچ بین Mock Data و API واقعی (Phase 3 به بعد)
   runtimeConfig: {
     public: {
       useMockApi: true,
@@ -47,12 +43,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
 
-  // typeCheck عمداً false می‌مونه: تست شد و روشن‌کردنش باعث شکست npm run build می‌شه،
-  // چون همون باگ ذاتی و غیرقابل‌رفع در @nuxt/image (که در README هم مستنده) با
-  // vite-plugin-checker گلوگاه build رو هم می‌شکنه، نه فقط dev رو.
-  // به‌جاش npm run typecheck رو به‌صورت جدا (مثلاً در CI یا pre-commit) اجرا کن؛
-  // خروجیش رو دستی بخون و فقط دو خطای شناخته‌شده‌ی @nuxt/image رو نادیده بگیر -
-  // دقیقاً همین‌طوری بود که باگ defineProps()() در DiseaseResultCard.vue پیدا و رفع شد.
   typescript: {
     strict: true,
     typeCheck: false,
