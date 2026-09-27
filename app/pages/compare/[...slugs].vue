@@ -9,7 +9,7 @@ const slugs = computed(() => {
 })
 
 const selectedPlants = computed(() =>
-  slugs.value.map(slug => mockPlants.find(p => p.slug === slug)).filter((p): p is NonNullable<typeof p> => !!p),
+    slugs.value.map(slug => mockPlants.find(p => p.slug === slug)).filter((p): p is NonNullable<typeof p> => !!p),
 )
 
 const pickerA = ref(slugs.value[0] ?? '')
@@ -32,45 +32,45 @@ function goCompare() {
       دو گیاه را انتخاب کن تا شرایط نگهداری‌شان را کنار هم ببینی.
     </p>
 
-    <div class="mb-8 flex flex-col items-center gap-3 rounded-lg bg-surface p-4 shadow-card sm:flex-row">
+    <div class="glass-card mb-8 flex flex-col items-center gap-3 p-4 sm:flex-row">
       <div class="w-full flex-1">
         <AppDropdown
-          v-model="pickerA"
-          :options="plantOptions"
-          placeholder="گیاه اول"
+            v-model="pickerA"
+            :options="plantOptions"
+            placeholder="گیاه اول"
         />
       </div>
       <Icon
-        name="lucide:arrow-left-right"
-        class="size-5 shrink-0 text-ink-muted"
+          name="lucide:arrow-left-right"
+          class="size-5 shrink-0 text-ink-muted"
       />
       <div class="w-full flex-1">
         <AppDropdown
-          v-model="pickerB"
-          :options="plantOptions"
-          placeholder="گیاه دوم"
+            v-model="pickerB"
+            :options="plantOptions"
+            placeholder="گیاه دوم"
         />
       </div>
       <AppButton
-        variant="primary"
-        @click="goCompare"
+          variant="primary"
+          @click="goCompare"
       >
         مقایسه کن
       </AppButton>
     </div>
 
     <CompareTable
-      v-if="selectedPlants.length >= 2"
-      :plants="selectedPlants"
+        v-if="selectedPlants.length >= 2"
+        :plants="selectedPlants"
     />
 
     <div
-      v-else
-      class="flex flex-col items-center gap-3 py-16 text-center text-ink-muted"
+        v-else
+        class="flex flex-col items-center gap-3 py-16 text-center text-ink-muted"
     >
       <Icon
-        name="lucide:git-compare"
-        class="size-10"
+          name="lucide:git-compare"
+          class="size-10"
       />
       برای شروع، دو گیاه از بالا انتخاب کن.
     </div>

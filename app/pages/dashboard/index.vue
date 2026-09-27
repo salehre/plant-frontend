@@ -25,7 +25,7 @@ function completeTask(id: string) {
 
     <!-- خلاصه وضعیت -->
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <p class="text-2xl font-bold text-primary-700">
           {{ toPersianDigits(userPlantsStore.plants.length) }}
         </p>
@@ -33,7 +33,7 @@ function completeTask(id: string) {
           گیاه
         </p>
       </div>
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <p class="text-2xl font-bold text-status-warning">
           {{ toPersianDigits(userPlantsStore.todayTasks.length) }}
         </p>
@@ -41,7 +41,7 @@ function completeTask(id: string) {
           وظیفه امروز
         </p>
       </div>
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <p class="text-2xl font-bold text-primary-700">
           {{ toPersianDigits(userPlantsStore.plants.filter(p => p.healthStatus === 'healthy').length) }}
         </p>
@@ -49,7 +49,7 @@ function completeTask(id: string) {
           سالم
         </p>
       </div>
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <p class="text-2xl font-bold text-status-danger">
           {{ toPersianDigits(userPlantsStore.plants.filter(p => p.healthStatus !== 'healthy').length) }}
         </p>
@@ -67,19 +67,19 @@ function completeTask(id: string) {
         </h2>
         <div class="flex flex-col gap-2">
           <PlantWidget
-            v-for="p in userPlantsStore.plants"
-            :key="p.id"
-            :user-plant="p"
+              v-for="p in userPlantsStore.plants"
+              :key="p.id"
+              :user-plant="p"
           />
         </div>
         <NuxtLink
-          to="/my-plants"
-          class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700"
+            to="/my-plants"
+            class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700"
         >
           مدیریت کامل گیاهان
           <Icon
-            name="lucide:arrow-left"
-            class="size-4"
+              name="lucide:arrow-left"
+              class="size-4"
           />
         </NuxtLink>
 
@@ -94,20 +94,20 @@ function completeTask(id: string) {
           تسک‌های امروز
         </h2>
         <div
-          v-if="userPlantsStore.todayTasks.length"
-          class="flex flex-col gap-2"
+            v-if="userPlantsStore.todayTasks.length"
+            class="flex flex-col gap-2"
         >
           <TaskCard
-            v-for="task in userPlantsStore.todayTasks"
-            :key="task.id"
-            :task="task"
-            :plant-name="plantNickname(task.userPlantId)"
-            @done="completeTask"
+              v-for="task in userPlantsStore.todayTasks"
+              :key="task.id"
+              :task="task"
+              :plant-name="plantNickname(task.userPlantId)"
+              @done="completeTask"
           />
         </div>
         <p
-          v-else
-          class="rounded-md bg-primary-50 p-4 text-sm text-primary-700"
+            v-else
+            class="rounded-md bg-primary-50 p-4 text-sm text-primary-700"
         >
           امروز کاری برای گیاهانت ثبت نشده 🌿
         </p>

@@ -42,13 +42,13 @@ function clearHistory() {
       <h2 class="mb-3 font-bold text-ink">
         تنظیمات
       </h2>
-      <div class="flex items-center justify-between rounded-lg bg-surface px-4 py-3 shadow-card">
+      <div class="glass-card flex items-center justify-between px-4 py-3">
         <div class="flex items-center gap-1 text-sm text-ink">
           <Icon
-            name="material-symbols:language"
-            class="size-5 text-primary-600"
+              name="material-symbols:language"
+              class="size-5 text-primary-600"
           />
-        {{ $t("swich_language") }}
+          {{ $t("swich_language") }}
         </div>
         <button
             type="button"
@@ -61,26 +61,26 @@ function clearHistory() {
       </div>
 
       <!-- انتخاب تم رنگی -->
-      <div class="mt-3 rounded-lg bg-surface px-4 py-3 shadow-card">
+      <div class="glass-card mt-3 px-4 py-3">
         <div class="mb-3 text-sm text-ink">
           تم رنگی
         </div>
         <div class="flex items-center gap-3">
           <button
-            v-for="t in themes"
-            :key="t.key"
-            type="button"
-            role="radio"
-            :aria-checked="uiStore.theme === t.key"
-            :aria-label="t.label"
-            :title="t.label"
-            class="flex size-9 items-center justify-center rounded-full ring-offset-2 ring-offset-surface transition-all"
-            :class="uiStore.theme === t.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
-            @click="uiStore.setTheme(t.key)"
+              v-for="t in themes"
+              :key="t.key"
+              type="button"
+              role="radio"
+              :aria-checked="uiStore.theme === t.key"
+              :aria-label="t.label"
+              :title="t.label"
+              class="flex size-9 items-center justify-center rounded-full ring-offset-2 ring-offset-surface transition-all"
+              :class="uiStore.theme === t.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
+              @click="uiStore.setTheme(t.key)"
           >
             <span
-              class="size-6 rounded-full"
-              :style="{ backgroundColor: t.swatch }"
+                class="size-6 rounded-full"
+                :style="{ backgroundColor: t.swatch }"
             />
           </button>
         </div>
@@ -95,39 +95,39 @@ function clearHistory() {
           <span class="text-sm font-normal text-ink-muted">({{ toPersianDigits(wishlistStore.count) }})</span>
         </h2>
         <NuxtLink
-          to="/plants"
-          class="text-sm text-primary-700 hover:underline"
+            to="/plants"
+            class="text-sm text-primary-700 hover:underline"
         >
           کاوش در دایرةالمعارف
         </NuxtLink>
       </div>
 
       <div
-        v-if="wishlistLoading"
-        class="grid grid-cols-2 gap-4 sm:grid-cols-3"
+          v-if="wishlistLoading"
+          class="grid grid-cols-2 gap-4 sm:grid-cols-3"
       >
         <AppSkeleton
-          v-for="i in 3"
-          :key="i"
-          height="140px"
-          rounded="rounded-lg"
+            v-for="i in 3"
+            :key="i"
+            height="140px"
+            rounded="rounded-lg"
         />
       </div>
 
       <div
-        v-else-if="wishlistPlants.length"
-        class="grid grid-cols-2 gap-4 sm:grid-cols-3"
+          v-else-if="wishlistPlants.length"
+          class="grid grid-cols-2 gap-4 sm:grid-cols-3"
       >
         <PlantCard
-          v-for="plant in wishlistPlants"
-          :key="plant.id"
-          :plant="plant"
+            v-for="plant in wishlistPlants"
+            :key="plant.id"
+            :plant="plant"
         />
       </div>
 
       <div
-        v-else
-        class="rounded-lg border border-dashed border-ink/15 px-4 py-8 text-center text-sm text-ink-muted"
+          v-else
+          class="rounded-lg border border-dashed border-ink/15 px-4 py-8 text-center text-sm text-ink-muted"
       >
         هنوز چیزی به علاقه‌مندی‌ها اضافه نکردی. از صفحه‌ی هر گیاه می‌تونی این کار رو انجام بدی.
       </div>
@@ -141,33 +141,33 @@ function clearHistory() {
           <span class="text-sm font-normal text-ink-muted">({{ toPersianDigits(historyStore.count) }})</span>
         </h2>
         <button
-          v-if="historyStore.count"
-          type="button"
-          class="text-sm text-status-danger hover:underline"
-          @click="clearHistory"
+            v-if="historyStore.count"
+            type="button"
+            class="text-sm text-status-danger hover:underline"
+            @click="clearHistory"
         >
           پاک کردن همه
         </button>
       </div>
 
       <div
-        v-if="historyStore.sorted.length"
-        class="flex flex-col divide-y divide-ink/5 rounded-lg bg-surface shadow-card"
+          v-if="historyStore.sorted.length"
+          class="glass-card flex flex-col divide-y divide-ink/5"
       >
         <div
-          v-for="entry in historyStore.sorted"
-          :key="entry.id"
-          class="flex items-center gap-3 px-4 py-3"
+            v-for="entry in historyStore.sorted"
+            :key="entry.id"
+            class="flex items-center gap-3 px-4 py-3"
         >
           <img
-            :src="entry.image"
-            :alt="entry.plantName"
-            class="size-12 shrink-0 rounded-md object-cover"
-            loading="lazy"
+              :src="entry.image"
+              :alt="entry.plantName"
+              class="size-12 shrink-0 rounded-md object-cover"
+              loading="lazy"
           >
           <NuxtLink
-            :to="entry.slug ? `/plants/${entry.slug}` : '/identify'"
-            class="min-w-0 flex-1"
+              :to="entry.slug ? `/plants/${entry.slug}` : '/identify'"
+              class="min-w-0 flex-1"
           >
             <p class="truncate font-medium text-ink">
               {{ entry.plantName }}
@@ -177,27 +177,27 @@ function clearHistory() {
             </p>
           </NuxtLink>
           <button
-            type="button"
-            class="flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted hover:bg-status-danger/10 hover:text-status-danger"
-            aria-label="حذف از تاریخچه"
-            @click="removeHistoryEntry(entry.id)"
+              type="button"
+              class="flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted hover:bg-status-danger/10 hover:text-status-danger"
+              aria-label="حذف از تاریخچه"
+              @click="removeHistoryEntry(entry.id)"
           >
             <Icon
-              name="lucide:trash-2"
-              class="size-4"
+                name="lucide:trash-2"
+                class="size-4"
             />
           </button>
         </div>
       </div>
 
       <div
-        v-else
-        class="rounded-lg border border-dashed border-ink/15 px-4 py-8 text-center text-sm text-ink-muted"
+          v-else
+          class="rounded-lg border border-dashed border-ink/15 px-4 py-8 text-center text-sm text-ink-muted"
       >
         هنوز هیچ گیاهی تشخیص نداده‌ای.
         <NuxtLink
-          to="/identify"
-          class="text-primary-700 hover:underline"
+            to="/identify"
+            class="text-primary-700 hover:underline"
         >
           یکی رو امتحان کن
         </NuxtLink>

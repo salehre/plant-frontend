@@ -11,8 +11,8 @@ const selectedCity = computed(() => findCityById(selectedCityId.value))
 const suitablePlants = computed(() => {
   if (!selectedCity.value) return []
   return selectedCity.value.suitablePlantSlugs
-    .map(slug => mockPlants.find(p => p.slug === slug))
-    .filter((p): p is NonNullable<typeof p> => !!p)
+      .map(slug => mockPlants.find(p => p.slug === slug))
+      .filter((p): p is NonNullable<typeof p> => !!p)
 })
 
 const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متوسط', high: 'زیاد' }
@@ -29,19 +29,19 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
 
     <div class="mb-8 max-w-xs">
       <AppDropdown
-        v-model="selectedCityId"
-        :options="cityOptions"
+          v-model="selectedCityId"
+          :options="cityOptions"
       />
     </div>
 
     <div
-      v-if="selectedCity"
-      class="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4"
+        v-if="selectedCity"
+        class="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4"
     >
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <Icon
-          name="lucide:thermometer"
-          class="mx-auto mb-1 size-5 text-primary-600"
+            name="lucide:thermometer"
+            class="mx-auto mb-1 size-5 text-primary-600"
         />
         <p class="text-sm font-medium text-ink">
           {{ toPersianDigits(selectedCity.avgTemp[0]) }} تا {{ toPersianDigits(selectedCity.avgTemp[1]) }}°
@@ -50,10 +50,10 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
           دمای سالانه
         </p>
       </div>
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <Icon
-          name="lucide:droplets"
-          class="mx-auto mb-1 size-5 text-primary-600"
+            name="lucide:droplets"
+            class="mx-auto mb-1 size-5 text-primary-600"
         />
         <p class="text-sm font-medium text-ink">
           {{ humidityLabelMap[selectedCity.humidity] }}
@@ -62,10 +62,10 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
           رطوبت هوا
         </p>
       </div>
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <Icon
-          name="lucide:cloud"
-          class="mx-auto mb-1 size-5 text-primary-600"
+            name="lucide:cloud"
+            class="mx-auto mb-1 size-5 text-primary-600"
         />
         <p class="text-sm font-medium text-ink">
           {{ selectedCity.climateType }}
@@ -74,10 +74,10 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
           نوع اقلیم
         </p>
       </div>
-      <div class="rounded-lg bg-surface p-4 text-center shadow-card">
+      <div class="glass-card p-4 text-center">
         <Icon
-          name="lucide:sprout"
-          class="mx-auto mb-1 size-5 text-primary-600"
+            name="lucide:sprout"
+            class="mx-auto mb-1 size-5 text-primary-600"
         />
         <p class="text-sm font-medium text-ink">
           {{ toPersianDigits(suitablePlants.length) }} گیاه
@@ -92,18 +92,18 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
       گیاهان پیشنهادی برای {{ selectedCity?.name }}
     </h2>
     <div
-      v-if="suitablePlants.length"
-      class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+        v-if="suitablePlants.length"
+        class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
     >
       <PlantCard
-        v-for="plant in suitablePlants"
-        :key="plant.id"
-        :plant="plant"
+          v-for="plant in suitablePlants"
+          :key="plant.id"
+          :plant="plant"
       />
     </div>
     <p
-      v-else
-      class="text-ink-muted"
+        v-else
+        class="text-ink-muted"
     >
       برای این شهر هنوز پیشنهادی ثبت نشده.
     </p>

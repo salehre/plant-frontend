@@ -230,11 +230,11 @@ const scientificSynonyms = ref([
 ])
 
 const fossilPeriod = ref(
-  'شواهد نشان می‌دهد جنس Glycyrrhiza در دوران پلیوسن حضور داشته؛ تاریخچه تکاملی چندمیلیون ساله دارد.',
+    'شواهد نشان می‌دهد جنس Glycyrrhiza در دوران پلیوسن حضور داشته؛ تاریخچه تکاملی چندمیلیون ساله دارد.',
 )
 
 const plantStory = ref(
-  'شیرین‌بیان یکی از کهن‌ترین گیاهان دارویی دنیاست؛ در متون پزشکی مصر باستان، چین و ایران باستان از آن نام برده شده. سربازان ایرانی در دوره هخامنشی برای جلوگیری از تشنگی در سفرهای طولانی ریشهٔ آن را می‌جویدند، زیرا گلیسیریزین سبب احساس شیرینی و افزایش ترشح بزاق می‌شود.',
+    'شیرین‌بیان یکی از کهن‌ترین گیاهان دارویی دنیاست؛ در متون پزشکی مصر باستان، چین و ایران باستان از آن نام برده شده. سربازان ایرانی در دوره هخامنشی برای جلوگیری از تشنگی در سفرهای طولانی ریشهٔ آن را می‌جویدند، زیرا گلیسیریزین سبب احساس شیرینی و افزایش ترشح بزاق می‌شود.',
 )
 
 const quickStats = ref([
@@ -287,9 +287,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
         <!-- عکس شناور -->
         <div class="relative -mb-14 shrink-0 sm:-mb-16">
           <img
-            :src="plantImage"
-            :alt="plantName"
-            class="size-28 rounded-full border-4 border-surface object-cover shadow-card-hover sm:size-40"
+              :src="plantImage"
+              :alt="plantName"
+              class="size-28 rounded-full border-4 border-surface object-cover shadow-card-hover sm:size-40"
           >
         </div>
 
@@ -305,23 +305,23 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </p>
 
           <button
-            class="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-400/90 px-3 py-1.5 text-xs font-semibold text-primary-900 transition hover:bg-accent-300"
-            @click="goToTarget"
+              class="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-400/90 px-3 py-1.5 text-xs font-semibold text-primary-900 transition hover:bg-accent-300"
+              @click="goToTarget"
           >
             وضعیت حفاظتی: {{ toxitcityStatus.lame }}
           </button>
 
           <div class="mt-1 flex items-center gap-2">
             <button
-              class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
-              :aria-pressed="isBookmarked"
-              @click="toggleBookmark"
+                class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                :aria-pressed="isBookmarked"
+                @click="toggleBookmark"
             >
               <Icon :name="isBookmarked ? 'lucide:bookmark-check' : 'lucide:bookmark'" class="size-4" />
             </button>
             <button
-              class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
-              @click="sharePlant"
+                class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                @click="sharePlant"
             >
               <Icon name="lucide:share-2" class="size-4" />
             </button>
@@ -334,9 +334,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
       <!-- ========== آمار سریع ========== -->
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <div
-          v-for="stat in quickStats"
-          :key="stat.label"
-          class="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-ink/10 bg-surface px-3 py-4 text-center shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover"
+            v-for="stat in quickStats"
+            :key="stat.label"
+            class="glass-card flex flex-col items-center justify-center gap-1.5 px-3 py-4 text-center transition hover:-translate-y-0.5"
         >
           <span class="text-sm font-bold text-primary-900">{{ stat.value }}</span>
           <span class="text-[0.65rem] uppercase tracking-wide text-ink-muted">{{ stat.label }}</span>
@@ -348,7 +348,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
         <!-- ستون اول -->
         <div class="flex flex-col gap-6 lg:col-span-7">
           <!-- طبقه‌بندی علمی -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               طبقه‌بندی علمی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Taxonomy</span>
@@ -356,28 +356,28 @@ const getNeedLabel = (key: string) => needLabels[key] || key
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <table class="w-full overflow-hidden rounded-md text-center text-sm">
               <tbody>
-                <tr v-for="(value, key) in filteredTaxonomy" :key="key" class="border-b border-ink/10 last:border-0">
-                  <td class="w-2/5 bg-bg px-4 py-3 text-xs font-semibold text-primary-900">
-                    {{ getTaxonomyLabel(key) }}
-                  </td>
-                  <td class="px-4 py-3 text-xs text-ink">
-                    {{ value }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-2/5 bg-bg px-4 py-3 text-xs font-semibold text-primary-900">
-                    وضع‌کننده (Authority)
-                  </td>
-                  <td class="px-4 py-3 text-xs text-ink">
-                    {{ taxonomy.authority }}
-                  </td>
-                </tr>
+              <tr v-for="(value, key) in filteredTaxonomy" :key="key" class="border-b border-ink/10 last:border-0">
+                <td class="w-2/5 bg-bg px-4 py-3 text-xs font-semibold text-primary-900">
+                  {{ getTaxonomyLabel(key) }}
+                </td>
+                <td class="px-4 py-3 text-xs text-ink">
+                  {{ value }}
+                </td>
+              </tr>
+              <tr>
+                <td class="w-2/5 bg-bg px-4 py-3 text-xs font-semibold text-primary-900">
+                  وضع‌کننده (Authority)
+                </td>
+                <td class="px-4 py-3 text-xs text-ink">
+                  {{ taxonomy.authority }}
+                </td>
+              </tr>
               </tbody>
             </table>
           </section>
 
           <!-- ویژگی‌های مورفولوژیک -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               ویژگی‌های زیست‌شناسی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Morphology</span>
@@ -385,9 +385,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <div class="grid grid-cols-2 gap-3">
               <div
-                v-for="(value, key) in morphology"
-                :key="key"
-                class="rounded-md border border-ink/10 bg-bg p-3 transition hover:-translate-x-1 hover:shadow-card"
+                  v-for="(value, key) in morphology"
+                  :key="key"
+                  class="rounded-md border border-ink/10 bg-bg p-3 transition hover:-translate-x-1 hover:shadow-card"
               >
                 <div class="flex items-center gap-1.5 border-b border-dashed border-ink/15 pb-1.5 text-xs text-ink-muted">
                   <span class="text-accent-500">●</span>
@@ -401,7 +401,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- کاربردها -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               کاربردها
               <span class="text-xs font-normal tracking-wide text-ink-muted">Applications</span>
@@ -439,7 +439,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- ترکیبات شیمیایی -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               ترکیبات شیمیایی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Phytochemistry</span>
@@ -453,9 +453,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
 
             <div class="mt-5 flex flex-col gap-5">
               <div
-                v-for="(cat, idx) in chemicalCompounds.categories"
-                :key="idx"
-                class="border-b border-ink/10 pb-3 last:border-0 last:pb-0"
+                  v-for="(cat, idx) in chemicalCompounds.categories"
+                  :key="idx"
+                  class="border-b border-ink/10 pb-3 last:border-0 last:pb-0"
               >
                 <div class="mb-2 flex flex-wrap items-baseline justify-between gap-1">
                   <strong class="text-sm text-primary-900">{{ cat.name }}</strong>
@@ -463,9 +463,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
                 </div>
                 <ul v-if="cat.compounds?.length" class="list-none space-y-1">
                   <li
-                    v-for="(comp, cidx) in cat.compounds"
-                    :key="cidx"
-                    class="flex items-baseline justify-between gap-2 border-b border-dashed border-ink/10 py-1 text-xs last:border-0"
+                      v-for="(comp, cidx) in cat.compounds"
+                      :key="cidx"
+                      class="flex items-baseline justify-between gap-2 border-b border-dashed border-ink/10 py-1 text-xs last:border-0"
                   >
                     <span class="font-medium text-ink">{{ comp.name }}</span>
                     <span class="shrink-0 rounded-full bg-bg px-2 py-0.5 text-ink-muted">{{ comp.amount }}</span>
@@ -479,7 +479,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
         <!-- ستون دوم -->
         <div class="flex flex-col gap-6 lg:col-span-5">
           <!-- نیازهای رشدی -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               نیازهای رشدی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Growth Requirements</span>
@@ -487,9 +487,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <div class="flex flex-col gap-3">
               <div
-                v-for="(value, key) in growthNeeds"
-                :key="key"
-                class="flex items-center gap-3 border-b border-ink/10 pb-3 last:border-0 last:pb-0"
+                  v-for="(value, key) in growthNeeds"
+                  :key="key"
+                  class="flex items-center gap-3 border-b border-ink/10 pb-3 last:border-0 last:pb-0"
               >
                 <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
                   <Icon :name="growthIcons[key]" class="size-4" />
@@ -507,7 +507,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- داستان گیاه -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               داستان گیاه
               <span class="text-xs font-normal tracking-wide text-ink-muted">Plant Story</span>
@@ -519,7 +519,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- سمیت -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               سمّیت
               <span class="text-xs font-normal tracking-wide text-ink-muted">Toxicity</span>
@@ -532,7 +532,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- حفاظت -->
-          <section ref="targetSection" class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section ref="targetSection" class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               حفاظت
               <span class="text-xs font-normal tracking-wide text-ink-muted">Status</span>
@@ -545,7 +545,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- نام‌های محلی -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               نام‌های محلی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Local Names</span>
@@ -553,9 +553,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <div class="flex flex-wrap gap-3">
               <div
-                v-for="item in localNames"
-                :key="item.name"
-                class="rounded-full bg-bg px-3.5 py-1.5 text-sm"
+                  v-for="item in localNames"
+                  :key="item.name"
+                  class="rounded-full bg-bg px-3.5 py-1.5 text-sm"
               >
                 <span class="font-semibold text-primary-900">{{ item.name }}</span>
                 <span class="mr-1 text-xs text-ink-muted">({{ item.region }})</span>
@@ -564,7 +564,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- مترادف‌های علمی -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               مترادف‌های علمی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Synonyms</span>
@@ -572,9 +572,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <div class="flex flex-col gap-2.5">
               <div
-                v-for="synonym in scientificSynonyms"
-                :key="synonym"
-                class="flex items-center gap-2 border-b border-ink/10 pb-2.5 text-sm last:border-0 last:pb-0"
+                  v-for="synonym in scientificSynonyms"
+                  :key="synonym"
+                  class="flex items-center gap-2 border-b border-ink/10 pb-2.5 text-sm last:border-0 last:pb-0"
               >
                 <span class="text-accent-500">▹</span>
                 <span class="italic">{{ synonym }}</span>
@@ -583,7 +583,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
           </section>
 
           <!-- دوره فسیلی -->
-          <section class="rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+          <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
               دوره فسیلی
               <span class="text-xs font-normal tracking-wide text-ink-muted">Fossil Record</span>
@@ -598,7 +598,7 @@ const getNeedLabel = (key: string) => needLabels[key] || key
       </div>
 
       <!-- ========== گالری تصاویر ========== -->
-      <section class="mt-6 rounded-lg border border-ink/10 bg-surface p-5 shadow-card sm:p-6">
+      <section class="glass-card mt-6 p-5 sm:p-6">
         <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
           گالری تصاویر
           <span class="text-xs font-normal tracking-wide text-ink-muted">Image Gallery</span>
@@ -606,17 +606,17 @@ const getNeedLabel = (key: string) => needLabels[key] || key
         <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           <button
-            v-for="(image, index) in plantGallery"
-            :key="index"
-            class="group overflow-hidden rounded-lg border border-ink/10 text-right transition hover:-translate-y-1 hover:shadow-card-hover"
-            @click="openGallery(index)"
+              v-for="(image, index) in plantGallery"
+              :key="index"
+              class="glass-card group overflow-hidden text-right transition hover:-translate-y-1"
+              @click="openGallery(index)"
           >
             <div class="h-[140px] overflow-hidden sm:h-[180px]">
               <img
-                :src="image.thumb"
-                :alt="image.title"
-                loading="lazy"
-                class="size-full object-cover transition duration-300 group-hover:scale-105"
+                  :src="image.thumb"
+                  :alt="image.title"
+                  loading="lazy"
+                  class="size-full object-cover transition duration-300 group-hover:scale-105"
               >
             </div>
             <div class="p-2 text-center text-xs text-ink-muted">
@@ -630,9 +630,9 @@ const getNeedLabel = (key: string) => needLabels[key] || key
     <!-- ========== لایت‌باکس گالری ========== -->
     <Teleport to="body">
       <div
-        v-if="galleryDialog"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
-        @click.self="closeGallery"
+          v-if="galleryDialog"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
+          @click.self="closeGallery"
       >
         <div class="w-full max-w-2xl overflow-hidden rounded-lg bg-surface">
           <div class="flex items-center justify-between px-4 py-3">
@@ -642,23 +642,23 @@ const getNeedLabel = (key: string) => needLabels[key] || key
             </button>
           </div>
           <img
-            :src="galleryCurrentImage?.full"
-            :alt="galleryCurrentImage?.title"
-            class="max-h-[60vh] w-full object-contain"
+              :src="galleryCurrentImage?.full"
+              :alt="galleryCurrentImage?.title"
+              class="max-h-[60vh] w-full object-contain"
           >
           <div class="flex items-center justify-center gap-3 py-4">
             <button
-              class="flex size-9 items-center justify-center rounded-full border border-ink/10 text-ink disabled:opacity-30"
-              :disabled="galleryIndex === 0"
-              @click="prevImage"
+                class="flex size-9 items-center justify-center rounded-full border border-ink/10 text-ink disabled:opacity-30"
+                :disabled="galleryIndex === 0"
+                @click="prevImage"
             >
               <Icon name="lucide:chevron-right" class="size-4" />
             </button>
             <span class="text-sm text-ink-muted">{{ galleryIndex + 1 }} / {{ plantGallery.length }}</span>
             <button
-              class="flex size-9 items-center justify-center rounded-full border border-ink/10 text-ink disabled:opacity-30"
-              :disabled="galleryIndex === plantGallery.length - 1"
-              @click="nextImage"
+                class="flex size-9 items-center justify-center rounded-full border border-ink/10 text-ink disabled:opacity-30"
+                :disabled="galleryIndex === plantGallery.length - 1"
+                @click="nextImage"
             >
               <Icon name="lucide:chevron-left" class="size-4" />
             </button>

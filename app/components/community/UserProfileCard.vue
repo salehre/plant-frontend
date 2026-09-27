@@ -2,8 +2,8 @@
 import type { CommunityUser } from '~/types/community.types'
 
 const props = withDefaults(
-  defineProps<{ user: CommunityUser, showFollow?: boolean }>(),
-  { showFollow: false },
+    defineProps<{ user: CommunityUser, showFollow?: boolean }>(),
+    { showFollow: false },
 )
 
 const communityStore = useCommunityStore()
@@ -11,12 +11,12 @@ const isOwnProfile = computed(() => props.user.id === communityStore.currentUser
 </script>
 
 <template>
-  <div class="rounded-lg bg-surface p-4 shadow-card">
+  <div class="glass-card p-4">
     <div class="flex items-center gap-3">
       <img
-        :src="props.user.avatar"
-        :alt="props.user.name"
-        class="size-14 rounded-full object-cover"
+          :src="props.user.avatar"
+          :alt="props.user.name"
+          class="size-14 rounded-full object-cover"
       >
       <div class="min-w-0 flex-1">
         <p class="truncate font-bold text-ink">
@@ -27,10 +27,10 @@ const isOwnProfile = computed(() => props.user.id === communityStore.currentUser
         </p>
       </div>
       <AppButton
-        v-if="props.showFollow && !isOwnProfile"
-        :variant="communityStore.isFollowing(props.user.id) ? 'secondary' : 'primary'"
-        size="sm"
-        @click="communityStore.toggleFollow(props.user.id)"
+          v-if="props.showFollow && !isOwnProfile"
+          :variant="communityStore.isFollowing(props.user.id) ? 'secondary' : 'primary'"
+          size="sm"
+          @click="communityStore.toggleFollow(props.user.id)"
       >
         {{ communityStore.isFollowing(props.user.id) ? 'دنبال می‌کنی' : 'دنبال کردن' }}
       </AppButton>

@@ -16,9 +16,9 @@ function onSearch() {
   <div>
     <section class="hero-leaves relative overflow-hidden px-4 py-10 sm:py-16">
       <img
-        src="/images/bg-image/spring.webp"
-        alt=""
-        class="absolute inset-0 size-full object-cover"
+          src="/public/images/bg-image/spring.webp"
+          alt=""
+          class="absolute inset-0 size-full object-cover"
       >
       <div class="absolute inset-0 bg-black/25" />
 
@@ -28,10 +28,10 @@ function onSearch() {
             <!-- نوار بالا -->
             <div class="flex items-center gap-3 text-white/90">
               <button
-                type="button"
-                aria-label="منو"
-                class="flex flex-col justify-center gap-1"
-                @click="uiStore.mobileNavOpen = true"
+                  type="button"
+                  aria-label="منو"
+                  class="flex flex-col justify-center gap-1"
+                  @click="uiStore.mobileNavOpen = true"
               >
                 <span class="block h-0.5 w-5 rounded-full bg-white/90" />
                 <span class="block h-0.5 w-5 rounded-full bg-white/90" />
@@ -44,10 +44,10 @@ function onSearch() {
             <div class="grid grid-cols-1 items-center gap-8 sm:grid-cols-[220px_1fr]">
               <div class="aspect-square overflow-hidden rounded-2xl border border-white/25 shadow-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=800"
-                  alt="برگ‌های سبز"
-                  class="size-full object-cover"
-                  loading="lazy"
+                    src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=800"
+                    alt="برگ‌های سبز"
+                    class="size-full object-cover"
+                    loading="lazy"
                 >
               </div>
 
@@ -72,18 +72,18 @@ function onSearch() {
               <span class="text-sm text-white/90">ارتباط با طبیعت</span>
               <div class="flex flex-wrap gap-3">
                 <NuxtLink
-                  to="/identify"
-                  class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                    to="/identify"
+                    class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 >
                   <Icon
-                    name="lucide:scan-line"
-                    class="size-4"
+                      name="lucide:scan-line"
+                      class="size-4"
                   />
                   {{ $t('home.identifyCta') }}
                 </NuxtLink>
                 <NuxtLink
-                  to="/plants"
-                  class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                    to="/plants"
+                    class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 >
                   دایرة‌المعارف
                 </NuxtLink>
@@ -94,24 +94,24 @@ function onSearch() {
 
         <!-- جستجو - جدا از کارت شیشه‌ای تا چیدمان مرجع دست‌نخورده بمونه -->
         <form
-          class="mx-auto mt-6 flex w-full max-w-md gap-2"
-          @submit.prevent="onSearch"
+            class="mx-auto mt-6 flex w-full max-w-md gap-2"
+            @submit.prevent="onSearch"
         >
           <div class="relative flex-1">
             <Icon
-              name="lucide:search"
-              class="absolute top-1/2 start-3 size-4 -translate-y-1/2 text-ink-muted"
+                name="lucide:search"
+                class="absolute top-1/2 start-3 size-4 -translate-y-1/2 text-ink-muted"
             />
             <input
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('common.searchPlaceholder')"
-              class="w-full rounded-full border-0 bg-surface py-3 ps-9 pe-3 text-sm text-ink outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
+                v-model="searchQuery"
+                type="text"
+                :placeholder="$t('common.searchPlaceholder')"
+                class="w-full rounded-full border-0 bg-surface py-3 ps-9 pe-3 text-sm text-ink outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
             >
           </div>
           <AppButton
-            type="submit"
-            variant="primary"
+              type="submit"
+              variant="primary"
           >
             {{ $t('common.search') }}
           </AppButton>
@@ -126,17 +126,17 @@ function onSearch() {
           {{ $t('home.featuredPlants') }}
         </h2>
         <NuxtLink
-          to="/plants"
-          class="text-sm font-medium text-primary-600 hover:text-primary-700"
+            to="/plants"
+            class="text-sm font-medium text-primary-600 hover:text-primary-700"
         >
           {{ $t('common.seeAll') }}
         </NuxtLink>
       </div>
       <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         <PlantCard
-          v-for="plant in featured"
-          :key="plant.id"
-          :plant="plant"
+            v-for="plant in featured"
+            :key="plant.id"
+            :plant="plant"
         />
       </div>
     </section>
@@ -149,16 +149,16 @@ function onSearch() {
         </h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <NuxtLink
-            v-for="disease in mockDiseases"
-            :key="disease.id"
-            :to="`/identify`"
-            class="flex flex-col gap-2 rounded-lg bg-surface p-4 shadow-card transition-shadow hover:shadow-card-hover"
+              v-for="disease in mockDiseases"
+              :key="disease.id"
+              :to="`/identify`"
+              class="glass-card flex flex-col gap-2 p-4"
           >
             <img
-              :src="disease.image"
-              :alt="disease.name"
-              class="h-28 w-full rounded-md object-cover"
-              loading="lazy"
+                :src="disease.image"
+                :alt="disease.name"
+                class="h-28 w-full rounded-md object-cover"
+                loading="lazy"
             >
             <span class="text-sm font-medium text-ink">{{ disease.name }}</span>
           </NuxtLink>
@@ -174,8 +174,8 @@ function onSearch() {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="rounded-lg border border-ink/5 p-5">
           <Icon
-            name="lucide:droplets"
-            class="mb-3 size-6 text-primary-600"
+              name="lucide:droplets"
+              class="mb-3 size-6 text-primary-600"
           />
           <h3 class="mb-1 font-medium text-ink">
             آبیاری اصولی
@@ -186,8 +186,8 @@ function onSearch() {
         </div>
         <div class="rounded-lg border border-ink/5 p-5">
           <Icon
-            name="lucide:sun"
-            class="mb-3 size-6 text-primary-600"
+              name="lucide:sun"
+              class="mb-3 size-6 text-primary-600"
           />
           <h3 class="mb-1 font-medium text-ink">
             نورسنجی خانه
@@ -198,8 +198,8 @@ function onSearch() {
         </div>
         <div class="rounded-lg border border-ink/5 p-5">
           <Icon
-            name="lucide:bug"
-            class="mb-3 size-6 text-primary-600"
+              name="lucide:bug"
+              class="mb-3 size-6 text-primary-600"
           />
           <h3 class="mb-1 font-medium text-ink">
             تشخیص زودهنگام آفت
