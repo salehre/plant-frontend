@@ -14,18 +14,18 @@ const severityMap = {
 </script>
 
 <template>
-  <div class="rounded-lg border border-status-danger/20 bg-surface p-5 shadow-card">
+  <div class="glass-card p-5">
     <div class="flex items-center justify-between">
       <h3 class="flex items-center gap-2 font-bold text-ink">
         <Icon
-          name="lucide:shield-alert"
-          class="size-5 text-status-danger"
+            name="lucide:shield-alert"
+            class="size-5 text-status-danger"
         />
         {{ props.result.diseaseName }}
       </h3>
       <span
-        class="rounded-full px-2.5 py-1 text-xs font-medium"
-        :class="severityMap[props.result.severity].class"
+          class="rounded-full px-2.5 py-1 text-xs font-medium"
+          :class="severityMap[props.result.severity].class"
       >
         {{ severityMap[props.result.severity].label }}
       </span>
@@ -41,13 +41,13 @@ const severityMap = {
       </p>
       <ul class="flex flex-col gap-1.5">
         <li
-          v-for="(step, i) in props.result.treatmentSteps"
-          :key="i"
-          class="flex items-start gap-2 text-sm text-ink-muted"
+            v-for="(step, i) in props.result.treatmentSteps"
+            :key="i"
+            class="flex items-start gap-2 text-sm text-ink-muted"
         >
           <Icon
-            name="lucide:check"
-            class="mt-0.5 size-4 shrink-0 text-primary-600"
+              name="lucide:check"
+              class="mt-0.5 size-4 shrink-0 text-primary-600"
           />
           {{ step }}
         </li>

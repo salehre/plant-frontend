@@ -12,7 +12,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-xl border border-ink/10 bg-surface">
+  <div class="overflow-hidden glass-card">
     <div class="px-5 pb-3 pt-5">
       <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
         {{ title }}
