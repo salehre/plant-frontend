@@ -52,10 +52,11 @@
 
 @layer base {
   :root {
-    --color-surface: 247 248 248; /* #f7f8f8 - derived from brand */
-    --color-bg: 238 241 240; /* #eef1f0 - derived from brand */
-    --color-ink: 12 48 36; /* #0c3024 - derived from brand */
-    --color-ink-muted: 81 100 94; /* #51645e - derived from brand */
+    /* حالت روشن (پیش‌فرض) - تم forest */
+    --color-surface: 247 248 248; /* #f7f8f8 */
+    --color-bg: 238 241 240; /* #eef1f0 */
+    --color-ink: 12 48 36; /* #0c3024 */
+    --color-ink-muted: 81 100 94; /* #51645e */
 
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
@@ -80,11 +81,19 @@
     --color-accent-900: 60 38 16; /* #3c2610 */
   }
 
+  :root.dark {
+    /* حالت تاریک - تم forest */
+    --color-surface: 49 88 75; /* #315b4b */
+    --color-bg: 14 55 41; /* #0e3729 */
+    --color-ink: 255 255 255; /* #ffffff */
+    --color-ink-muted: 147 168 161; /* #93a8a1 */
+  }
+
   [data-theme='wine'] {
-    --color-surface: 249 247 248; /* #f9f7f8 - derived from brand */
-    --color-bg: 243 239 240; /* #f3eff0 - derived from brand */
-    --color-ink: 70 23 33; /* #461721 - derived from brand */
-    --color-ink-muted: 112 87 92; /* #70575c - derived from brand */
+    --color-surface: 249 247 248; /* #f9f7f8 */
+    --color-bg: 243 239 240; /* #f3eff0 */
+    --color-ink: 70 23 33; /* #461721 */
+    --color-ink-muted: 112 87 92; /* #70575c */
 
     --color-brand: 90 30 42; /* #5a1e2a */
     --color-primary-50: 253 243 245; /* #fdf3f5 */
@@ -109,11 +118,18 @@
     --color-accent-900: 23 47 21; /* #172f15 */
   }
 
+  [data-theme='wine'].dark {
+    --color-surface: 113 62 72; /* #713e48 */
+    --color-bg: 81 27 38; /* #511b26 */
+    --color-ink: 255 255 255; /* #ffffff */
+    --color-ink-muted: 181 154 159; /* #b59a9f */
+  }
+
   [data-theme='forest'] {
-    --color-surface: 247 248 248; /* #f7f8f8 - derived from brand */
-    --color-bg: 238 241 240; /* #eef1f0 - derived from brand */
-    --color-ink: 12 48 36; /* #0c3024 - derived from brand */
-    --color-ink-muted: 81 100 94; /* #51645e - derived from brand */
+    --color-surface: 247 248 248; /* #f7f8f8 */
+    --color-bg: 238 241 240; /* #eef1f0 */
+    --color-ink: 12 48 36; /* #0c3024 */
+    --color-ink-muted: 81 100 94; /* #51645e */
 
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
@@ -138,11 +154,18 @@
     --color-accent-900: 60 38 16; /* #3c2610 */
   }
 
+  [data-theme='forest'].dark {
+    --color-surface: 49 88 75; /* #315b4b */
+    --color-bg: 14 55 41; /* #0e3729 */
+    --color-ink: 255 255 255; /* #ffffff */
+    --color-ink-muted: 147 168 161; /* #93a8a1 */
+  }
+
   [data-theme='brown'] {
-    --color-surface: 249 248 246; /* #f9f8f6 - derived from brand */
-    --color-bg: 243 240 238; /* #f3f0ee - derived from brand */
-    --color-ink: 70 36 8; /* #462408 - derived from brand */
-    --color-ink-muted: 112 94 78; /* #705e4e - derived from brand */
+    --color-surface: 249 248 246; /* #f9f8f6 */
+    --color-bg: 243 240 238; /* #f3f0ee */
+    --color-ink: 70 36 8; /* #462408 */
+    --color-ink-muted: 112 94 78; /* #705e4e */
 
     --color-brand: 90 46 10; /* #5a2e0a */
     --color-primary-50: 253 244 237; /* #fdf4ed */
@@ -167,11 +190,18 @@
     --color-accent-900: 56 18 12; /* #38120c */
   }
 
+  [data-theme='brown'].dark {
+    --color-surface: 113 75 44; /* #714b2c */
+    --color-bg: 81 41 9; /* #512909 */
+    --color-ink: 255 255 255; /* #ffffff */
+    --color-ink-muted: 181 161 145; /* #b5a191 */
+  }
+
   [data-theme='navy'] {
-    --color-surface: 246 247 248; /* #f6f7f8 - derived from brand */
-    --color-bg: 238 239 241; /* #eeeff1 - derived from brand */
-    --color-ink: 5 18 44; /* #05122c - derived from brand */
-    --color-ink-muted: 77 84 98; /* #4d5462 - derived from brand */
+    --color-surface: 246 247 248; /* #f6f7f8 */
+    --color-bg: 238 239 241; /* #eeeff1 */
+    --color-ink: 5 18 44; /* #05122c */
+    --color-ink-muted: 77 84 98; /* #4d5462 */
 
     --color-brand: 7 23 57; /* #071739 */
     --color-primary-50: 241 243 249; /* #f1f3f9 */
@@ -196,9 +226,20 @@
     --color-accent-900: 22 44 57; /* #162c39 */
   }
 
+  [data-theme='navy'].dark {
+    --color-surface: 42 55 85; /* #2a3755 */
+    --color-bg: 6 21 51; /* #061533 */
+    --color-ink: 255 255 255; /* #ffffff */
+    --color-ink-muted: 143 151 166; /* #8f97a6 */
+  }
+
   html {
     font-family: 'Peyda', sans-serif !important;
     color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   body {

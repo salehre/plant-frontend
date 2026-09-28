@@ -1,5 +1,6 @@
 <template>
   <div class="flex min-h-screen flex-col">
+    <CornerGradient />
     <TheHeader />
     <div class="mx-auto flex w-full max-w-6xl flex-1">
       <TheSidebar />

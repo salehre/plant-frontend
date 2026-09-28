@@ -60,6 +60,25 @@ function clearHistory() {
         </button>
       </div>
 
+      <!-- حالت روشن/تاریک -->
+      <div class="mt-3 flex items-center justify-between rounded-lg bg-surface px-4 py-3 shadow-card">
+        <div class="flex items-center gap-1 text-sm text-ink">
+          <Icon
+            :name="uiStore.mode === 'dark' ? 'material-symbols:dark-mode-outline' : 'material-symbols:light-mode-outline'"
+            class="size-5 text-primary-600"
+          />
+          حالت نمایش
+        </div>
+        <button
+          type="button"
+          class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+          :aria-label="uiStore.mode === 'dark' ? 'تغییر به حالت روشن' : 'تغییر به حالت تاریک'"
+          @click="uiStore.toggleMode()"
+        >
+          {{ uiStore.mode === 'dark' ? 'تاریک' : 'روشن' }}
+        </button>
+      </div>
+
       <!-- انتخاب تم رنگی -->
       <div class="mt-3 rounded-lg bg-surface px-4 py-3 shadow-card">
         <div class="mb-3 text-sm text-ink">
