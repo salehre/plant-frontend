@@ -5,22 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f735a1df-3114-4aed-b584-3befc7ea24fd" name="Changes" comment="1.2.3">
+      <change afterPath="$PROJECT_DIR$/app/services/mock/plant-details.mock.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/ai/DiseaseResultCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/ai/DiseaseResultCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/ai/PredictionCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/ai/PredictionCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/community/PostCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/community/PostCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/community/UserProfileCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/community/UserProfileCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/dashboard/GrowthChart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/dashboard/GrowthChart.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/dashboard/PlantWidget.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/dashboard/PlantWidget.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/dashboard/TaskCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/dashboard/TaskCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/plant/DetailSectionCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/plant/DetailSectionCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/climate/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/climate/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/compare/[...slugs].vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/compare/[...slugs].vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/dashboard/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/dashboard/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/components/layout/CornerGradient.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/layout/CornerGradient.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layouts/auth.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/layouts/auth.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layouts/dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/layouts/dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layouts/default.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/layouts/default.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/pages/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/my-plants/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/my-plants/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/profile.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/testdetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/testdetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pages/plants/[slug].vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/plants/[slug].vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/mock/plants.mock.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/mock/plants.mock.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/stores/ui.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/stores/ui.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/types/plant.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/types/plant.types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plant-frontend.zip" beforeDir="false" afterPath="$PROJECT_DIR$/plant-frontend.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +26,13 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -75,7 +79,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "D:\\projects\\plant-frontend\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\projects\\plant-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -96,6 +100,7 @@
       <updated>1789816099842</updated>
       <workItem from="1789816101004" duration="2936000" />
       <workItem from="1790428137349" duration="948000" />
+      <workItem from="1790660383074" duration="11660000" />
     </task>
     <task id="LOCAL-00001" summary="1.2.3">
       <option name="closed" value="true" />

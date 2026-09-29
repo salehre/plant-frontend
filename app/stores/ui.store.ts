@@ -15,13 +15,17 @@ export const themes = [
 export type ThemeKey = typeof themes[number]['key']
 export type ThemeMode = 'light' | 'dark'
 
+export const seasonByTheme: Record<ThemeKey, string> = {
+  navy: 'winter',
+  brown: 'autumn',
+  wine: 'spring',
+  forest: 'summer',
+}
+
 export const useUiStore = defineStore('ui', {
   state: () => ({
     mobileNavOpen: false,
-    // تم رنگی انتخابی روی همین دستگاه ذخیره می‌شه (localStorage)؛ پیش‌فرض forest
-    // (نزدیک‌ترین تم به هویت اصلی سبز اپ) تا با اولین بار بازکردن اپ هماهنگ باشه.
     theme: useLocalStorage<ThemeKey>('bargyar-theme', 'forest'),
-    // حالت روشن/تاریک، مستقل از تم رنگی؛ پیش‌فرض dark چون هویت اصلی اپ تاریکه.
     mode: useLocalStorage<ThemeMode>('bargyar-mode', 'dark'),
   }),
   actions: {
@@ -39,7 +43,6 @@ export const useUiStore = defineStore('ui', {
     toggleMode() {
       this.setMode(this.mode === 'dark' ? 'light' : 'dark')
     },
-    /** روی <html> attribute «data-theme» و کلاس «dark» رو اعمال می‌کنه؛ در بوت اپ و بعد از setTheme/setMode صدا زده می‌شه */
     applyThemeAttribute() {
       if (import.meta.client) {
         document.documentElement.setAttribute('data-theme', this.theme)

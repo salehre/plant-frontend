@@ -46,3 +46,96 @@ export interface PlantSummary {
   category: string
   difficulty: Difficulty
 }
+
+// ============ دیتای غنی صفحه‌ی جزئیات (بر اساس طرح testdetail.vue) ============
+
+export interface PlantGalleryImage {
+  thumb: string
+  full: string
+  title: string
+}
+
+export interface PlantChemicalCompound {
+  name: string
+  amount: string
+}
+
+export interface PlantChemicalCategory {
+  name: string
+  total: string
+  compounds: PlantChemicalCompound[]
+}
+
+export interface PlantTaxonomy {
+  kingdom: string
+  division: string
+  class: string
+  order: string
+  family: string
+  genus: string
+  species: string
+  subspecies: string
+  authority: string
+}
+
+export interface PlantMorphology {
+  plantType: string
+  leaf: string
+  flower: string
+  stem: string
+  root: string
+  fruit: string
+  seed: string
+  bark: string
+  latex: string
+}
+
+export interface PlantGrowthNeeds {
+  light: string
+  water: string
+  soil: string
+  temperature: string
+  growthAltitude: string
+}
+
+export interface PlantApplications {
+  food: string[]
+  industrial: string[]
+  therapeutic: string[]
+}
+
+export interface PlantLocalName {
+  name: string
+  region: string
+}
+
+export interface PlantQuickStat {
+  label: string
+  value: string
+}
+
+export interface PlantDetail {
+  slug: string
+  /** عکس دایره‌ای هدر */
+  image: string
+  gallery: PlantGalleryImage[]
+  taxonomy: PlantTaxonomy
+  morphology: PlantMorphology
+  chemicalCompounds: {
+    majorCompound: string
+    categories: PlantChemicalCategory[]
+  }
+  growthNeeds: PlantGrowthNeeds
+  applications: PlantApplications
+  /** متن توصیفی سمیت (مستقل از toxicity.isToxic ساده‌ی Plant) */
+  toxicityText: string
+  /** برچسب کوتاه برای دکمه‌ی هدر، مثلاً «وضعیت پایدار» */
+  conservationBadge: string
+  /** متن کامل توضیحی برای بخش «حفاظت» */
+  conservationStatus: string
+  localNames: PlantLocalName[]
+  scientificSynonyms: string[]
+  fossilPeriod: string
+  plantStory: string
+  quickStats: PlantQuickStat[]
+}

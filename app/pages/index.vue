@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { mockDiseases } from '~/services/mock/diseases.mock'
+import { seasonByTheme } from '~/stores/ui.store'
 
 const plantStore = usePlantStore()
 const { data: featured } = await useAsyncData('featured-plants', () => plantStore.fetchFeatured().then(() => plantStore.featured))
 
 const uiStore = useUiStore()
 const searchQuery = ref('')
+
+const bgImage = computed(() => `/images/bg-image/${seasonByTheme[uiStore.theme]}.webp`)
 
 function onSearch() {
   navigateTo({ path: '/plants', query: searchQuery.value ? { q: searchQuery.value } : {} })
@@ -15,11 +18,14 @@ function onSearch() {
 <template>
   <div>
     <section class="hero-leaves relative overflow-hidden px-4 py-10 sm:py-16">
-      <img
-          src="/public/images/bg-image/spring.webp"
-          alt=""
-          class="absolute inset-0 size-full object-cover"
-      >
+      <Transition name="bg-fade">
+        <img
+            :key="bgImage"
+            :src="bgImage"
+            alt=""
+            class="absolute inset-0 size-full object-cover"
+        >
+      </Transition>
       <div class="absolute inset-0 bg-black/25" />
 
       <div class="relative z-10 mx-auto max-w-5xl">
@@ -152,7 +158,7 @@ function onSearch() {
               v-for="disease in mockDiseases"
               :key="disease.id"
               :to="`/identify`"
-              class="glass-card flex flex-col gap-2 p-4"
+              class="flex flex-col gap-2 rounded-lg bg-surface p-4 shadow-card transition-shadow hover:shadow-card-hover"
           >
             <img
                 :src="disease.image"
@@ -218,5 +224,14 @@ function onSearch() {
   min-height: 560px;
   display: flex;
   align-items: center;
+}
+
+.bg-fade-enter-active,
+.bg-fade-leave-active {
+  transition: opacity 0.6s ease;
+}
+.bg-fade-enter-from,
+.bg-fade-leave-to {
+  opacity: 0;
 }
 </style>

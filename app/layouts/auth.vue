@@ -1,15 +1,7 @@
 <script setup lang="ts">
-import { themes } from '~/stores/ui.store'
-import type { ThemeKey } from '~/stores/ui.store'
+import { seasonByTheme, themes } from '~/stores/ui.store'
 
 const uiStore = useUiStore()
-
-const seasonByTheme: Record<ThemeKey, string> = {
-  navy: 'winter',
-  brown: 'autumn',
-  wine: 'spring',
-  forest: 'summer',
-}
 
 const bgImage = computed(() => `/images/bg-image/${seasonByTheme[uiStore.theme]}.webp`)
 

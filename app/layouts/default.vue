@@ -6,7 +6,7 @@ import CornerGradient from '~/components/layout/CornerGradient.vue'
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col">
+  <div class="relative flex min-h-screen flex-col overflow-hidden">
     <CornerGradient />
     <TheHeader />
     <main class="flex-1 pb-24 md:pb-0">

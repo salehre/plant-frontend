@@ -11,7 +11,7 @@ export const mockPlants: Plant[] = [
       'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=800',
     ],
     description:
-      'مونستِرا یکی از محبوب‌ترین گیاهان آپارتمانی است که با برگ‌های بزرگ و شکاف‌دار خود فضای هر خانه‌ای را دگرگون می‌کند. این گیاه نسبتاً کم‌توقع است و برای مبتدیان مناسب است.',
+        'مونستِرا یکی از محبوب‌ترین گیاهان آپارتمانی است که با برگ‌های بزرگ و شکاف‌دار خود فضای هر خانه‌ای را دگرگون می‌کند. این گیاه نسبتاً کم‌توقع است و برای مبتدیان مناسب است.',
     care: {
       light: 'medium',
       water: 'medium',
@@ -34,7 +34,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Sansevieria trifasciata',
     images: ['https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=800'],
     description:
-      'یکی از مقاوم‌ترین گیاهان آپارتمانی که در کم‌نوری و بی‌توجهی هم زنده می‌ماند. انتخابی عالی برای کسانی که تازه شروع به نگهداری گیاه کرده‌اند.',
+        'یکی از مقاوم‌ترین گیاهان آپارتمانی که در کم‌نوری و بی‌توجهی هم زنده می‌ماند. انتخابی عالی برای کسانی که تازه شروع به نگهداری گیاه کرده‌اند.',
     care: {
       light: 'low',
       water: 'low',
@@ -57,7 +57,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Ficus lyrata',
     images: ['https://images.unsplash.com/photo-1616500163246-742b4b5c15a1?w=800'],
     description:
-      'با برگ‌های بزرگ و براق شبیه به برگ انجیر، این گیاه به‌عنوان یک المان دکوراتیو محبوب شناخته می‌شود، اما نسبت به تغییر محیط حساس است.',
+        'با برگ‌های بزرگ و براق شبیه به برگ انجیر، این گیاه به‌عنوان یک المان دکوراتیو محبوب شناخته می‌شود، اما نسبت به تغییر محیط حساس است.',
     care: {
       light: 'high',
       water: 'medium',
@@ -80,7 +80,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Aloe vera',
     images: ['https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800'],
     description:
-      'گیاهی دارویی و مقاوم که در نور مستقیم آفتاب بهترین رشد را دارد. برای فضاهای آفتاب‌گیر و کسانی که کمتر به آبیاری می‌رسند مناسب است.',
+        'گیاهی دارویی و مقاوم که در نور مستقیم آفتاب بهترین رشد را دارد. برای فضاهای آفتاب‌گیر و کسانی که کمتر به آبیاری می‌رسند مناسب است.',
     care: {
       light: 'direct',
       water: 'low',
@@ -103,7 +103,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Epipremnum aureum',
     images: ['https://images.unsplash.com/photo-1598880940639-84d0bb2f9b96?w=800'],
     description:
-      'گیاهی آویز و رونده، بسیار مقاوم و سریع‌الرشد که در انواع شرایط نوری زنده می‌ماند. انتخاب کلاسیک برای دفتر کار و آشپزخانه.',
+        'گیاهی آویز و رونده، بسیار مقاوم و سریع‌الرشد که در انواع شرایط نوری زنده می‌ماند. انتخاب کلاسیک برای دفتر کار و آشپزخانه.',
     care: {
       light: 'low',
       water: 'medium',
@@ -126,7 +126,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Spathiphyllum wallisii',
     images: ['https://images.unsplash.com/photo-1620127252536-03bcfe0aeda6?w=800'],
     description:
-      'با گل‌های سفید ظریف، این گیاه هم زیبایی می‌آورد و هم به تصفیه هوای داخل خانه کمک می‌کند. به رطوبت نسبتاً بالا نیاز دارد.',
+        'با گل‌های سفید ظریف، این گیاه هم زیبایی می‌آورد و هم به تصفیه هوای داخل خانه کمک می‌کند. به رطوبت نسبتاً بالا نیاز دارد.',
     care: {
       light: 'medium',
       water: 'high',
@@ -142,6 +142,236 @@ export const mockPlants: Plant[] = [
     genus: 'Spathiphyllum',
     difficulty: 'medium',
   },
+  {
+    id: 'p7',
+    slug: 'zamioculcas-zamiifolia',
+    name: 'زامیفولیا',
+    scientificName: 'Zamioculcas zamiifolia',
+    images: ['https://images.unsplash.com/photo-1632207691143-643e2a9a9361?w=800'],
+    description:
+        'گیاهی تقریباً نابودنشدنی با برگ‌های براق و ضخیم که هفته‌ها بدون آبیاری هم دوام می‌آورد. انتخابی عالی برای فضاهای کم‌نور اداری و خانگی.',
+    care: {
+      light: 'low',
+      water: 'low',
+      temperatureRange: [18, 26],
+      soil: 'خاک سبک و زهکش‌دار',
+      humidity: 'low',
+      wateringFrequencyDays: 16,
+    },
+    toxicity: { isToxic: true, toxicTo: ['cat', 'dog'] },
+    commonIssues: ['d3'],
+    category: 'آپارتمانی',
+    family: 'Araceae',
+    genus: 'Zamioculcas',
+    difficulty: 'easy',
+  },
+  {
+    id: 'p8',
+    slug: 'chlorophytum-comosum',
+    name: 'گیاه عنکبوتی',
+    scientificName: 'Chlorophytum comosum',
+    images: ['https://images.unsplash.com/photo-1572688984311-6ba63ecab1c5?w=800'],
+    description:
+        'با برگ‌های نواری راه‌راه و ساقه‌های آویزی که جوانه‌های کوچک تولید می‌کنند. رشدش سریع است و برای پرورش در آب هم مناسب است.',
+    care: {
+      light: 'medium',
+      water: 'medium',
+      temperatureRange: [15, 25],
+      soil: 'خاک معمولی گلدانی با زهکش خوب',
+      humidity: 'medium',
+      wateringFrequencyDays: 7,
+    },
+    toxicity: { isToxic: false, toxicTo: [] },
+    commonIssues: ['d1'],
+    category: 'آویز',
+    family: 'Asparagaceae',
+    genus: 'Chlorophytum',
+    difficulty: 'easy',
+  },
+  {
+    id: 'p9',
+    slug: 'dracaena-marginata',
+    name: 'دراسینا مارجیناتا',
+    scientificName: 'Dracaena marginata',
+    images: ['https://images.unsplash.com/photo-1616690710400-a16d146927c5?w=800'],
+    description:
+        'با ساقه‌های نازک و باریک و برگ‌های سرخ‌حاشیه، ظاهری شبیه درخت مینیاتوری دارد. نسبت به کم‌آبی مقاوم است ولی از آب سنگین (فلوراید) آسیب می‌بیند.',
+    care: {
+      light: 'medium',
+      water: 'low',
+      temperatureRange: [18, 27],
+      soil: 'خاک سبک و زهکش‌دار',
+      humidity: 'medium',
+      wateringFrequencyDays: 10,
+    },
+    toxicity: { isToxic: true, toxicTo: ['cat', 'dog'] },
+    commonIssues: ['d3', 'd1'],
+    category: 'آپارتمانی',
+    family: 'Asparagaceae',
+    genus: 'Dracaena',
+    difficulty: 'medium',
+  },
+  {
+    id: 'p10',
+    slug: 'philodendron-hederaceum',
+    name: 'فیلودندرون برگ قلبی',
+    scientificName: 'Philodendron hederaceum',
+    images: ['https://images.unsplash.com/photo-1602923668104-8f9e03e77e56?w=800'],
+    description:
+        'گیاهی آویز با برگ‌های قلبی‌شکل که به‌سرعت رشد می‌کند و در نور کم هم شاداب می‌ماند. یکی از راحت‌ترین گیاهان برای نگهداری مبتدیان.',
+    care: {
+      light: 'low',
+      water: 'medium',
+      temperatureRange: [18, 27],
+      soil: 'خاک سبک با کمپوست برگ',
+      humidity: 'medium',
+      wateringFrequencyDays: 7,
+    },
+    toxicity: { isToxic: true, toxicTo: ['cat', 'dog'] },
+    commonIssues: ['d1'],
+    category: 'آویز',
+    family: 'Araceae',
+    genus: 'Philodendron',
+    difficulty: 'easy',
+  },
+  {
+    id: 'p11',
+    slug: 'calathea-orbifolia',
+    name: 'کالاتیا اوربیفولیا',
+    scientificName: 'Calathea orbifolia',
+    images: ['https://images.unsplash.com/photo-1599598177991-ec67b5c37318?w=800'],
+    description:
+        'با برگ‌های گرد و راه‌راه نقره‌ای، یکی از زیباترین ولی حساس‌ترین گیاهان آپارتمانی است. به رطوبت بالا و دوری از آفتاب مستقیم نیاز دارد.',
+    care: {
+      light: 'medium',
+      water: 'high',
+      temperatureRange: [18, 24],
+      soil: 'خاک مرطوب و غنی از مواد آلی',
+      humidity: 'high',
+      wateringFrequencyDays: 5,
+    },
+    toxicity: { isToxic: false, toxicTo: [] },
+    commonIssues: ['d2', 'd4'],
+    category: 'آپارتمانی',
+    family: 'Marantaceae',
+    genus: 'Calathea',
+    difficulty: 'hard',
+  },
+  {
+    id: 'p12',
+    slug: 'peperomia-obtusifolia',
+    name: 'پپرومیا',
+    scientificName: 'Peperomia obtusifolia',
+    images: ['https://images.unsplash.com/photo-1622557850710-0ac4b6e6c8c4?w=800'],
+    description:
+        'گیاهی کوچک و فشرده با برگ‌های ضخیم و گوشتی که مثل ساکولنت‌ها آب ذخیره می‌کند. برای میز کار و فضاهای کوچک بسیار مناسب است.',
+    care: {
+      light: 'medium',
+      water: 'low',
+      temperatureRange: [18, 26],
+      soil: 'خاک سبک و زهکش‌دار',
+      humidity: 'medium',
+      wateringFrequencyDays: 10,
+    },
+    toxicity: { isToxic: false, toxicTo: [] },
+    commonIssues: ['d3'],
+    category: 'آپارتمانی',
+    family: 'Piperaceae',
+    genus: 'Peperomia',
+    difficulty: 'easy',
+  },
+  {
+    id: 'p13',
+    slug: 'crassula-ovata',
+    name: 'درخت یادبود (جید)',
+    scientificName: 'Crassula ovata',
+    images: ['https://images.unsplash.com/photo-1459156212016-c812468e2115?w=800'],
+    description:
+        'ساکولنتی با برگ‌های گرد و ضخیم که به‌مرور شکل درخت کوچک پیدا می‌کند. نیاز آبی بسیار کمی دارد و در نور مستقیم بهترین رشد را نشان می‌دهد.',
+    care: {
+      light: 'direct',
+      water: 'low',
+      temperatureRange: [15, 27],
+      soil: 'خاک کاکتوسی با زهکش بالا',
+      humidity: 'low',
+      wateringFrequencyDays: 16,
+    },
+    toxicity: { isToxic: true, toxicTo: ['cat', 'dog'] },
+    commonIssues: ['d3'],
+    category: 'کاکتوس و ساکولنت',
+    family: 'Crassulaceae',
+    genus: 'Crassula',
+    difficulty: 'easy',
+  },
+  {
+    id: 'p14',
+    slug: 'echeveria-elegans',
+    name: 'اچوریا',
+    scientificName: 'Echeveria elegans',
+    images: ['https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=800'],
+    description:
+        'ساکولنتی با شکل گلی و برگ‌های آبی‌رنگ که روی هم ردیف شده‌اند. برای گلدان‌های کوچک و پنجره‌های آفتاب‌گیر بسیار محبوب است.',
+    care: {
+      light: 'direct',
+      water: 'low',
+      temperatureRange: [13, 26],
+      soil: 'خاک کاکتوسی',
+      humidity: 'low',
+      wateringFrequencyDays: 14,
+    },
+    toxicity: { isToxic: false, toxicTo: [] },
+    commonIssues: ['d3'],
+    category: 'کاکتوس و ساکولنت',
+    family: 'Crassulaceae',
+    genus: 'Echeveria',
+    difficulty: 'easy',
+  },
+  {
+    id: 'p15',
+    slug: 'rosa-chinensis',
+    name: 'رز مینیاتوری',
+    scientificName: 'Rosa chinensis',
+    images: ['https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=800'],
+    description:
+        'گونه‌ای فشرده از رز که برای کشت گلدانی و بالکن مناسب است. برای گلدهی مداوم به نور مستقیم زیاد و هرس منظم نیاز دارد.',
+    care: {
+      light: 'direct',
+      water: 'medium',
+      temperatureRange: [15, 28],
+      soil: 'خاک غنی از کمپوست با زهکش خوب',
+      humidity: 'medium',
+      wateringFrequencyDays: 4,
+    },
+    toxicity: { isToxic: false, toxicTo: [] },
+    commonIssues: ['d2', 'd4'],
+    category: 'گلدار',
+    family: 'Rosaceae',
+    genus: 'Rosa',
+    difficulty: 'medium',
+  },
+  {
+    id: 'p16',
+    slug: 'lavandula-angustifolia',
+    name: 'اسطوخودوس',
+    scientificName: 'Lavandula angustifolia',
+    images: ['https://images.unsplash.com/photo-1611909023032-2d6b3134ecba?w=800'],
+    description:
+        'گیاهی معطر و دارویی با گل‌های بنفش که در آفتاب کامل و خاک خشک بهترین رشد را دارد. علاوه بر خواص آرام‌بخش، برای باغچه هم زینتی است.',
+    care: {
+      light: 'direct',
+      water: 'low',
+      temperatureRange: [15, 30],
+      soil: 'خاک سبک، آهکی و زهکش‌دار',
+      humidity: 'low',
+      wateringFrequencyDays: 10,
+    },
+    toxicity: { isToxic: true, toxicTo: ['cat', 'dog'] },
+    commonIssues: ['d3'],
+    category: 'دارویی',
+    family: 'Lamiaceae',
+    genus: 'Lavandula',
+    difficulty: 'medium',
+  },
 ]
 
 export function findPlantBySlug(slug: string): Plant | undefined {
@@ -149,16 +379,16 @@ export function findPlantBySlug(slug: string): Plant | undefined {
 }
 
 export function searchPlants(
-  query: string,
-  category?: string,
-  difficulty?: string,
-  light?: string,
-  family?: string,
-  genus?: string,
+    query: string,
+    category?: string,
+    difficulty?: string,
+    light?: string,
+    family?: string,
+    genus?: string,
 ): Plant[] {
   return mockPlants.filter((p) => {
     const matchQuery
-      = !query
+        = !query
         || p.name.includes(query)
         || p.scientificName.toLowerCase().includes(query.toLowerCase())
     const matchCategory = !category || category === 'all' || p.category === category
@@ -185,6 +415,6 @@ export function suggestPlants(query: string, limit = 5): Plant[] {
   if (!query.trim()) return []
   const q = query.trim()
   return mockPlants
-    .filter(p => p.name.includes(q) || p.scientificName.toLowerCase().includes(q.toLowerCase()))
-    .slice(0, limit)
+      .filter(p => p.name.includes(q) || p.scientificName.toLowerCase().includes(q.toLowerCase()))
+      .slice(0, limit)
 }
