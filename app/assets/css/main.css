@@ -82,11 +82,11 @@
   }
 
   :root.dark {
-    /* حالت تاریک - تم forest */
-    --color-surface: 49 88 75; /* #315b4b */
-    --color-bg: 14 55 41; /* #0e3729 */
+    /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
+    --color-surface: 57 106 90; /* #396a5a */
+    --color-bg: 41 87 72; /* #295748 */
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 147 168 161; /* #93a8a1 */
+    --color-ink-muted: 205 219 214; /* #cddbd6 */
   }
 
   [data-theme='wine'] {
@@ -119,10 +119,11 @@
   }
 
   [data-theme='wine'].dark {
-    --color-surface: 113 62 72; /* #713e48 */
-    --color-bg: 81 27 38; /* #511b26 */
+    /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
+    --color-surface: 106 57 67; /* #6a3943 */
+    --color-bg: 87 41 50; /* #572932 */
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 181 154 159; /* #b59a9f */
+    --color-ink-muted: 219 205 207; /* #dbcdcf */
   }
 
   [data-theme='forest'] {
@@ -155,10 +156,11 @@
   }
 
   [data-theme='forest'].dark {
-    --color-surface: 49 88 75; /* #315b4b */
-    --color-bg: 14 55 41; /* #0e3729 */
+    /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
+    --color-surface: 57 106 90; /* #396a5a */
+    --color-bg: 41 87 72; /* #295748 */
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 147 168 161; /* #93a8a1 */
+    --color-ink-muted: 205 219 214; /* #cddbd6 */
   }
 
   [data-theme='brown'] {
@@ -191,10 +193,11 @@
   }
 
   [data-theme='brown'].dark {
-    --color-surface: 113 75 44; /* #714b2c */
-    --color-bg: 81 41 9; /* #512909 */
+    /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
+    --color-surface: 106 79 57; /* #6a4f39 */
+    --color-bg: 87 61 41; /* #573d29 */
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 181 161 145; /* #b5a191 */
+    --color-ink-muted: 219 211 205; /* #dbd3cd */
   }
 
   [data-theme='navy'] {
@@ -227,10 +230,11 @@
   }
 
   [data-theme='navy'].dark {
-    --color-surface: 42 55 85; /* #2a3755 */
-    --color-bg: 6 21 51; /* #061533 */
+    /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
+    --color-surface: 57 73 106; /* #39496a */
+    --color-bg: 41 55 87; /* #293757 */
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 143 151 166; /* #8f97a6 */
+    --color-ink-muted: 205 209 219; /* #cdd1db */
   }
 
   html {

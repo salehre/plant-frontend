@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-screen flex-col overflow-hidden">
+  <div class="relative flex min-h-screen flex-col overflow-x-clip">
     <CornerGradient />
     <TheHeader />
     <div class="mx-auto flex w-full max-w-6xl flex-1">
