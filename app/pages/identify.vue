@@ -1,10 +1,12 @@
 <script setup lang="ts">
 const identifyStore = useIdentifyStore()
+const { locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const showCamera = ref(false)
 
 function onImageSelected(url: string) {
   identifyStore.setPreview(url)
-  identifyStore.runIdentify()
+  identifyStore.runIdentify(activeLocale.value)
 }
 
 function onCameraCapture(url: string) {
@@ -45,7 +47,7 @@ function onCameraCapture(url: string) {
     <!-- حالت دوربین -->
     <AppModal
       v-model="showCamera"
-      title="گرفتن عکس"
+      :title="$t('identify.cameraModalTitle')"
     >
       <CameraCapture
         @capture="onCameraCapture"
@@ -61,7 +63,7 @@ function onCameraCapture(url: string) {
       <div class="relative w-full max-w-sm overflow-hidden rounded-lg">
         <img
           :src="identifyStore.previewUrl"
-          alt="تصویر بارگذاری‌شده"
+          :alt="$t('identify.uploadedImageAlt')"
           class="aspect-square w-full object-cover"
         >
         <div
@@ -101,7 +103,7 @@ function onCameraCapture(url: string) {
         v-else-if="identifyStore.status === 'error'"
         class="rounded-md bg-status-danger/10 p-4 text-sm text-status-danger"
       >
-        {{ identifyStore.error }}
+        {{ $t(identifyStore.error) }}
       </div>
 
       <AppButton

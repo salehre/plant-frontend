@@ -1,4 +1,6 @@
 import type { PlantDetail } from '~/types/plant.types'
+import { findPlantBySlug } from './plants.mock'
+import type { MockLocale } from './mock-locale'
 
 export const plantDetails: Record<string, PlantDetail> = {
     'monstera-deliciosa': {
@@ -62,7 +64,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'آمریکای مرکزی (مکزیک تا پاناما)' },
             { label: 'زیستگاه', value: 'جنگل‌های بارانی گرمسیری' },
-            { label: 'محبوبیت در ایران', value: 'بسیار پرطرفدار در گلفروشی‌ها' },
+            { label: 'گستره ایران', value: 'شمال و مناطق گرم و مرطوب' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر مناطق گرمسیری و معتدل' },
         ],
     },
@@ -127,7 +129,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'غرب آفریقا (نیجریه تا کنگو)' },
             { label: 'زیستگاه', value: 'مناطق خشک و نیمه‌خشک' },
-            { label: 'محبوبیت در ایران', value: 'یکی از رایج‌ترین گیاهان اداری' },
+            { label: 'گستره ایران', value: 'سراسر ایران، به‌ویژه مناطق گرم' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر جهان' },
         ],
     },
@@ -192,7 +194,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'غرب آفریقا (کامرون تا سیرالئون)' },
             { label: 'زیستگاه', value: 'جنگل‌های بارانی کم‌ارتفاع' },
-            { label: 'محبوبیت در ایران', value: 'محبوب در دکوراسیون مدرن' },
+            { label: 'گستره ایران', value: 'مناطق گرم و گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'کشت گسترده در مناطق معتدل و گرمسیری' },
         ],
     },
@@ -257,7 +259,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'شبه‌جزیره عربستان (احتمالی)' },
             { label: 'زیستگاه', value: 'مناطق خشک و بیابانی' },
-            { label: 'محبوبیت در ایران', value: 'رایج در طب سنتی و خانگی' },
+            { label: 'گستره ایران', value: 'هرمزگان، بوشهر، سیستان‌وبلوچستان، فارس، خوزستان' },
             { label: 'گستره جهانی', value: 'کشت‌شده در بیش از ۱۰۰ کشور' },
         ],
     },
@@ -321,7 +323,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'جزایر سلیمان (اقیانوس آرام)' },
             { label: 'زیستگاه', value: 'جنگل‌های بارانی گرمسیری' },
-            { label: 'محبوبیت در ایران', value: 'یکی از پرفروش‌ترین گیاهان آویز' },
+            { label: 'گستره ایران', value: 'مناطق گرم و مرطوب، بیشتر گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'در بسیاری مناطق گرمسیری، گونه‌ای مهاجم' },
         ],
     },
@@ -386,7 +388,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'کلمبیا و ونزوئلا' },
             { label: 'زیستگاه', value: 'جنگل‌های بارانی کف‌جنگلی' },
-            { label: 'محبوبیت در ایران', value: 'محبوب برای هدیه و دکوراسیون' },
+            { label: 'گستره ایران', value: 'مناطق گرم و گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر جهان' },
         ],
     },
@@ -450,7 +452,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'شرق آفریقا (کنیا و تانزانیا)' },
             { label: 'زیستگاه', value: 'مناطق خشک و نیمه‌خشک' },
-            { label: 'محبوبیت در ایران', value: 'بسیار محبوب برای فضای اداری' },
+            { label: 'گستره ایران', value: 'سراسر ایران، بیشتر مناطق گرم' },
             { label: 'گستره جهانی', value: 'کشت‌شده از دهه ۱۹۹۰ در سراسر جهان' },
         ],
     },
@@ -515,7 +517,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'آفریقای جنوبی' },
             { label: 'زیستگاه', value: 'مناطق ساحلی و جنگلی' },
-            { label: 'محبوبیت در ایران', value: 'رایج در خانه و مدرسه' },
+            { label: 'گستره ایران', value: 'سراسر ایران' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر جهان' },
         ],
     },
@@ -579,7 +581,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'ماداگاسکار' },
             { label: 'زیستگاه', value: 'جنگل‌های کم‌ارتفاع تا میان‌ارتفاع' },
-            { label: 'محبوبیت در ایران', value: 'رایج در دکوراسیون اداری' },
+            { label: 'گستره ایران', value: 'مناطق گرم و گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر مناطق معتدل و گرمسیری' },
         ],
     },
@@ -643,7 +645,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'آمریکای مرکزی و جنوبی' },
             { label: 'زیستگاه', value: 'جنگل‌های بارانی گرمسیری' },
-            { label: 'محبوبیت در ایران', value: 'پرطرفدار به‌عنوان گیاه آویز' },
+            { label: 'گستره ایران', value: 'مناطق گرم و مرطوب، بیشتر گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'کشت گسترده در سراسر جهان' },
         ],
     },
@@ -707,7 +709,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'بولیوی' },
             { label: 'زیستگاه', value: 'جنگل‌های بارانی با پراکنش محدود' },
-            { label: 'محبوبیت در ایران', value: 'گیاهی کلکسیونی و نسبتاً کمیاب' },
+            { label: 'گستره ایران', value: 'مناطق گرم و گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'کشت‌شده توسط علاقه‌مندان حرفه‌ای' },
         ],
     },
@@ -771,7 +773,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'فلوریدا و کارائیب' },
             { label: 'زیستگاه', value: 'مناطق ساحلی کم‌ارتفاع' },
-            { label: 'محبوبیت در ایران', value: 'گزینه محبوب برای میز کار' },
+            { label: 'گستره ایران', value: 'مناطق گرم و گلخانه‌ای' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر جهان' },
         ],
     },
@@ -835,7 +837,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'آفریقای جنوبی (ناحیه کیپ)' },
             { label: 'زیستگاه', value: 'مناطق خشک صخره‌ای' },
-            { label: 'محبوبیت در ایران', value: 'محبوب به‌عنوان نماد شانس مالی' },
+            { label: 'گستره ایران', value: 'مناطق گرم و خشک' },
             { label: 'گستره جهانی', value: 'کشت‌شده در سراسر جهان' },
         ],
     },
@@ -899,7 +901,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'هیدالگوی مکزیک' },
             { label: 'زیستگاه', value: 'مناطق کوهستانی خشک' },
-            { label: 'محبوبیت در ایران', value: 'محبوب در میان علاقه‌مندان ساکولنت' },
+            { label: 'گستره ایران', value: 'مناطق خشک و معتدل' },
             { label: 'گستره جهانی', value: 'کشت گسترده در باغبانی خشک' },
         ],
     },
@@ -964,7 +966,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'چین' },
             { label: 'زیستگاه', value: 'مناطق معتدل کوهستانی' },
-            { label: 'محبوبیت در ایران', value: 'یکی از رایج‌ترین گل‌های باغچه' },
+            { label: 'گستره ایران', value: 'بیشتر مناطق معتدل و نیمه‌خشک' },
             { label: 'گستره جهانی', value: 'اجداد بیشتر رزهای مدرن جهان' },
         ],
     },
@@ -1029,12 +1031,328 @@ export const plantDetails: Record<string, PlantDetail> = {
         quickStats: [
             { label: 'مبدا', value: 'مدیترانه و آلپ فرانسه' },
             { label: 'زیستگاه', value: 'مناطق کوهستانی خشک آفتاب‌گیر' },
-            { label: 'محبوبیت در ایران', value: 'رایج در طب سنتی و باغبانی' },
+            { label: 'گستره ایران', value: 'تهران، البرز، مرکزی، اصفهان، فارس' },
             { label: 'گستره جهانی', value: 'کشت تجاری گسترده برای اسانس' },
         ],
     },
 }
 
-export function findPlantDetailBySlug(slug: string) {
-    return plantDetails[slug]
+type EnglishDetailText = {
+    subspecies: string
+    morphology: PlantDetail['morphology']
+    majorCompound: string
+    categories: PlantDetail['chemicalCompounds']['categories']
+    growthNeeds: PlantDetail['growthNeeds']
+    applications: PlantDetail['applications']
+    toxicityText: string
+    conservationBadge: string
+    conservationStatus: string
+    localNames: PlantDetail['localNames']
+    scientificSynonyms: string[]
+    fossilPeriod: string
+    plantStory: string
+    quickStats: PlantDetail['quickStats']
+}
+
+const englishDetails: Record<string, EnglishDetailText> = {
+    'monstera-deliciosa': {
+        subspecies: 'No formally recognized subspecies; horticultural cultivars include “Variegata” and “Albo”.',
+        morphology: { plantType: 'Woody, climbing tropical epiphyte.', leaf: 'Large, heart- to oval-shaped leaves develop natural splits and holes (fenestrations) as they mature.', flower: 'A cream spadix enclosed by a white spathe; flowering is rare indoors.', stem: 'Fleshy, semi-woody stems produce aerial roots to climb tree trunks.', root: 'Numerous aerial roots and soil roots absorb water and nutrients.', fruit: 'In the wild, a corn-like compound fruit with a pineapple-banana flavor; edible only when fully ripe.', seed: 'Small seeds embedded in the compound fruit.', bark: 'No true woody bark; stems are smooth and green.', latex: 'Watery sap containing calcium oxalate crystals that irritate skin and mucous membranes.', },
+        majorCompound: 'Calcium oxalate raphide crystals.',
+        categories: [{ name: 'Irritating mineral compounds', total: 'Throughout all plant tissues', compounds: [{ name: 'Needle-shaped calcium oxalate (raphides)', amount: 'Abundant' }] }, { name: 'Enzymes', total: 'Small amounts', compounds: [{ name: 'Plant proteases', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Medium to bright indirect light.', water: 'Moderate; let the soil surface dry slightly between waterings.', soil: 'Light, well-draining soil enriched with leaf compost.', temperature: '18–27°C; sensitive to temperatures below 10°C.', growthAltitude: 'Usually below 1,000 m above sea level in its natural habitat.' },
+        applications: { food: ['The fully ripe fruit is sometimes eaten in its native range; unripe fruit is unsuitable.'], industrial: ['One of the world’s best-selling ornamental houseplants.', 'Variegated cultivars command very high prices among collectors.'], therapeutic: ['No established therapeutic use; grown primarily as an ornamental.'] },
+        toxicityText: 'Leaves and stems contain calcium oxalate crystals. Chewing them can cause mouth irritation, swollen lips and tongue, drooling, and, rarely, difficulty swallowing in people, dogs, and cats.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed for the IUCN Red List; populations in its Central American native range are reported to be relatively stable.',
+        localNames: [{ name: 'Swiss cheese plant', region: 'Common English name' }, { name: 'Split-leaf Monstera', region: 'Common horticultural name' }],
+        scientificSynonyms: ['Philodendron pertusum', 'Monstera deliciosa var. borsigiana'],
+        fossilPeriod: 'Araceae is among the oldest monocot families; related fossil pollen dates to the Late Cretaceous, about 90 million years ago.',
+        plantStory: 'The name Monstera comes from the Latin word for “strange” or “monstrous,” referring to its enormous, perforated leaves. In Central American forests, the holes help light reach lower leaves and reduce wind resistance. Since the 1970s, Monstera has become an icon of modern interior design.',
+        quickStats: [{ label: 'Origin', value: 'Central America (Mexico to Panama)' }, { label: 'Habitat', value: 'Tropical rainforests' }, { label: 'Range in Iran', value: 'Northern Iran and warm, humid regions' }, { label: 'Global range', value: 'Cultivated throughout tropical and temperate regions' }],
+    },
+    'sansevieria-trifasciata': {
+        subspecies: 'Cultivars include “Laurentii” (yellow leaf margins) and “Hahnii” (short rosette form).',
+        morphology: { plantType: 'Rhizomatous, succulent-like perennial herb.', leaf: 'Upright, stiff, spear-shaped leaves with light- and dark-green bands.', flower: 'Clusters of greenish-white, night-fragrant flowers; rarely blooms indoors.', stem: 'Essentially stemless above ground; leaves grow directly from the underground rhizome.', root: 'Thick horizontal rhizomes produce offsets.', fruit: 'Small orange capsule containing seeds; rarely produced indoors.', seed: 'Small, round seeds.', bark: 'No woody bark.', latex: 'Leaf sap contains irritating steroidal saponins.', },
+        majorCompound: 'Steroidal saponins.',
+        categories: [{ name: 'Saponins', total: '0.5–2%', compounds: [{ name: 'Sansevierin', amount: '0.5–1%' }] }, { name: 'Organic acids', total: 'Small amount', compounds: [{ name: 'Malic acid', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Low light to bright indirect light; highly shade-tolerant.', water: 'Low; allow the soil to dry completely between waterings.', soil: 'Cactus mix with very sharp drainage.', temperature: '15–30°C.', growthAltitude: 'Mostly in dry, low-elevation areas of its native West Africa.' },
+        applications: { food: ['No recognized food use.'], industrial: ['Leaf fibers are used to make rope and cord in parts of Africa and Asia.', 'A popular ornamental for modern interiors and offices.'], therapeutic: ['Used traditionally for skin wounds in some African communities; scientific evidence is limited.'] },
+        toxicityText: 'Ingestion of leaf steroidal saponins may cause nausea, vomiting, and diarrhea in dogs and cats; in people, it usually causes only mild gastrointestinal irritation.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; common and not considered threatened in its native West African range.',
+        localNames: [{ name: 'Mother-in-law’s tongue', region: 'Common English name' }, { name: 'Snake plant', region: 'Common English name' }],
+        scientificSynonyms: ['Dracaena trifasciata (currently accepted name)', 'Sansevieria zeylanica (historically misapplied name)'],
+        fossilPeriod: 'Direct fossils of the genus are limited. Asparagaceae diversified mainly during the Cenozoic, after the extinction of the dinosaurs.',
+        plantStory: 'Its stiff, pointed, durable leaves inspired the humorous name “mother-in-law’s tongue.” In Chinese feng shui, the plant is considered a symbol of protection that wards off negative energy. NASA studies in the 1980s listed it among plants that could help clean indoor air.',
+        quickStats: [{ label: 'Origin', value: 'West Africa (Nigeria to the Congo)' }, { label: 'Habitat', value: 'Arid and semi-arid regions' }, { label: 'Range in Iran', value: 'Throughout Iran, especially warmer regions' }, { label: 'Global range', value: 'Cultivated worldwide' }],
+    },
+    'ficus-lyrata': {
+        subspecies: 'The compact “Bambino” cultivar is popular for small spaces.',
+        morphology: { plantType: 'Evergreen shrub or small tree.', leaf: 'Large, glossy, leathery, violin-shaped (lyrate) leaves.', flower: 'A syconium (flowers hidden inside a fleshy structure); essentially unseen in indoor cultivation.', stem: 'Upright, woody stem with limited branching when young.', root: 'Broad, shallow roots; may begin life as an epiphyte in the wild.', fruit: 'Small green syconium, not edible to people.', seed: 'Very small seeds inside the syconium.', bark: 'Light gray and fairly smooth on young plants.', latex: 'White latex containing ficin and furanocoumarins, which can irritate skin.', },
+        majorCompound: 'Furanocoumarins in the latex.',
+        categories: [{ name: 'Phototoxic compounds', total: 'In stem and leaf latex', compounds: [{ name: 'Furanocoumarins', amount: 'Trace to low' }] }, { name: 'Enzymes', total: 'In the latex', compounds: [{ name: 'Ficin (proteolytic enzyme)', amount: 'Low' }] }],
+        growthNeeds: { light: 'Bright indirect light; avoid moving it frequently.', water: 'Moderate; sensitive to both overwatering and underwatering.', soil: 'Rich, light, well-draining soil.', temperature: '18–24°C; sensitive to drafts.', growthAltitude: 'Usually below 600 m in West African rainforests.' },
+        applications: { food: ['No recognized food use for people.'], industrial: ['A popular ornamental in modern interior design.', 'The latex has occasionally been tested for local rubber production.'], therapeutic: ['No common, documented therapeutic use.'] },
+        toxicityText: 'Latex from stems and leaves contains furanocoumarins. Skin contact followed by sun exposure can cause phytophotodermatitis; ingestion may upset the stomachs of dogs and cats.',
+        conservationBadge: 'Near Threatened',
+        conservationStatus: 'Recent regional assessments classify some wild West African populations as Near Threatened because of forest loss.',
+        localNames: [{ name: 'Fiddle-leaf fig', region: 'Common English name' }, { name: 'Ficus lyrata', region: 'Scientific name used as a common name' }],
+        scientificSynonyms: ['Ficus pandurata (historically misapplied name)'],
+        fossilPeriod: 'Ficus has one of the richest fossil records among flowering plants. Fig-like fossils date to the Eocene (about 50 million years ago) and possibly the Late Cretaceous.',
+        plantStory: 'Its large, violin-shaped leaves gave the species its name: the Latin “lyrata” means lyre-shaped. During the 2010s it became a favorite in Scandinavian and minimalist interiors and was sometimes called an “Instagram plant.”',
+        quickStats: [{ label: 'Origin', value: 'West Africa (Cameroon to Sierra Leone)' }, { label: 'Habitat', value: 'Lowland rainforests' }, { label: 'Range in Iran', value: 'Warm regions and greenhouses' }, { label: 'Global range', value: 'Widely cultivated in temperate and tropical regions' }],
+    },
+    'aloe-vera': {
+        subspecies: 'No formally recognized subspecies.',
+        morphology: { plantType: 'Stemless or short-stemmed perennial herbaceous succulent.', leaf: 'Thick, fleshy, sword-shaped leaves with toothed edges and clear gel.', flower: 'Yellow to orange tubular flowers on a tall raceme.', stem: 'Very short or absent; leaves form a basal rosette.', root: 'Shallow, fibrous roots adapted to dry conditions.', fruit: 'Three-chambered capsule containing seeds.', seed: 'Flat, brown seeds.', bark: 'No woody bark.', latex: 'The bitter, laxative yellow layer beneath the leaf skin (aloin) is separate from the clear inner gel.', },
+        majorCompound: 'Acemannan in the gel and aloin in the yellow leaf layer.',
+        categories: [{ name: 'Polysaccharides', total: '50–60% of gel dry matter', compounds: [{ name: 'Acemannan', amount: 'Major' }] }, { name: 'Anthraquinones', total: 'In the yellow layer beneath the skin', compounds: [{ name: 'Aloin', amount: '15–30% of the yellow layer' }, { name: 'Emodin', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Direct sun or very bright indirect light.', water: 'Low; drought-tolerant but sensitive to waterlogged roots.', soil: 'Light cactus mix with excellent drainage.', temperature: '13–30°C.', growthAltitude: 'Usually below 500 m in arid and semi-arid regions.' },
+        applications: { food: ['The inner leaf gel is used in drinks and desserts, especially in Southeast Asia.'], industrial: ['Widely used as a raw material in cosmetics and personal-care products such as creams, gels, and shampoos.', 'Added to some processed foods.'], therapeutic: ['Used to soothe minor burns and sunburn.', 'Used as a skin moisturizer and conditioner.', 'The yellow layer has a mild laxative effect when ingested; high doses require caution.'] },
+        toxicityText: 'The yellow layer beneath the leaf skin contains aloin, which can cause vomiting, diarrhea, and lethargy in dogs and cats. The clear inner gel is generally considered safe for people when properly prepared.',
+        conservationBadge: 'Unclear in the wild',
+        conservationStatus: 'Its precise wild origin is uncertain and it is rarely found in nature; today it is found mainly in cultivation worldwide.',
+        localNames: [{ name: 'Aloe', region: 'Traditional name in Iranian medicine' }, { name: 'Aloe vera', region: 'International common name' }],
+        scientificSynonyms: ['Aloe barbadensis Mill.', 'Aloe vulgaris Lam.'],
+        fossilPeriod: 'Direct Aloe fossils are limited. Asphodelaceae diversified during the Cenozoic in arid parts of Africa and Arabia.',
+        plantStory: 'Aloe vera has been known as the “plant of immortality” for thousands of years in ancient Egyptian, Greek, and Iranian civilizations. Cleopatra is said to have used its gel for skin care. Today it is one of the world’s most widely used medicinal and cosmetic plants.',
+        quickStats: [{ label: 'Origin', value: 'Possibly the Arabian Peninsula' }, { label: 'Habitat', value: 'Arid and desert regions' }, { label: 'Range in Iran', value: 'Hormozgan, Bushehr, Sistan and Baluchestan, Fars, and Khuzestan' }, { label: 'Global range', value: 'Cultivated in more than 100 countries' }],
+    },
+    'epipremnum-aureum': {
+        subspecies: 'Cultivars include “Marble Queen” and “N’Joy,” with yellow or white variegation.',
+        morphology: { plantType: 'Evergreen climbing or trailing plant.', leaf: 'Glossy, heart-shaped leaves, often mottled with yellow or white.', flower: 'A spadix enclosed by a spathe; almost never flowers indoors.', stem: 'Flexible, jointed stems with aerial roots at each node.', root: 'Clinging aerial roots accompanied by fine soil roots.', fruit: 'Rarely observed; effectively fruitless in indoor cultivation.', seed: 'Limited information; usually propagated by cuttings.', bark: 'No true woody bark.', latex: 'Watery sap containing calcium oxalate crystals.', },
+        majorCompound: 'Calcium oxalate crystals.',
+        categories: [{ name: 'Irritating mineral compounds', total: 'Throughout all plant tissues', compounds: [{ name: 'Needle-shaped calcium oxalate', amount: 'Abundant' }] }],
+        growthNeeds: { light: 'Low light to bright indirect light; highly adaptable.', water: 'Moderate; allow the soil surface to dry somewhat between waterings.', soil: 'Standard potting mix with good drainage.', temperature: '16–28°C.', growthAltitude: 'Lowland tropical forests in its native Solomon Islands.' },
+        applications: { food: ['Not edible.'], industrial: ['A widely used trailing ornamental in homes and offices.', 'Studied as an air-purifying plant in NASA’s Clean Air Study.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'Calcium oxalate crystals throughout the plant can cause mouth irritation, excess salivation, and swelling in dogs and cats; people usually experience only mild local irritation.',
+        conservationBadge: 'Rare in its native habitat',
+        conservationStatus: 'It flowers rarely and is uncommon in its native Solomon Islands, but has been reported as invasive in many tropical regions.',
+        localNames: [{ name: 'Pothos', region: 'Common name in the Iranian flower trade' }, { name: 'Golden pothos', region: 'Common English name' }],
+        scientificSynonyms: ['Scindapsus aureus', 'Pothos aureus'],
+        fossilPeriod: 'Araceae is among the oldest monocot families; related fossil pollen dates to the Late Cretaceous.',
+        plantStory: 'The familiar name “pothos” comes from its former scientific name, Pothos aureus. It rarely flowers in the Solomon Islands, but its exceptional hardiness and rapid growth have made it one of the world’s most popular beginner houseplants.',
+        quickStats: [{ label: 'Origin', value: 'Solomon Islands (Pacific Ocean)' }, { label: 'Habitat', value: 'Tropical rainforests' }, { label: 'Range in Iran', value: 'Warm, humid regions, mostly in greenhouses' }, { label: 'Global range', value: 'Invasive in many tropical regions' }],
+    },
+    'spathiphyllum': {
+        subspecies: 'Dozens of horticultural hybrids have different flower and leaf sizes.',
+        morphology: { plantType: 'Dense perennial herb with no distinct above-ground stem.', leaf: 'Glossy, dark-green, long-stalked, oval-lance-shaped leaves.', flower: 'A sail-like white spathe around a cream spadix, mildly fragrant.', stem: 'Short, underground or close to the soil surface.', root: 'A spreading rhizome produces offsets.', fruit: 'Small green berry, rarely seen indoors.', seed: 'Small seeds inside the berry.', bark: 'No woody bark.', latex: 'Sap contains calcium oxalate crystals that irritate the mouth and throat.', },
+        majorCompound: 'Calcium oxalate crystals.',
+        categories: [{ name: 'Irritating mineral compounds', total: 'Throughout all plant tissues', compounds: [{ name: 'Needle-shaped calcium oxalate', amount: 'Abundant' }] }, { name: 'Saponins', total: 'Small amount', compounds: [{ name: 'Glycosidic saponins', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Medium indirect light; tolerates low light.', water: 'High; needs consistently moist soil.', soil: 'Moist soil rich in organic matter.', temperature: '18–26°C.', growthAltitude: 'Mostly at low elevations in the rainforests of Colombia and Venezuela.' },
+        applications: { food: ['Not edible.'], industrial: ['A popular ornamental promoted for improving indoor air quality.', 'Included among plants studied for removing air pollutants in NASA’s Clean Air Study.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'Chewing the calcium oxalate crystals can cause mouth and throat irritation and swelling in people, dogs, or cats; poisoning is usually not severe or fatal.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; reported as common and not threatened in the rainforests of Colombia and Venezuela.',
+        localNames: [{ name: 'Peace lily', region: 'Common English name' }, { name: 'White sails', region: 'Common horticultural name' }],
+        scientificSynonyms: ['Spathiphyllum floribundum (historically misapplied name)'],
+        fossilPeriod: 'Fossil records for this family are scarce; pollen related to the order Alismatales dates to the Late Cretaceous.',
+        plantStory: 'The English name “peace lily” refers to the white, sail-shaped spathe, which resembles a white flag. In Western cultures, the plant is often given as a gift for both condolences and celebrations.',
+        quickStats: [{ label: 'Origin', value: 'Colombia and Venezuela' }, { label: 'Habitat', value: 'Rainforest understory' }, { label: 'Range in Iran', value: 'Warm regions and greenhouses' }, { label: 'Global range', value: 'Cultivated worldwide' }],
+    },
+    'zamioculcas-zamiifolia': {
+        subspecies: 'The “Raven” cultivar has nearly black-purple leaves.',
+        morphology: { plantType: 'Rhizomatous perennial herb that stores water in its stems.', leaf: 'Pinnate compound leaves with thick, glossy, fleshy leaflets.', flower: 'A small spadix enclosed in a spathe near the base; rare indoors.', stem: 'Swollen, fleshy leaf stalks store water.', root: 'An underground tuberous rhizome stores water and nutrients.', fruit: 'Rarely observed in container cultivation.', seed: 'Limited information; usually propagated by leaves or rhizome division.', bark: 'No woody bark.', latex: 'Sap contains calcium oxalate crystals that mildly irritate skin and mucous membranes.', },
+        majorCompound: 'Calcium oxalate crystals.',
+        categories: [{ name: 'Irritating mineral compounds', total: 'In plant sap', compounds: [{ name: 'Needle-shaped calcium oxalate', amount: 'Moderate' }] }],
+        growthNeeds: { light: 'Low to bright indirect light.', water: 'Low; the rhizome stores water, making the plant highly drought-tolerant.', soil: 'Light, well-draining soil.', temperature: '18–26°C.', growthAltitude: 'Dry, low- to mid-elevation areas of East Africa (Kenya and Tanzania).' },
+        applications: { food: ['Not edible.'], industrial: ['A very popular office ornamental because it is hardy and needs little care.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'Calcium oxalate crystals in the sap may cause mild itching on skin and mouth irritation or digestive upset if eaten by dogs and cats. Its toxicity is often overstated.',
+        conservationBadge: 'Least Concern (LC)',
+        conservationStatus: 'Listed as Least Concern on the IUCN Red List, with stable populations in its native East African habitat.',
+        localNames: [{ name: 'ZZ plant', region: 'Common English name' }, { name: 'Emerald palm', region: 'Common English name' }],
+        scientificSynonyms: ['Caladium zamiifolium (historical basionym)'],
+        fossilPeriod: 'Araceae is among the oldest monocot families; related fossil pollen dates to the Late Cretaceous.',
+        plantStory: 'Dutch growers introduced ZZ plants to the international houseplant market in the 1990s. Their remarkable tolerance of neglect and low light quickly earned them the nickname “unkillable plant.”',
+        quickStats: [{ label: 'Origin', value: 'East Africa (Kenya and Tanzania)' }, { label: 'Habitat', value: 'Arid and semi-arid regions' }, { label: 'Range in Iran', value: 'Throughout Iran, mostly warmer regions' }, { label: 'Global range', value: 'Cultivated worldwide since the 1990s' }],
+    },
+    'chlorophytum-comosum': {
+        subspecies: 'Cultivars include “Vittatum” and “Variegatum,” with white or cream leaf margins.',
+        morphology: { plantType: 'Rhizomatous perennial herb with trailing runners (stolons).', leaf: 'Narrow, strap-shaped leaves, green or edged with white or cream stripes.', flower: 'Small, white, star-shaped flowers grow on hanging stolons alongside young plantlets.', stem: 'Horizontal stolons produce new plantlets at their tips.', root: 'Fleshy, tuberous roots store water.', fruit: 'Small, three-lobed capsule.', seed: 'Tiny black seeds.', bark: 'No woody bark.', latex: 'No significant sap; very low toxicity.', },
+        majorCompound: 'Fructans (fructooligosaccharides) in the roots.',
+        categories: [{ name: 'Storage carbohydrates', total: 'In the tuberous roots', compounds: [{ name: 'Fructan', amount: 'Moderate' }] }, { name: 'Phenolic compounds', total: 'Small amount', compounds: [{ name: 'Glycosylated flavonoids', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Medium to bright indirect light.', water: 'Moderate; fairly forgiving of irregular watering.', soil: 'Standard potting mix with good drainage.', temperature: '15–25°C.', growthAltitude: 'Coastal and low-elevation areas in its native South Africa.' },
+        applications: { food: ['Not edible.'], industrial: ['A common, hardy ornamental for hanging baskets and classrooms.'], therapeutic: ['Mentioned in some traditional medicine for minor skin uses; evidence is limited.'] },
+        toxicityText: 'Very low toxicity to people and pets. Some cats like chewing the leaves, possibly because of a mildly stimulating compound, but this usually causes only mild vomiting.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; common and not threatened in its native South African range.',
+        localNames: [{ name: 'Spider plant', region: 'Common English name' }, { name: 'Chlorophytum', region: 'Common name in the plant trade' }],
+        scientificSynonyms: ['Anthericum comosum'],
+        fossilPeriod: 'Direct fossils of the genus are limited; Asparagaceae diversified mainly during the Cenozoic.',
+        plantStory: 'The spider plant is named for the tiny spider-like plantlets hanging from its runners. In NASA’s well-known 1989 study, it was among the species effective at removing formaldehyde and carbon monoxide from indoor air.',
+        quickStats: [{ label: 'Origin', value: 'South Africa' }, { label: 'Habitat', value: 'Coastal and forested regions' }, { label: 'Range in Iran', value: 'Throughout Iran' }, { label: 'Global range', value: 'Cultivated worldwide' }],
+    },
+    'dracaena-marginata': {
+        subspecies: 'The “Tricolor” cultivar has green, yellow, and red stripes.',
+        morphology: { plantType: 'Slow-growing evergreen woody shrub.', leaf: 'Long, narrow, strap-shaped leaves with reddish-purple edges.', flower: 'Small clusters of white to pink, fragrant flowers; rare indoors.', stem: 'Slender, woody stems show distinct circular leaf scars after leaves fall.', root: 'Fairly shallow, fibrous roots.', fruit: 'Small orange-red berry, rarely seen indoors.', seed: 'Seeds are contained in the berry.', bark: 'Light gray, with circular scars from fallen leaves.', latex: 'Watery sap containing irritating steroidal saponins.', },
+        majorCompound: 'Steroidal saponins.',
+        categories: [{ name: 'Saponins', total: '0.5–1.5%', compounds: [{ name: 'Steroidal saponins', amount: '0.5–1%' }] }],
+        growthNeeds: { light: 'Medium to bright indirect light.', water: 'Low; sensitive to water with high fluoride or chlorine levels.', soil: 'Light, well-draining soil.', temperature: '18–27°C.', growthAltitude: 'Mostly at low to mid elevations in Madagascar.' },
+        applications: { food: ['Not edible.'], industrial: ['A popular office and indoor ornamental with a tree-like form.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'If eaten by dogs or cats, leaf steroidal saponins can cause vomiting (sometimes with blood), loss of appetite, and dilated pupils in cats.',
+        conservationBadge: 'Declining in its native range',
+        conservationStatus: 'Some wild populations in Madagascar are declining because of the loss of native forests, although the plant is widely cultivated globally.',
+        localNames: [{ name: 'Madagascar dragon tree', region: 'Common English name' }, { name: 'Dragon tree', region: 'Common English name' }],
+        scientificSynonyms: ['Dracaena cincta (currently accepted name)'],
+        fossilPeriod: 'Direct fossils of the genus are limited; Asparagaceae diversified mainly during the Cenozoic.',
+        plantStory: 'In African and Asian lore, Dracaena (Greek for “dragon”) is associated with the red sap of related species, known as “dragon’s blood.” With its slender trunk and leafy crown, Dracaena marginata resembles a miniature tree and is popular in modern interiors.',
+        quickStats: [{ label: 'Origin', value: 'Madagascar' }, { label: 'Habitat', value: 'Low- to mid-elevation forests' }, { label: 'Range in Iran', value: 'Warm regions and greenhouses' }, { label: 'Global range', value: 'Cultivated throughout temperate and tropical regions' }],
+    },
+    'philodendron-hederaceum': {
+        subspecies: 'Cultivars such as “Brasil” and “Micans” have colorful or velvety leaves.',
+        morphology: { plantType: 'Evergreen climbing or trailing epiphyte.', leaf: 'Simple, glossy, heart-shaped leaves; ornamental cultivars may be bronze.', flower: 'A spadix enclosed by a green-red spathe; rare indoors.', stem: 'Flexible stems produce aerial roots at each node to attach to tree trunks.', root: 'Aerial roots accompanied by fine soil roots.', fruit: 'A many-seeded berry, rarely seen indoors.', seed: 'Small seeds inside the berry.', bark: 'No true woody bark.', latex: 'Watery sap containing calcium oxalate crystals.', },
+        majorCompound: 'Calcium oxalate crystals.',
+        categories: [{ name: 'Irritating mineral compounds', total: 'Throughout all plant tissues', compounds: [{ name: 'Needle-shaped calcium oxalate', amount: 'Abundant' }] }],
+        growthNeeds: { light: 'Low to bright indirect light.', water: 'Moderate; let the soil surface dry somewhat between waterings.', soil: 'Light soil enriched with leaf compost.', temperature: '18–27°C.', growthAltitude: 'Mostly at low elevations in the tropical forests of Central and South America.' },
+        applications: { food: ['Not edible.'], industrial: ['One of the world’s best-selling ornamental trailing plants.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'Chewing the calcium oxalate crystals in leaves and stems can cause mouth irritation, drooling, and local swelling in people, dogs, and cats.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; widely distributed and stable in the tropical forests of Central and South America.',
+        localNames: [{ name: 'Heartleaf philodendron', region: 'Common English name' }, { name: 'Sweetheart plant', region: 'Common English name' }],
+        scientificSynonyms: ['Philodendron scandens', 'Philodendron oxycardium'],
+        fossilPeriod: 'Araceae is among the oldest monocot families; related fossil pollen dates to the Late Cretaceous.',
+        plantStory: 'The name Philodendron comes from Greek words meaning “tree lover,” referring to the plant’s habit of climbing tree trunks in rainforests. Decorative cultivars such as “Brasil” and “Micans” have gained many fans on social media in recent years.',
+        quickStats: [{ label: 'Origin', value: 'Central and South America' }, { label: 'Habitat', value: 'Tropical rainforests' }, { label: 'Range in Iran', value: 'Warm, humid regions, mostly in greenhouses' }, { label: 'Global range', value: 'Widely cultivated worldwide' }],
+    },
+    'calathea-orbifolia': {
+        subspecies: 'No widely grown horticultural cultivar; the species itself is prized for its unusual leaf pattern.',
+        morphology: { plantType: 'Dense perennial herb with an underground rhizome.', leaf: 'Large, round to oval silver leaves with dark-green stripes and purple undersides.', flower: 'Small clusters of white or pale-purple flowers; very rare indoors.', stem: 'Long, upright petioles move in response to light (nyctinasty).', root: 'Horizontal rhizome with fine fibrous roots.', fruit: 'Small capsule, rarely observed.', seed: 'Limited information from indoor cultivation.', bark: 'No woody bark.', latex: 'No significant sap; considered safe for pets.', },
+        majorCompound: 'Small amounts of phenolic compounds and flavonoids; poorly studied.',
+        categories: [{ name: 'Phenolic compounds', total: 'Limited studies', compounds: [{ name: 'General Marantaceae flavonoids', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Medium indirect light; keep out of direct sun.', water: 'High; needs high humidity and consistently moist soil.', soil: 'Moist soil rich in organic matter.', temperature: '18–24°C.', growthAltitude: 'Rainforests in Bolivia, within a limited range.' },
+        applications: { food: ['Not edible.'], industrial: ['A valuable collector’s ornamental because of its rare leaf pattern.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'No known toxicity to people, dogs, or cats; considered a safe choice for homes with pets.',
+        conservationBadge: 'Conservation concern (limited range)',
+        conservationStatus: 'Its naturally limited range in Bolivia and collection for the ornamental plant trade have raised concerns about wild populations, although no formal IUCN assessment has been published.',
+        localNames: [{ name: 'Round-leaf Calathea', region: 'Name based on the species epithet orbifolia' }, { name: 'Silver Calathea', region: 'Horticultural name referring to its leaf color' }],
+        scientificSynonyms: ['Goeppertia orbifolia (currently accepted name)'],
+        fossilPeriod: 'Fossils of this family are scarce; pollen related to the order Zingiberales dates to the Late Cretaceous.',
+        plantStory: 'Calathea orbifolia is prized by collectors for its large, round, silvery leaves. It exhibits nyctinasty: at night its leaves fold upward as if in prayer, which has earned it the common nickname “prayer plant.”',
+        quickStats: [{ label: 'Origin', value: 'Bolivia' }, { label: 'Habitat', value: 'Rainforests with a limited range' }, { label: 'Range in Iran', value: 'Warm regions and greenhouses' }, { label: 'Global range', value: 'Grown by specialist plant enthusiasts' }],
+    },
+    'peperomia-obtusifolia': {
+        subspecies: 'The “Variegata” cultivar has yellow-cream margins.',
+        morphology: { plantType: 'Compact perennial herb, either epiphytic or terrestrial.', leaf: 'Fleshy, glossy, oval to round leaves store water like those of succulents.', flower: 'Narrow, cream-green, rat-tail-like flower spikes.', stem: 'Short, fleshy, and partly upright to slightly trailing.', root: 'Shallow, fine fibrous roots.', fruit: 'Small, dry, one-seeded fruit.', seed: 'Tiny seed contained in the fruit.', bark: 'No woody bark.', latex: 'No significant sap; reported toxicity is very low.', },
+        majorCompound: 'Small amounts of terpenoids and volatile oils.',
+        categories: [{ name: 'Volatile oils', total: 'Very small amount', compounds: [{ name: 'General Piperaceae terpenoids', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Medium indirect light.', water: 'Low; allow the soil to dry between waterings.', soil: 'Light, well-draining soil.', temperature: '18–26°C.', growthAltitude: 'Mostly in low-elevation coastal areas of Florida and the Caribbean.' },
+        applications: { food: ['Not edible, unlike some relatives such as black pepper.'], industrial: ['A popular compact ornamental for desks and small spaces.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'No known toxicity to people or pets; eating a large amount may cause mild digestive upset.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; common, with stable populations in Florida and the Caribbean.',
+        localNames: [{ name: 'Baby rubber plant', region: 'Common English name' }, { name: 'Pepper face', region: 'Common English name' }],
+        scientificSynonyms: ['Piper obtusifolium (historical basionym)'],
+        fossilPeriod: 'Pollen fossils related to Piperaceae have been reported from the Eocene, about 50 million years ago.',
+        plantStory: 'Peperomia belongs to the pepper family (Piperaceae), which also includes culinary black pepper, although this species is not used as a spice. Its compact size and easy care make it a popular choice for small desks.',
+        quickStats: [{ label: 'Origin', value: 'Florida and the Caribbean' }, { label: 'Habitat', value: 'Low-elevation coastal regions' }, { label: 'Range in Iran', value: 'Warm regions and greenhouses' }, { label: 'Global range', value: 'Cultivated worldwide' }],
+    },
+    'crassula-ovata': {
+        subspecies: '“Gollum” and “Hobbit” cultivars have tubular leaves.',
+        morphology: { plantType: 'Perennial shrub-like succulent with a thick trunk.', leaf: 'Round to oval, thick, fleshy, glossy leaves that store water.', flower: 'Small, star-shaped pink to white flowers in terminal clusters, usually in the cool season.', stem: 'Thick, woody-fleshy stems resemble a miniature tree trunk.', root: 'Shallow, fragile fibrous roots prone to rot if overwatered.', fruit: 'Small, dry capsule, rarely seen indoors.', seed: 'Very small; usually propagated by cuttings.', bark: 'Thin brown bark on older stems.', latex: 'No distinctive sap; the exact toxic compound has not been fully identified.', },
+        majorCompound: 'The exact toxic compound has not been fully identified.',
+        categories: [{ name: 'Unidentified compounds', total: 'Limited research', compounds: [{ name: 'Possibly unidentified alkaloids', amount: 'Unknown' }] }],
+        growthNeeds: { light: 'Direct sun or very bright indirect light.', water: 'Low; highly drought-tolerant.', soil: 'Cactus mix with excellent drainage.', temperature: '15–27°C.', growthAltitude: 'Dry, low-elevation areas of South Africa’s Cape region.' },
+        applications: { food: ['Not edible.'], industrial: ['A popular feng shui ornamental known as the “money tree” or “jade plant.”'], therapeutic: ['Used traditionally in South Africa for wounds and toothache; scientific evidence is limited.'] },
+        toxicityText: 'The exact toxic compound is unknown, but eating the leaves can cause vomiting, lethargy, a slow heart rate, and sometimes poor coordination in dogs and cats.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; common and not threatened in its native Cape region of South Africa.',
+        localNames: [{ name: 'Money plant', region: 'Common name; also called jade plant' }, { name: 'Jade plant', region: 'Common horticultural name' }],
+        scientificSynonyms: ['Crassula argentea (historical common name)'],
+        fossilPeriod: 'Crassulaceae has a scattered fossil record from the Oligocene to Miocene; CAM metabolism became more widespread during this period.',
+        plantStory: 'In feng shui and popular belief across many Asian countries, the plant is called a “money tree” and symbolizes wealth and financial good fortune. It is often placed at the entrances of shops and offices.',
+        quickStats: [{ label: 'Origin', value: 'South Africa (Cape region)' }, { label: 'Habitat', value: 'Dry, rocky regions' }, { label: 'Range in Iran', value: 'Warm, dry regions' }, { label: 'Global range', value: 'Cultivated worldwide' }],
+    },
+    'echeveria-elegans': {
+        subspecies: 'Natural varieties include “kesselringiana,” which has a denser rosette.',
+        morphology: { plantType: 'Rosette-forming succulent without a tall above-ground stem.', leaf: 'Fleshy, spoon-shaped, blue-gray leaves with pink tips, arranged in a symmetrical rosette.', flower: 'Pink-orange, bell-shaped flowers on a tall, slender flowering stalk.', stem: 'Very short when young; lengthens slightly with age.', root: 'Shallow fibrous roots adapted to drought.', fruit: 'Small capsule containing several seeds.', seed: 'Very small and light.', bark: 'No woody bark.', latex: 'No sap; generally considered safe for pets.', },
+        majorCompound: 'Malic acid, which accumulates overnight through CAM metabolism.',
+        categories: [{ name: 'Organic acids', total: 'In leaf tissue (at night)', compounds: [{ name: 'Malic acid', amount: 'Varies with time of day' }] }],
+        growthNeeds: { light: 'Direct sun or very bright indirect light.', water: 'Low; water only after the soil has dried completely.', soil: 'Cactus soil.', temperature: '13–26°C.', growthAltitude: 'Dry mountains in Hidalgo, Mexico, at about 1,500–2,500 m.' },
+        applications: { food: ['Not edible.'], industrial: ['One of the most popular ornamental succulents for xeriscaping.'], therapeutic: ['No established therapeutic use.'] },
+        toxicityText: 'Generally reported as safe for people and pets; eating a large amount may cause mild digestive discomfort.',
+        conservationBadge: 'Collection pressure in its native range',
+        conservationStatus: 'Some wild populations in Hidalgo, Mexico, are under pressure from over-collection for the succulent trade, although the species is abundant in cultivation.',
+        localNames: [{ name: 'Mexican snowball', region: 'Common English name' }, { name: 'Mexican gem', region: 'Common English name' }],
+        scientificSynonyms: ['Echeveria elegans var. kesselringiana'],
+        fossilPeriod: 'Crassulaceae has a scattered fossil record from the Oligocene to Miocene; CAM metabolism became more widespread during this period.',
+        plantStory: 'Echeveria was formally described and named in 1874 by the American botanist Rose. Its blue-gray leaves arranged in a symmetrical rosette have made it one of the most photographed succulents on social media.',
+        quickStats: [{ label: 'Origin', value: 'Hidalgo, Mexico' }, { label: 'Habitat', value: 'Dry mountainous regions' }, { label: 'Range in Iran', value: 'Dry and temperate regions' }, { label: 'Global range', value: 'Widely grown in xeriscaping' }],
+    },
+    'rosa-chinensis': {
+        subspecies: 'An ancestor of many modern repeat-flowering rose cultivars.',
+        morphology: { plantType: 'Semi-evergreen to deciduous thorny shrub.', leaf: 'Pinnately compound leaves with 3–5 toothed leaflets.', flower: 'Single or clustered red to pink, double flowers bloom repeatedly through the growing season.', stem: 'Woody stems bear scattered curved thorns.', root: 'Deep taproot with extensive lateral roots.', fruit: 'Orange-red rose hip, rich in vitamin C.', seed: 'Several hard seeds inside each rose hip.', bark: 'Young branches are greenish brown and become browner with age.', latex: 'No sap; the main risk is a superficial scratch from thorns, not chemical toxicity.', },
+        majorCompound: 'Aromatic terpenoids in the petal essential oil.',
+        categories: [{ name: 'Essential-oil terpenoids', total: 'In petal glands', compounds: [{ name: 'Citronellol', amount: 'Major' }, { name: 'Geraniol', amount: 'Minor' }] }, { name: 'Flavonoids', total: 'In petals', compounds: [{ name: 'Quercetin glycosides', amount: 'Low' }] }],
+        growthNeeds: { light: 'At least 6 hours of direct sunlight per day.', water: 'Moderate; water regularly without waterlogging.', soil: 'Compost-rich soil with good drainage.', temperature: '15–28°C.', growthAltitude: 'Mostly at low to mid elevations in China.' },
+        applications: { food: ['Petals are used in jam and rose-flavored syrup.', 'Vitamin-C-rich rose hips are used in tea and preserves.'], industrial: ['A source of rose perfume and essential oil.', 'A parent species in the breeding of thousands of modern rose cultivars.'], therapeutic: ['Petals and rose hips have antioxidant properties.', 'Traditionally used for relaxation and to flavor herbal teas.'] },
+        toxicityText: 'Rose petals and hips are generally safe for people and pets; the main hazard is a superficial injury from stem thorns, not chemical toxicity.',
+        conservationBadge: 'Rare in the wild (parent species)',
+        conservationStatus: 'The wild ancestral form, Rosa chinensis var. spontanea, is very rare and threatened, while its garden cultivars are widely grown around the world.',
+        localNames: [{ name: 'China rose', region: 'Common English name' }, { name: 'Bengal rose', region: 'Common English name' }],
+        scientificSynonyms: ['Rosa indica (historically misapplied name)'],
+        fossilPeriod: 'Leaf and pollen fossils related to Rosaceae date to the Eocene–Oligocene, about 35–50 million years ago.',
+        plantStory: 'The China rose is an ancestor of many modern roses. Its introduction from China to Europe in the 18th century—and especially its repeat-flowering habit—revolutionized European rose breeding, where roses had previously flowered only once a year.',
+        quickStats: [{ label: 'Origin', value: 'China' }, { label: 'Habitat', value: 'Temperate mountainous regions' }, { label: 'Range in Iran', value: 'Mostly temperate and semi-arid regions' }, { label: 'Global range', value: 'An ancestor of many modern roses' }],
+    },
+    'lavandula-angustifolia': {
+        subspecies: 'Cultivars “Hidcote” and “Munstead” have dark-purple flowers.',
+        morphology: { plantType: 'Aromatic, semi-woody perennial subshrub.', leaf: 'Narrow, linear, gray-green leaves covered with fine hairs.', flower: 'Purple flower spikes on long stems, rich in aromatic oil glands.', stem: 'Woody base with young herbaceous shoots above.', root: 'Deep taproot adapted to drought.', fruit: 'Small nutlet, with four nutlets inside the calyx.', seed: 'Very small seeds contained in the nutlets.', bark: 'Thin brown bark at the woody base of mature plants.', latex: 'No sap; aromatic essential oil is stored in surface glands on leaves and flowers.', },
+        majorCompound: 'Linalool and linalyl acetate in the essential oil.',
+        categories: [{ name: 'Essential-oil terpenoids', total: '25–45% of the essential oil', compounds: [{ name: 'Linalool', amount: '25–38%' }, { name: 'Linalyl acetate', amount: '25–45%' }] }, { name: 'Phenolic compounds', total: 'Small amount', compounds: [{ name: 'Rosmarinic acid', amount: 'Trace' }] }],
+        growthNeeds: { light: 'Full direct sun.', water: 'Low; highly drought-tolerant but sensitive to excessive root moisture.', soil: 'Light, calcareous, very well-draining soil.', temperature: '15–30°C.', growthAltitude: 'Usually 600–1,800 m above sea level in the Mediterranean and French Alps.' },
+        applications: { food: ['Used to flavor baked goods and some drinks (culinary lavender).'], industrial: ['A major source of lavender perfume and essential oil.', 'Added to personal-care and cleaning products.'], therapeutic: ['Commonly used in aromatherapy to reduce anxiety and improve sleep.', 'Used topically for its soothing and anti-inflammatory properties.'] },
+        toxicityText: 'Large amounts of the aromatic essential oil, especially linalool, may cause nausea and loss of appetite in dogs and cats. Normal aromatherapy and culinary use is generally considered safe for people.',
+        conservationBadge: 'Stable',
+        conservationStatus: 'Not formally assessed by the IUCN; common in the Mediterranean and French Alps and widely cultivated commercially.',
+        localNames: [{ name: 'Lavender', region: 'Traditional name in Iranian medicine' }, { name: 'English lavender', region: 'International common name' }],
+        scientificSynonyms: ['Lavandula officinalis (historical common name)', 'Lavandula vera'],
+        fossilPeriod: 'Pollen fossils of Lamiaceae date to the Eocene; Lavandula likely arose in the Mediterranean basin during the Miocene.',
+        plantStory: 'The name Lavandula comes from the Latin “lavare,” meaning “to wash,” because ancient Romans used it to scent bathwater. Today, the purple lavender fields of Provence, France, are a celebrated regional landmark.',
+        quickStats: [{ label: 'Origin', value: 'The Mediterranean and the French Alps' }, { label: 'Habitat', value: 'Sunny, dry mountain regions' }, { label: 'Range in Iran', value: 'Tehran, Alborz, Markazi, Isfahan, and Fars' }, { label: 'Global range', value: 'Widely cultivated commercially for essential oil' }],
+    },
+}
+
+function localizePlantDetail(detail: PlantDetail, locale: MockLocale): PlantDetail {
+    if (locale !== 'en') return detail
+
+    const text = englishDetails[detail.slug]
+    if (!text) return detail
+    const taxonomy = {
+        ...detail.taxonomy,
+        subspecies: text.subspecies,
+    }
+
+    return {
+        ...detail,
+        gallery: detail.gallery.map((image, index) => ({
+            ...image,
+            title: detail.slug === 'monstera-deliciosa' && index === 0 ? 'Mature split leaves' : 'Plant overview',
+        })),
+        taxonomy,
+        morphology: { ...text.morphology },
+        chemicalCompounds: { majorCompound: text.majorCompound, categories: text.categories.map(category => ({ ...category, compounds: category.compounds.map(compound => ({ ...compound })) })) },
+        growthNeeds: { ...text.growthNeeds },
+        applications: { food: [...text.applications.food], industrial: [...text.applications.industrial], therapeutic: [...text.applications.therapeutic] },
+        toxicityText: text.toxicityText,
+        conservationBadge: text.conservationBadge,
+        conservationStatus: text.conservationStatus,
+        localNames: text.localNames.map(name => ({ ...name })),
+        scientificSynonyms: [...text.scientificSynonyms],
+        fossilPeriod: text.fossilPeriod,
+        plantStory: text.plantStory,
+        quickStats: text.quickStats.map(stat => ({ ...stat })),
+    }
+}
+
+export function getPlantDetails(locale: MockLocale = 'fa'): Record<string, PlantDetail> {
+    if (locale === 'fa') return plantDetails
+    return Object.fromEntries(
+        Object.entries(plantDetails).map(([slug, detail]) => [slug, localizePlantDetail(detail, locale)]),
+    )
+}
+
+export function findPlantDetailBySlug(slug: string, locale: MockLocale = 'fa'): PlantDetail | undefined {
+    const detail = plantDetails[slug]
+    return detail ? localizePlantDetail(detail, locale) : undefined
 }

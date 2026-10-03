@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const props = withDefaults(
   defineProps<{
     slug: string
@@ -9,12 +11,16 @@ const props = withDefaults(
 )
 
 const wishlistStore = useWishlistStore()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 const isSaved = computed(() => wishlistStore.isWishlisted(props.slug))
 
 function onClick(e: MouseEvent) {
   e.preventDefault()
   e.stopPropagation()
-  wishlistStore.toggle(props.slug)
+  wishlistStore.toggle(props.slug, {
+    added: t('components.wishlistButton.addedToast'),
+    removed: t('components.wishlistButton.removedToast'),
+  })
 }
 </script>
 
@@ -24,7 +30,7 @@ function onClick(e: MouseEvent) {
     type="button"
     class="flex size-8 items-center justify-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur transition-colors hover:text-status-danger"
     :class="{ 'text-status-danger': isSaved }"
-    :aria-label="isSaved ? 'حذف از علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'"
+    :aria-label="isSaved ? t('components.wishlistButton.remove') : t('components.wishlistButton.add')"
     @click="onClick"
   >
     <Icon
@@ -45,6 +51,6 @@ function onClick(e: MouseEvent) {
       class="size-4"
       :class="isSaved ? 'fill-current text-status-danger' : ''"
     />
-    {{ isSaved ? 'در علاقه‌مندی‌هاست' : 'افزودن به علاقه‌مندی‌ها' }}
+    {{ isSaved ? t('components.wishlistButton.saved') : t('components.wishlistButton.add') }}
   </AppButton>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { CommunityUser } from '~/types/community.types'
 
 const props = withDefaults(
@@ -7,7 +8,11 @@ const props = withDefaults(
 )
 
 const communityStore = useCommunityStore()
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
 const isOwnProfile = computed(() => props.user.id === communityStore.currentUser.id)
+function formatCount(value: number) {
+  return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)
+}
 </script>
 
 <template>
@@ -32,32 +37,32 @@ const isOwnProfile = computed(() => props.user.id === communityStore.currentUser
           size="sm"
           @click="communityStore.toggleFollow(props.user.id)"
       >
-        {{ communityStore.isFollowing(props.user.id) ? 'دنبال می‌کنی' : 'دنبال کردن' }}
+        {{ communityStore.isFollowing(props.user.id) ? t('components.userProfileCard.following') : t('components.userProfileCard.follow') }}
       </AppButton>
     </div>
     <div class="mt-4 grid grid-cols-3 gap-2 text-center">
       <div>
         <p class="font-bold text-ink">
-          {{ toPersianDigits(props.user.plantsCount) }}
+          {{ formatCount(props.user.plantsCount) }}
         </p>
         <p class="text-[11px] text-ink-muted">
-          گیاه
+          {{ t('components.userProfileCard.plant') }}
         </p>
       </div>
       <div>
         <p class="font-bold text-ink">
-          {{ toPersianDigits(props.user.followersCount) }}
+          {{ formatCount(props.user.followersCount) }}
         </p>
         <p class="text-[11px] text-ink-muted">
-          دنبال‌کننده
+          {{ t('components.userProfileCard.followers') }}
         </p>
       </div>
       <div>
         <p class="font-bold text-ink">
-          {{ toPersianDigits(props.user.followingCount) }}
+          {{ formatCount(props.user.followingCount) }}
         </p>
         <p class="text-[11px] text-ink-muted">
-          دنبال‌شونده
+          {{ t('components.userProfileCard.followingCount') }}
         </p>
       </div>
     </div>

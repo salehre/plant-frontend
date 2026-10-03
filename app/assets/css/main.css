@@ -342,10 +342,12 @@
   }
 
   .glass-card {
-    @apply relative isolate rounded-[28px] text-white;
+    @apply relative isolate rounded-[28px];
     box-shadow: 0 0 21px -8px rgba(255, 255, 255, 0.3);
+  }
+  .dark .glass-card {
+    @apply text-white;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    /* داخل کارت، رنگ متن روشن می‌شه تا text-ink و text-ink-muted هم دیده بشن */
     --color-ink: 255 255 255;
     --color-ink-muted: 224 230 237;
   }

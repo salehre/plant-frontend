@@ -2,20 +2,22 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import { z } from 'zod'
-import { mockPlants } from '~/services/mock/plants.mock'
+import { getMockPlants, mockPlants } from '~/services/mock/plants.mock'
 
 definePageMeta({ layout: 'dashboard' }) // middleware: 'auth' فعلاً موقتاً غیرفعاله تا فرانت بدون لاگین قابل تست باشه؛ وقتی auth واقعی وصل شد برگردون
 
 const userPlantsStore = useUserPlantsStore()
 const uiStore = useUiStore()
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const showAddModal = ref(false)
 
-const plantOptions = mockPlants.map(p => ({ label: p.name, value: p.slug }))
+const plantOptions = computed(() => getMockPlants(activeLocale.value).map(p => ({ label: p.name, value: p.slug })))
 
 const schema = toTypedSchema(z.object({
-  nickname: z.string().min(2, 'اسم مستعار باید حداقل ۲ حرف باشد').max(30, 'اسم مستعار خیلی بلنده'),
-  plantSlug: z.string().min(1, 'یک گیاه انتخاب کن'),
-  location: z.string().max(40, 'محل نگهداری خیلی بلنده').optional(),
+  nickname: z.string().min(2, 'pages.myPlants.validation.nicknameMin').max(30, 'pages.myPlants.validation.nicknameMax'),
+  plantSlug: z.string().min(1, 'pages.myPlants.validation.plantRequired'),
+  location: z.string().max(40, 'pages.myPlants.validation.locationMax').optional(),
 }))
 
 const { handleSubmit, defineField, errors, resetForm } = useForm({
@@ -34,19 +36,19 @@ const onSubmit = handleSubmit((values) => {
     nickname: values.nickname,
     photo: plant?.images[0] ?? '/images/plants/botanical-1.webp',
     acquiredAt: new Date().toISOString().slice(0, 10),
-    location: values.location || 'خانه',
+    location: values.location || t('pages.myPlants.home'),
     healthStatus: 'healthy',
     lastWateredAt: null,
     nextWateringAt: null,
   })
-  uiStore.showToast(`${values.nickname} به گیاهان تو اضافه شد`)
+  uiStore.showToast(t('pages.myPlants.addedToast', { name: values.nickname }))
   showAddModal.value = false
   resetForm()
 })
 
 function removePlant(id: string, nickname: string) {
   userPlantsStore.removePlant(id)
-  uiStore.showToast(`${nickname} حذف شد`, 'info')
+  uiStore.showToast(t('pages.myPlants.removedToast', { name: nickname }), 'info')
 }
 </script>
 
@@ -54,7 +56,7 @@ function removePlant(id: string, nickname: string) {
   <div>
     <div class="mb-6 flex items-center justify-between">
       <h1 class="text-2xl font-bold text-ink">
-        {{ $t('myPlants') }}
+        {{ t('nav.myPlants') }}
       </h1>
       <AppButton
           variant="primary"
@@ -89,7 +91,7 @@ function removePlant(id: string, nickname: string) {
               {{ p.nickname }}
             </h3>
             <button
-                aria-label="حذف"
+                :aria-label="t('common.delete')"
                 class="text-ink-muted hover:text-status-danger"
                 @click="removePlant(p.id, p.nickname)"
             >
@@ -110,7 +112,7 @@ function removePlant(id: string, nickname: string) {
                 name="lucide:droplets"
                 class="size-3.5"
             />
-            آبیاری بعدی: {{ toJalaliDate(p.nextWateringAt) }}
+            {{ t('pages.myPlants.nextWatering') }}: {{ toJalaliDate(p.nextWateringAt) }}
           </p>
         </div>
       </div>
@@ -124,12 +126,12 @@ function removePlant(id: string, nickname: string) {
           name="lucide:sprout"
           class="size-10"
       />
-      هنوز گیاهی اضافه نکرده‌ای.
+      {{ t('pages.myPlants.empty') }}
     </div>
 
     <AppModal
         v-model="showAddModal"
-        title="افزودن گیاه جدید"
+        :title="t('pages.myPlants.addPlant')"
     >
       <form
           class="flex flex-col gap-4"
@@ -137,51 +139,51 @@ function removePlant(id: string, nickname: string) {
           @submit="onSubmit"
       >
         <div>
-          <label class="mb-1 block text-sm text-ink">اسم مستعار</label>
+          <label class="mb-1 block text-sm text-ink">{{ t('pages.myPlants.nickname') }}</label>
           <input
               v-model="nickname"
               v-bind="nicknameAttrs"
               type="text"
               class="w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
               :class="errors.nickname ? 'border-status-danger' : 'border-ink/10'"
-              placeholder="مثلاً مونی"
+              :placeholder="t('pages.myPlants.nicknamePlaceholder')"
           >
           <p
               v-if="errors.nickname"
               class="mt-1 text-xs text-status-danger"
           >
-            {{ errors.nickname }}
+            {{ errors.nickname ? t(errors.nickname) : '' }}
           </p>
         </div>
         <div>
-          <label class="mb-1 block text-sm text-ink">نوع گیاه</label>
+          <label class="mb-1 block text-sm text-ink">{{ t('pages.myPlants.plantType') }}</label>
           <AppDropdown
               v-model="plantSlug"
               :options="plantOptions"
-              placeholder="یک گیاه انتخاب کن"
+              :placeholder="t('pages.myPlants.choosePlant')"
           />
           <p
               v-if="errors.plantSlug"
               class="mt-1 text-xs text-status-danger"
           >
-            {{ errors.plantSlug }}
+            {{ errors.plantSlug ? t(errors.plantSlug) : '' }}
           </p>
         </div>
         <div>
-          <label class="mb-1 block text-sm text-ink">محل نگهداری</label>
+          <label class="mb-1 block text-sm text-ink">{{ t('pages.myPlants.location') }}</label>
           <input
               v-model="location"
               v-bind="locationAttrs"
               type="text"
               class="w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
               :class="errors.location ? 'border-status-danger' : 'border-ink/10'"
-              placeholder="مثلاً پذیرایی"
+              :placeholder="t('pages.myPlants.locationPlaceholder')"
           >
           <p
               v-if="errors.location"
               class="mt-1 text-xs text-status-danger"
           >
-            {{ errors.location }}
+            {{ errors.location ? t(errors.location) : '' }}
           </p>
         </div>
         <AppButton

@@ -17,7 +17,10 @@
   ازاش نصف حجم کد و یه نقطه‌ی نگهداری داریم.
 -->
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const uiStore = useUiStore()
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const targetSection = ref<HTMLElement | null>(null)
 
@@ -26,43 +29,49 @@ function goToTarget() {
 }
 
 // ============ اطلاعات اصلی گیاه ============
-const plantName = ref('شیرین بیان')
-const scientificName = ref('Glycyrrhiza glabra L.')
-const plantImage = ref('plant1.png')
+const plantName = computed(() => t('components.plantDetailFull.plantName'))
+const scientificName = 'Glycyrrhiza glabra L.'
+const plantImage = 'plant1.png'
 
-const toxitcityStatus = ref({
-  lame: 'در معرض تهدید',
-  extinct: 'منقرض شده',
-  stable: 'وضعیت پایدار',
-  notFound: 'اطلاعات کافی موجود نیست',
-})
+const toxitcityStatus = computed(() => ({
+  lame: t('components.plantDetailFull.threatened'),
+  extinct: t('components.plantDetailFull.extinct'),
+  stable: t('components.plantDetailFull.stable'),
+  notFound: t('components.plantDetailFull.noStatusData'),
+}))
 
-const plantGallery = ref([
+const plantGallery = computed(() => [
   {
     thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Glycyrrhiza_glabra_LC0256.jpg/400px-Glycyrrhiza_glabra_LC0256.jpg',
     full: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Glycyrrhiza_glabra_LC0256.jpg',
-    title: 'گل و برگ شیرین بیان',
+    title: t('components.plantDetailFull.galleryFlowerLeaves'),
   },
   {
     thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Glycyrrhiza_glabra_-_Köhler–s_Medizinal-Pflanzen-069.jpg/400px-Glycyrrhiza_glabra_-_Köhler–s_Medizinal-Pflanzen-069.jpg',
     full: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Glycyrrhiza_glabra_-_Köhler–s_Medizinal-Pflanzen-069.jpg',
-    title: 'نقشه علمی گیاه',
+    title: t('components.plantDetailFull.galleryBotanicalIllustration'),
   },
   {
     thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Liquorice_roots.jpg/400px-Liquorice_roots.jpg',
     full: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Liquorice_roots.jpg',
-    title: 'ریشه شیرین بیان',
+    title: t('components.plantDetailFull.galleryRoots'),
   },
   {
     thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Glycyrrhiza_glabra_001.JPG/400px-Glycyrrhiza_glabra_001.JPG',
     full: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/Glycyrrhiza_glabra_001.JPG',
-    title: 'گل‌های بنفش شیرین بیان',
+    title: t('components.plantDetailFull.galleryPurpleFlowers'),
   },
 ])
 
 const galleryOpen = ref(false)
 const galleryIndex = ref(0)
 const galleryCurrentImage = computed(() => plantGallery.value[galleryIndex.value])
+const formattedGalleryIndex = computed(() =>
+  new Intl.NumberFormat(locale.value, { useGrouping: false }).format(galleryIndex.value + 1),
+)
+const formattedGalleryLength = computed(() =>
+  new Intl.NumberFormat(locale.value, { useGrouping: false }).format(plantGallery.value.length),
+)
 function openGallery(index: number) {
   galleryIndex.value = index
   galleryOpen.value = true
@@ -75,7 +84,7 @@ function prevImage() {
 }
 
 async function sharePlant() {
-  const shareData = { title: plantName.value, text: scientificName.value, url: window.location.href }
+  const shareData = { title: plantName.value, text: scientificName, url: window.location.href }
   if (navigator.share) {
     try {
       await navigator.share(shareData)
@@ -86,10 +95,10 @@ async function sharePlant() {
     return
   }
   await navigator.clipboard.writeText(window.location.href)
-  uiStore.showToast('لینک صفحه کپی شد')
+  uiStore.showToast(t('components.plantDetailFull.copiedLink'))
 }
 
-const taxonomy = ref({
+const taxonomy = computed(() => ({
   kingdom: 'Plantae',
   division: 'Magnoliophyta',
   class: 'Magnoliopsida',
@@ -97,129 +106,129 @@ const taxonomy = ref({
   family: 'Fabaceae',
   genus: 'Glycyrrhiza',
   species: 'Glycyrrhiza glabra',
-  subspecies: 'معمولاً زیرگونه‌های شناخته‌شده ندارد',
+  subspecies: t('components.plantDetailFull.taxonomy.subspecies'),
   authority: 'Linnaeus (L.)',
-})
+}))
 const filteredTaxonomy = computed(() => {
   const { authority, ...rest } = taxonomy.value
   return rest
 })
 
-const morphology = ref({
-  plantType: 'علفی چندساله (perennial herb)',
-  leaf: 'مرکب شانه‌ای، حاشیه صاف، آرایش متناوب روی ساقه',
-  flower: 'بنفش کم‌رنگ تا آبی، گلبرگ‌های پروانه‌ای',
-  stem: 'راست یا متمایل، نیمه‌چوبی در پایه',
-  root: 'غده‌ای ـ راست ـ بسیار گسترده و منشعب (بخش دارویی اصلی)',
-  fruit: 'نیام کوچک',
-  seed: 'کوچک، تخم‌مرغی',
-  bark: 'پوست زرد ـ قهوه‌ای',
-  latex: 'ندارد (فاقد شیرابه لاتکسی)',
-})
+const morphology = computed(() => ({
+  plantType: t('components.plantDetailFull.morphology.plantType'),
+  leaf: t('components.plantDetailFull.morphology.leaf'),
+  flower: t('components.plantDetailFull.morphology.flower'),
+  stem: t('components.plantDetailFull.morphology.stem'),
+  root: t('components.plantDetailFull.morphology.root'),
+  fruit: t('components.plantDetailFull.morphology.fruit'),
+  seed: t('components.plantDetailFull.morphology.seed'),
+  bark: t('components.plantDetailFull.morphology.bark'),
+  latex: t('components.plantDetailFull.morphology.latex'),
+}))
 
-const chemicalCompounds = ref({
-  majorCompound: 'گلیسیریزین (Glycyrrhizin) - یک ساپونین تری‌ترپنوئیدی',
+const chemicalCompounds = computed(() => ({
+  majorCompound: t('components.plantDetailFull.chemical.majorCompound'),
   categories: [
     {
-      name: 'آلکالوئیدها',
-      total: 'بسیار کم (Trace, <0.01%)',
+      name: t('components.plantDetailFull.chemical.alkaloids'),
+      total: t('components.plantDetailFull.chemical.traceBelow001'),
       compounds: [
-        { name: 'ترموپسین (Thermopsine)', amount: 'trace' },
-        { name: 'سیتیسین (Cytisine)', amount: 'trace' },
+        { name: t('components.plantDetailFull.chemical.thermopsine'), amount: 'trace' },
+        { name: t('components.plantDetailFull.chemical.cytisine'), amount: 'trace' },
       ],
     },
     {
-      name: 'گلیکوزیدها',
-      total: '2-5% (عمدتاً گلیسیریزین)',
+      name: t('components.plantDetailFull.chemical.glycosides'),
+      total: t('components.plantDetailFull.chemical.mainlyGlycyrrhizin'),
       compounds: [
-        { name: 'اسید گلیسیریزیک (Glycyrrhizic acid)', amount: '2-4%' },
-        { name: 'لیکوریتین (Liquiritin)', amount: '0.5-1%' },
+        { name: t('components.plantDetailFull.chemical.glycyrrhizicAcid'), amount: '2-4%' },
+        { name: t('components.plantDetailFull.chemical.liquiritin'), amount: '0.5-1%' },
       ],
     },
     {
-      name: 'فلاونوئیدها',
+      name: t('components.plantDetailFull.chemical.flavonoids'),
       total: '0.5-2.5%',
       compounds: [
-        { name: 'لیکوکالکون A (Licochalcone A)', amount: '0.1-0.5%' },
-        { name: 'گلابریدین (Glabridin)', amount: '0.1-0.3%' },
-        { name: 'لیکوریتین (Liquiritin)', amount: '0.2-0.5%' },
-        { name: 'گلابرن (Glabrene)', amount: '0.05-0.1%' },
+        { name: t('components.plantDetailFull.chemical.licochalcone'), amount: '0.1-0.5%' },
+        { name: t('components.plantDetailFull.chemical.glabridin'), amount: '0.1-0.3%' },
+        { name: t('components.plantDetailFull.chemical.liquiritin'), amount: '0.2-0.5%' },
+        { name: t('components.plantDetailFull.chemical.glabrene'), amount: '0.05-0.1%' },
       ],
     },
     {
-      name: 'تانن‌ها',
+      name: t('components.plantDetailFull.chemical.tannins'),
       total: '5-15%',
       compounds: [
-        { name: 'تانن‌های هیدرولیز شونده (گالوتانن‌ها)', amount: '3-10%' },
-        { name: 'پروآنتوسیانیدین‌ها', amount: '2-5%' },
+        { name: t('components.plantDetailFull.chemical.hydrolyzableTannins'), amount: '3-10%' },
+        { name: t('components.plantDetailFull.chemical.proanthocyanidins'), amount: '2-5%' },
       ],
     },
     {
-      name: 'اسانس‌ها (روغن فرار)',
-      total: 'کمتر از 0.1%',
+      name: t('components.plantDetailFull.chemical.essentialOils'),
+      total: t('components.plantDetailFull.chemical.belowPointOne'),
       compounds: [
-        { name: 'اکسید کاریوفیلن (Caryophyllene oxide)', amount: 'اصلی' },
-        { name: 'لینالول (Linalool)', amount: 'فرعی' },
-        { name: 'یوژنول (Eugenol)', amount: 'trace' },
+        { name: t('components.plantDetailFull.chemical.caryophylleneOxide'), amount: t('components.plantDetailFull.chemical.primary') },
+        { name: t('components.plantDetailFull.chemical.linalool'), amount: t('components.plantDetailFull.chemical.secondary') },
+        { name: t('components.plantDetailFull.chemical.eugenol'), amount: 'trace' },
       ],
     },
     {
-      name: 'ساپونین‌ها',
+      name: t('components.plantDetailFull.chemical.saponins'),
       total: '5-15%',
       compounds: [
-        { name: 'اسید گلیسیریزیک (Glycyrrhizic acid)', amount: '2-4%' },
-        { name: 'ساپونین‌های مرتبط (Glycyrrhizin analogues)', amount: '1-3%' },
+        { name: t('components.plantDetailFull.chemical.glycyrrhizicAcid'), amount: '2-4%' },
+        { name: t('components.plantDetailFull.chemical.relatedSaponins'), amount: '1-3%' },
       ],
     },
     {
-      name: 'ترکیبات فنولی',
-      total: 'متنوع، شامل فلاونوئیدها و کومارین‌ها',
+      name: t('components.plantDetailFull.chemical.phenolicCompounds'),
+      total: t('components.plantDetailFull.chemical.variedFlavonoidsCoumarins'),
       compounds: [
-        { name: 'کومارین‌ها (مانند هیدروکسی کومارین)', amount: '0.1-0.5%' },
-        { name: 'فنولیک اسیدها (p-coumaric, ferulic)', amount: '0.2-0.8%' },
+        { name: t('components.plantDetailFull.chemical.coumarins'), amount: '0.1-0.5%' },
+        { name: t('components.plantDetailFull.chemical.phenolicAcids'), amount: '0.2-0.8%' },
       ],
     },
   ],
-})
+}))
 
-const growthNeeds = ref({
-  light: 'آفتاب کامل',
-  water: 'متوسط؛ تحمل خشکی دارد',
-  soil: 'لومی، سبک، عمیق، با زهکشی خوب',
-  temperature: 'معتدل تا گرم؛ مقاومت مناسب در برابر گرما',
-  growthAltitude: 'حدود ۲۰۰ تا ۱۵۰۰ متر از سطح دریا',
-})
+const growthNeeds = computed(() => ({
+  light: t('components.plantDetailFull.growthNeeds.light'),
+  water: t('components.plantDetailFull.growthNeeds.water'),
+  soil: t('components.plantDetailFull.growthNeeds.soil'),
+  temperature: t('components.plantDetailFull.growthNeeds.temperature'),
+  growthAltitude: t('components.plantDetailFull.growthNeeds.growthAltitude'),
+}))
 
-const applications = ref({
+const applications = computed(() => ({
   food: [
-    'شیرین‌کننده طبیعی در دمنوش‌ها',
-    'طعم‌دهنده در صنعت شیرینی‌پزی',
-    'ماده اولیه نوشیدنی‌های سنتی',
+    t('components.plantDetailFull.applications.foodTea'),
+    t('components.plantDetailFull.applications.foodFlavor'),
+    t('components.plantDetailFull.applications.foodDrinks'),
   ],
   industrial: [
-    'عصاره‌گیری برای صنایع داروسازی',
-    'افزودنی در محصولات آرایشی‌بهداشتی',
-    'ماده اولیه در تولید شیرین‌کننده‌های صنعتی',
+    t('components.plantDetailFull.applications.industrialExtract'),
+    t('components.plantDetailFull.applications.industrialCosmetics'),
+    t('components.plantDetailFull.applications.industrialSweeteners'),
   ],
   therapeutic: [
-    'درمان زخم معده و التهاب دستگاه گوارش',
-    'کاهش سرفه و خلط‌آوری',
-    'ضدویروس در درمان تبخال',
-    'ملین ملایم و ضد یبوست',
+    t('components.plantDetailFull.applications.therapeuticUlcer'),
+    t('components.plantDetailFull.applications.therapeuticCough'),
+    t('components.plantDetailFull.applications.therapeuticAntiviral'),
+    t('components.plantDetailFull.applications.therapeuticLaxative'),
   ],
-})
+}))
 
-const toxicity = ref({
-  toxicity: 'مصرف زیاد باعث افزایش فشار خون، احتباس آب و سدیم، کاهش پتاسیم',
-  conservationStatus: 'در برخی مناطق ایران برداشت بی‌رویه باعث تهدید جمعیت طبیعی شده، اما به‌طور رسمی در لیست انقراض جهانی نیست',
-})
+const toxicity = computed(() => ({
+  toxicity: t('components.plantDetailFull.toxicity'),
+  conservationStatus: t('components.plantDetailFull.conservationStatus'),
+}))
 
-const localNames = ref([
-  { name: 'مهک', region: 'لرستان' },
-  { name: 'مهوک', region: 'کردستان' },
-  { name: 'اصل‌السوس', region: 'فارس و خوزستان' },
-  { name: 'سقزبیان', region: 'آذربایجان' },
-  { name: 'شیرین‌بویه', region: 'خراسان' },
+const localNames = computed(() => [
+  { name: t('components.plantDetailFull.localNames.mahak'), region: t('components.plantDetailFull.localNames.lorestan') },
+  { name: t('components.plantDetailFull.localNames.mahuk'), region: t('components.plantDetailFull.localNames.kurdistan') },
+  { name: t('components.plantDetailFull.localNames.aslAlSus'), region: t('components.plantDetailFull.localNames.farsKhuzestan') },
+  { name: t('components.plantDetailFull.localNames.saqezbian'), region: t('components.plantDetailFull.localNames.azerbaijan') },
+  { name: t('components.plantDetailFull.localNames.shirinBuyeh'), region: t('components.plantDetailFull.localNames.khorasan') },
 ])
 
 const scientificSynonyms = ref([
@@ -227,59 +236,57 @@ const scientificSynonyms = ref([
   'Liquiritia officinalis',
 ])
 
-const fossilPeriod = ref(
-  'شواهد نشان می‌دهد جنس Glycyrrhiza در دوران پلیوسن حضور داشته؛ تاریخچه تکاملی چندمیلیون ساله دارد.',
-)
+const fossilPeriod = computed(() => t('components.plantDetailFull.fossilPeriod'))
+const plantStory = computed(() => t('components.plantDetailFull.plantStory'))
 
-const plantStory = ref(
-  'شیرین‌بیان یکی از کهن‌ترین گیاهان دارویی دنیاست؛ در متون پزشکی مصر باستان، چین و ایران باستان از آن نام برده شده. سربازان ایرانی در دوره هخامنشی برای جلوگیری از تشنگی در سفرهای طولانی ریشهٔ آن را می‌جویدند، زیرا گلیسیریزین سبب احساس شیرینی و افزایش ترشح بزاق می‌شود.',
-)
-
-const quickStats = ref([
-  { label: 'مبدا', value: 'مدیترانه شرقی' },
-  { label: 'زیستگاه', value: 'مناطق خشک، نیمه‌خشک' },
-  { label: 'گستره ایران', value: 'آذربایجان، خراسان، لرستان، فارس' },
-  { label: 'گستره جهانی', value: 'مدیترانه تا آسیا' },
+const quickStats = computed(() => [
+  { label: t('components.plantDetailFull.quickStats.origin'), value: t('components.plantDetailFull.quickStats.easternMediterranean') },
+  { label: t('components.plantDetailFull.quickStats.habitat'), value: t('components.plantDetailFull.quickStats.dryRegions') },
+  { label: t('components.plantDetailFull.quickStats.iranRange'), value: t('components.plantDetailFull.quickStats.iranProvinces') },
+  { label: t('components.plantDetailFull.quickStats.worldRange'), value: t('components.plantDetailFull.quickStats.mediterraneanAsia') },
 ])
 
 const taxonomyLabels: Record<string, string> = {
-  kingdom: 'فرمانرو',
-  division: 'دسته',
-  class: 'رده',
-  order: 'راسته',
-  family: 'تیره',
-  genus: 'جنس',
-  species: 'گونه',
-  subspecies: 'زیرگونه',
+  kingdom: 'components.plantDetailFull.taxonomy.kingdom',
+  division: 'components.plantDetailFull.taxonomy.division',
+  class: 'components.plantDetailFull.taxonomy.class',
+  order: 'components.plantDetailFull.taxonomy.order',
+  family: 'components.plantDetailFull.taxonomy.family',
+  genus: 'components.plantDetailFull.taxonomy.genus',
+  species: 'components.plantDetailFull.taxonomy.species',
+  subspecies: 'components.plantDetailFull.taxonomy.subspeciesLabel',
 }
 function getTaxonomyLabel(key: string) {
-  return taxonomyLabels[key] ?? key
+  const labelKey = taxonomyLabels[key]
+  return labelKey ? t(labelKey) : key
 }
 
 const morphLabels: Record<string, string> = {
-  plantType: 'نوع گیاه',
-  leaf: 'برگ',
-  flower: 'گل',
-  stem: 'ساقه',
-  root: 'ریشه',
-  fruit: 'میوه',
-  seed: 'دانه',
-  bark: 'پوست',
-  latex: 'شیرابه',
+  plantType: 'components.plantDetailFull.morphology.plantTypeLabel',
+  leaf: 'components.plantDetailFull.morphology.leafLabel',
+  flower: 'components.plantDetailFull.morphology.flowerLabel',
+  stem: 'components.plantDetailFull.morphology.stemLabel',
+  root: 'components.plantDetailFull.morphology.rootLabel',
+  fruit: 'components.plantDetailFull.morphology.fruitLabel',
+  seed: 'components.plantDetailFull.morphology.seedLabel',
+  bark: 'components.plantDetailFull.morphology.barkLabel',
+  latex: 'components.plantDetailFull.morphology.latexLabel',
 }
 function getMorphLabel(key: string) {
-  return morphLabels[key] ?? key
+  const labelKey = morphLabels[key]
+  return labelKey ? t(labelKey) : key
 }
 
 const needLabels: Record<string, string> = {
-  light: 'نور',
-  water: 'آب',
-  soil: 'خاک',
-  temperature: 'دما',
-  growthAltitude: 'ارتفاع رویش',
+  light: 'components.plantDetailFull.growthNeeds.lightLabel',
+  water: 'components.plantDetailFull.growthNeeds.waterLabel',
+  soil: 'components.plantDetailFull.growthNeeds.soilLabel',
+  temperature: 'components.plantDetailFull.growthNeeds.temperatureLabel',
+  growthAltitude: 'components.plantDetailFull.growthNeeds.growthAltitudeLabel',
 }
 function getNeedLabel(key: string) {
-  return needLabels[key] ?? key
+  const labelKey = needLabels[key]
+  return labelKey ? t(labelKey) : key
 }
 </script>
 
@@ -306,7 +313,7 @@ function getNeedLabel(key: string) {
             {{ scientificName }}
           </p>
           <p class="mt-2 text-sm opacity-75">
-            وضع‌کننده: {{ taxonomy.authority }}
+            {{ t('components.plantDetailFull.taxonomy.authorityPrefix') }}: {{ taxonomy.authority }}
           </p>
 
           <button
@@ -314,14 +321,14 @@ function getNeedLabel(key: string) {
             class="mt-4 inline-flex items-center rounded-full bg-accent-400/90 px-3.5 py-1.5 text-xs font-semibold text-primary-900 transition-colors hover:bg-accent-400"
             @click="goToTarget"
           >
-            وضعیت حفاظتی: {{ toxitcityStatus.lame }}
+            {{ t('components.plantDetailFull.statusLabel', { status: toxitcityStatus.lame }) }}
           </button>
 
           <div class="mt-4 flex justify-center gap-2 md:justify-start">
             <button
               type="button"
               class="flex size-10 items-center justify-center rounded-full bg-white/90 text-primary-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-500 hover:text-white hover:shadow-lg"
-              aria-label="ذخیره در نشان‌شده‌ها"
+              :aria-label="t('components.plantDetailFull.save')"
             >
               <Icon
                 name="lucide:bookmark"
@@ -331,7 +338,7 @@ function getNeedLabel(key: string) {
             <button
               type="button"
               class="flex size-10 items-center justify-center rounded-full bg-white/90 text-primary-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-500 hover:text-white hover:shadow-lg"
-              aria-label="اشتراک‌گذاری"
+              :aria-label="t('components.plantDetailFull.share')"
               @click="sharePlant"
             >
               <Icon
@@ -366,7 +373,7 @@ function getNeedLabel(key: string) {
         <!-- ستون سمت راست بصری / اول در DOM: بخش‌های تشریحی -->
         <div class="flex flex-col gap-5 md:col-span-7">
           <DetailSectionCard
-            title="ویژگی‌های زیست‌شناسی"
+            :title="t('components.plantDetailFull.biology')"
             title-en="Morphology"
           >
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -387,13 +394,13 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="کاربردها"
+            :title="t('components.plantDetailFull.applicationsTitle')"
             title-en="Applications"
           >
             <div class="flex flex-col gap-3">
               <div>
                 <span class="me-1.5 inline-block w-4 text-xs text-primary-600">●</span>
-                <strong class="text-ink">خوراکی:</strong>
+                <strong class="text-ink">{{ t('components.plantDetailFull.applications.food') }}</strong>
                 <ul class="mt-1.5 list-disc ps-5 text-sm leading-relaxed text-ink-muted">
                   <li
                     v-for="item in applications.food"
@@ -405,7 +412,7 @@ function getNeedLabel(key: string) {
               </div>
               <div>
                 <span class="me-1.5 inline-block w-4 text-xs text-sky-600">●</span>
-                <strong class="text-ink">صنعتی:</strong>
+                <strong class="text-ink">{{ t('components.plantDetailFull.applications.industrial') }}</strong>
                 <ul class="mt-1.5 list-disc ps-5 text-sm leading-relaxed text-ink-muted">
                   <li
                     v-for="item in applications.industrial"
@@ -417,7 +424,7 @@ function getNeedLabel(key: string) {
               </div>
               <div>
                 <span class="me-1.5 inline-block w-4 text-xs text-purple-600">●</span>
-                <strong class="text-ink">درمانی:</strong>
+                <strong class="text-ink">{{ t('components.plantDetailFull.applications.therapeutic') }}</strong>
                 <ul class="mt-1.5 list-disc ps-5 text-sm leading-relaxed text-ink-muted">
                   <li
                     v-for="item in applications.therapeutic"
@@ -431,11 +438,11 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="ترکیبات شیمیایی"
+            :title="t('components.plantDetailFull.phytochemistry')"
             title-en="Phytochemistry"
           >
             <div class="rounded-xl border-e-4 border-accent-500 bg-primary-50/60 p-4">
-              <span class="mb-1 block text-xs font-semibold text-ink-muted">ماده مؤثره اصلی:</span>
+              <span class="mb-1 block text-xs font-semibold text-ink-muted">{{ t('components.plantDetailFull.chemical.primaryIngredient') }}</span>
               <span class="text-sm font-medium text-primary-800">{{ chemicalCompounds.majorCompound }}</span>
             </div>
 
@@ -470,7 +477,7 @@ function getNeedLabel(key: string) {
         <!-- ستون سمت چپ بصری / دوم در DOM: مرجع سریع -->
         <div class="flex flex-col gap-5 md:col-span-5">
           <DetailSectionCard
-            title="طبقه‌بندی علمی"
+            :title="t('components.plantDetailFull.taxonomyTitle')"
             title-en="Taxonomy"
           >
             <table class="w-full text-center">
@@ -489,7 +496,7 @@ function getNeedLabel(key: string) {
                 </tr>
                 <tr>
                   <td class="w-[35%] bg-bg px-4 py-3 text-sm font-semibold text-primary-800">
-                    وضع‌کننده (Authority)
+                    {{ t('components.plantDetailFull.taxonomy.authority') }}
                   </td>
                   <td class="px-4 py-3 text-sm text-ink">
                     {{ taxonomy.authority }}
@@ -500,7 +507,7 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="نیازهای رشدی"
+            :title="t('components.plantDetailFull.growthRequirements')"
             title-en="Growth Requirements"
           >
             <div class="flex flex-col gap-3">
@@ -520,7 +527,7 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="داستان گیاه"
+            :title="t('components.plantDetailFull.plantStoryTitle')"
             title-en="Plant Story"
           >
             <p class="text-justify text-[0.95rem] leading-loose text-ink">
@@ -529,20 +536,20 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="سمّیت"
+            :title="t('components.plantDetailFull.toxicityTitle')"
             title-en="Toxicity"
           >
             <div class="flex items-center gap-3 rounded-xl border-s-4 border-amber-500 bg-amber-50 p-4">
               <span class="text-xl">⚠</span>
               <div class="text-sm text-ink">
-                <strong>سمیت:</strong> {{ toxicity.toxicity }}
+                <strong>{{ t('components.plantDetailFull.toxicLabel') }}</strong> {{ toxicity.toxicity }}
               </div>
             </div>
           </DetailSectionCard>
 
           <div ref="targetSection" class="scroll-mt-24">
             <DetailSectionCard
-              title="حفاظت"
+              :title="t('components.plantDetailFull.conservationTitle')"
               title-en="Status"
             >
               <div class="flex items-center gap-3 rounded-xl border-s-4 border-sky-500 bg-sky-50 p-4">
@@ -551,14 +558,14 @@ function getNeedLabel(key: string) {
                   class="size-5 shrink-0 text-sky-600"
                 />
                 <div class="text-sm text-ink">
-                  <strong>وضعیت حفاظتی:</strong> {{ toxicity.conservationStatus }}
+                  <strong>{{ t('components.plantDetailFull.conservationLabel') }}</strong> {{ toxicity.conservationStatus }}
                 </div>
               </div>
             </DetailSectionCard>
           </div>
 
           <DetailSectionCard
-            title="نام‌های محلی"
+            :title="t('components.plantDetailFull.localNamesTitle')"
             title-en="Local Names"
           >
             <div class="flex flex-wrap gap-3">
@@ -574,7 +581,7 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="مترادف‌های علمی"
+            :title="t('components.plantDetailFull.synonymsTitle')"
             title-en="Synonyms"
           >
             <div class="flex flex-col gap-2.5">
@@ -590,7 +597,7 @@ function getNeedLabel(key: string) {
           </DetailSectionCard>
 
           <DetailSectionCard
-            title="دوره فسیلی"
+            :title="t('components.plantDetailFull.fossilRecordTitle')"
             title-en="Fossil Record"
           >
             <div class="text-sm leading-relaxed text-ink-muted">
@@ -603,7 +610,7 @@ function getNeedLabel(key: string) {
       <!-- گالری تصاویر -->
       <div class="mt-8">
         <DetailSectionCard
-          title="گالری تصاویر"
+          :title="t('components.plantDetailFull.imageGalleryTitle')"
           title-en="Image Gallery"
         >
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
@@ -643,7 +650,7 @@ function getNeedLabel(key: string) {
               <button
                 type="button"
                 class="rounded-full p-1.5 hover:bg-white/10"
-                aria-label="بستن"
+                :aria-label="t('components.plantDetailFull.closeGallery')"
                 @click="galleryOpen = false"
               >
                 <Icon
@@ -664,7 +671,7 @@ function getNeedLabel(key: string) {
                 type="button"
                 class="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"
                 :disabled="galleryIndex === 0"
-                aria-label="قبلی"
+                :aria-label="t('components.plantDetailFull.previousImage')"
                 @click="prevImage"
               >
                 <Icon
@@ -672,12 +679,12 @@ function getNeedLabel(key: string) {
                   class="size-5"
                 />
               </button>
-              <span class="text-sm tabular-nums">{{ galleryIndex + 1 }} / {{ plantGallery.length }}</span>
+              <span class="text-sm tabular-nums">{{ formattedGalleryIndex }} / {{ formattedGalleryLength }}</span>
               <button
                 type="button"
                 class="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"
                 :disabled="galleryIndex === plantGallery.length - 1"
-                aria-label="بعدی"
+                :aria-label="t('components.plantDetailFull.nextImage')"
                 @click="nextImage"
               >
                 <Icon

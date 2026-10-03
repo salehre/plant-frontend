@@ -2,6 +2,7 @@
 const props = defineProps({
   error: Object,
 })
+const { t } = useI18n()
 
 const statusCode = props.error?.statusCode || 404
 const spinPool = [
@@ -17,7 +18,7 @@ const flapStrips = computed(() =>
 )
 
 const errorMessage = computed(() =>
-  props.error?.statusMessage || props.error?.message || 'خطای ناشناخته',
+  props.error?.statusMessage || props.error?.message || t('errors.unknown'),
 )
 
 const router = useRouter()
@@ -48,14 +49,14 @@ function goBack() {
               name="lucide:leaf"
               class="size-5 text-accent-300"
             />
-            <span class="text-sm">برگ‌یار</span>
+            <span class="text-sm">{{ t('brand.name') }}</span>
           </div>
 
           <div class="grid grid-cols-1 items-center gap-8 sm:grid-cols-[220px_1fr]">
             <div
               class="flap-404"
               role="img"
-              :aria-label="`${statusCode} error animation: a split-flap departure board rolls to ${flapDigits.join('')} — cancelled`"
+              :aria-label="t('errors.animation', { status: statusCode, digits: flapDigits.join('') })"
             >
               <div class="flap-row">
                 <span
@@ -79,12 +80,12 @@ function goBack() {
 
             <div>
               <h1 class="mb-6 text-3xl font-extrabold leading-tight text-white [text-shadow:0_2px_14px_rgba(0,0,0,0.35)] sm:text-5xl">
-                مسیر گم شد
+                {{ t('errors.pathLost') }}
               </h1>
 
               <div class="max-w-md border-t border-white/25 pt-4">
                 <h2 class="mb-3 text-lg font-semibold text-white sm:text-xl">
-                  صفحه مورد نظر در دسترس نیست
+                  {{ t('errors.unavailable') }}
                 </h2>
                 <p class="text-sm leading-7 text-white/80">
                   {{ errorMessage }}
@@ -94,28 +95,28 @@ function goBack() {
           </div>
 
           <div class="flex flex-wrap items-center justify-between gap-4 border-t border-white/20 pt-5">
-            <span class="text-sm text-white/90">برگرد به مسیر</span>
+            <span class="text-sm text-white/90">{{ t('errors.returnTo') }}</span>
             <div class="flex flex-wrap gap-3">
               <button
                 type="button"
                 class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 @click="goHome"
               >
-                صفحه اصلی
+                {{ t('errors.home') }}
               </button>
               <button
                 type="button"
                 class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 @click="refreshPage"
               >
-                تلاش مجدد
+                {{ t('errors.retry') }}
               </button>
               <button
                 type="button"
                 class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 @click="goBack"
               >
-                صفحه قبلی
+                {{ t('errors.previousPage') }}
               </button>
             </div>
           </div>

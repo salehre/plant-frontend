@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { themes } from '~/stores/ui.store'
-const { locale, setLocale } = useI18n()
+const { locale, setLocale, t } = useI18n()
 
 function toggleLocale() {
   setLocale(locale.value === 'fa' ? 'en' : 'fa')
@@ -11,36 +11,23 @@ definePageMeta({ layout: 'default' })
 const uiStore = useUiStore()
 const historyStore = useHistoryStore()
 const wishlistStore = useWishlistStore()
-
-const { plants: wishlistPlants, loading: wishlistLoading, load: loadWishlistPlants } = useWishlistPlants()
-await loadWishlistPlants()
-
-function removeHistoryEntry(id: string) {
-  historyStore.remove(id)
-  uiStore.showToast('از تاریخچه حذف شد', 'info')
-}
-
-function clearHistory() {
-  historyStore.clear()
-  uiStore.showToast('تاریخچه پاک شد', 'info')
-}
 </script>
 
 <template>
   <div class="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-10">
     <div>
       <h1 class="text-2xl font-bold text-ink">
-        پروفایل
+        {{ t('pages.profile.title') }}
       </h1>
-      <p class="text-ink-muted">
-        تاریخچه‌ی اسکن‌ها، علاقه‌مندی‌ها و تنظیمات همین دستگاه.
+      <p class="text-ink-muted leading-relaxed">
+        {{ t('pages.profile.subtitle') }}
       </p>
     </div>
 
     <!-- تنظیمات -->
     <section>
       <h2 class="mb-3 font-bold text-ink">
-        تنظیمات
+        {{ t('pages.profile.settings') }}
       </h2>
       <div class="glass-card flex items-center justify-between px-4 py-3">
         <div class="flex items-center gap-1 text-sm text-ink">
@@ -53,7 +40,7 @@ function clearHistory() {
         <button
             type="button"
             class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
-            :aria-label="locale === 'fa' ? 'Switch language to English' : 'تغییر زبان به فارسی'"
+            :aria-label="locale === 'fa' ? t('common.switchToEnglish') : t('common.switchToPersian')"
             @click="toggleLocale"
         >
           {{ locale === 'fa' ? 'EN' : 'فا' }}
@@ -67,160 +54,96 @@ function clearHistory() {
             :name="uiStore.mode === 'dark' ? 'material-symbols:dark-mode-outline' : 'material-symbols:light-mode-outline'"
             class="size-5 text-primary-600"
           />
-          حالت نمایش
+          {{ t('pages.profile.appearance') }}
         </div>
         <button
           type="button"
           class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
-          :aria-label="uiStore.mode === 'dark' ? 'تغییر به حالت روشن' : 'تغییر به حالت تاریک'"
+          :aria-label="uiStore.mode === 'dark' ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
         >
-          {{ uiStore.mode === 'dark' ? 'تاریک' : 'روشن' }}
+          {{ uiStore.mode === 'dark' ? t('pages.profile.dark') : t('pages.profile.light') }}
         </button>
       </div>
 
       <!-- انتخاب تم رنگی -->
       <div class="glass-card mt-3 px-4 py-3">
         <div class="mb-3 text-sm text-ink">
-          تم رنگی
+          {{ t('pages.profile.colorTheme') }}
         </div>
         <div class="flex items-center gap-3">
           <button
-              v-for="t in themes"
-              :key="t.key"
+              v-for="theme in themes"
+              :key="theme.key"
               type="button"
               role="radio"
-              :aria-checked="uiStore.theme === t.key"
-              :aria-label="t.label"
-              :title="t.label"
+              :aria-checked="uiStore.theme === theme.key"
+              :aria-label="t(`pages.profile.themes.${theme.key}`)"
+              :title="t(`pages.profile.themes.${theme.key}`)"
               class="flex size-9 items-center justify-center rounded-full ring-offset-2 ring-offset-surface transition-all"
-              :class="uiStore.theme === t.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
-              @click="uiStore.setTheme(t.key)"
+              :class="uiStore.theme === theme.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
+              @click="uiStore.setTheme(theme.key)"
           >
             <span
                 class="size-6 rounded-full"
-                :style="{ backgroundColor: t.swatch }"
+                :style="{ backgroundColor: theme.swatch }"
             />
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Wishlist -->
-    <section>
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="font-bold text-ink">
-          علاقه‌مندی‌ها
-          <span class="text-sm font-normal text-ink-muted">({{ toPersianDigits(wishlistStore.count) }})</span>
-        </h2>
-        <NuxtLink
-            to="/plants"
-            class="text-sm text-primary-700 hover:underline"
-        >
-          کاوش در دایرةالمعارف
-        </NuxtLink>
-      </div>
-
-      <div
-          v-if="wishlistLoading"
-          class="grid grid-cols-2 gap-4 sm:grid-cols-3"
+    <!-- لینک به صفحه‌ی علاقه‌مندی‌ها و تاریخچه -->
+    <section class="flex flex-col gap-3">
+      <NuxtLink
+        to="/wishlist"
+        class="glass-card group flex items-center gap-4 px-4 py-4"
       >
-        <AppSkeleton
-            v-for="i in 3"
-            :key="i"
-            height="140px"
-            rounded="rounded-lg"
+        <span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
+          <Icon
+            name="lucide:heart"
+            class="size-6"
+          />
+        </span>
+        <span class="min-w-0 flex-1">
+          <span class="block font-bold text-ink">
+            {{ t('pages.profile.wishlist') }}
+            <span class="text-sm font-normal text-ink-muted">({{ toPersianDigits(wishlistStore.count) }})</span>
+          </span>
+          <span class="block text-xs leading-relaxed text-ink-muted">
+            {{ t('pages.profile.wishlistDescription') }}
+          </span>
+        </span>
+        <Icon
+          name="lucide:chevron-left"
+          class="size-5 shrink-0 text-ink-muted transition-transform group-hover:-translate-x-1"
         />
-      </div>
+      </NuxtLink>
 
-      <div
-          v-else-if="wishlistPlants.length"
-          class="grid grid-cols-2 gap-4 sm:grid-cols-3"
+      <NuxtLink
+        to="/history"
+        class="glass-card group flex items-center gap-4 px-4 py-4"
       >
-        <PlantCard
-            v-for="plant in wishlistPlants"
-            :key="plant.id"
-            :plant="plant"
+        <span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
+          <Icon
+            name="lucide:history"
+            class="size-6"
+          />
+        </span>
+        <span class="min-w-0 flex-1">
+          <span class="block font-bold text-ink">
+            {{ t('pages.profile.history') }}
+            <span class="text-sm font-normal text-ink-muted">({{ toPersianDigits(historyStore.count) }})</span>
+          </span>
+          <span class="block text-xs leading-relaxed text-ink-muted">
+            {{ t('pages.profile.historyDescription') }}
+          </span>
+        </span>
+        <Icon
+          name="lucide:chevron-left"
+          class="size-5 shrink-0 text-ink-muted transition-transform group-hover:-translate-x-1"
         />
-      </div>
-
-      <div
-          v-else
-          class="rounded-lg border border-dashed border-ink/15 px-4 py-8 text-center text-sm text-ink-muted"
-      >
-        هنوز چیزی به علاقه‌مندی‌ها اضافه نکردی. از صفحه‌ی هر گیاه می‌تونی این کار رو انجام بدی.
-      </div>
-    </section>
-
-    <!-- History -->
-    <section>
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="font-bold text-ink">
-          تاریخچه‌ی اسکن‌ها
-          <span class="text-sm font-normal text-ink-muted">({{ toPersianDigits(historyStore.count) }})</span>
-        </h2>
-        <button
-            v-if="historyStore.count"
-            type="button"
-            class="text-sm text-status-danger hover:underline"
-            @click="clearHistory"
-        >
-          پاک کردن همه
-        </button>
-      </div>
-
-      <div
-          v-if="historyStore.sorted.length"
-          class="glass-card flex flex-col divide-y divide-ink/5"
-      >
-        <div
-            v-for="entry in historyStore.sorted"
-            :key="entry.id"
-            class="flex items-center gap-3 px-4 py-3"
-        >
-          <img
-              :src="entry.image"
-              :alt="entry.plantName"
-              class="size-12 shrink-0 rounded-md object-cover"
-              loading="lazy"
-          >
-          <NuxtLink
-              :to="entry.slug ? `/plants/${entry.slug}` : '/identify'"
-              class="min-w-0 flex-1"
-          >
-            <p class="truncate font-medium text-ink">
-              {{ entry.plantName }}
-            </p>
-            <p class="truncate text-xs text-ink-muted">
-              {{ toJalaliDate(new Date(entry.timestamp).toISOString()) }} · اطمینان {{ formatConfidence(entry.confidence) }}
-            </p>
-          </NuxtLink>
-          <button
-              type="button"
-              class="flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted hover:bg-status-danger/10 hover:text-status-danger"
-              aria-label="حذف از تاریخچه"
-              @click="removeHistoryEntry(entry.id)"
-          >
-            <Icon
-                name="lucide:trash-2"
-                class="size-4"
-            />
-          </button>
-        </div>
-      </div>
-
-      <div
-          v-else
-          class="rounded-lg border border-dashed border-ink/15 px-4 py-8 text-center text-sm text-ink-muted"
-      >
-        هنوز هیچ گیاهی تشخیص نداده‌ای.
-        <NuxtLink
-            to="/identify"
-            class="text-primary-700 hover:underline"
-        >
-          یکی رو امتحان کن
-        </NuxtLink>
-      </div>
+      </NuxtLink>
     </section>
   </div>
 </template>

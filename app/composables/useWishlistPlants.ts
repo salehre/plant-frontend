@@ -9,6 +9,8 @@ import { getPlantsBySlugs } from '~/services/plant.service'
  */
 export function useWishlistPlants() {
   const wishlistStore = useWishlistStore()
+  const { locale } = useI18n()
+  const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
   const plants = ref<Plant[]>([])
   const loading = ref(false)
@@ -20,14 +22,14 @@ export function useWishlistPlants() {
     }
     loading.value = true
     try {
-      plants.value = await getPlantsBySlugs(wishlistStore.slugs)
+      plants.value = await getPlantsBySlugs(wishlistStore.slugs, activeLocale.value)
     }
     finally {
       loading.value = false
     }
   }
 
-  watch(() => wishlistStore.slugs.length, load)
+  watch([() => wishlistStore.slugs.length, activeLocale], load)
 
   return { plants, loading, load }
 }

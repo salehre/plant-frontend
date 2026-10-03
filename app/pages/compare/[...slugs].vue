@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { mockPlants } from '~/services/mock/plants.mock'
+import { getMockPlants } from '~/services/mock/plants.mock'
 
 const route = useRoute()
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
+const localizedPlants = computed(() => getMockPlants(activeLocale.value))
 
 const slugs = computed(() => {
   const param = route.params.slugs
@@ -9,13 +12,13 @@ const slugs = computed(() => {
 })
 
 const selectedPlants = computed(() =>
-    slugs.value.map(slug => mockPlants.find(p => p.slug === slug)).filter((p): p is NonNullable<typeof p> => !!p),
+    slugs.value.map(slug => localizedPlants.value.find(p => p.slug === slug)).filter((p): p is NonNullable<typeof p> => !!p),
 )
 
 const pickerA = ref(slugs.value[0] ?? '')
 const pickerB = ref(slugs.value[1] ?? '')
 
-const plantOptions = mockPlants.map(p => ({ label: p.name, value: p.slug }))
+const plantOptions = computed(() => localizedPlants.value.map(p => ({ label: p.name, value: p.slug })))
 
 function goCompare() {
   if (!pickerA.value || !pickerB.value) return
@@ -26,10 +29,10 @@ function goCompare() {
 <template>
   <div class="mx-auto max-w-4xl px-4 py-10">
     <h1 class="mb-2 text-2xl font-bold text-ink">
-      مقایسه گیاهان
+      {{ t('pages.compare.title') }}
     </h1>
     <p class="mb-6 text-ink-muted">
-      دو گیاه را انتخاب کن تا شرایط نگهداری‌شان را کنار هم ببینی.
+      {{ t('pages.compare.subtitle') }}
     </p>
 
     <div class="glass-card mb-8 flex flex-col items-center gap-3 p-4 sm:flex-row">
@@ -37,7 +40,7 @@ function goCompare() {
         <AppDropdown
             v-model="pickerA"
             :options="plantOptions"
-            placeholder="گیاه اول"
+            :placeholder="t('pages.compare.firstPlant')"
         />
       </div>
       <Icon
@@ -48,14 +51,14 @@ function goCompare() {
         <AppDropdown
             v-model="pickerB"
             :options="plantOptions"
-            placeholder="گیاه دوم"
+            :placeholder="t('pages.compare.secondPlant')"
         />
       </div>
       <AppButton
           variant="primary"
           @click="goCompare"
       >
-        مقایسه کن
+        {{ t('pages.compare.compare') }}
       </AppButton>
     </div>
 
@@ -72,7 +75,7 @@ function goCompare() {
           name="lucide:git-compare"
           class="size-10"
       />
-      برای شروع، دو گیاه از بالا انتخاب کن.
+      {{ t('pages.compare.empty') }}
     </div>
   </div>
 </template>

@@ -2,6 +2,8 @@ export interface SimilarSpecies {
   name: string
   scientificName: string
   confidence: number
+  slug?: string
+  image?: string
 }
 
 export interface IdentifyResult {

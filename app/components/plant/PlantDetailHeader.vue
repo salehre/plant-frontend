@@ -1,13 +1,24 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { Plant } from '~/types/plant.types'
 
 const props = defineProps<{ plant: Plant }>()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const difficultyClass: Record<string, string> = {
   easy: 'bg-primary-50 text-primary-700',
   medium: 'bg-status-warning/10 text-status-warning',
   hard: 'bg-status-danger/10 text-status-danger',
 }
+const difficultyKeys: Record<string, string> = {
+  easy: 'components.common.difficultyEasy',
+  medium: 'components.common.difficultyMedium',
+  hard: 'components.common.difficultyHard',
+}
+const difficultyLabel = computed(() => {
+  const key = difficultyKeys[props.plant.difficulty]
+  return key ? t(key) : props.plant.difficulty
+})
 </script>
 
 <template>
@@ -18,7 +29,7 @@ const difficultyClass: Record<string, string> = {
         class="rounded-full px-2.5 py-1 text-xs font-medium"
         :class="difficultyClass[props.plant.difficulty]"
       >
-        سطح مراقبت: {{ difficultyLabel(props.plant.difficulty) }}
+        {{ t('components.plantDetailHeader.careLevel', { level: difficultyLabel }) }}
       </span>
       <span
         v-if="props.plant.toxicity.isToxic"
@@ -28,7 +39,7 @@ const difficultyClass: Record<string, string> = {
           name="lucide:alert-triangle"
           class="size-3.5"
         />
-        سمی برای حیوانات خانگی
+        {{ t('components.plantDetailHeader.toxicForPets') }}
       </span>
     </div>
     <h1 class="text-2xl font-bold text-ink sm:text-3xl">
@@ -38,11 +49,11 @@ const difficultyClass: Record<string, string> = {
       {{ props.plant.scientificName }}
     </p>
     <p class="text-xs text-ink-muted">
-      خانواده: <NuxtLink
+      {{ t('components.plantDetailHeader.family') }} <NuxtLink
         :to="{ path: '/plants', query: { family: props.plant.family } }"
         class="text-primary-700 hover:underline"
       >{{ props.plant.family }}</NuxtLink>
-      · جنس: <NuxtLink
+      · {{ t('components.plantDetailHeader.genus') }} <NuxtLink
         :to="{ path: '/plants', query: { genus: props.plant.genus } }"
         class="text-primary-700 hover:underline"
       >{{ props.plant.genus }}</NuxtLink>

@@ -3,13 +3,15 @@
 // Health Check/Disease Detection از MVP فعلی کنار گذاشته شده؛ این کامپوننت جایی
 // استفاده نمی‌شه، فقط برای وقتی که آن فیچر برگرده نگه داشته شده - حذفش نکن.
 import type { DiseaseDetectionResult } from '~/types/identify.types'
+import { en, fa } from '~/i18n/componentMessages'
 
 const props = defineProps<{ result: DiseaseDetectionResult }>()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const severityMap = {
-  low: { label: 'خفیف', class: 'bg-status-info/10 text-status-info' },
-  medium: { label: 'متوسط', class: 'bg-status-warning/10 text-status-warning' },
-  high: { label: 'جدی', class: 'bg-status-danger/10 text-status-danger' },
+  low: { label: 'components.diseaseResultCard.severityLow', class: 'bg-status-info/10 text-status-info' },
+  medium: { label: 'components.diseaseResultCard.severityMedium', class: 'bg-status-warning/10 text-status-warning' },
+  high: { label: 'components.diseaseResultCard.severityHigh', class: 'bg-status-danger/10 text-status-danger' },
 }
 </script>
 
@@ -27,7 +29,7 @@ const severityMap = {
           class="rounded-full px-2.5 py-1 text-xs font-medium"
           :class="severityMap[props.result.severity].class"
       >
-        {{ severityMap[props.result.severity].label }}
+        {{ t(severityMap[props.result.severity].label) }}
       </span>
     </div>
 
@@ -37,7 +39,7 @@ const severityMap = {
 
     <div class="mt-4">
       <p class="mb-2 text-sm font-medium text-ink">
-        مراحل درمان پیشنهادی
+        {{ t('components.diseaseResultCard.treatmentSteps') }}
       </p>
       <ul class="flex flex-col gap-1.5">
         <li

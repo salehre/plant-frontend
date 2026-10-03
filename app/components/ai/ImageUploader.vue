@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const emit = defineEmits<{ select: [string] }>()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
@@ -42,10 +45,10 @@ function onInputChange(e: Event) {
     </div>
     <div>
       <p class="font-medium text-ink">
-        عکس گیاهت را اینجا بکش یا آپلود کن
+        {{ t('components.imageUploader.dropPrompt') }}
       </p>
       <p class="mt-1 text-sm text-ink-muted">
-        فرمت JPG یا PNG، حداکثر ۱۰ مگابایت
+        {{ t('components.imageUploader.supportedFormats') }}
       </p>
     </div>
     <div class="flex flex-wrap items-center justify-center gap-3">

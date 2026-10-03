@@ -7,13 +7,14 @@ definePageMeta({ layout: 'auth' })
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
+const { t } = useI18n()
 
 // رمز عبور این‌جا گرفته نمی‌شه؛ فقط بعد از وریفای ایمیل (verify-email → set-password)
 // کاربر صاحب حساب می‌شه. اینطوری نمی‌شه با یه ایمیل غیرواقعی حساب نیمه‌ساز با رمز ساخت.
 const schema = toTypedSchema(
     z.object({
-      name: z.string().min(2, 'اسم باید حداقل ۲ حرف باشد'),
-      email: z.string().min(1, 'ایمیل را وارد کن').email('ایمیل معتبر نیست'),
+      name: z.string().min(2, 'auth.nameMin'),
+      email: z.string().min(1, 'auth.emailRequired').email('auth.emailInvalid'),
     }),
 )
 
@@ -27,7 +28,7 @@ const onSubmit = handleSubmit(async (values) => {
   if (code) {
     // dev-only: چون ایمیل واقعی وصل نیست، کد رو همین‌جا نشون می‌دیم تا فلو قابل تست باشه.
     // Phase 3 این toast حذف می‌شه؛ کد واقعاً فقط توی ایمیل کاربر می‌ره.
-    uiStore.showToast(`کد تایید ارسال شد (dev: ${code})`)
+    uiStore.showToast(t('auth.otpSentDev', { code }))
     navigateTo({ path: '/auth/verify-email', query: { email: values.email } })
   }
 })
@@ -36,10 +37,10 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div>
     <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-      ساخت حساب کاربری
+      {{ t('auth.registerTitle') }}
     </h1>
     <p class="mb-6 text-sm text-white/70">
-      رایگان ثبت‌نام کن و شروع کن به مراقبت هوشمند از گیاهانت.
+      {{ t('auth.registerSubtitle') }}
     </p>
 
     <form
@@ -48,25 +49,25 @@ const onSubmit = handleSubmit(async (values) => {
         @submit="onSubmit"
     >
       <div>
-        <label class="glass-label">اسم</label>
+        <label class="glass-label">{{ t('auth.name') }}</label>
         <input
             v-model="name"
             v-bind="nameAttrs"
             type="text"
             class="glass-input"
             :class="{ 'glass-input--error': errors.name }"
-            placeholder="اسم و فامیل"
+            :placeholder="t('auth.namePlaceholder')"
         >
         <p
             v-if="errors.name"
             class="mt-1 text-xs text-red-200"
         >
-          {{ errors.name }}
+          {{ errors.name ? t(errors.name) : '' }}
         </p>
       </div>
 
       <div>
-        <label class="glass-label">ایمیل</label>
+        <label class="glass-label">{{ t('auth.email') }}</label>
         <input
             v-model="email"
             v-bind="emailAttrs"
@@ -79,7 +80,7 @@ const onSubmit = handleSubmit(async (values) => {
             v-if="errors.email"
             class="mt-1 text-xs text-red-200"
         >
-          {{ errors.email }}
+          {{ errors.email ? t(errors.email) : '' }}
         </p>
       </div>
 
@@ -87,7 +88,7 @@ const onSubmit = handleSubmit(async (values) => {
           v-if="authStore.error"
           class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
       >
-        {{ authStore.error }}
+        {{ t(authStore.error) }}
       </p>
 
       <AppButton
@@ -96,17 +97,17 @@ const onSubmit = handleSubmit(async (values) => {
           block
           :loading="authStore.loading"
       >
-        ادامه
+        {{ t('common.continue') }}
       </AppButton>
     </form>
 
     <p class="mt-5 text-center text-sm text-white/70">
-      قبلاً حساب ساختی؟
+      {{ t('auth.haveAccount') }}
       <NuxtLink
           to="/auth/login"
           class="font-medium text-accent-200 hover:text-accent-100"
       >
-        وارد شو
+        {{ t('auth.login') }}
       </NuxtLink>
     </p>
   </div>

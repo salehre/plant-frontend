@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const props = defineProps<{
   modelValue: boolean
   title?: string
 }>()
 
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>()
 
 function close() {
@@ -29,7 +32,7 @@ function close() {
             </h3>
             <button
               class="rounded-sm p-1 text-ink-muted hover:bg-ink/5"
-              aria-label="بستن"
+              :aria-label="t('components.appModal.close')"
               @click="close"
             >
               <Icon

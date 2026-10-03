@@ -8,10 +8,11 @@ definePageMeta({ layout: 'auth' })
 const authStore = useAuthStore()
 const route = useRoute()
 const uiStore = useUiStore()
+const { t } = useI18n()
 
 const schema = toTypedSchema(z.object({
-  email: z.string().min(1, 'ایمیل را وارد کن').email('ایمیل معتبر نیست'),
-  password: z.string().min(6, 'رمز عبور باید حداقل ۶ کاراکتر باشد'),
+  email: z.string().min(1, 'auth.emailRequired').email('auth.emailInvalid'),
+  password: z.string().min(6, 'auth.passwordMin6'),
 }))
 
 const { handleSubmit, defineField, errors } = useForm({ validationSchema: schema })
@@ -27,7 +28,7 @@ const justReset = route.query.reset === 'true'
 const onSubmit = handleSubmit(async (values) => {
   const ok = await authStore.login(values.email, values.password)
   if (ok) {
-    uiStore.showToast('خوش اومدی 🌿')
+    uiStore.showToast(t('auth.welcome') + ' 🌿')
     const redirect = (route.query.redirect as string) || '/dashboard'
     navigateTo(redirect)
   }
@@ -37,17 +38,17 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div>
     <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-      ورود به حساب
+      {{ t('auth.loginTitle') }}
     </h1>
     <p class="mb-6 text-sm text-white/70">
-      برای مدیریت گیاهانت وارد شو.
+      {{ t('auth.loginSubtitle') }}
     </p>
 
     <p
       v-if="justReset"
       class="mb-4 rounded-lg border border-emerald-300/30 bg-emerald-500/15 p-2 text-sm text-emerald-100"
     >
-      رمز عبورت با موفقیت تغییر کرد، حالا وارد شو.
+      {{ t('auth.passwordChangedLogin') }}
     </p>
 
     <form
@@ -56,7 +57,7 @@ const onSubmit = handleSubmit(async (values) => {
       @submit="onSubmit"
     >
       <div>
-        <label class="glass-label">ایمیل</label>
+        <label class="glass-label">{{ t('auth.email') }}</label>
         <input
           v-model="email"
           v-bind="emailAttrs"
@@ -69,18 +70,18 @@ const onSubmit = handleSubmit(async (values) => {
           v-if="errors.email"
           class="mt-1 text-xs text-red-200"
         >
-          {{ errors.email }}
+          {{ errors.email ? t(errors.email) : '' }}
         </p>
       </div>
 
       <div>
         <div class="flex items-center justify-between">
-          <label class="glass-label">رمز عبور</label>
+          <label class="glass-label">{{ t('auth.password') }}</label>
           <NuxtLink
             to="/auth/forgot-password"
             class="text-xs font-medium text-accent-200 hover:text-accent-100"
           >
-            رمز عبور را فراموش کردی؟
+            {{ t('auth.forgotPassword') }}
           </NuxtLink>
         </div>
         <div class="relative">
@@ -95,7 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
           <button
             type="button"
             class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
-            :aria-label="showPassword ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+            :aria-label="showPassword ? t('auth.hidePassword') : t('auth.showPassword')"
             @click="showPassword = !showPassword"
           >
             <Icon
@@ -108,7 +109,7 @@ const onSubmit = handleSubmit(async (values) => {
           v-if="errors.password"
           class="mt-1 text-xs text-red-200"
         >
-          {{ errors.password }}
+          {{ errors.password ? t(errors.password) : '' }}
         </p>
       </div>
 
@@ -116,7 +117,7 @@ const onSubmit = handleSubmit(async (values) => {
         v-if="authStore.error"
         class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
       >
-        {{ authStore.error }}
+        {{ t(authStore.error) }}
       </p>
 
       <AppButton
@@ -125,17 +126,17 @@ const onSubmit = handleSubmit(async (values) => {
         block
         :loading="authStore.loading"
       >
-        ورود
+        {{ t('auth.login') }}
       </AppButton>
     </form>
 
     <p class="mt-5 text-center text-sm text-white/70">
-      حساب نداری؟
+      {{ t('auth.noAccount') }}
       <NuxtLink
         to="/auth/register"
         class="font-medium text-accent-200 hover:text-accent-100"
       >
-        ثبت‌نام کن
+        {{ t('auth.register') }}
       </NuxtLink>
     </p>
   </div>

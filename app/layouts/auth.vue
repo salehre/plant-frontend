@@ -45,7 +45,7 @@ const mistStyle = computed(() => ({
             name="lucide:leaf"
             class="size-6 text-accent-300"
         />
-        برگ‌یار
+        {{ $t('brand.name') }}
       </NuxtLink>
 
       <LiquidGlassPanel>

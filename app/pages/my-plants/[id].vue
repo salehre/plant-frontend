@@ -3,6 +3,7 @@ definePageMeta({ layout: 'dashboard' }) // middleware: 'auth' فعلاً موق�
 
 const route = useRoute()
 const userPlantsStore = useUserPlantsStore()
+const { t } = useI18n()
 
 const userPlant = computed(() => userPlantsStore.plants.find(p => p.id === route.params.id))
 const relatedTasks = computed(() => userPlantsStore.tasks.filter(t => t.userPlantId === route.params.id))
@@ -21,7 +22,7 @@ const relatedTasks = computed(() => userPlantsStore.tasks.filter(t => t.userPlan
         name="lucide:arrow-right"
         class="size-4"
       />
-      بازگشت به گیاهان من
+      {{ t('pages.myPlants.back') }}
     </NuxtLink>
 
     <div class="flex flex-col gap-4 sm:flex-row">
@@ -38,10 +39,10 @@ const relatedTasks = computed(() => userPlantsStore.tasks.filter(t => t.userPlan
           {{ userPlant.location }}
         </p>
         <p class="mt-2 text-sm">
-          وضعیت: <span class="font-medium text-ink">{{ healthLabel(userPlant.healthStatus) }}</span>
+          {{ t('pages.myPlants.status') }}: <span class="font-medium text-ink">{{ healthLabel(userPlant.healthStatus) }}</span>
         </p>
         <p class="mt-1 text-sm text-ink-muted">
-          از تاریخ {{ toJalaliDate(userPlant.acquiredAt) }} پیش تو هست
+          {{ t('pages.myPlants.sinceDate', { date: toJalaliDate(userPlant.acquiredAt) }) }}
         </p>
       </div>
     </div>
@@ -50,7 +51,7 @@ const relatedTasks = computed(() => userPlantsStore.tasks.filter(t => t.userPlan
 
     <div>
       <h2 class="mb-3 font-bold text-ink">
-        وظایف مراقبتی
+        {{ t('pages.myPlants.careTasks') }}
       </h2>
       <div
         v-if="relatedTasks.length"
@@ -68,7 +69,7 @@ const relatedTasks = computed(() => userPlantsStore.tasks.filter(t => t.userPlan
         v-else
         class="text-sm text-ink-muted"
       >
-        وظیفه‌ای برای این گیاه ثبت نشده.
+        {{ t('pages.myPlants.noTasks') }}
       </p>
     </div>
   </div>
@@ -77,6 +78,6 @@ const relatedTasks = computed(() => userPlantsStore.tasks.filter(t => t.userPlan
     v-else
     class="py-16 text-center text-ink-muted"
   >
-    گیاهی با این مشخصات پیدا نشد.
+    {{ t('pages.myPlants.notFound') }}
   </div>
 </template>

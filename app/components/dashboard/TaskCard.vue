@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { CareTask } from '~/types/user.types'
 
 const props = defineProps<{ task: CareTask, plantName: string }>()
 const emit = defineEmits<{ done: [string] }>()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const taskIcon: Record<string, string> = {
   water: 'lucide:droplets',
@@ -11,6 +13,17 @@ const taskIcon: Record<string, string> = {
   repot: 'lucide:flower',
   mist: 'lucide:cloud-drizzle',
 }
+const taskLabelKeys: Record<string, string> = {
+  water: 'components.common.taskWater',
+  fertilize: 'components.common.taskFertilize',
+  prune: 'components.common.taskPrune',
+  repot: 'components.common.taskRepot',
+  mist: 'components.common.taskMist',
+}
+const localizedTaskLabel = computed(() => {
+  const key = taskLabelKeys[props.task.type]
+  return key ? t(key) : props.task.type
+})
 </script>
 
 <template>
@@ -23,7 +36,7 @@ const taskIcon: Record<string, string> = {
     </div>
     <div class="min-w-0 flex-1">
       <p class="truncate text-sm font-medium text-ink">
-        {{ taskLabel(props.task.type) }} · {{ props.plantName }}
+        {{ localizedTaskLabel }} · {{ props.plantName }}
       </p>
       <p class="text-xs text-ink-muted">
         {{ toJalaliDate(props.task.dueDate) }}
@@ -31,7 +44,7 @@ const taskIcon: Record<string, string> = {
     </div>
     <button
         class="flex size-8 shrink-0 items-center justify-center rounded-full border border-primary-200 text-primary-600 hover:bg-primary-50"
-        aria-label="انجام شد"
+        :aria-label="t('components.taskCard.complete')"
         @click="emit('done', props.task.id)"
     >
       <Icon

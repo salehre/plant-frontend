@@ -7,6 +7,7 @@ definePageMeta({ layout: 'auth' })
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
+const { t } = useI18n()
 
 // این صفحه خودش سه قدمه (بدون رفتن به صفحه‌ی جدا): ایمیل → کد → رمز جدید.
 // کد جداگانه وریفای نمی‌شه؛ همراه رمز جدید توی resetPassword با هم چک می‌شن -
@@ -16,7 +17,7 @@ const submittedEmail = ref('')
 
 // ─── قدم ۱: ایمیل ───
 const emailSchema = toTypedSchema(z.object({
-  email: z.string().min(1, 'ایمیل را وارد کن').email('ایمیل معتبر نیست'),
+  email: z.string().min(1, 'auth.emailRequired').email('auth.emailInvalid'),
 }))
 const { handleSubmit: handleEmailSubmit, defineField: defineEmailField, errors: emailErrors } = useForm({ validationSchema: emailSchema })
 const [email, emailAttrs] = defineEmailField('email')
@@ -28,7 +29,7 @@ const onEmailSubmit = handleEmailSubmit(async (values) => {
     step.value = 'otp'
     startCountdown()
     // dev-only: چون ایمیل واقعی وصل نیست، کد رو همین‌جا نشون می‌دیم - Phase 3 حذف می‌شه.
-    uiStore.showToast(`کد بازیابی ارسال شد (dev: ${code})`)
+    uiStore.showToast(t('auth.resetCodeSentDev', { code }))
   }
 })
 
@@ -84,7 +85,7 @@ async function resendCode() {
   resending.value = true
   try {
     const code = await authStore.sendOtp(submittedEmail.value, 'reset')
-    uiStore.showToast(`کد جدید ارسال شد (dev: ${code})`, 'info')
+    uiStore.showToast(t('auth.newCodeSentDev', { code }), 'info')
     startCountdown()
     digits.value = ['', '', '', '', '', '']
     authStore.error = ''
@@ -97,10 +98,10 @@ async function resendCode() {
 // ─── قدم ۳: رمز جدید ───
 const passwordSchema = toTypedSchema(
   z.object({
-    password: z.string().min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد'),
+    password: z.string().min(8, 'auth.passwordMin8'),
     passwordConfirm: z.string(),
   }).refine(data => data.password === data.passwordConfirm, {
-    message: 'تکرار رمز عبور مطابقت ندارد',
+    message: 'auth.passwordMismatch',
     path: ['passwordConfirm'],
   }),
 )
@@ -113,7 +114,7 @@ const showPasswordConfirm = ref(false)
 const onPasswordSubmit = handlePasswordSubmit(async (values) => {
   const ok = await authStore.resetPassword(submittedEmail.value, digits.value.join(''), values.password)
   if (ok) {
-    uiStore.showToast('رمز عبورت با موفقیت تغییر کرد 🌿')
+    uiStore.showToast(t('auth.passwordChanged') + ' 🌿')
     navigateTo({ path: '/auth/login', query: { reset: 'true' } })
   }
   else {
@@ -140,10 +141,10 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
 
     <template v-if="step === 'email'">
       <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-        بازیابی رمز عبور
+        {{ t('auth.resetTitle') }}
       </h1>
       <p class="mb-6 text-sm text-white/70">
-        ایمیلت را وارد کن تا کد بازیابی رمز عبور را برایت بفرستیم.
+        {{ t('auth.resetEmailSubtitle') }}
       </p>
 
       <form
@@ -152,7 +153,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
         @submit="onEmailSubmit"
       >
         <div>
-          <label class="glass-label">ایمیل</label>
+          <label class="glass-label">{{ t('auth.email') }}</label>
           <input
             v-model="email"
             v-bind="emailAttrs"
@@ -165,7 +166,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             v-if="emailErrors.email"
             class="mt-1 text-xs text-red-200"
           >
-            {{ emailErrors.email }}
+            {{ emailErrors.email ? t(emailErrors.email) : '' }}
           </p>
         </div>
 
@@ -173,7 +174,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
           v-if="authStore.error"
           class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
         >
-          {{ authStore.error }}
+          {{ t(authStore.error) }}
         </p>
 
         <AppButton
@@ -182,17 +183,17 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
           block
           :loading="authStore.loading"
         >
-          ارسال کد بازیابی
+          {{ t('auth.sendResetCode') }}
         </AppButton>
       </form>
     </template>
 
     <template v-else-if="step === 'otp'">
       <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-        تایید ایمیل
+        {{ t('auth.verifyEmail') }}
       </h1>
       <p class="mb-6 text-sm text-white/70">
-        کد ۶ رقمی ارسال‌شده به <span class="font-medium text-white">{{ submittedEmail }}</span> را وارد کن.
+        {{ t('auth.enterCodeSentTo') }} <span class="font-medium text-white">{{ submittedEmail }}</span>.
       </p>
 
       <div class="flex flex-col gap-5">
@@ -222,7 +223,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
           v-if="authStore.error"
           class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-center text-sm text-red-100"
         >
-          {{ authStore.error }}
+          {{ t(authStore.error) }}
         </p>
 
         <AppButton
@@ -232,12 +233,12 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
           :disabled="!isCodeComplete"
           @click="continueToPassword"
         >
-          تایید کد
+          {{ t('auth.verifyCode') }}
         </AppButton>
 
         <p class="text-center text-sm text-white/70">
           <span v-if="countdown > 0">
-            ارسال مجدد تا
+            {{ t('auth.resendIn') }}
             <span class="font-bold tabular-nums text-accent-200">{{ formatCountdown }}</span>
           </span>
           <button
@@ -247,7 +248,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             :disabled="resending"
             @click="resendCode"
           >
-            ارسال دوباره کد
+            {{ t('auth.resendCode') }}
           </button>
         </p>
       </div>
@@ -255,10 +256,10 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
 
     <template v-else>
       <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-        رمز جدید
+        {{ t('auth.newPassword') }}
       </h1>
       <p class="mb-6 text-sm text-white/70">
-        یک رمز عبور جدید برای حسابت انتخاب کن.
+        {{ t('auth.newPasswordSubtitle') }}
       </p>
 
       <form
@@ -267,7 +268,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
         @submit="onPasswordSubmit"
       >
         <div>
-          <label class="glass-label">رمز عبور جدید</label>
+          <label class="glass-label">{{ t('auth.newPassword') }}</label>
           <div class="relative">
             <input
               v-model="password"
@@ -280,7 +281,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             <button
               type="button"
               class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
-              :aria-label="showPassword ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+              :aria-label="showPassword ? t('auth.hidePassword') : t('auth.showPassword')"
               @click="showPassword = !showPassword"
             >
               <Icon
@@ -293,12 +294,12 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             v-if="passwordErrors.password"
             class="mt-1 text-xs text-red-200"
           >
-            {{ passwordErrors.password }}
+            {{ passwordErrors.password ? t(passwordErrors.password) : '' }}
           </p>
         </div>
 
         <div>
-          <label class="glass-label">تکرار رمز عبور</label>
+          <label class="glass-label">{{ t('auth.confirmPassword') }}</label>
           <div class="relative">
             <input
               v-model="passwordConfirm"
@@ -311,7 +312,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             <button
               type="button"
               class="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-white/60 hover:text-white"
-              :aria-label="showPasswordConfirm ? 'مخفی کردن رمز عبور' : 'نمایش رمز عبور'"
+              :aria-label="showPasswordConfirm ? t('auth.hidePassword') : t('auth.showPassword')"
               @click="showPasswordConfirm = !showPasswordConfirm"
             >
               <Icon
@@ -324,7 +325,7 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
             v-if="passwordErrors.passwordConfirm"
             class="mt-1 text-xs text-red-200"
           >
-            {{ passwordErrors.passwordConfirm }}
+            {{ passwordErrors.passwordConfirm ? t(passwordErrors.passwordConfirm) : '' }}
           </p>
         </div>
 
@@ -334,18 +335,18 @@ const stepNumber = computed(() => ({ email: 1, otp: 2, password: 3 }[step.value]
           block
           :loading="authStore.loading"
         >
-          ذخیره رمز جدید
+          {{ t('auth.saveNewPassword') }}
         </AppButton>
       </form>
     </template>
 
     <p class="mt-5 text-center text-sm text-white/70">
-      رمزت را یادت آمد؟
+      {{ t('auth.rememberPassword') }}
       <NuxtLink
         to="/auth/login"
         class="font-medium text-accent-200 hover:text-accent-100"
       >
-        وارد شو
+        {{ t('auth.login') }}
       </NuxtLink>
     </p>
   </div>

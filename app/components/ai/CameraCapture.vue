@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const emit = defineEmits<{ capture: [string], close: [] }>()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const videoEl = ref<HTMLVideoElement | null>(null)
 const stream = ref<MediaStream | null>(null)
@@ -11,7 +14,7 @@ async function startCamera() {
     if (videoEl.value) videoEl.value.srcObject = stream.value
   }
   catch {
-    error.value = 'دسترسی به دوربین ممکن نشد. مرورگر یا دستگاهت اجازه نداده.'
+    error.value = t('components.cameraCapture.permissionDenied')
   }
 }
 
@@ -61,7 +64,7 @@ onBeforeUnmount(stopCamera)
         variant="ghost"
         @click="emit('close')"
       >
-        {{ $t('common.cancel') }}
+        {{ t('components.cameraCapture.cancel') }}
       </AppButton>
       <AppButton
         v-if="!error"
@@ -72,7 +75,7 @@ onBeforeUnmount(stopCamera)
           name="lucide:camera"
           class="size-4"
         />
-        {{ $t('identify.cameraCta') }}
+        {{ t('components.cameraCapture.capture') }}
       </AppButton>
     </div>
   </div>

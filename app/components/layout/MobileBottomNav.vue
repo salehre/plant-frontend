@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const route = useRoute()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 interface NavItem {
   to: string
@@ -9,10 +12,10 @@ interface NavItem {
 }
 
 const items: NavItem[] = [
-  { to: '/', icon: 'lucide:home', label: 'خانه' },
-  { to: '/identify', icon: 'lucide:scan-line', label: 'شناسایی' },
-  { to: '/plants', icon: 'lucide:sprout', label: 'گیاهان' },
-  { to: '/profile', icon: 'lucide:user', label: 'پروفایل' },
+  { to: '/', icon: 'lucide:home', label: 'components.mobileBottomNav.home' },
+  { to: '/identify', icon: 'lucide:scan-line', label: 'components.mobileBottomNav.identify' },
+  { to: '/plants', icon: 'lucide:sprout', label: 'components.mobileBottomNav.plants' },
+  { to: '/profile', icon: 'lucide:user', label: 'components.mobileBottomNav.profile' },
 ]
 
 function isActive(to: string) {
@@ -291,7 +294,7 @@ onBeforeUnmount(() => {
     <nav
       ref="navRef"
       class="jelly-nav relative isolate flex w-full max-w-[330px] items-center justify-between gap-0.5 overflow-hidden rounded-full px-2 py-1.5 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.18)]"
-      aria-label="ناوبری اصلی"
+      :aria-label="t('components.mobileBottomNav.navigation')"
     >
       <span
         ref="feedbackRef"
@@ -308,7 +311,7 @@ onBeforeUnmount(() => {
         :key="item.to"
         :ref="(el) => setItemRef(el, index)"
         :to="item.to"
-        :aria-label="item.label"
+        :aria-label="t(item.label)"
         class="jelly-item relative z-10 flex items-center justify-center gap-1 rounded-full px-3.5 py-2.5 transition-colors"
         :class="index === displayActiveIndex ? 'text-white' : 'text-ink-muted hover:text-ink'"
         @pointerdown="onPointerDown(index, $event)"

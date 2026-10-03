@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const props = withDefaults(
     defineProps<{
       data?: number[]
@@ -6,10 +8,14 @@ const props = withDefaults(
     }>(),
     {
       data: () => [20, 35, 30, 50, 65, 60, 80],
-      labels: () => ['هفته ۱', 'هفته ۲', 'هفته ۳', 'هفته ۴', 'هفته ۵', 'هفته ۶', 'هفته ۷'],
     },
 )
 
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const chartLabels = computed(() => props.labels ?? Array.from({ length: 7 }, (_, index) => {
+  const week = new Intl.NumberFormat(locale.value, { useGrouping: false }).format(index + 1)
+  return t('components.growthChart.week', { week })
+}))
 const width = 300
 const height = 100
 const max = computed(() => Math.max(...props.data))
@@ -28,7 +34,7 @@ const points = computed(() =>
 <template>
   <div class="glass-card p-4">
     <p class="mb-3 text-sm font-medium text-ink">
-      روند رشد
+      {{ t('components.growthChart.title') }}
     </p>
     <svg
         :viewBox="`0 0 ${width} ${height}`"
@@ -45,8 +51,8 @@ const points = computed(() =>
       />
     </svg>
     <div class="mt-2 flex justify-between text-[10px] text-ink-muted">
-      <span>{{ props.labels[0] }}</span>
-      <span>{{ props.labels[props.labels.length - 1] }}</span>
+      <span>{{ chartLabels[0] }}</span>
+      <span>{{ chartLabels[chartLabels.length - 1] }}</span>
     </div>
   </div>
 </template>

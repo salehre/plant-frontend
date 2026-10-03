@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+import type { MockLocale } from '~/services/mock/mock-locale'
 import { suggestPlants } from '~/services/mock/plants.mock'
 
 const props = defineProps<{ modelValue: string }>()
 const emit = defineEmits<{ 'update:modelValue': [string], 'select': [string] }>()
+const { locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const isFocused = ref(false)
 const target = ref<HTMLElement | null>(null)
 onClickOutside(target, () => (isFocused.value = false))
 
-const suggestions = computed(() => suggestPlants(props.modelValue, 5))
+const mockLocale = computed<MockLocale>(() => locale.value === 'en' ? 'en' : 'fa')
+const suggestions = computed(() => suggestPlants(props.modelValue, 5, mockLocale.value))
 const showDropdown = computed(() => isFocused.value && props.modelValue.trim().length > 0 && suggestions.value.length > 0)
 
 function pick(name: string) {

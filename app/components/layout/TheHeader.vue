@@ -1,12 +1,14 @@
 <script setup lang="ts">
-const uiStore = useUiStore()
+import { en, fa } from '~/i18n/componentMessages'
 
+const uiStore = useUiStore()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const navLinks = [
-  { to: '/', label: 'home' },
-  { to: '/identify', label: 'identify' },
-  { to: '/plants', label: 'catalog' },
-  { to: '/profile', label: 'profile' },
+  { to: '/', label: 'components.theHeader.home' },
+  { to: '/identify', label: 'components.theHeader.identify' },
+  { to: '/plants', label: 'components.theHeader.catalog' },
+  { to: '/profile', label: 'components.theHeader.profile' },
 ]
 </script>
 
@@ -21,7 +23,7 @@ const navLinks = [
             name="lucide:leaf"
             class="size-6"
         />
-        <span>برگ‌یار</span>
+        <span>{{ t('components.theHeader.brand') }}</span>
       </NuxtLink>
 
       <nav class="hidden items-center gap-1 md:flex">
@@ -32,7 +34,7 @@ const navLinks = [
             class="rounded-md px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
             active-class="!text-primary-700 bg-primary-50"
         >
-          {{ $t(link.label) }}
+          {{ t(link.label) }}
         </NuxtLink>
       </nav>
 
@@ -40,7 +42,7 @@ const navLinks = [
         <NuxtLink
             to="/profile"
             class="hidden size-9 items-center justify-center rounded-full bg-primary-50 text-primary-700 sm:flex"
-            aria-label="پروفایل"
+            :aria-label="t('components.theHeader.profile')"
         >
           <Icon
               name="lucide:user"
@@ -50,7 +52,7 @@ const navLinks = [
 
         <button
             class="flex size-9 items-center justify-center rounded-md text-ink md:hidden"
-            aria-label="منو"
+            :aria-label="t('components.theHeader.menu')"
             @click="uiStore.mobileNavOpen = true"
         >
           <Icon

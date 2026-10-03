@@ -1,4 +1,5 @@
 import type { CommunityUser, Post, Comment } from '~/types/community.types'
+import type { MockLocale } from './mock-locale'
 
 export const mockUsers: CommunityUser[] = [
   {
@@ -107,10 +108,63 @@ export const mockComments: Comment[] = [
   },
 ]
 
-export function commentsForPost(postId: string): Comment[] {
-  return mockComments.filter(c => c.postId === postId)
+const englishUsers: Record<string, Pick<CommunityUser, 'name' | 'bio'>> = {
+  u1: { name: 'Sara Ahmadi', bio: 'Houseplant lover with 20 pots in a 30-square-meter home 🌿' },
+  u2: { name: 'Reza Karimi', bio: 'Amateur gardener learning about medicinal plants' },
+  u3: { name: 'Niloufar Rostami', bio: 'Interior designer specializing in styling plants at home' },
 }
 
-export function findUserById(id: string): CommunityUser | undefined {
-  return mockUsers.find(u => u.id === id)
+const englishPostText: Record<string, string> = {
+  post1: 'My Monstera finally unfurled its first split leaf after six months! I’m so happy 🥹',
+  post2: 'A new medicinal-plant corner at home. Aloe vera and mint look great together.',
+  post3: 'Hanging plants in the living room. The pothos puts out a new leaf every week 🌱',
+  post4: 'Has anyone dealt with spider mites on a fiddle-leaf fig? I could use some help 😩',
+}
+
+const englishCommentText: Record<string, string> = {
+  c1: 'Wow, it looks beautiful! Congratulations 👏',
+  c2: 'How much light does it get? Mine still has no splits.',
+  c3: 'The pots look great together.',
+  c4: 'Try neem oil; it worked for me.',
+}
+
+function localizeUser(user: CommunityUser, locale: MockLocale): CommunityUser {
+  return { ...user, ...(locale === 'en' ? englishUsers[user.id] : undefined) }
+}
+
+function localizePost(post: Post, locale: MockLocale): Post {
+  return {
+    ...post,
+    author: localizeUser(post.author, locale),
+    ...(locale === 'en' ? { caption: englishPostText[post.id] ?? post.caption } : {}),
+  }
+}
+
+function localizeComment(comment: Comment, locale: MockLocale): Comment {
+  return {
+    ...comment,
+    author: localizeUser(comment.author, locale),
+    ...(locale === 'en' ? { content: englishCommentText[comment.id] ?? comment.content } : {}),
+  }
+}
+
+export function getMockUsers(locale: MockLocale = 'fa'): CommunityUser[] {
+  return mockUsers.map(user => localizeUser(user, locale))
+}
+
+export function getMockPosts(locale: MockLocale = 'fa'): Post[] {
+  return mockPosts.map(post => localizePost(post, locale))
+}
+
+export function getMockComments(locale: MockLocale = 'fa'): Comment[] {
+  return mockComments.map(comment => localizeComment(comment, locale))
+}
+
+export function commentsForPost(postId: string, locale: MockLocale = 'fa'): Comment[] {
+  return mockComments.filter(c => c.postId === postId).map(comment => localizeComment(comment, locale))
+}
+
+export function findUserById(id: string, locale: MockLocale = 'fa'): CommunityUser | undefined {
+  const user = mockUsers.find(u => u.id === id)
+  return user ? localizeUser(user, locale) : undefined
 }

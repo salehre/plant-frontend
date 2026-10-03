@@ -1,30 +1,41 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { Post } from '~/types/community.types'
 
 const props = defineProps<{ post: Post }>()
 
 const communityStore = useCommunityStore()
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
 const showComments = ref(false)
 const commentText = ref('')
 
-const comments = computed(() => communityStore.comments[props.post.id] ?? [])
+const comments = computed(() => communityStore.localizedComments(props.post.id, locale.value))
+
+function formatCount(value: number) {
+  return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)
+}
 
 function toggleComments() {
   showComments.value = !showComments.value
-  if (showComments.value) communityStore.loadComments(props.post.id)
+  if (showComments.value) communityStore.localizedComments(props.post.id, locale.value)
 }
 
 function submitComment() {
-  communityStore.addComment(props.post.id, commentText.value)
+  communityStore.addComment(props.post.id, commentText.value, locale.value)
   commentText.value = ''
 }
 
 function relativeTime(iso: string) {
   const diffMs = Date.now() - new Date(iso).getTime()
   const hours = Math.floor(diffMs / 3_600_000)
-  if (hours < 1) return 'چند دقیقه پیش'
-  if (hours < 24) return `${toPersianDigits(hours)} ساعت پیش`
-  return `${toPersianDigits(Math.floor(hours / 24))} روز پیش`
+  if (hours < 1) return t('components.postCard.minutesAgo')
+  if (hours < 24) {
+    const key = hours === 1 ? 'components.postCard.hourAgo' : 'components.postCard.hoursAgo'
+    return t(key, { count: formatCount(hours) })
+  }
+  const days = Math.floor(hours / 24)
+  const key = days === 1 ? 'components.postCard.dayAgo' : 'components.postCard.daysAgo'
+  return t(key, { count: formatCount(days) })
 }
 </script>
 
@@ -80,7 +91,7 @@ function relativeTime(iso: string) {
               class="size-5"
               :class="props.post.likedByMe ? 'fill-status-danger' : ''"
           />
-          {{ toPersianDigits(props.post.likesCount) }}
+          {{ formatCount(props.post.likesCount) }}
         </button>
         <button
             class="flex items-center gap-1.5 text-sm text-ink-muted"
@@ -90,7 +101,7 @@ function relativeTime(iso: string) {
               name="lucide:message-circle"
               class="size-5"
           />
-          {{ toPersianDigits(props.post.commentsCount) }}
+          {{ formatCount(props.post.commentsCount) }}
         </button>
       </div>
 
@@ -126,7 +137,7 @@ function relativeTime(iso: string) {
           <input
               v-model="commentText"
               type="text"
-              placeholder="نظرت رو بنویس..."
+              :placeholder="t('components.postCard.commentPlaceholder')"
               class="flex-1 rounded-md border border-ink/10 px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
           >
           <AppButton
@@ -134,7 +145,7 @@ function relativeTime(iso: string) {
               variant="secondary"
               size="sm"
           >
-            ارسال
+            {{ t('components.postCard.send') }}
           </AppButton>
         </form>
       </div>

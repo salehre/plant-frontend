@@ -1,15 +1,56 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { Plant } from '~/types/plant.types'
 
 const props = defineProps<{ plants: Plant[] }>()
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+
+const lightKeys: Record<string, string> = {
+  low: 'components.common.lightLow',
+  medium: 'components.common.lightMedium',
+  high: 'components.common.lightHigh',
+  direct: 'components.common.lightDirect',
+}
+const waterKeys: Record<string, string> = {
+  low: 'components.common.waterLow',
+  medium: 'components.common.waterMedium',
+  high: 'components.common.waterHigh',
+}
+const difficultyKeys: Record<string, string> = {
+  easy: 'components.common.difficultyEasy',
+  medium: 'components.common.difficultyMedium',
+  hard: 'components.common.difficultyHard',
+}
+function formatCount(value: number) {
+  return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)
+}
+function translatedValue(keys: Record<string, string>, value: string) {
+  const key = keys[value]
+  return key ? t(key) : value
+}
 
 const rows = computed(() => [
-  { label: 'نور', get: (p: Plant) => lightLabel(p.care.light), icon: 'lucide:sun' },
-  { label: 'آبیاری', get: (p: Plant) => `هر ${toPersianDigits(p.care.wateringFrequencyDays)} روز`, icon: 'lucide:droplets' },
-  { label: 'دما', get: (p: Plant) => `${toPersianDigits(p.care.temperatureRange[0])} تا ${toPersianDigits(p.care.temperatureRange[1])} درجه`, icon: 'lucide:thermometer' },
-  { label: 'رطوبت', get: (p: Plant) => waterLabel(p.care.humidity), icon: 'lucide:wind' },
-  { label: 'سطح مراقبت', get: (p: Plant) => difficultyLabel(p.difficulty), icon: 'lucide:gauge' },
-  { label: 'سمیت', get: (p: Plant) => (p.toxicity.isToxic ? 'سمی برای حیوانات' : 'بی‌خطر'), icon: 'lucide:alert-triangle' },
+  { label: t('components.compareTable.light'), get: (p: Plant) => translatedValue(lightKeys, p.care.light), icon: 'lucide:sun' },
+  {
+    label: t('components.compareTable.watering'),
+    get: (p: Plant) => t('components.compareTable.everyDays', { days: formatCount(p.care.wateringFrequencyDays) }),
+    icon: 'lucide:droplets',
+  },
+  {
+    label: t('components.compareTable.temperature'),
+    get: (p: Plant) => t('components.compareTable.temperatureValue', {
+      min: formatCount(p.care.temperatureRange[0]),
+      max: formatCount(p.care.temperatureRange[1]),
+    }),
+    icon: 'lucide:thermometer',
+  },
+  { label: t('components.compareTable.humidity'), get: (p: Plant) => translatedValue(waterKeys, p.care.humidity), icon: 'lucide:wind' },
+  { label: t('components.compareTable.careLevel'), get: (p: Plant) => translatedValue(difficultyKeys, p.difficulty), icon: 'lucide:gauge' },
+  {
+    label: t('components.compareTable.toxicity'),
+    get: (p: Plant) => t(p.toxicity.isToxic ? 'components.compareTable.toxicForPets' : 'components.compareTable.safe'),
+    icon: 'lucide:alert-triangle',
+  },
 ])
 </script>
 
@@ -19,7 +60,7 @@ const rows = computed(() => [
       <thead>
         <tr class="border-b border-ink/5">
           <th class="p-4 text-start text-ink-muted">
-            ویژگی
+            {{ t('components.compareTable.feature') }}
           </th>
           <th
             v-for="plant in props.plants"

@@ -4,6 +4,7 @@ import 'vue-sonner/style.css'
 
 
 const i18nHead = useLocaleHead()
+const { locale } = useI18n()
 useHead(() => ({
   htmlAttrs: i18nHead.value.htmlAttrs,
 }))
@@ -23,7 +24,7 @@ useHead(() => ({
     <ClientOnly>
       <VitePwaManifest />
     </ClientOnly>
-    <Toaster rich-colors dir="rtl" position="bottom-right" />
+    <Toaster rich-colors :dir="locale === 'fa' ? 'rtl' : 'ltr'" position="bottom-right" />
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />

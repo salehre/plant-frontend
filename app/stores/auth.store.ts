@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         await simulateDelay(500)
         if (!email.includes('@')) {
-          this.error = 'ایمیل یا رمز عبور اشتباه است.'
+          this.error = 'auth.errors.invalidCredentials'
           return false
         }
         this.user = {
@@ -109,7 +109,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         await simulateDelay(500)
         if (!this.verifyOtpCode(email, 'register', code)) {
-          this.error = 'کد وارد شده اشتباه یا منقضی‌شده است.'
+          this.error = 'auth.errors.invalidCode'
           return false
         }
         if (this.pendingRegistration && this.pendingRegistration.email === email) {
@@ -129,7 +129,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         await simulateDelay(500)
         if (!this.pendingRegistration?.verified) {
-          this.error = 'ابتدا باید ایمیلت را تایید کنی.'
+          this.error = 'auth.errors.verifyEmailFirst'
           return false
         }
         this.user = {
@@ -153,7 +153,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         await simulateDelay(500)
         if (!email.includes('@')) {
-          this.error = 'ایمیل معتبر نیست.'
+          this.error = 'auth.errors.emailInvalid'
           return null
         }
         const code = await this.sendOtp(email, 'reset')
@@ -175,7 +175,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         await simulateDelay(500)
         if (!this.verifyOtpCode(email, 'reset', code)) {
-          this.error = 'کد وارد شده اشتباه یا منقضی‌شده است.'
+          this.error = 'auth.errors.invalidCode'
           return false
         }
         return true

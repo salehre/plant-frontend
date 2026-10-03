@@ -20,7 +20,7 @@ const links = [
         :name="link.icon"
         class="size-4"
       />
-      {{ $t(link.label) }}
+      {{ $t(`nav.${link.label}`) }}
     </NuxtLink>
   </aside>
 </template>

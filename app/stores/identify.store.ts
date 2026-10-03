@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { IdentifyResult, IdentifyStatus } from '~/types/identify.types'
+import type { MockLocale } from '~/services/mock/mock-locale'
 import { fakeIdentify } from '~/services/mock/identify.mock'
 
 export const useIdentifyStore = defineStore('identify', {
@@ -16,11 +17,11 @@ export const useIdentifyStore = defineStore('identify', {
       this.status = 'idle'
       this.error = ''
     },
-    async runIdentify() {
+    async runIdentify(locale: MockLocale = 'fa') {
       if (!this.previewUrl) return
       this.status = 'analyzing'
       try {
-        this.result = await fakeIdentify()
+        this.result = await fakeIdentify(locale)
         this.status = 'done'
         // History خودکاره: هر اسکن موفق بدون تصمیمی از کاربر ثبت می‌شه.
         // عکس خودِ کاربر (previewUrl) رو نگه می‌داریم، نه عکس استوک گونه‌ی تشخیص‌داده‌شده.
@@ -28,7 +29,7 @@ export const useIdentifyStore = defineStore('identify', {
       }
       catch {
         this.status = 'error'
-        this.error = 'مشکلی در تحلیل تصویر پیش آمد. دوباره تلاش کن.'
+        this.error = 'identify.errors.analysisFailed'
       }
     },
     reset() {

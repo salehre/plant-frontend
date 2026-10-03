@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
+
 const props = defineProps<{ value: number }>()
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
 
 const percent = computed(() => Math.round(props.value * 100))
+const formattedPercent = computed(() =>
+  t('components.confidenceScore.percentage', {
+    value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(percent.value),
+  }),
+)
 
 const colorClass = computed(() => {
   if (props.value >= 0.8) return 'bg-primary-500'
@@ -19,6 +27,6 @@ const colorClass = computed(() => {
         :style="{ width: percent + '%' }"
       />
     </div>
-    <span class="w-10 text-left text-xs font-medium text-ink-muted">{{ toPersianDigits(percent) }}٪</span>
+    <span class="w-10 text-left text-xs font-medium text-ink-muted">{{ formattedPercent }}</span>
   </div>
 </template>

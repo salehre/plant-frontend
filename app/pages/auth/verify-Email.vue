@@ -7,6 +7,7 @@ definePageMeta({ layout: 'auth' })
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
+const { t } = useI18n()
 
 // بدون verified بودن ایمیل (از قدم قبل)، این صفحه معنی نداره؛ برگرد به ثبت‌نام.
 if (!authStore.pendingRegistration?.verified) {
@@ -15,10 +16,10 @@ if (!authStore.pendingRegistration?.verified) {
 
 const schema = toTypedSchema(
   z.object({
-    password: z.string().min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد'),
+    password: z.string().min(8, 'auth.passwordMin8'),
     passwordConfirm: z.string(),
   }).refine(data => data.password === data.passwordConfirm, {
-    message: 'تکرار رمز عبور مطابقت ندارد',
+    message: 'auth.passwordMismatch',
     path: ['passwordConfirm'],
   }),
 )
@@ -31,7 +32,7 @@ const [passwordConfirm, passwordConfirmAttrs] = defineField('passwordConfirm')
 const onSubmit = handleSubmit(async (values) => {
   const ok = await authStore.setPassword(values.password)
   if (ok) {
-    uiStore.showToast(`خوش اومدی ${authStore.user?.name} 🌿`)
+    uiStore.showToast(t('auth.welcomeUser', { name: authStore.user?.name ?? '' }) + ' 🌿')
     navigateTo('/dashboard')
   }
 })
@@ -40,10 +41,10 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div>
     <h1 class="mb-1 text-xl font-bold text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.3)]">
-      تنظیم رمز عبور
+      {{ t('auth.setPasswordTitle') }}
     </h1>
     <p class="mb-6 text-sm text-white/70">
-      یک رمز عبور قوی برای حسابت انتخاب کن.
+      {{ t('auth.setPasswordSubtitle') }}
     </p>
 
     <form
@@ -52,7 +53,7 @@ const onSubmit = handleSubmit(async (values) => {
       @submit="onSubmit"
     >
       <div>
-        <label class="glass-label">رمز عبور</label>
+        <label class="glass-label">{{ t('auth.password') }}</label>
         <input
           v-model="password"
           v-bind="passwordAttrs"
@@ -65,12 +66,12 @@ const onSubmit = handleSubmit(async (values) => {
           v-if="errors.password"
           class="mt-1 text-xs text-red-200"
         >
-          {{ errors.password }}
+          {{ errors.password ? t(errors.password) : '' }}
         </p>
       </div>
 
       <div>
-        <label class="glass-label">تکرار رمز عبور</label>
+        <label class="glass-label">{{ t('auth.confirmPassword') }}</label>
         <input
           v-model="passwordConfirm"
           v-bind="passwordConfirmAttrs"
@@ -83,7 +84,7 @@ const onSubmit = handleSubmit(async (values) => {
           v-if="errors.passwordConfirm"
           class="mt-1 text-xs text-red-200"
         >
-          {{ errors.passwordConfirm }}
+          {{ errors.passwordConfirm ? t(errors.passwordConfirm) : '' }}
         </p>
       </div>
 
@@ -91,7 +92,7 @@ const onSubmit = handleSubmit(async (values) => {
         v-if="authStore.error"
         class="rounded-lg border border-red-300/30 bg-red-500/15 p-2 text-sm text-red-100"
       >
-        {{ authStore.error }}
+        {{ t(authStore.error) }}
       </p>
 
       <AppButton
@@ -100,7 +101,7 @@ const onSubmit = handleSubmit(async (values) => {
         block
         :loading="authStore.loading"
       >
-        تکمیل ثبت‌نام
+        {{ t('auth.completeRegistration') }}
       </AppButton>
     </form>
   </div>

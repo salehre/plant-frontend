@@ -1,30 +1,37 @@
 <script setup lang="ts">
-import { mockCities, findCityById } from '~/services/mock/climate.mock'
-import { mockPlants } from '~/services/mock/plants.mock'
+import { getMockCities, findCityById } from '~/services/mock/climate.mock'
+import { getMockPlants } from '~/services/mock/plants.mock'
 
 const selectedCityId = ref('tehran')
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
-const cityOptions = mockCities.map(c => ({ label: `${c.name} (${c.province})`, value: c.id }))
+const cityOptions = computed(() => getMockCities(activeLocale.value).map(c => ({ label: `${c.name} (${c.province})`, value: c.id })))
 
-const selectedCity = computed(() => findCityById(selectedCityId.value))
+const selectedCity = computed(() => findCityById(selectedCityId.value, activeLocale.value))
+const localizedPlants = computed(() => getMockPlants(activeLocale.value))
 
 const suitablePlants = computed(() => {
   if (!selectedCity.value) return []
   return selectedCity.value.suitablePlantSlugs
-      .map(slug => mockPlants.find(p => p.slug === slug))
+      .map(slug => localizedPlants.value.find(p => p.slug === slug))
       .filter((p): p is NonNullable<typeof p> => !!p)
 })
 
-const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متوسط', high: 'زیاد' }
+const humidityLabelMap = computed<Record<string, string>>(() => ({
+  low: t('pages.climate.low'),
+  medium: t('pages.climate.medium'),
+  high: t('pages.climate.high'),
+}))
 </script>
 
 <template>
   <div class="mx-auto max-w-5xl px-4 py-10">
     <h1 class="mb-2 text-2xl font-bold text-ink">
-      گیاه مناسب شهر تو
+      {{ t('pages.climate.title') }}
     </h1>
     <p class="mb-6 text-ink-muted">
-      شهرت را انتخاب کن تا گیاهان سازگار با آب‌وهوای آن را ببینی.
+      {{ t('pages.climate.subtitle') }}
     </p>
 
     <div class="mb-8 max-w-xs">
@@ -44,10 +51,10 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
             class="mx-auto mb-1 size-5 text-primary-600"
         />
         <p class="text-sm font-medium text-ink">
-          {{ toPersianDigits(selectedCity.avgTemp[0]) }} تا {{ toPersianDigits(selectedCity.avgTemp[1]) }}°
+          {{ toPersianDigits(selectedCity.avgTemp[0]) }}–{{ toPersianDigits(selectedCity.avgTemp[1]) }}°
         </p>
         <p class="text-xs text-ink-muted">
-          دمای سالانه
+          {{ t('pages.climate.annualTemperature') }}
         </p>
       </div>
       <div class="glass-card p-4 text-center">
@@ -59,7 +66,7 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
           {{ humidityLabelMap[selectedCity.humidity] }}
         </p>
         <p class="text-xs text-ink-muted">
-          رطوبت هوا
+          {{ t('pages.climate.humidity') }}
         </p>
       </div>
       <div class="glass-card p-4 text-center">
@@ -71,7 +78,7 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
           {{ selectedCity.climateType }}
         </p>
         <p class="text-xs text-ink-muted">
-          نوع اقلیم
+          {{ t('pages.climate.climateType') }}
         </p>
       </div>
       <div class="glass-card p-4 text-center">
@@ -80,16 +87,16 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
             class="mx-auto mb-1 size-5 text-primary-600"
         />
         <p class="text-sm font-medium text-ink">
-          {{ toPersianDigits(suitablePlants.length) }} گیاه
+          {{ toPersianDigits(suitablePlants.length) }} {{ t('pages.climate.plantCount') }}
         </p>
         <p class="text-xs text-ink-muted">
-          پیشنهاد سازگار
+          {{ t('pages.climate.suitableRecommendations') }}
         </p>
       </div>
     </div>
 
     <h2 class="mb-4 text-lg font-bold text-ink">
-      گیاهان پیشنهادی برای {{ selectedCity?.name }}
+      {{ t('pages.climate.plantsForCity', { city: selectedCity?.name }) }}
     </h2>
     <div
         v-if="suitablePlants.length"
@@ -105,7 +112,7 @@ const humidityLabelMap: Record<string, string> = { low: 'کم', medium: 'متو�
         v-else
         class="text-ink-muted"
     >
-      برای این شهر هنوز پیشنهادی ثبت نشده.
+      {{ t('pages.climate.empty') }}
     </p>
   </div>
 </template>

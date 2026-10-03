@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { mockDiseases } from '~/services/mock/diseases.mock'
+import { getMockDiseases } from '~/services/mock/diseases.mock'
 import { seasonByTheme } from '~/stores/ui.store'
 
 const plantStore = usePlantStore()
-const { data: featured } = await useAsyncData('featured-plants', () => plantStore.fetchFeatured().then(() => plantStore.featured))
-
 const uiStore = useUiStore()
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const searchQuery = ref('')
+const diseases = computed(() => getMockDiseases(activeLocale.value))
+const featured = computed(() => plantStore.featured)
+await useAsyncData(
+  `featured-plants-${activeLocale.value}`,
+  () => plantStore.fetchFeatured(activeLocale.value, t('errors.featuredPlants')).then(() => plantStore.featured),
+)
+watch(activeLocale, locale => plantStore.fetchFeatured(locale, t('errors.featuredPlants')))
 
 const bgImage = computed(() => `/images/bg-image/${seasonByTheme[uiStore.theme]}.webp`)
 
@@ -35,7 +42,7 @@ function onSearch() {
             <div class="flex items-center gap-3 text-white/90">
               <button
                   type="button"
-                  aria-label="منو"
+                  :aria-label="t('common.menu')"
                   class="flex flex-col justify-center gap-1"
                   @click="uiStore.mobileNavOpen = true"
               >
@@ -43,7 +50,7 @@ function onSearch() {
                 <span class="block h-0.5 w-5 rounded-full bg-white/90" />
                 <span class="block h-0.5 w-5 rounded-full bg-white/90" />
               </button>
-              <span class="text-sm">درباره‌ی زندگی و گیاهان</span>
+              <span class="text-sm">{{ t('home.about') }}</span>
             </div>
 
             <!-- عکس + عنوان -->
@@ -51,7 +58,7 @@ function onSearch() {
               <div class="aspect-square overflow-hidden rounded-2xl border border-white/25 shadow-lg">
                 <img
                     src="/images/plants/botanical-1.webp"
-                    alt="برگ‌های سبز"
+                    :alt="t('home.greenLeavesAlt')"
                     class="size-full object-cover"
                     loading="lazy"
                 >
@@ -59,7 +66,7 @@ function onSearch() {
 
               <div>
                 <h1 class="mb-6 text-3xl font-extrabold leading-tight text-white [text-shadow:0_2px_14px_rgba(0,0,0,0.35)] sm:text-5xl">
-                  لذت طبیعت
+                  {{ t('home.natureJoy') }}
                 </h1>
 
                 <div class="max-w-md border-t border-white/25 pt-4">
@@ -75,7 +82,7 @@ function onSearch() {
 
             <!-- نوار پایین -->
             <div class="flex flex-wrap items-center justify-between gap-4 border-t border-white/20 pt-5">
-              <span class="text-sm text-white/90">ارتباط با طبیعت</span>
+              <span class="text-sm text-white/90">{{ t('home.connectWithNature') }}</span>
               <div class="flex flex-wrap gap-3">
                 <NuxtLink
                     to="/identify"
@@ -91,7 +98,7 @@ function onSearch() {
                     to="/plants"
                     class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 >
-                  دایرة‌المعارف
+                  {{ t('nav.catalog') }}
                 </NuxtLink>
               </div>
             </div>
@@ -155,7 +162,7 @@ function onSearch() {
         </h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <NuxtLink
-              v-for="disease in mockDiseases"
+              v-for="disease in diseases"
               :key="disease.id"
               :to="`/identify`"
               class="flex flex-col gap-2 rounded-lg bg-surface p-4 shadow-card transition-shadow hover:shadow-card-hover"
@@ -175,7 +182,7 @@ function onSearch() {
     <!-- Educational Content -->
     <section class="mx-auto max-w-6xl px-4 py-14">
       <h2 class="mb-6 text-xl font-bold text-ink">
-        شروع کن با این راهنماها
+        {{ t('home.guidesTitle') }}
       </h2>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="rounded-lg border border-ink/5 p-5">
@@ -184,10 +191,10 @@ function onSearch() {
               class="mb-3 size-6 text-primary-600"
           />
           <h3 class="mb-1 font-medium text-ink">
-            آبیاری اصولی
+            {{ t('home.wateringTitle') }}
           </h3>
           <p class="text-sm text-ink-muted">
-            یاد بگیر چطور آبیاری بیش‌ازحد را تشخیص بدی و از پوسیدگی ریشه جلوگیری کنی.
+            {{ t('home.wateringDescription') }}
           </p>
         </div>
         <div class="rounded-lg border border-ink/5 p-5">
@@ -196,10 +203,10 @@ function onSearch() {
               class="mb-3 size-6 text-primary-600"
           />
           <h3 class="mb-1 font-medium text-ink">
-            نورسنجی خانه
+            {{ t('home.lightTitle') }}
           </h3>
           <p class="text-sm text-ink-muted">
-            هر گوشه خانه‌ات چقدر نور می‌گیرد و کدام گیاه با آن سازگار است؟
+            {{ t('home.lightDescription') }}
           </p>
         </div>
         <div class="rounded-lg border border-ink/5 p-5">
@@ -208,10 +215,10 @@ function onSearch() {
               class="mb-3 size-6 text-primary-600"
           />
           <h3 class="mb-1 font-medium text-ink">
-            تشخیص زودهنگام آفت
+            {{ t('home.pestTitle') }}
           </h3>
           <p class="text-sm text-ink-muted">
-            نشانه‌های اولیه آفت و بیماری را قبل از گسترش شناسایی کن.
+            {{ t('home.pestDescription') }}
           </p>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { Plant } from '~/types/plant.types'
+import type { MockLocale } from './mock-locale'
 
 export const mockPlants: Plant[] = [
   {
@@ -374,8 +375,126 @@ export const mockPlants: Plant[] = [
   },
 ]
 
-export function findPlantBySlug(slug: string): Plant | undefined {
-  return mockPlants.find(p => p.slug === slug)
+const englishPlantText: Record<string, Pick<Plant, 'name' | 'description' | 'category' | 'care'>> = {
+  'monstera-deliciosa': {
+    name: 'Monstera',
+    description: 'One of the most popular houseplants, Monstera transforms any room with its large, split leaves. It is relatively low-maintenance and suitable for beginners.',
+    category: 'Houseplant',
+    care: { ...mockPlants[0]!.care, soil: 'Light, well-draining soil enriched with leaf compost' },
+  },
+  'sansevieria-trifasciata': {
+    name: 'Snake Plant',
+    description: 'One of the toughest houseplants, it survives low light and neglect. An excellent choice for people new to plant care.',
+    category: 'Houseplant',
+    care: { ...mockPlants[1]!.care, soil: 'Well-draining cactus soil' },
+  },
+  'ficus-lyrata': {
+    name: 'Fiddle-Leaf Fig',
+    description: 'Its large, glossy, fig-like leaves make it a popular decorative feature, though it is sensitive to changes in its environment.',
+    category: 'Houseplant',
+    care: { ...mockPlants[2]!.care, soil: 'Rich, well-draining soil' },
+  },
+  'aloe-vera': {
+    name: 'Aloe Vera',
+    description: 'A hardy medicinal plant that grows best in direct sunlight. It suits sunny spaces and people who water less often.',
+    category: 'Medicinal',
+    care: { ...mockPlants[3]!.care, soil: 'Cactus soil' },
+  },
+  'epipremnum-aureum': {
+    name: 'Golden Pothos',
+    description: 'A hardy, fast-growing trailing vine that tolerates a range of light conditions. A classic choice for offices and kitchens.',
+    category: 'Trailing',
+    care: { ...mockPlants[4]!.care, soil: 'Standard potting soil' },
+  },
+  'spathiphyllum': {
+    name: 'Peace Lily',
+    description: 'With delicate white flowers, this plant adds beauty and can help improve indoor air. It needs relatively high humidity.',
+    category: 'Houseplant',
+    care: { ...mockPlants[5]!.care, soil: 'Moist soil rich in organic matter' },
+  },
+  'zamioculcas-zamiifolia': {
+    name: 'ZZ Plant',
+    description: 'An exceptionally resilient plant with glossy, thick leaves that can last for weeks without watering. Great for dim homes and offices.',
+    category: 'Houseplant',
+    care: { ...mockPlants[6]!.care, soil: 'Light, well-draining soil' },
+  },
+  'chlorophytum-comosum': {
+    name: 'Spider Plant',
+    description: 'Its striped, ribbon-like leaves grow on arching stems that produce small plantlets. It grows quickly and can also be grown in water.',
+    category: 'Trailing',
+    care: { ...mockPlants[7]!.care, soil: 'Standard potting soil with good drainage' },
+  },
+  'dracaena-marginata': {
+    name: 'Dragon Tree',
+    description: 'Its slender stems and red-edged leaves create a miniature-tree look. It tolerates dry conditions but can be harmed by fluoride-heavy water.',
+    category: 'Houseplant',
+    care: { ...mockPlants[8]!.care, soil: 'Light, well-draining soil' },
+  },
+  'philodendron-hederaceum': {
+    name: 'Heartleaf Philodendron',
+    description: 'A fast-growing trailing plant with heart-shaped leaves that stays attractive even in low light. One of the easiest plants for beginners.',
+    category: 'Trailing',
+    care: { ...mockPlants[9]!.care, soil: 'Light soil enriched with leaf compost' },
+  },
+  'calathea-orbifolia': {
+    name: 'Calathea Orbifolia',
+    description: 'One of the most beautiful yet sensitive houseplants, with round, silver-striped leaves. It needs high humidity and protection from direct sun.',
+    category: 'Houseplant',
+    care: { ...mockPlants[10]!.care, soil: 'Moist soil rich in organic matter' },
+  },
+  'peperomia-obtusifolia': {
+    name: 'Baby Rubber Plant',
+    description: 'A compact plant with thick, fleshy leaves that store water like a succulent. Well suited to desks and small spaces.',
+    category: 'Houseplant',
+    care: { ...mockPlants[11]!.care, soil: 'Light, well-draining soil' },
+  },
+  'crassula-ovata': {
+    name: 'Jade Plant',
+    description: 'A succulent with thick, rounded leaves that gradually develops a miniature-tree shape. It needs little water and grows best in direct sun.',
+    category: 'Cactus & Succulent',
+    care: { ...mockPlants[12]!.care, soil: 'Well-draining cactus soil' },
+  },
+  'echeveria-elegans': {
+    name: 'Mexican Snowball',
+    description: 'A flower-shaped succulent with blue-toned leaves arranged in a rosette. Popular in small pots and sunny windows.',
+    category: 'Cactus & Succulent',
+    care: { ...mockPlants[13]!.care, soil: 'Cactus soil' },
+  },
+  'rosa-chinensis': {
+    name: 'Miniature Rose',
+    description: 'A compact rose suitable for pots and balconies. Continuous flowering requires plenty of direct sun and regular pruning.',
+    category: 'Flowering',
+    care: { ...mockPlants[14]!.care, soil: 'Compost-rich soil with good drainage' },
+  },
+  'lavandula-angustifolia': {
+    name: 'English Lavender',
+    description: 'An aromatic medicinal herb with purple flowers that grows best in full sun and dry soil. Its calming fragrance also makes it a garden favorite.',
+    category: 'Medicinal',
+    care: { ...mockPlants[15]!.care, soil: 'Light, alkaline, well-draining soil' },
+  },
+}
+
+function localizePlant(plant: Plant, locale: MockLocale): Plant {
+  const translation = locale === 'en' ? englishPlantText[plant.slug] : undefined
+  return {
+    ...plant,
+    images: [...plant.images],
+    description: translation?.description ?? plant.description,
+    name: translation?.name ?? plant.name,
+    category: translation?.category ?? plant.category,
+    care: { ...plant.care, ...(translation?.care ?? {}) },
+    toxicity: { ...plant.toxicity, toxicTo: [...plant.toxicity.toxicTo] },
+    commonIssues: [...plant.commonIssues],
+  }
+}
+
+export function getMockPlants(locale: MockLocale = 'fa'): Plant[] {
+  return mockPlants.map(plant => localizePlant(plant, locale))
+}
+
+export function findPlantBySlug(slug: string, locale: MockLocale = 'fa'): Plant | undefined {
+  const plant = mockPlants.find(p => p.slug === slug)
+  return plant ? localizePlant(plant, locale) : undefined
 }
 
 export function searchPlants(
@@ -385,13 +504,19 @@ export function searchPlants(
     light?: string,
     family?: string,
     genus?: string,
+    locale: MockLocale = 'fa',
 ): Plant[] {
-  return mockPlants.filter((p) => {
+  const categoryValues: Record<string, Record<MockLocale, string>> = {
+    indoor: { fa: 'آپارتمانی', en: 'Indoor' },
+    hanging: { fa: 'آویز', en: 'Hanging' },
+    medicinal: { fa: 'دارویی', en: 'Medicinal' },
+  }
+  return mockPlants.map(p => localizePlant(p, locale)).filter((p) => {
     const matchQuery
         = !query
         || p.name.includes(query)
         || p.scientificName.toLowerCase().includes(query.toLowerCase())
-    const matchCategory = !category || category === 'all' || p.category === category
+    const matchCategory = !category || category === 'all' || p.category === (categoryValues[category]?.[locale] ?? category)
     const matchDifficulty = !difficulty || difficulty === 'all' || p.difficulty === difficulty
     const matchLight = !light || light === 'all' || p.care.light === light
     const matchFamily = !family || family === 'all' || p.family === family
@@ -411,10 +536,10 @@ export function listGenera(family?: string): string[] {
   return Array.from(new Set(source.map(p => p.genus))).sort()
 }
 
-export function suggestPlants(query: string, limit = 5): Plant[] {
+export function suggestPlants(query: string, limit = 5, locale: MockLocale = 'fa'): Plant[] {
   if (!query.trim()) return []
   const q = query.trim()
-  return mockPlants
+  return mockPlants.map(p => localizePlant(p, locale))
       .filter(p => p.name.includes(q) || p.scientificName.toLowerCase().includes(q.toLowerCase()))
       .slice(0, limit)
 }

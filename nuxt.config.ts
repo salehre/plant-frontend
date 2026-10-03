@@ -66,8 +66,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'پلنت',
-      short_name: 'پلنت',
+      name: 'Golban',
+      short_name: 'Golban',
       description: 'اپلیکیشن نگهداری و شناسایی گیاهان',
       lang: 'fa',
       dir: 'rtl',

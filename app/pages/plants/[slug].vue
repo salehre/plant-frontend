@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { mockDiseases } from '~/services/mock/diseases.mock'
+import { getMockDiseases } from '~/services/mock/diseases.mock'
 import { findPlantDetailBySlug } from '~/services/mock/plant-details.mock'
 
 const route = useRoute()
 const plantStore = usePlantStore()
 const wishlistStore = useWishlistStore()
 const uiStore = useUiStore()
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
 const slug = route.params.slug as string
-await useAsyncData(`plant-${slug}`, () => plantStore.fetchBySlug(slug).then(() => true))
+await useAsyncData(
+  `plant-${slug}-${activeLocale.value}`,
+  () => plantStore.fetchBySlug(slug, activeLocale.value, t('errors.plantDetail')).then(() => true),
+)
+watch(activeLocale, locale => plantStore.fetchBySlug(slug, locale, t('errors.plantDetail')))
 
 const plant = computed(() => plantStore.current)
-const detail = computed(() => findPlantDetailBySlug(slug))
+const detail = computed(() => findPlantDetailBySlug(slug, activeLocale.value))
 
 function findDisease(id: string) {
-  return mockDiseases.find(d => d.id === id)
+  return getMockDiseases(activeLocale.value).find(d => d.id === id)
 }
 
 // ============ اسکرول به بخش حفاظت (از روی بج وضعیت حفاظتی) ============
@@ -30,8 +36,10 @@ function goToTarget() {
 // ============ نشان‌کردن (وصل به wishlistStore واقعی) و اشتراک‌گذاری ============
 const isBookmarked = computed(() => wishlistStore.isWishlisted(slug))
 function toggleBookmark() {
-  wishlistStore.toggle(slug)
-  uiStore.showToast(isBookmarked.value ? 'به نشان‌شده‌ها اضافه شد' : 'از نشان‌شده‌ها حذف شد', 'success')
+  wishlistStore.toggle(slug, {
+    added: t('plantDetail.addedToWishlist'),
+    removed: t('plantDetail.removedFromWishlist'),
+  })
 }
 async function sharePlant() {
   if (!plant.value) return
@@ -42,7 +50,7 @@ async function sharePlant() {
     }
     else {
       await navigator.clipboard.writeText(window.location.href)
-      uiStore.showToast('لینک کپی شد', 'success')
+      uiStore.showToast(t('plantDetail.linkCopied'), 'success')
     }
   }
   catch {
@@ -75,39 +83,39 @@ const filteredTaxonomy = computed(() => {
   return rest
 })
 
-const taxonomyLabels: Record<string, string> = {
-  kingdom: 'فرمانرو',
-  division: 'دسته',
-  class: 'رده',
-  order: 'راسته',
-  family: 'تیره',
-  genus: 'جنس',
-  species: 'گونه',
-  subspecies: 'زیرگونه',
-}
-const getTaxonomyLabel = (key: string) => taxonomyLabels[key] || key
+const taxonomyLabels = computed<Record<string, string>>(() => ({
+  kingdom: t('plantDetail.taxonomy.kingdom'),
+  division: t('plantDetail.taxonomy.division'),
+  class: t('plantDetail.taxonomy.class'),
+  order: t('plantDetail.taxonomy.order'),
+  family: t('plantDetail.taxonomy.family'),
+  genus: t('plantDetail.taxonomy.genus'),
+  species: t('plantDetail.taxonomy.species'),
+  subspecies: t('plantDetail.taxonomy.subspecies'),
+}))
+const getTaxonomyLabel = (key: string) => taxonomyLabels.value[key] || key
 
-const morphLabels: Record<string, string> = {
-  plantType: 'نوع گیاه',
-  leaf: 'برگ',
-  flower: 'گل',
-  stem: 'ساقه',
-  root: 'ریشه',
-  fruit: 'میوه',
-  seed: 'دانه',
-  bark: 'پوست',
-  latex: 'شیرابه',
-}
-const getMorphLabel = (key: string) => morphLabels[key] || key
+const morphLabels = computed<Record<string, string>>(() => ({
+  plantType: t('plantDetail.morphology.plantType'),
+  leaf: t('plantDetail.morphology.leaf'),
+  flower: t('plantDetail.morphology.flower'),
+  stem: t('plantDetail.morphology.stem'),
+  root: t('plantDetail.morphology.root'),
+  fruit: t('plantDetail.morphology.fruit'),
+  seed: t('plantDetail.morphology.seed'),
+  bark: t('plantDetail.morphology.bark'),
+  latex: t('plantDetail.morphology.latex'),
+}))
+const getMorphLabel = (key: string) => morphLabels.value[key] || key
 
-const needLabels: Record<string, string> = {
-  light: 'نور',
-  water: 'آب',
-  soil: 'خاک',
-  temperature: 'دما',
-  growthAltitude: 'ارتفاع رویش',
-}
-const getNeedLabel = (key: string) => needLabels[key] || key
+const needLabels = computed<Record<string, string>>(() => ({
+  light: t('plantDetail.requirements.light'),
+  water: t('plantDetail.requirements.water'),
+  soil: t('plantDetail.requirements.soil'),
+  temperature: t('plantDetail.requirements.temperature'),
+  growthAltitude: t('plantDetail.requirements.growthAltitude'),
+}))
+const getNeedLabel = (key: string) => needLabels.value[key] || key
 
 const growthIcons: Record<string, string> = {
   light: 'lucide:sun',
@@ -131,7 +139,7 @@ const growthIcons: Record<string, string> = {
 
   <div
       v-else-if="plant && detail"
-      class="min-h-screen bg-bg pb-10"
+      class="plant-detail-page min-h-screen bg-bg pb-10"
   >
     <!-- ========== هدر ========== -->
     <div class="relative overflow-visible bg-gradient-to-l from-primary-900 via-primary-800 to-primary-700 px-4 pb-4 pt-10 text-white sm:px-8 sm:pt-14">
@@ -152,7 +160,7 @@ const growthIcons: Record<string, string> = {
             {{ plant.scientificName }}
           </p>
           <p class="text-xs opacity-70 sm:text-sm">
-            وضع‌کننده: {{ detail.taxonomy.authority }}
+            {{ t('plantDetail.authority') }}: {{ detail.taxonomy.authority }}
           </p>
 
           <button
@@ -160,7 +168,7 @@ const growthIcons: Record<string, string> = {
               class="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-400/90 px-3 py-1.5 text-xs font-semibold text-primary-900 transition hover:bg-accent-300"
               @click="goToTarget"
           >
-            وضعیت حفاظتی: {{ detail.conservationBadge }}
+            {{ t('plantDetail.conservationStatus') }}: {{ detail.conservationBadge }}
           </button>
 
           <div class="mt-1 flex items-center gap-2">
@@ -168,7 +176,7 @@ const growthIcons: Record<string, string> = {
                 type="button"
                 class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
                 :aria-pressed="isBookmarked"
-                :aria-label="isBookmarked ? 'حذف از علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'"
+                :aria-label="isBookmarked ? t('plantDetail.removeFromWishlist') : t('plantDetail.addToWishlist')"
                 @click="toggleBookmark"
             >
               <Icon :name="isBookmarked ? 'lucide:bookmark-check' : 'lucide:bookmark'" class="size-4" />
@@ -176,7 +184,7 @@ const growthIcons: Record<string, string> = {
             <button
                 type="button"
                 class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
-                aria-label="اشتراک‌گذاری"
+                :aria-label="t('plantDetail.share')"
                 @click="sharePlant"
             >
               <Icon name="lucide:share-2" class="size-4" />
@@ -184,7 +192,7 @@ const growthIcons: Record<string, string> = {
             <button
                 type="button"
                 class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
-                aria-label="مقایسه با گیاه دیگر"
+                :aria-label="t('plantDetail.compare')"
                 @click="navigateTo(`/compare/${slug}`)"
             >
               <Icon name="lucide:git-compare" class="size-4" />
@@ -224,7 +232,7 @@ const growthIcons: Record<string, string> = {
           <!-- طبقه‌بندی علمی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              طبقه‌بندی علمی
+              {{ t('plantDetail.taxonomyTitle') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Taxonomy</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -240,7 +248,7 @@ const growthIcons: Record<string, string> = {
               </tr>
               <tr>
                 <td class="w-2/5 bg-bg px-4 py-3 text-xs font-semibold text-primary-900">
-                  وضع‌کننده (Authority)
+                  {{ t('plantDetail.authority') }} (Authority)
                 </td>
                 <td class="px-4 py-3 text-xs text-ink">
                   {{ detail.taxonomy.authority }}
@@ -253,7 +261,7 @@ const growthIcons: Record<string, string> = {
           <!-- ویژگی‌های زیست‌شناسی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              ویژگی‌های زیست‌شناسی
+              {{ t('plantDetail.morphologyTitle') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Morphology</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -277,14 +285,14 @@ const growthIcons: Record<string, string> = {
           <!-- کاربردها -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              کاربردها
+              {{ t('plantDetail.applicationsTitle') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Applications</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <div class="space-y-3">
               <div>
                 <span class="text-status-success">●</span>
-                <strong class="text-sm"> خوراکی:</strong>
+                <strong class="text-sm">{{ t('plantDetail.edible') }}:</strong>
                 <ul class="mr-5 mt-1.5 list-none space-y-1.5">
                   <li v-for="item in detail.applications.food" :key="item" class="text-sm text-ink">
                     {{ item }}
@@ -293,7 +301,7 @@ const growthIcons: Record<string, string> = {
               </div>
               <div>
                 <span class="text-status-info">●</span>
-                <strong class="text-sm"> صنعتی:</strong>
+                <strong class="text-sm">{{ t('plantDetail.industrial') }}:</strong>
                 <ul class="mr-5 mt-1.5 list-none space-y-1.5">
                   <li v-for="item in detail.applications.industrial" :key="item" class="text-sm text-ink">
                     {{ item }}
@@ -302,7 +310,7 @@ const growthIcons: Record<string, string> = {
               </div>
               <div>
                 <span class="text-accent-600">●</span>
-                <strong class="text-sm"> درمانی:</strong>
+                <strong class="text-sm">{{ t('plantDetail.therapeutic') }}:</strong>
                 <ul class="mr-5 mt-1.5 list-none space-y-1.5">
                   <li v-for="item in detail.applications.therapeutic" :key="item" class="text-sm text-ink">
                     {{ item }}
@@ -315,13 +323,13 @@ const growthIcons: Record<string, string> = {
           <!-- ترکیبات شیمیایی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              ترکیبات شیمیایی
+              {{ t('plantDetail.chemicalCompounds') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Phytochemistry</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
 
             <div class="rounded-md border-r-4 border-accent-400 bg-bg px-4 py-3">
-              <span class="block text-xs font-semibold text-ink-muted">ماده مؤثره اصلی:</span>
+              <span class="block text-xs font-semibold text-ink-muted">{{ t('plantDetail.mainActiveCompound') }}:</span>
               <span class="text-sm font-medium text-primary-900">{{ detail.chemicalCompounds.majorCompound }}</span>
             </div>
 
@@ -355,7 +363,7 @@ const growthIcons: Record<string, string> = {
           <!-- نیازهای رشدی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              نیازهای رشدی
+              {{ t('plantDetail.growthRequirements') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Growth Requirements</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -383,7 +391,7 @@ const growthIcons: Record<string, string> = {
           <!-- داستان گیاه -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              داستان گیاه
+              {{ t('plantDetail.story') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Plant Story</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -395,13 +403,13 @@ const growthIcons: Record<string, string> = {
           <!-- سمّیت -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              سمّیت
+              {{ t('plantDetail.toxicity') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Toxicity</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
-            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-warning bg-amber-50 px-4 py-3">
+            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-warning bg-status-warning/10 px-4 py-3">
               <Icon name="lucide:triangle-alert" class="size-5 shrink-0 text-status-warning" />
-              <div class="text-sm text-ink"><strong>سمیت:</strong> {{ detail.toxicityText }}</div>
+              <div class="text-sm text-ink"><strong>{{ t('plantDetail.toxicity') }}:</strong> {{ detail.toxicityText }}</div>
             </div>
           </section>
 
@@ -411,7 +419,7 @@ const growthIcons: Record<string, string> = {
               class="glass-card p-5 sm:p-6"
           >
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              مشکلات رایج
+              {{ t('plantDetail.commonProblems') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Common Issues</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -444,20 +452,20 @@ const growthIcons: Record<string, string> = {
           <!-- حفاظت -->
           <section ref="targetSection" class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              حفاظت
+              {{ t('plantDetail.conservation') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Status</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
-            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-info bg-sky-50 px-4 py-3">
+            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-info bg-status-info/10 px-4 py-3">
               <Icon name="lucide:shield" class="size-5 shrink-0 text-status-info" />
-              <div class="text-sm text-ink"><strong>وضعیت حفاظتی:</strong> {{ detail.conservationStatus }}</div>
+              <div class="text-sm text-ink"><strong>{{ t('plantDetail.conservationStatus') }}:</strong> {{ detail.conservationStatus }}</div>
             </div>
           </section>
 
           <!-- نام‌های محلی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              نام‌های محلی
+              {{ t('plantDetail.localNames') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Local Names</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -476,7 +484,7 @@ const growthIcons: Record<string, string> = {
           <!-- مترادف‌های علمی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              مترادف‌های علمی
+              {{ t('plantDetail.scientificSynonyms') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Synonyms</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -495,7 +503,7 @@ const growthIcons: Record<string, string> = {
           <!-- دوره فسیلی -->
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              دوره فسیلی
+              {{ t('plantDetail.fossilPeriod') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Fossil Record</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -508,9 +516,9 @@ const growthIcons: Record<string, string> = {
       </div>
 
       <!-- ========== گالری تصاویر ========== -->
-      <section class="glass-card group overflow-hidden text-right transition hover:-translate-y-1">
+      <section class="glass-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1">
         <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-          گالری تصاویر
+          {{ t('plantDetail.gallery') }}
           <span class="text-xs font-normal tracking-wide text-ink-muted">Image Gallery</span>
         </h2>
         <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
@@ -585,6 +593,28 @@ const growthIcons: Record<string, string> = {
       v-else
       class="mx-auto max-w-5xl px-4 py-20 text-center text-ink-muted"
   >
-    گیاهی با این مشخصات پیدا نشد.
+    {{ t('plantDetail.notFound') }}
   </div>
 </template>
+
+<style scoped>
+.plant-detail-page {
+  --plant-ink: var(--color-ink);
+  --plant-ink-muted: var(--color-ink-muted);
+}
+
+.plant-detail-page :deep(.glass-card) {
+  --color-ink: var(--plant-ink);
+  --color-ink-muted: var(--plant-ink-muted);
+  color: rgb(var(--plant-ink));
+  text-shadow: none;
+}
+
+.plant-detail-page :deep(.glass-card .text-primary-900) {
+  color: rgb(var(--plant-ink));
+}
+
+.plant-detail-page :deep(.font-serif) {
+  font-family: inherit;
+}
+</style>

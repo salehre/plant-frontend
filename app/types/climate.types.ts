@@ -4,6 +4,6 @@ export interface CityClimate {
   province: string
   avgTemp: [number, number]
   humidity: 'low' | 'medium' | 'high'
-  climateType: 'خشک' | 'معتدل' | 'مرطوب' | 'کوهستانی'
+  climateType: 'خشک' | 'معتدل' | 'مرطوب' | 'کوهستانی' | 'dry' | 'temperate' | 'humid' | 'mountainous'
   suitablePlantSlugs: string[]
 }

@@ -1,36 +1,38 @@
 <script setup lang="ts">
 const route = useRoute()
 const plantStore = usePlantStore()
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
 plantStore.query = (route.query.q as string) ?? ''
 
-const categories = [
-  { label: 'همه دسته‌ها', value: 'all' },
-  { label: 'آپارتمانی', value: 'آپارتمانی' },
-  { label: 'آویز', value: 'آویز' },
-  { label: 'دارویی', value: 'دارویی' },
-]
-const difficulties = [
-  { label: 'همه سطوح مراقبت', value: 'all' },
-  { label: 'آسان', value: 'easy' },
-  { label: 'متوسط', value: 'medium' },
-  { label: 'سخت', value: 'hard' },
-]
-const lightOptions = [
-  { label: 'همه نیازهای نوری', value: 'all' },
-  { label: 'کم‌نور', value: 'low' },
-  { label: 'نور غیرمستقیم', value: 'medium' },
-  { label: 'نور زیاد', value: 'high' },
-  { label: 'آفتاب مستقیم', value: 'direct' },
-]
+const categories = computed(() => [
+  { label: t('pages.catalog.filters.allCategories'), value: 'all' },
+  { label: t('pages.catalog.filters.indoor'), value: 'indoor' },
+  { label: t('pages.catalog.filters.hanging'), value: 'hanging' },
+  { label: t('pages.catalog.filters.medicinal'), value: 'medicinal' },
+])
+const difficulties = computed(() => [
+  { label: t('pages.catalog.filters.allDifficulties'), value: 'all' },
+  { label: t('pages.catalog.filters.easy'), value: 'easy' },
+  { label: t('pages.catalog.filters.medium'), value: 'medium' },
+  { label: t('pages.catalog.filters.hard'), value: 'hard' },
+])
+const lightOptions = computed(() => [
+  { label: t('pages.catalog.filters.allLight'), value: 'all' },
+  { label: t('pages.catalog.filters.lowLight'), value: 'low' },
+  { label: t('pages.catalog.filters.indirectLight'), value: 'medium' },
+  { label: t('pages.catalog.filters.highLight'), value: 'high' },
+  { label: t('pages.catalog.filters.directSun'), value: 'direct' },
+])
 
 // گزینه‌های فیلتر تاکسونومیک (family/genus) از دیتاست واقعی می‌آیند، نه هاردکد
 const familyDropdownOptions = computed(() => [
-  { label: 'همه خانواده‌ها', value: 'all' },
+  { label: t('pages.catalog.filters.allFamilies'), value: 'all' },
   ...plantStore.familyOptions.map(f => ({ label: f, value: f })),
 ])
 const genusDropdownOptions = computed(() => [
-  { label: 'همه جنس‌ها', value: 'all' },
+  { label: t('pages.catalog.filters.allGenera'), value: 'all' },
   ...plantStore.genusOptions.map(g => ({ label: g, value: g })),
 ])
 
@@ -42,21 +44,15 @@ plantStore.genus = (route.query.genus as string) ?? 'all'
 
 const showAdvanced = ref(!!route.query.family || !!route.query.genus)
 
-await plantStore.fetchFilterOptions()
-await useAsyncData('plant-list', () => plantStore.fetchList().then(() => true), {
-  watch: [
-    () => plantStore.query,
-    () => plantStore.category,
-    () => plantStore.difficulty,
-    () => plantStore.light,
-    () => plantStore.family,
-    () => plantStore.genus,
-  ],
-})
+await plantStore.fetchFilterOptions(t('errors.plantFilters'))
+await useAsyncData(
+  `plant-list-${activeLocale.value}`,
+  () => plantStore.fetchList(activeLocale.value, t('errors.plantList')).then(() => true),
+)
 
 watch(
-  [() => plantStore.query, () => plantStore.category, () => plantStore.difficulty, () => plantStore.light, () => plantStore.genus],
-  () => plantStore.fetchList(),
+  [() => plantStore.query, () => plantStore.category, () => plantStore.difficulty, () => plantStore.light, () => plantStore.genus, () => activeLocale.value],
+  () => plantStore.fetchList(activeLocale.value, t('errors.plantList')),
 )
 
 // وقتی خانواده عوض میشه، لیست جنس‌ها باید دوباره محاسبه بشه و جنس انتخاب‌شده‌ی قبلی معتبر نمونه
@@ -64,8 +60,8 @@ watch(
   () => plantStore.family,
   async () => {
     plantStore.genus = 'all'
-    await plantStore.fetchFilterOptions()
-    await plantStore.fetchList()
+    await plantStore.fetchFilterOptions(t('errors.plantFilters'))
+    await plantStore.fetchList(activeLocale.value, t('errors.plantList'))
   },
 )
 
@@ -81,10 +77,10 @@ function resetFilters() {
 <template>
   <div class="mx-auto max-w-6xl px-4 py-10">
     <h1 class="mb-2 text-2xl font-bold text-ink">
-      {{ $t('catalog') }}
+      {{ t('nav.catalog') }}
     </h1>
     <p class="mb-6 text-ink-muted">
-      هر آنچه برای شناخت و انتخاب گیاه مناسب نیاز داری.
+      {{ t('pages.catalog.subtitle') }}
     </p>
 
     <div class="mb-4 flex flex-col gap-3 sm:flex-row">
@@ -105,7 +101,7 @@ function resetFilters() {
           name="lucide:sliders-horizontal"
           class="size-4"
         />
-        فیلتر پیشرفته
+        {{ t('pages.catalog.advancedFilters') }}
       </AppButton>
     </div>
 
@@ -130,21 +126,21 @@ function resetFilters() {
           <AppDropdown
             v-model="plantStore.family"
             :options="familyDropdownOptions"
-            placeholder="خانواده (Family)"
+            :placeholder="t('pages.catalog.family')"
           />
         </div>
         <div class="sm:w-56">
           <AppDropdown
             v-model="plantStore.genus"
             :options="genusDropdownOptions"
-            placeholder="جنس (Genus)"
+            :placeholder="t('pages.catalog.genus')"
           />
         </div>
         <button
           class="text-sm text-primary-700 hover:underline"
           @click="resetFilters"
         >
-          پاک کردن فیلترها
+          {{ t('pages.catalog.clearFilters') }}
         </button>
       </div>
     </Transition>
@@ -193,7 +189,7 @@ function resetFilters() {
         class="size-10 text-ink-muted"
       />
       <p class="text-ink-muted">
-        گیاهی با این مشخصات پیدا نشد. عبارت دیگری را امتحان کن.
+        {{ t('pages.catalog.empty') }}
       </p>
     </div>
   </div>

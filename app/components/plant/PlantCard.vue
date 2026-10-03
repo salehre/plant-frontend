@@ -1,7 +1,25 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { Plant } from '~/types/plant.types'
 
 const props = defineProps<{ plant: Plant }>()
+const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+
+const lightKeys: Record<string, string> = {
+  low: 'components.common.lightLow',
+  medium: 'components.common.lightMedium',
+  high: 'components.common.lightHigh',
+  direct: 'components.common.lightDirect',
+}
+const waterKeys: Record<string, string> = {
+  low: 'components.common.waterLow',
+  medium: 'components.common.waterMedium',
+  high: 'components.common.waterHigh',
+}
+function translatedValue(keys: Record<string, string>, value: string) {
+  const key = keys[value]
+  return key ? t(key) : value
+}
 </script>
 
 <template>
@@ -28,11 +46,11 @@ const props = defineProps<{ plant: Plant }>()
       <div class="mt-2 flex flex-wrap gap-1.5">
         <RequirementBadge
           icon="lucide:sun"
-          :label="lightLabel(props.plant.care.light)"
+          :label="translatedValue(lightKeys, props.plant.care.light)"
         />
         <RequirementBadge
           icon="lucide:droplets"
-          :label="waterLabel(props.plant.care.water)"
+          :label="translatedValue(waterKeys, props.plant.care.water)"
         />
       </div>
     </div>

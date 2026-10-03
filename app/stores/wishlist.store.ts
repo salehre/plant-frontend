@@ -20,14 +20,14 @@ export const useWishlistStore = defineStore('wishlist', {
     isWishlisted(slug: string) {
       return this.slugs.includes(slug)
     },
-    toggle(slug: string) {
+    toggle(slug: string, messages: { added: string, removed: string }) {
       if (this.isWishlisted(slug)) {
         this.slugs = this.slugs.filter(s => s !== slug)
-        useUiStore().showToast('از علاقه‌مندی‌ها حذف شد', 'info')
+        useUiStore().showToast(messages.removed, 'info')
       }
       else {
         this.slugs = [...this.slugs, slug]
-        useUiStore().showToast('به علاقه‌مندی‌ها اضافه شد')
+        useUiStore().showToast(messages.added)
       }
     },
     remove(slug: string) {

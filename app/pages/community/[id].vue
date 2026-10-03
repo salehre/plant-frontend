@@ -3,10 +3,12 @@ definePageMeta({ layout: 'dashboard' }) // middleware: 'auth' فعلاً موق�
 
 const route = useRoute()
 const communityStore = useCommunityStore()
+const { t, locale } = useI18n()
+const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
 const userId = route.params.id as string
-const user = computed(() => communityStore.getUser(userId))
-const posts = computed(() => communityStore.postsByUser(userId))
+const user = computed(() => communityStore.getUser(userId, activeLocale.value))
+const posts = computed(() => communityStore.postsByUser(userId, activeLocale.value))
 </script>
 
 <template>
@@ -22,7 +24,7 @@ const posts = computed(() => communityStore.postsByUser(userId))
         name="lucide:arrow-right"
         class="size-4"
       />
-      بازگشت به فید
+      {{ t('pages.community.backToFeed') }}
     </NuxtLink>
 
     <UserProfileCard
@@ -32,7 +34,7 @@ const posts = computed(() => communityStore.postsByUser(userId))
 
     <div>
       <h2 class="mb-3 font-bold text-ink">
-        پست‌های {{ user.name }}
+        {{ t('pages.community.userPosts', { name: user.name }) }}
       </h2>
       <div
         v-if="posts.length"
@@ -48,7 +50,7 @@ const posts = computed(() => communityStore.postsByUser(userId))
         v-else
         class="text-sm text-ink-muted"
       >
-        هنوز پستی منتشر نکرده.
+        {{ t('pages.community.noPosts') }}
       </p>
     </div>
   </div>
@@ -57,6 +59,6 @@ const posts = computed(() => communityStore.postsByUser(userId))
     v-else
     class="py-16 text-center text-ink-muted"
   >
-    کاربری با این مشخصات پیدا نشد.
+    {{ t('pages.community.userNotFound') }}
   </div>
 </template>

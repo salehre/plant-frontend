@@ -2,6 +2,7 @@
 definePageMeta({ layout: 'dashboard' }) // middleware: 'auth' فعلاً موقتاً غیرفعاله تا فرانت بدون لاگین قابل تست باشه؛ وقتی auth واقعی وصل شد برگردون
 
 const userPlantsStore = useUserPlantsStore()
+const { t } = useI18n()
 
 function plantNickname(userPlantId: string) {
   return userPlantsStore.plants.find(p => p.id === userPlantId)?.nickname ?? ''
@@ -11,14 +12,14 @@ function plantNickname(userPlantId: string) {
 <template>
   <div class="flex flex-col gap-8">
     <h1 class="text-2xl font-bold text-ink">
-      {{ $t('careCalendar') }}
+      {{ t('nav.careCalendar') }}
     </h1>
 
     <CareCalendar :tasks="[...userPlantsStore.todayTasks, ...userPlantsStore.upcomingTasks]" />
 
     <div>
       <h2 class="mb-3 font-bold text-ink">
-        وظایف پیش رو
+        {{ t('pages.careCalendar.upcoming') }}
       </h2>
       <div
         v-if="userPlantsStore.upcomingTasks.length"
@@ -36,7 +37,7 @@ function plantNickname(userPlantId: string) {
         v-else
         class="text-sm text-ink-muted"
       >
-        در روزهای پیش رو وظیفه‌ای ثبت نشده.
+        {{ t('pages.careCalendar.empty') }}
       </p>
     </div>
   </div>

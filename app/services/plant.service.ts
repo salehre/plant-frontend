@@ -1,6 +1,7 @@
-import { mockPlants, findPlantBySlug, searchPlants, listFamilies, listGenera } from './mock/plants.mock'
+import { getMockPlants, findPlantBySlug, searchPlants, listFamilies, listGenera } from './mock/plants.mock'
 import { useApiClient } from './api/client'
 import type { Plant } from '~/types/plant.types'
+import type { MockLocale } from './mock/mock-locale'
 
 /**
  * هر تابع این فایل، مرز رسمی بین Mock Data و Laravel API واقعی است.
@@ -14,11 +15,12 @@ export async function getPlantList(
   light = '',
   family = '',
   genus = '',
+  locale: MockLocale = 'fa',
 ): Promise<Plant[]> {
   const { public: pub } = useRuntimeConfig()
   if (pub.useMockApi) {
     await simulateDelay()
-    return searchPlants(query, category, difficulty, light, family, genus)
+    return searchPlants(query, category, difficulty, light, family, genus, locale)
   }
   const { get } = useApiClient()
   return get<Plant[]>(
@@ -36,32 +38,32 @@ export async function getFilterOptions(family = ''): Promise<{ families: string[
   return get<{ families: string[], genera: string[] }>(`/plants/filter-options?family=${family}`)
 }
 
-export async function getPlantBySlug(slug: string): Promise<Plant | undefined> {
+export async function getPlantBySlug(slug: string, locale: MockLocale = 'fa'): Promise<Plant | undefined> {
   const { public: pub } = useRuntimeConfig()
   if (pub.useMockApi) {
     await simulateDelay(300)
-    return findPlantBySlug(slug)
+    return findPlantBySlug(slug, locale)
   }
   const { get } = useApiClient()
   return get<Plant>(`/plants/${slug}`)
 }
 
-export async function getFeaturedPlants(): Promise<Plant[]> {
+export async function getFeaturedPlants(locale: MockLocale = 'fa'): Promise<Plant[]> {
   const { public: pub } = useRuntimeConfig()
   if (pub.useMockApi) {
     await simulateDelay(200)
-    return mockPlants.slice(0, 4)
+    return getMockPlants(locale).slice(0, 4)
   }
   const { get } = useApiClient()
   return get<Plant[]>('/plants/featured')
 }
 
 /** برای رزولوکردن لیست Wishlist (که فقط slug نگه می‌داره) به آبجکت کامل گیاه */
-export async function getPlantsBySlugs(slugs: string[]): Promise<Plant[]> {
+export async function getPlantsBySlugs(slugs: string[], locale: MockLocale = 'fa'): Promise<Plant[]> {
   const { public: pub } = useRuntimeConfig()
   if (pub.useMockApi) {
     await simulateDelay(150)
-    return mockPlants.filter(p => slugs.includes(p.slug))
+    return getMockPlants(locale).filter(p => slugs.includes(p.slug))
   }
   const { get } = useApiClient()
   return get<Plant[]>(`/plants/by-slugs?slugs=${slugs.join(',')}`)

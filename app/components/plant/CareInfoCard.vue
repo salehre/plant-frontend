@@ -1,18 +1,50 @@
 <script setup lang="ts">
+import { en, fa } from '~/i18n/componentMessages'
 import type { Plant } from '~/types/plant.types'
 
 const props = defineProps<{ plant: Plant }>()
+const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+
+const lightKeys: Record<string, string> = {
+  low: 'components.common.lightLow',
+  medium: 'components.common.lightMedium',
+  high: 'components.common.lightHigh',
+  direct: 'components.common.lightDirect',
+}
+const waterKeys: Record<string, string> = {
+  low: 'components.common.waterLow',
+  medium: 'components.common.waterMedium',
+  high: 'components.common.waterHigh',
+}
+function formatCount(value: number) {
+  return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)
+}
+function translatedValue(keys: Record<string, string>, value: string) {
+  const key = keys[value]
+  return key ? t(key) : value
+}
 
 const items = computed(() => [
-  { icon: 'lucide:sun', label: 'نور', value: lightLabel(props.plant.care.light) },
-  { icon: 'lucide:droplets', label: 'آبیاری', value: `هر ${toPersianDigits(props.plant.care.wateringFrequencyDays)} روز` },
+  { icon: 'lucide:sun', label: t('components.careInfoCard.light'), value: translatedValue(lightKeys, props.plant.care.light) },
+  {
+    icon: 'lucide:droplets',
+    label: t('components.careInfoCard.watering'),
+    value: t('components.careInfoCard.everyDays', { days: formatCount(props.plant.care.wateringFrequencyDays) }),
+  },
   {
     icon: 'lucide:thermometer',
-    label: 'دما',
-    value: `${toPersianDigits(props.plant.care.temperatureRange[0])} تا ${toPersianDigits(props.plant.care.temperatureRange[1])} درجه`,
+    label: t('components.careInfoCard.temperature'),
+    value: t('components.careInfoCard.temperatureValue', {
+      min: formatCount(props.plant.care.temperatureRange[0]),
+      max: formatCount(props.plant.care.temperatureRange[1]),
+    }),
   },
-  { icon: 'lucide:sprout', label: 'خاک مناسب', value: props.plant.care.soil },
-  { icon: 'lucide:wind', label: 'رطوبت', value: waterLabel(props.plant.care.humidity) },
+  { icon: 'lucide:sprout', label: t('components.careInfoCard.suitableSoil'), value: props.plant.care.soil },
+  {
+    icon: 'lucide:wind',
+    label: t('components.careInfoCard.humidity'),
+    value: translatedValue(waterKeys, props.plant.care.humidity),
+  },
 ])
 </script>
 
