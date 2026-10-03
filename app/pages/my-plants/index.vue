@@ -32,7 +32,7 @@ const onSubmit = handleSubmit((values) => {
   userPlantsStore.addPlant({
     plantSlug: values.plantSlug,
     nickname: values.nickname,
-    photo: plant?.images[0] ?? 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=400',
+    photo: plant?.images[0] ?? '/images/plants/botanical-1.webp',
     acquiredAt: new Date().toISOString().slice(0, 10),
     location: values.location || 'خانه',
     healthStatus: 'healthy',

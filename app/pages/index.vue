@@ -50,7 +50,7 @@ function onSearch() {
             <div class="grid grid-cols-1 items-center gap-8 sm:grid-cols-[220px_1fr]">
               <div class="aspect-square overflow-hidden rounded-2xl border border-white/25 shadow-lg">
                 <img
-                    src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=800"
+                    src="/images/plants/botanical-1.webp"
                     alt="برگ‌های سبز"
                     class="size-full object-cover"
                     loading="lazy"

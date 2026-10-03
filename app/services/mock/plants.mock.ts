@@ -7,8 +7,8 @@ export const mockPlants: Plant[] = [
     name: 'مونستِرا',
     scientificName: 'Monstera deliciosa',
     images: [
-      'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=800',
-      'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=800',
+      '/images/plants/botanical-1.webp',
+      '/images/plants/botanical-2.webp',
     ],
     description:
         'مونستِرا یکی از محبوب‌ترین گیاهان آپارتمانی است که با برگ‌های بزرگ و شکاف‌دار خود فضای هر خانه‌ای را دگرگون می‌کند. این گیاه نسبتاً کم‌توقع است و برای مبتدیان مناسب است.',
@@ -32,7 +32,7 @@ export const mockPlants: Plant[] = [
     slug: 'sansevieria-trifasciata',
     name: 'زبان مادرشوهر',
     scientificName: 'Sansevieria trifasciata',
-    images: ['https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=800'],
+    images: ['/images/plants/botanical-3.webp'],
     description:
         'یکی از مقاوم‌ترین گیاهان آپارتمانی که در کم‌نوری و بی‌توجهی هم زنده می‌ماند. انتخابی عالی برای کسانی که تازه شروع به نگهداری گیاه کرده‌اند.',
     care: {
@@ -55,7 +55,7 @@ export const mockPlants: Plant[] = [
     slug: 'ficus-lyrata',
     name: 'فیکوس برگ انجیری',
     scientificName: 'Ficus lyrata',
-    images: ['https://images.unsplash.com/photo-1616500163246-742b4b5c15a1?w=800'],
+    images: ['/images/plants/botanical-4.webp'],
     description:
         'با برگ‌های بزرگ و براق شبیه به برگ انجیر، این گیاه به‌عنوان یک المان دکوراتیو محبوب شناخته می‌شود، اما نسبت به تغییر محیط حساس است.',
     care: {
@@ -78,7 +78,7 @@ export const mockPlants: Plant[] = [
     slug: 'aloe-vera',
     name: 'صبر زرد (آلوئه‌ورا)',
     scientificName: 'Aloe vera',
-    images: ['https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800'],
+    images: ['/images/plants/botanical-5.webp'],
     description:
         'گیاهی دارویی و مقاوم که در نور مستقیم آفتاب بهترین رشد را دارد. برای فضاهای آفتاب‌گیر و کسانی که کمتر به آبیاری می‌رسند مناسب است.',
     care: {
@@ -101,7 +101,7 @@ export const mockPlants: Plant[] = [
     slug: 'epipremnum-aureum',
     name: 'پوتوس (گندمی)',
     scientificName: 'Epipremnum aureum',
-    images: ['https://images.unsplash.com/photo-1598880940639-84d0bb2f9b96?w=800'],
+    images: ['/images/plants/botanical-1.webp'],
     description:
         'گیاهی آویز و رونده، بسیار مقاوم و سریع‌الرشد که در انواع شرایط نوری زنده می‌ماند. انتخاب کلاسیک برای دفتر کار و آشپزخانه.',
     care: {
@@ -124,7 +124,7 @@ export const mockPlants: Plant[] = [
     slug: 'spathiphyllum',
     name: 'گل صدتومانی',
     scientificName: 'Spathiphyllum wallisii',
-    images: ['https://images.unsplash.com/photo-1620127252536-03bcfe0aeda6?w=800'],
+    images: ['/images/plants/botanical-2.webp'],
     description:
         'با گل‌های سفید ظریف، این گیاه هم زیبایی می‌آورد و هم به تصفیه هوای داخل خانه کمک می‌کند. به رطوبت نسبتاً بالا نیاز دارد.',
     care: {
@@ -147,7 +147,7 @@ export const mockPlants: Plant[] = [
     slug: 'zamioculcas-zamiifolia',
     name: 'زامیفولیا',
     scientificName: 'Zamioculcas zamiifolia',
-    images: ['https://images.unsplash.com/photo-1632207691143-643e2a9a9361?w=800'],
+    images: ['/images/plants/botanical-3.webp'],
     description:
         'گیاهی تقریباً نابودنشدنی با برگ‌های براق و ضخیم که هفته‌ها بدون آبیاری هم دوام می‌آورد. انتخابی عالی برای فضاهای کم‌نور اداری و خانگی.',
     care: {
@@ -170,7 +170,7 @@ export const mockPlants: Plant[] = [
     slug: 'chlorophytum-comosum',
     name: 'گیاه عنکبوتی',
     scientificName: 'Chlorophytum comosum',
-    images: ['https://images.unsplash.com/photo-1572688984311-6ba63ecab1c5?w=800'],
+    images: ['/images/plants/botanical-4.webp'],
     description:
         'با برگ‌های نواری راه‌راه و ساقه‌های آویزی که جوانه‌های کوچک تولید می‌کنند. رشدش سریع است و برای پرورش در آب هم مناسب است.',
     care: {
@@ -193,7 +193,7 @@ export const mockPlants: Plant[] = [
     slug: 'dracaena-marginata',
     name: 'دراسینا مارجیناتا',
     scientificName: 'Dracaena marginata',
-    images: ['https://images.unsplash.com/photo-1616690710400-a16d146927c5?w=800'],
+    images: ['/images/plants/botanical-5.webp'],
     description:
         'با ساقه‌های نازک و باریک و برگ‌های سرخ‌حاشیه، ظاهری شبیه درخت مینیاتوری دارد. نسبت به کم‌آبی مقاوم است ولی از آب سنگین (فلوراید) آسیب می‌بیند.',
     care: {
@@ -216,7 +216,7 @@ export const mockPlants: Plant[] = [
     slug: 'philodendron-hederaceum',
     name: 'فیلودندرون برگ قلبی',
     scientificName: 'Philodendron hederaceum',
-    images: ['https://images.unsplash.com/photo-1602923668104-8f9e03e77e56?w=800'],
+    images: ['/images/plants/botanical-1.webp'],
     description:
         'گیاهی آویز با برگ‌های قلبی‌شکل که به‌سرعت رشد می‌کند و در نور کم هم شاداب می‌ماند. یکی از راحت‌ترین گیاهان برای نگهداری مبتدیان.',
     care: {
@@ -239,7 +239,7 @@ export const mockPlants: Plant[] = [
     slug: 'calathea-orbifolia',
     name: 'کالاتیا اوربیفولیا',
     scientificName: 'Calathea orbifolia',
-    images: ['https://images.unsplash.com/photo-1599598177991-ec67b5c37318?w=800'],
+    images: ['/images/plants/botanical-2.webp'],
     description:
         'با برگ‌های گرد و راه‌راه نقره‌ای، یکی از زیباترین ولی حساس‌ترین گیاهان آپارتمانی است. به رطوبت بالا و دوری از آفتاب مستقیم نیاز دارد.',
     care: {
@@ -262,7 +262,7 @@ export const mockPlants: Plant[] = [
     slug: 'peperomia-obtusifolia',
     name: 'پپرومیا',
     scientificName: 'Peperomia obtusifolia',
-    images: ['https://images.unsplash.com/photo-1622557850710-0ac4b6e6c8c4?w=800'],
+    images: ['/images/plants/botanical-3.webp'],
     description:
         'گیاهی کوچک و فشرده با برگ‌های ضخیم و گوشتی که مثل ساکولنت‌ها آب ذخیره می‌کند. برای میز کار و فضاهای کوچک بسیار مناسب است.',
     care: {
@@ -285,7 +285,7 @@ export const mockPlants: Plant[] = [
     slug: 'crassula-ovata',
     name: 'درخت یادبود (جید)',
     scientificName: 'Crassula ovata',
-    images: ['https://images.unsplash.com/photo-1459156212016-c812468e2115?w=800'],
+    images: ['/images/plants/botanical-4.webp'],
     description:
         'ساکولنتی با برگ‌های گرد و ضخیم که به‌مرور شکل درخت کوچک پیدا می‌کند. نیاز آبی بسیار کمی دارد و در نور مستقیم بهترین رشد را نشان می‌دهد.',
     care: {
@@ -308,7 +308,7 @@ export const mockPlants: Plant[] = [
     slug: 'echeveria-elegans',
     name: 'اچوریا',
     scientificName: 'Echeveria elegans',
-    images: ['https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=800'],
+    images: ['/images/plants/botanical-5.webp'],
     description:
         'ساکولنتی با شکل گلی و برگ‌های آبی‌رنگ که روی هم ردیف شده‌اند. برای گلدان‌های کوچک و پنجره‌های آفتاب‌گیر بسیار محبوب است.',
     care: {
@@ -331,7 +331,7 @@ export const mockPlants: Plant[] = [
     slug: 'rosa-chinensis',
     name: 'رز مینیاتوری',
     scientificName: 'Rosa chinensis',
-    images: ['https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=800'],
+    images: ['/images/plants/botanical-1.webp'],
     description:
         'گونه‌ای فشرده از رز که برای کشت گلدانی و بالکن مناسب است. برای گلدهی مداوم به نور مستقیم زیاد و هرس منظم نیاز دارد.',
     care: {
@@ -354,7 +354,7 @@ export const mockPlants: Plant[] = [
     slug: 'lavandula-angustifolia',
     name: 'اسطوخودوس',
     scientificName: 'Lavandula angustifolia',
-    images: ['https://images.unsplash.com/photo-1611909023032-2d6b3134ecba?w=800'],
+    images: ['/images/plants/botanical-2.webp'],
     description:
         'گیاهی معطر و دارویی با گل‌های بنفش که در آفتاب کامل و خاک خشک بهترین رشد را دارد. علاوه بر خواص آرام‌بخش، برای باغچه هم زینتی است.',
     care: {

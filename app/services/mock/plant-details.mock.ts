@@ -3,10 +3,10 @@ import type { PlantDetail } from '~/types/plant.types'
 export const plantDetails: Record<string, PlantDetail> = {
     'monstera-deliciosa': {
         slug: 'monstera-deliciosa',
-        image: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=400',
+        image: '/images/plants/botanical-1.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=400', full: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=1200', title: 'برگ‌های شکاف‌دار بالغ' },
-            { thumb: 'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=400', full: 'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-1.webp', full: '/images/plants/botanical-1.webp', title: 'برگ‌های شکاف‌دار بالغ' },
+            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -69,9 +69,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'sansevieria-trifasciata': {
         slug: 'sansevieria-trifasciata',
-        image: 'https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=400',
+        image: '/images/plants/botanical-3.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=400', full: 'https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-3.webp', full: '/images/plants/botanical-3.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -134,9 +134,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'ficus-lyrata': {
         slug: 'ficus-lyrata',
-        image: 'https://images.unsplash.com/photo-1616500163246-742b4b5c15a1?w=400',
+        image: '/images/plants/botanical-4.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1616500163246-742b4b5c15a1?w=400', full: 'https://images.unsplash.com/photo-1616500163246-742b4b5c15a1?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-4.webp', full: '/images/plants/botanical-4.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -199,9 +199,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'aloe-vera': {
         slug: 'aloe-vera',
-        image: 'https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=400',
+        image: '/images/plants/botanical-5.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=400', full: 'https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-5.webp', full: '/images/plants/botanical-5.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -264,9 +264,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'epipremnum-aureum': {
         slug: 'epipremnum-aureum',
-        image: 'https://images.unsplash.com/photo-1598880940639-84d0bb2f9b96?w=400',
+        image: '/images/plants/botanical-1.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1598880940639-84d0bb2f9b96?w=400', full: 'https://images.unsplash.com/photo-1598880940639-84d0bb2f9b96?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-1.webp', full: '/images/plants/botanical-1.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -328,9 +328,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'spathiphyllum': {
         slug: 'spathiphyllum',
-        image: 'https://images.unsplash.com/photo-1620127252536-03bcfe0aeda6?w=400',
+        image: '/images/plants/botanical-2.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1620127252536-03bcfe0aeda6?w=400', full: 'https://images.unsplash.com/photo-1620127252536-03bcfe0aeda6?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -393,9 +393,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'zamioculcas-zamiifolia': {
         slug: 'zamioculcas-zamiifolia',
-        image: 'https://images.unsplash.com/photo-1632207691143-643e2a9a9361?w=400',
+        image: '/images/plants/botanical-3.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1632207691143-643e2a9a9361?w=400', full: 'https://images.unsplash.com/photo-1632207691143-643e2a9a9361?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-3.webp', full: '/images/plants/botanical-3.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -457,9 +457,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'chlorophytum-comosum': {
         slug: 'chlorophytum-comosum',
-        image: 'https://images.unsplash.com/photo-1572688984311-6ba63ecab1c5?w=400',
+        image: '/images/plants/botanical-4.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1572688984311-6ba63ecab1c5?w=400', full: 'https://images.unsplash.com/photo-1572688984311-6ba63ecab1c5?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-4.webp', full: '/images/plants/botanical-4.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -522,9 +522,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'dracaena-marginata': {
         slug: 'dracaena-marginata',
-        image: 'https://images.unsplash.com/photo-1616690710400-a16d146927c5?w=400',
+        image: '/images/plants/botanical-5.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1616690710400-a16d146927c5?w=400', full: 'https://images.unsplash.com/photo-1616690710400-a16d146927c5?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-5.webp', full: '/images/plants/botanical-5.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -586,9 +586,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'philodendron-hederaceum': {
         slug: 'philodendron-hederaceum',
-        image: 'https://images.unsplash.com/photo-1602923668104-8f9e03e77e56?w=400',
+        image: '/images/plants/botanical-1.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1602923668104-8f9e03e77e56?w=400', full: 'https://images.unsplash.com/photo-1602923668104-8f9e03e77e56?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-1.webp', full: '/images/plants/botanical-1.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -650,9 +650,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'calathea-orbifolia': {
         slug: 'calathea-orbifolia',
-        image: 'https://images.unsplash.com/photo-1599598177991-ec67b5c37318?w=400',
+        image: '/images/plants/botanical-2.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1599598177991-ec67b5c37318?w=400', full: 'https://images.unsplash.com/photo-1599598177991-ec67b5c37318?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -714,9 +714,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'peperomia-obtusifolia': {
         slug: 'peperomia-obtusifolia',
-        image: 'https://images.unsplash.com/photo-1622557850710-0ac4b6e6c8c4?w=400',
+        image: '/images/plants/botanical-3.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1622557850710-0ac4b6e6c8c4?w=400', full: 'https://images.unsplash.com/photo-1622557850710-0ac4b6e6c8c4?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-3.webp', full: '/images/plants/botanical-3.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -778,9 +778,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'crassula-ovata': {
         slug: 'crassula-ovata',
-        image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=400',
+        image: '/images/plants/botanical-4.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=400', full: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-4.webp', full: '/images/plants/botanical-4.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -842,9 +842,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'echeveria-elegans': {
         slug: 'echeveria-elegans',
-        image: 'https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=400',
+        image: '/images/plants/botanical-5.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=400', full: 'https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-5.webp', full: '/images/plants/botanical-5.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -906,9 +906,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'rosa-chinensis': {
         slug: 'rosa-chinensis',
-        image: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=400',
+        image: '/images/plants/botanical-1.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=400', full: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-1.webp', full: '/images/plants/botanical-1.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -971,9 +971,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'lavandula-angustifolia': {
         slug: 'lavandula-angustifolia',
-        image: 'https://images.unsplash.com/photo-1611909023032-2d6b3134ecba?w=400',
+        image: '/images/plants/botanical-2.webp',
         gallery: [
-            { thumb: 'https://images.unsplash.com/photo-1611909023032-2d6b3134ecba?w=400', full: 'https://images.unsplash.com/photo-1611909023032-2d6b3134ecba?w=1200', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',

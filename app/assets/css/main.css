@@ -246,6 +246,75 @@
     color-scheme: dark;
   }
 
+  /* اسکرول‌بار سراسری - همرنگ تم فعال (از primary هر تم می‌گیره) */
+  :root {
+    --scrollbar-thumb: rgb(var(--color-primary-500) / 0.5);
+    --scrollbar-thumb-hover: rgb(var(--color-primary-600) / 0.85);
+    --scrollbar-track: rgb(var(--color-primary-500) / 0.08);
+  }
+
+  :root.dark {
+    /* در حالت تاریک از طیف روشن‌تر primary استفاده می‌شه تا روی بک‌گراند دیده بشه */
+    --scrollbar-thumb: rgb(var(--color-primary-300) / 0.45);
+    --scrollbar-thumb-hover: rgb(var(--color-primary-300) / 0.75);
+    --scrollbar-track: rgb(255 255 255 / 0.06);
+  }
+
+  /* استاندارد (کروم ۱۲۱+، فایرفاکس، سافاری ۱۸.۲+) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  /* فال‌بک برای مرورگرهای webkit قدیمی‌تر */
+  @supports not (scrollbar-color: auto) {
+    *::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    *::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+    }
+    *::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border: 2px solid transparent;
+      border-radius: 999px;
+      background-clip: padding-box;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+      background-clip: padding-box;
+    }
+  }
+
+  /*
+    رنگ سایه‌ی کارت‌ها در حالت روشن = همون رنگی که بک‌گراند اون تم تو حالت تاریک داره
+    (مقادیر با --color-bg بلوک‌های .dark بالا یکیه؛ اگه اون‌ها رو عوض کردی، اینجا هم عوض کن)
+  */
+  :root {
+    --shadow-tint: 41 87 72; /* #295748 */
+    --card-shadow:
+            0 1px 2px rgb(var(--shadow-tint) / 0.1),
+            0 6px 20px -4px rgb(var(--shadow-tint) / 0.3),
+            0 0 0 1px rgb(var(--shadow-tint) / 0.1);
+    --card-shadow-hover:
+            0 2px 4px rgb(var(--shadow-tint) / 0.14),
+            0 14px 32px -6px rgb(var(--shadow-tint) / 0.42),
+            0 0 0 1px rgb(var(--shadow-tint) / 0.18);
+  }
+  [data-theme='wine'] {
+    --shadow-tint: 87 41 50; /* #572932 */
+  }
+  [data-theme='forest'] {
+    --shadow-tint: 41 87 72; /* #295748 */
+  }
+  [data-theme='brown'] {
+    --shadow-tint: 87 61 41; /* #573d29 */
+  }
+  [data-theme='navy'] {
+    --shadow-tint: 41 55 87; /* #293757 */
+  }
+
   body {
     @apply bg-bg text-ink antialiased transition-colors duration-200;
   }
@@ -305,46 +374,39 @@
 }
 
 @layer utilities {
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgb(var(--color-primary-500) / 0.08);
-    border-radius: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgb(var(--color-primary-500) / 0.35);
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--color-primary-500) / 0.55);
-  }
-
-  /* فایرفاکس */
+  /* همون استایل اسکرول‌بار سراسری؛ برای سازگاری با کدهایی که کلاس رو صدا زدن */
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--color-primary-500) / 0.35) transparent;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   }
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+/*
+  سایه‌ی رنگیِ کارت‌ها فقط در حالت روشن.
+  بیرون از @layer نوشته شده تا Tailwind پاکش نکنه، و specificity بالاتر (html:not(.dark))
+  باعث می‌شه روی .glass-card و shadow-card / shadow-card-hover (تعریف‌شده در کانفیگ Tailwind) غلبه کنه.
+*/
+html:not(.dark) .glass-card {
+  box-shadow: var(--card-shadow);
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: color-mix(in srgb, var(--t-500) 8%, transparent);
-  border-radius: 8px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--t-500) 35%, transparent);
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--t-500) 55%, transparent);
+html:not(.dark) a.glass-card:hover,
+html:not(.dark) .glass-card.group:hover {
+  box-shadow: var(--card-shadow-hover);
 }
 
-/* برای فایرفاکس */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--t-500) 35%, transparent) transparent;
+html:not(.dark) .shadow-card {
+  --tw-shadow: var(--card-shadow);
+  --tw-shadow-colored: var(--card-shadow);
+}
+html:not(.dark) .shadow-card-hover {
+  --tw-shadow: var(--card-shadow-hover);
+  --tw-shadow-colored: var(--card-shadow-hover);
+}
+html:not(.dark) .hover\:shadow-card:hover {
+  --tw-shadow: var(--card-shadow);
+  --tw-shadow-colored: var(--card-shadow);
+}
+html:not(.dark) .hover\:shadow-card-hover:hover {
+  --tw-shadow: var(--card-shadow-hover);
+  --tw-shadow-colored: var(--card-shadow-hover);
 }
