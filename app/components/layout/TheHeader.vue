@@ -3,6 +3,8 @@ import { en, fa } from '~/i18n/componentMessages'
 
 const uiStore = useUiStore()
 const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+// locale و setLocale فقط روی scope سراسری هستن
+const { locale, setLocale } = useI18n()
 
 const navLinks = [
   { to: '/', label: 'components.theHeader.home' },
@@ -10,6 +12,20 @@ const navLinks = [
   { to: '/plants', label: 'components.theHeader.catalog' },
   { to: '/profile', label: 'components.theHeader.profile' },
 ]
+
+const isDark = computed(() => uiStore.mode === 'dark')
+
+function toggleLocale() {
+  setLocale(locale.value === 'fa' ? 'en' : 'fa')
+}
+
+const localeLabel = computed(() =>
+  locale.value === 'fa' ? 'Switch to English' : 'تغییر به فارسی',
+)
+const modeLabel = computed(() => {
+  if (locale.value === 'fa') return isDark.value ? 'تغییر به حالت روشن' : 'تغییر به حالت تاریک'
+  return isDark.value ? 'Switch to light mode' : 'Switch to dark mode'
+})
 </script>
 
 <template>
@@ -39,6 +55,31 @@ const navLinks = [
       </nav>
 
       <div class="flex items-center gap-2">
+        <!-- تغییر زبان -->
+        <button
+            type="button"
+            class="flex h-9 min-w-9 items-center justify-center rounded-full bg-primary-50 px-2.5 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+            :aria-label="localeLabel"
+            :title="localeLabel"
+            @click="toggleLocale"
+        >
+          {{ locale === 'fa' ? 'EN' : 'فا' }}
+        </button>
+
+        <!-- دارک / لایت مود -->
+        <button
+            type="button"
+            class="flex size-9 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors hover:bg-primary-100"
+            :aria-label="modeLabel"
+            :title="modeLabel"
+            @click="uiStore.toggleMode()"
+        >
+          <Icon
+              :name="isDark ? 'lucide:sun' : 'lucide:moon'"
+              class="size-4"
+          />
+        </button>
+
         <NuxtLink
             to="/profile"
             class="hidden size-9 items-center justify-center rounded-full bg-primary-50 text-primary-700 sm:flex"
