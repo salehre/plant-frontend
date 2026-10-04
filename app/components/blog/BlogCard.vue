@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/blogMessages'
 import type { BlogPostSummary } from '~/types/blog.types'
 
 const props = defineProps<{ post: BlogPostSummary }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 </script>
 
 <template>

@@ -179,6 +179,9 @@ function onSearch() {
       </div>
     </section>
 
+    <!-- Blog -->
+    <BlogSection />
+
     <!-- Educational Content -->
     <section class="mx-auto max-w-6xl px-4 py-14">
       <h2 class="mb-6 text-xl font-bold text-ink">

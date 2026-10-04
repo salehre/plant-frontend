@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/blogMessages'
-
 const blogStore = useBlogStore()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
 // بدون await تا رندر بقیه‌ی صفحه‌ی اصلی منتظر بلاگ نمونه؛ با تغییر زبان دوباره دریافت می‌شه

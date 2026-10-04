@@ -11,7 +11,7 @@ const slug = route.params.slug as string
 
 async function load(lang: 'fa' | 'en') {
   await Promise.all([
-    blogStore.fetchBySlug(slug, lang, t('errors.blogPost')),
+    blogStore.fetchBySlug(slug, lang, t('blog.errorPost')),
     blogStore.fetchRelated(slug, lang),
   ])
   return true
@@ -35,7 +35,7 @@ async function sharePost() {
     }
     else {
       await navigator.clipboard.writeText(window.location.href)
-      uiStore.showToast(t('pages.blog.linkCopied'), 'success')
+      uiStore.showToast(t('blog.linkCopied'), 'success')
     }
   }
   catch {
@@ -55,7 +55,7 @@ async function sharePost() {
           name="lucide:arrow-right"
           class="size-4 ltr:rotate-180"
         />
-        {{ t('pages.blog.backToBlog') }}
+        {{ t('blog.backToBlog') }}
       </NuxtLink>
 
       <div
@@ -91,10 +91,10 @@ async function sharePost() {
               >
               <div class="text-sm">
                 <div class="font-medium text-ink">
-                  {{ t('pages.blog.by') }} {{ post.author.name }}
+                  {{ t('blog.by') }} {{ post.author.name }}
                 </div>
                 <div class="text-xs text-ink-muted">
-                  {{ toJalaliDate(post.publishedAt) }} · {{ t('pages.blog.readTime', { n: toPersianDigits(post.readMinutes) }) }}
+                  {{ toJalaliDate(post.publishedAt) }} · {{ t('blog.readTime', { n: toPersianDigits(post.readMinutes) }) }}
                 </div>
               </div>
             </div>
@@ -107,7 +107,7 @@ async function sharePost() {
                 name="lucide:share-2"
                 class="size-4"
               />
-              {{ t('pages.blog.share') }}
+              {{ t('blog.share') }}
             </button>
           </div>
         </header>
@@ -155,7 +155,7 @@ async function sharePost() {
                 class="mt-1 size-5 shrink-0 text-primary-600"
               />
               <p class="leading-8 text-ink">
-                <span class="font-bold text-primary-700">{{ t('pages.blog.tip') }}:</span>
+                <span class="font-bold text-primary-700">{{ t('blog.tip') }}:</span>
                 {{ block.text }}
               </p>
             </aside>
@@ -181,10 +181,10 @@ async function sharePost() {
         class="py-16 text-center"
       >
         <h1 class="mb-2 text-xl font-bold text-ink">
-          {{ t('pages.blog.notFoundTitle') }}
+          {{ t('blog.notFoundTitle') }}
         </h1>
         <p class="text-ink-muted">
-          {{ t('pages.blog.notFoundText') }}
+          {{ t('blog.notFoundText') }}
         </p>
       </div>
 
@@ -195,7 +195,7 @@ async function sharePost() {
       class="mt-14"
     >
       <h2 class="mb-4 text-xl font-bold text-ink">
-        {{ t('pages.blog.related') }}
+        {{ t('blog.related') }}
       </h2>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <BlogCard

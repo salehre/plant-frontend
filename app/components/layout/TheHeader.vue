@@ -19,13 +19,6 @@ function toggleLocale() {
   setLocale(locale.value === 'fa' ? 'en' : 'fa')
 }
 
-const localeLabel = computed(() =>
-  locale.value === 'fa' ? 'Switch to English' : 'تغییر به فارسی',
-)
-const modeLabel = computed(() => {
-  if (locale.value === 'fa') return isDark.value ? 'تغییر به حالت روشن' : 'تغییر به حالت تاریک'
-  return isDark.value ? 'Switch to light mode' : 'Switch to dark mode'
-})
 </script>
 
 <template>
@@ -59,8 +52,8 @@ const modeLabel = computed(() => {
         <button
             type="button"
             class="flex h-9 min-w-9 items-center justify-center rounded-full bg-primary-50 px-2.5 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
-            :aria-label="localeLabel"
-            :title="localeLabel"
+            :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
+            :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
             @click="toggleLocale"
         >
           {{ locale === 'fa' ? 'EN' : 'فا' }}
@@ -70,8 +63,8 @@ const modeLabel = computed(() => {
         <button
             type="button"
             class="flex size-9 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors hover:bg-primary-100"
-            :aria-label="modeLabel"
-            :title="modeLabel"
+            :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
+            :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
             @click="uiStore.toggleMode()"
         >
           <Icon
