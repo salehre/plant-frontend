@@ -73,7 +73,9 @@
     "plantList": "We couldn't load the plant list.",
     "featuredPlants": "We couldn't load featured plants.",
     "plantDetail": "We couldn't load plant details.",
-    "plantFilters": "We couldn't load the plant filters."
+    "plantFilters": "We couldn't load the plant filters.",
+    "blogList": "Failed to load articles.",
+    "blogPost": "Failed to load the article."
   },
   "brand": {
     "name": "BargYar"
@@ -223,6 +225,21 @@
       "careTasks": "Care tasks",
       "noTasks": "No care tasks have been scheduled for this plant.",
       "notFound": "We couldn't find this plant."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Guides and tips for caring for your plants",
+      "allCategories": "All",
+      "empty": "No articles found in this category.",
+      "backToBlog": "Back to blog",
+      "related": "Related articles",
+      "share": "Share",
+      "linkCopied": "Article link copied",
+      "tip": "Tip",
+      "by": "By",
+      "readTime": "{n} min read",
+      "notFoundTitle": "Article not found",
+      "notFoundText": "This article may have been removed or the address is wrong."
     }
   },
   "auth": {
@@ -333,5 +350,25 @@
       "temperature": "Temperature",
       "growthAltitude": "Growing altitude"
     }
+  },
+    "blog": {
+    "title": "From the blog",
+    "subtitle": "Practical tips for taking better care of your plants",
+    "seeAll": "See all",
+    "pageTitle": "Blog",
+    "pageSubtitle": "Guides and tips for caring for your plants",
+    "allCategories": "All",
+    "readTime": "{n} min read",
+    "by": "By",
+    "backToBlog": "Back to blog",
+    "related": "Related articles",
+    "share": "Share",
+    "linkCopied": "Article link copied",
+    "tip": "Tip",
+    "empty": "No articles found in this category.",
+    "notFoundTitle": "Article not found",
+    "notFoundText": "This article may have been removed or the address is wrong.",
+    "errorList": "Failed to load articles.",
+    "errorPost": "Failed to load the article."
   }
 }
