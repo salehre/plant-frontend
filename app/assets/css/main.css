@@ -317,6 +317,20 @@
 
   body {
     @apply bg-bg text-ink antialiased transition-colors duration-200;
+    /* گرادیانت ریز و نرم بک‌گراند - از رنگ‌های همون تم فعال ساخته می‌شه */
+    background-image:
+            radial-gradient(60rem 42rem at 0% 0%, rgb(var(--color-primary-300) / 0.16), transparent 65%),
+            radial-gradient(52rem 38rem at 100% 100%, rgb(var(--color-accent-300) / 0.12), transparent 65%),
+            linear-gradient(180deg, rgb(var(--color-primary-100) / 0.35) 0%, transparent 50%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background-image:
+            radial-gradient(60rem 42rem at 0% 0%, rgb(var(--color-primary-300) / 0.14), transparent 65%),
+            radial-gradient(52rem 38rem at 100% 100%, rgb(var(--color-accent-300) / 0.08), transparent 65%),
+            linear-gradient(180deg, rgb(255 255 255 / 0.05) 0%, transparent 55%);
   }
 
   ::selection {
@@ -408,7 +422,7 @@ html:not(.dark) .hover\:shadow-card:hover {
   --tw-shadow: var(--card-shadow);
   --tw-shadow-colored: var(--card-shadow);
 }
-html:not(.dark) .hover\:shadow-card-hover:hover {
+html:not(.dark) .shadow-card-hover:hover {
   --tw-shadow: var(--card-shadow-hover);
   --tw-shadow-colored: var(--card-shadow-hover);
 }

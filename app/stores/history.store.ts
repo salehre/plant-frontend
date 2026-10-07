@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import type { IdentifyResult } from '~/types/identify.types'
 
+/** حداقل چیزی که برای ثبت یک اسکن تاییدشده لازمه (نتیجه‌ی اصلی یا یکی از گونه‌های مشابه) */
+export type ScanLogInput = Pick<IdentifyResult, 'plantName' | 'scientificName' | 'confidence' | 'image' | 'slug'>
+
 export interface HistoryEntry {
   id: string
   timestamp: number
@@ -14,9 +17,8 @@ export interface HistoryEntry {
 const MAX_ENTRIES = 50
 
 /**
- * History = لاگ خودکار اسکن‌های Identify.
- * برخلاف Wishlist، این هیچ تصمیمی از کاربر نمی‌گیره - هر اسکنی، موفق یا ناموفق،
- * خودش این‌جا ثبت می‌شه تا جواب «قبلاً چی اسکن کرده بودم؟» رو بده.
+ * History = نتیجه‌هایی از Identify که کاربر خودش با دکمه‌ی «تأیید» قبولشون کرده.
+ * اسکنی که تأیید نشه این‌جا ثبت نمی‌شه.
  */
 export const useHistoryStore = defineStore('history', {
   state: () => ({
@@ -28,7 +30,8 @@ export const useHistoryStore = defineStore('history', {
     sorted: state => [...state.entries].sort((a, b) => b.timestamp - a.timestamp),
   },
   actions: {
-    logScan(result: IdentifyResult) {
+    /** یک نتیجه‌ی تاییدشده رو ثبت می‌کنه و id رکورد رو برمی‌گردونه */
+    logScan(result: ScanLogInput): string {
       const entry: HistoryEntry = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         timestamp: Date.now(),
@@ -39,6 +42,7 @@ export const useHistoryStore = defineStore('history', {
         slug: result.slug,
       }
       this.entries = [entry, ...this.entries].slice(0, MAX_ENTRIES)
+      return entry.id
     },
     remove(id: string) {
       this.entries = this.entries.filter(e => e.id !== id)

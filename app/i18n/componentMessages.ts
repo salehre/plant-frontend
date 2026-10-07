@@ -37,6 +37,8 @@ export const fa = {
     predictionCard: {
       identified: 'گیاه تو شناسایی شد',
       similarSpecies: 'گونه‌های مشابه احتمالی',
+      confirmedToast: 'تأیید شد و به تاریخچه‌ی اسکن‌ها اضافه شد',
+      unconfirmedToast: 'تأیید لغو شد و از تاریخچه حذف شد',
     },
     imageUploader: {
       dropPrompt: 'عکس گیاهت را اینجا بکش یا آپلود کن',
@@ -150,6 +152,8 @@ export const fa = {
     },
     plantResultCard: {
       removeFromHistory: 'حذف از تاریخچه',
+      confirm: 'تأیید این نتیجه (ثبت در تاریخچه)',
+      undoConfirm: 'لغو تأیید',
     },
     historyCard: {
       removeFromHistory: 'حذف از تاریخچه',
@@ -353,6 +357,8 @@ export const en = {
     predictionCard: {
       identified: 'Your plant has been identified',
       similarSpecies: 'Possible similar species',
+      confirmedToast: 'Confirmed and added to your scan history',
+      unconfirmedToast: 'Confirmation undone and removed from history',
     },
     imageUploader: {
       dropPrompt: 'Drag a plant photo here or upload one',
@@ -466,6 +472,8 @@ export const en = {
     },
     plantResultCard: {
       removeFromHistory: 'Remove from history',
+      confirm: 'Confirm this result (save to history)',
+      undoConfirm: 'Undo confirmation',
     },
     historyCard: {
       removeFromHistory: 'Remove from history',
@@ -532,7 +540,7 @@ export const en = {
         glycyrrhizicAcid: 'Glycyrrhizic acid',
         liquiritin: 'Liquiritin',
         flavonoids: 'Flavonoids',
-        licochalcone: 'Licochalcone A',
+        licochalone: 'Licochalcone A',
         glabridin: 'Glabridin',
         glabrene: 'Glabrene',
         tannins: 'Tannins',

@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f735a1df-3114-4aed-b584-3befc7ea24fd" name="Changes" comment="V 1.3.5">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/components/plant/PlantResultList.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/composables/usePlantResults.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/assets/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/layouts/default.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/layouts/default.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/plants/[slug].vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/plants/[slug].vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/profile.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/mock/plant-details.mock.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/mock/plant-details.mock.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nuxt.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/nuxt.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/components/ai/PredictionCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/ai/PredictionCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/components/history/HistoryCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/history/HistoryCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/components/plant/PlantResultCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/plant/PlantResultCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/i18n/componentMessages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/i18n/componentMessages.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pages/history.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/history.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pages/wishlist.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/wishlist.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/stores/history.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/stores/history.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/stores/identify.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/stores/identify.store.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plant-frontend.zip" beforeDir="false" afterPath="$PROJECT_DIR$/plant-frontend.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,6 +30,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript File" />
+        <option value="Vue Composition API Component" />
       </list>
     </option>
   </component>
@@ -59,25 +64,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;git.auto.fetch.suggestion.counter&quot;: &quot;3&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/projects/plant-frontend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\projects\\plant-frontend\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "git.auto.fetch.suggestion.counter": "3",
+    "last_opened_file_path": "C:/projects/plant-frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\projects\\plant-frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Composition API Component"
+    ]
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -98,6 +108,7 @@
       <workItem from="1790660383074" duration="11761000" />
       <workItem from="1791008238348" duration="8016000" />
       <workItem from="1791027326287" duration="47000" />
+      <workItem from="1791367805734" duration="8578000" />
     </task>
     <task id="LOCAL-00001" summary="1.2.3">
       <option name="closed" value="true" />

@@ -52,11 +52,11 @@ async function onImageError() {
 }
 const thumb = computed(() => (imageFailed.value ? (plant.value?.images[0] ?? '') : props.entry.image))
 
-const confidenceColor = computed(() => {
-  if (props.entry.confidence >= 0.8) return 'bg-primary-500'
-  if (props.entry.confidence >= 0.5) return 'bg-status-warning'
-  return 'bg-status-danger'
-})
+// const confidenceColor = computed(() => {
+//   if (props.entry.confidence >= 0.8) return 'bg-primary-500'
+//   if (props.entry.confidence >= 0.5) return 'bg-status-warning'
+//   return 'bg-status-danger'
+// })
 
 const toxicLabels: Record<string, string> = {
   human: 'components.common.human',
@@ -119,12 +119,12 @@ function formatConfidenceLocalized(value: number) {
             class="absolute inset-0 m-auto size-6 text-primary-600"
           />
           <!-- ریبون درصد اطمینان روی عکس -->
-          <span
-            class="absolute inset-x-0 bottom-0 py-0.5 text-center text-[11px] font-bold text-white"
-            :class="confidenceColor"
-          >
-            {{ formatConfidenceLocalized(entry.confidence) }}
-          </span>
+<!--          <span-->
+<!--            class="absolute inset-x-0 bottom-0 py-0.5 text-center text-[11px] font-bold text-white"-->
+<!--            :class="confidenceColor"-->
+<!--          >-->
+<!--            {{ formatConfidenceLocalized(entry.confidence) }}-->
+<!--          </span>-->
         </span>
 
         <span class="min-w-0 flex-1">
