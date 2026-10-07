@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f735a1df-3114-4aed-b584-3befc7ea24fd" name="Changes" comment="V 1.3.5">
-      <change afterPath="$PROJECT_DIR$/app/components/plant/PlantResultList.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/composables/usePlantResults.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/assets/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/ai/PredictionCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/ai/PredictionCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/history/HistoryCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/history/HistoryCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/plant/PlantResultCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/plant/PlantResultCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/i18n/componentMessages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/i18n/componentMessages.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/history.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/history.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pages/wishlist.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/pages/wishlist.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/stores/history.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/stores/history.store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/stores/identify.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/stores/identify.store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plant-frontend.zip" beforeDir="false" afterPath="$PROJECT_DIR$/plant-frontend.zip" afterDir="false" />
+    <list default="true" id="f735a1df-3114-4aed-b584-3befc7ea24fd" name="Changes" comment="V 1.3.11">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +97,7 @@
       <workItem from="1790660383074" duration="11761000" />
       <workItem from="1791008238348" duration="8016000" />
       <workItem from="1791027326287" duration="47000" />
-      <workItem from="1791367805734" duration="8578000" />
+      <workItem from="1791367805734" duration="9125000" />
     </task>
     <task id="LOCAL-00001" summary="1.2.3">
       <option name="closed" value="true" />
@@ -134,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791020380614</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="V 1.3.11">
+      <option name="closed" value="true" />
+      <created>1791381461138</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1791381461138</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +152,7 @@
     <MESSAGE value="1.2.3" />
     <MESSAGE value="V 1.3.3" />
     <MESSAGE value="V 1.3.5" />
-    <option name="LAST_COMMIT_MESSAGE" value="V 1.3.5" />
+    <MESSAGE value="V 1.3.11" />
+    <option name="LAST_COMMIT_MESSAGE" value="V 1.3.11" />
   </component>
 </project>

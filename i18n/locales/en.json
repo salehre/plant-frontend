@@ -167,7 +167,8 @@
       "firstPlant": "First plant",
       "secondPlant": "Second plant",
       "compare": "Compare",
-      "empty": "Choose two plants above to get started."
+      "empty": "Choose two plants above to get started.",
+      "backToResults": "Back to identification results"
     },
     "climate": {
       "title": "Plants for your city",
@@ -312,6 +313,8 @@
     "therapeutic": "Medicinal",
     "chemicalCompounds": "Chemical compounds",
     "mainActiveCompound": "Main active compound",
+    "showCompounds": "Show other compounds",
+    "hideCompounds": "Hide other compounds",
     "growthRequirements": "Growing requirements",
     "story": "Plant story",
     "toxicity": "Toxicity",

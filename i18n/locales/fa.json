@@ -167,7 +167,8 @@
       "firstPlant": "گیاه اول",
       "secondPlant": "گیاه دوم",
       "compare": "مقایسه کن",
-      "empty": "برای شروع، دو گیاه از بالا انتخاب کن."
+      "empty": "برای شروع، دو گیاه از بالا انتخاب کن.",
+      "backToResults": "بازگشت به نتایج تشخیص"
     },
     "climate": {
       "title": "گیاه مناسب شهر تو",
@@ -312,6 +313,8 @@
     "therapeutic": "درمانی",
     "chemicalCompounds": "ترکیبات شیمیایی",
     "mainActiveCompound": "ماده مؤثره اصلی",
+    "showCompounds": "نمایش سایر ترکیبات",
+    "hideCompounds": "بستن سایر ترکیبات",
     "growthRequirements": "نیازهای رشدی",
     "story": "داستان گیاه",
     "toxicity": "سمّیت",

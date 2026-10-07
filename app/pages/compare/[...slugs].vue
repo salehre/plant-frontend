@@ -2,6 +2,7 @@
 import { getMockPlants } from '~/services/mock/plants.mock'
 
 const route = useRoute()
+const identifyStore = useIdentifyStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const localizedPlants = computed(() => getMockPlants(activeLocale.value))
@@ -22,12 +23,37 @@ const plantOptions = computed(() => localizedPlants.value.map(p => ({ label: p.n
 
 function goCompare() {
   if (!pickerA.value || !pickerB.value) return
-  navigateTo(`/compare/${pickerA.value}/${pickerB.value}`)
+  navigateTo({
+    path: `/compare/${pickerA.value}/${pickerB.value}`,
+    // اگه از نتایج تشخیص اومده بودیم، دکمه‌ی برگشت بعد از مقایسه‌ی جدید هم بمونه
+    query: route.query.from ? { from: route.query.from } : undefined,
+  })
+}
+
+// دکمه‌ی برگشت فقط وقتی میاد که از نتایج تشخیص اومده باشیم و اون نتایج هنوز تو store باشن
+const cameFromIdentify = computed(() => route.query.from === 'identify' && !!identifyStore.previewUrl)
+const backIcon = computed(() => locale.value === 'fa' ? 'lucide:arrow-right' : 'lucide:arrow-left')
+
+function backToIdentify() {
+  navigateTo('/identify')
 }
 </script>
 
 <template>
   <div class="mx-auto max-w-4xl px-4 py-10">
+    <AppButton
+        v-if="cameFromIdentify"
+        variant="ghost"
+        class="mb-4"
+        @click="backToIdentify"
+    >
+      <Icon
+          :name="backIcon"
+          class="size-4"
+      />
+      {{ t('pages.compare.backToResults') }}
+    </AppButton>
+
     <h1 class="mb-2 text-2xl font-bold text-ink">
       {{ t('pages.compare.title') }}
     </h1>

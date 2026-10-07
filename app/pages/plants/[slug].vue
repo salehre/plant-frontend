@@ -19,6 +19,7 @@ watch(activeLocale, locale => plantStore.fetchBySlug(slug, locale, t('errors.pla
 
 const plant = computed(() => plantStore.current)
 const detail = computed(() => findPlantDetailBySlug(slug, activeLocale.value))
+const chemicalCompoundsExpanded = ref(false)
 
 function findDisease(id: string) {
   return getMockDiseases(activeLocale.value).find(d => d.id === id)
@@ -139,7 +140,7 @@ const growthIcons: Record<string, string> = {
 
   <div
       v-else-if="plant && detail"
-      class="plant-detail-page min-h-screen bg-bg pb-10"
+      class="plant-detail-page text-readable min-h-screen bg-bg pb-10"
   >
     <!-- ========== هدر ========== -->
     <div class="relative overflow-visible bg-gradient-to-l from-primary-900 via-primary-800 to-primary-700 px-4 pb-4 pt-10 text-white sm:px-8 sm:pt-14">
@@ -291,8 +292,8 @@ const growthIcons: Record<string, string> = {
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
             <div class="space-y-3">
               <div>
-                <span class="text-status-success">●</span>
-                <strong class="text-sm">{{ t('plantDetail.edible') }}:</strong>
+                <span class="text-status-success">● </span>
+                <strong class="text-sm">{{ t('plantDetail.edible') }} :</strong>
                 <ul class="mr-5 mt-1.5 list-none space-y-1.5">
                   <li v-for="item in detail.applications.food" :key="item" class="text-sm text-ink">
                     {{ item }}
@@ -300,8 +301,8 @@ const growthIcons: Record<string, string> = {
                 </ul>
               </div>
               <div>
-                <span class="text-status-info">●</span>
-                <strong class="text-sm">{{ t('plantDetail.industrial') }}:</strong>
+                <span class="text-status-info">● </span>
+                <strong class="text-sm">{{ t('plantDetail.industrial') }} :</strong>
                 <ul class="mr-5 mt-1.5 list-none space-y-1.5">
                   <li v-for="item in detail.applications.industrial" :key="item" class="text-sm text-ink">
                     {{ item }}
@@ -309,8 +310,8 @@ const growthIcons: Record<string, string> = {
                 </ul>
               </div>
               <div>
-                <span class="text-accent-600">●</span>
-                <strong class="text-sm">{{ t('plantDetail.therapeutic') }}:</strong>
+                <span class="text-accent-600">● </span>
+                <strong class="text-sm">{{ t('plantDetail.therapeutic') }} :</strong>
                 <ul class="mr-5 mt-1.5 list-none space-y-1.5">
                   <li v-for="item in detail.applications.therapeutic" :key="item" class="text-sm text-ink">
                     {{ item }}
@@ -322,37 +323,58 @@ const growthIcons: Record<string, string> = {
 
           <!-- ترکیبات شیمیایی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
-              {{ t('plantDetail.chemicalCompounds') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Phytochemistry</span>
-            </h2>
+            <div class="flex items-center justify-between gap-3">
+              <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+                {{ t('plantDetail.chemicalCompounds') }}
+                <span class="text-xs font-normal tracking-wide text-ink-muted">Phytochemistry</span>
+              </h2>
+              <button
+                  v-if="detail.chemicalCompounds.categories.length"
+                  type="button"
+                  class="flex size-9 shrink-0 items-center justify-center rounded-full text-primary-900 border border-primary-700 transition hover:border-primary-200 hover:text-primary-900"
+                  :aria-expanded="chemicalCompoundsExpanded"
+                  aria-controls="chemical-compound-details"
+                  :aria-label="t(chemicalCompoundsExpanded ? 'plantDetail.hideCompounds' : 'plantDetail.showCompounds')"
+                  @click="chemicalCompoundsExpanded = !chemicalCompoundsExpanded"
+              >
+                <Icon :name="chemicalCompoundsExpanded ? 'lucide:chevron-up' : 'lucide:chevron-down'" class="size-4" />
+              </button>
+            </div>
+
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
 
             <div class="rounded-md border-r-4 border-accent-400 bg-bg px-4 py-3">
               <span class="block text-xs font-semibold text-ink-muted">{{ t('plantDetail.mainActiveCompound') }}:</span>
               <span class="text-sm font-medium text-primary-900">{{ detail.chemicalCompounds.majorCompound }}</span>
             </div>
-
-            <div class="mt-5 flex flex-col gap-5">
-              <div
-                  v-for="(cat, idx) in detail.chemicalCompounds.categories"
-                  :key="idx"
-                  class="border-b border-ink/10 pb-3 last:border-0 last:pb-0"
-              >
-                <div class="mb-2 flex flex-wrap items-baseline justify-between gap-1">
-                  <strong class="text-sm text-primary-900">{{ cat.name }}</strong>
-                  <span class="rounded-full bg-bg px-2 py-0.5 text-xs text-ink-muted">{{ cat.total }}</span>
-                </div>
-                <ul v-if="cat.compounds?.length" class="list-none space-y-1">
-                  <li
-                      v-for="(comp, cidx) in cat.compounds"
-                      :key="cidx"
-                      class="flex items-baseline justify-between gap-2 border-b border-dashed border-ink/10 py-1 text-xs last:border-0"
+            <div
+                id="chemical-compound-details"
+                class="grid transition-[grid-template-rows] duration-300 ease-out"
+                :class="chemicalCompoundsExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+            >
+              <div class="min-h-0 overflow-hidden" :inert="!chemicalCompoundsExpanded">
+                <div class="flex flex-col gap-5 pt-5">
+                  <div
+                      v-for="(cat, idx) in detail.chemicalCompounds.categories"
+                      :key="idx"
+                      class="border-b border-ink/10 pb-3 last:border-0 last:pb-0"
                   >
-                    <span class="font-medium text-ink">{{ comp.name }}</span>
-                    <span class="shrink-0 rounded-full bg-bg px-2 py-0.5 text-ink-muted">{{ comp.amount }}</span>
-                  </li>
-                </ul>
+                    <div class="mb-2 flex flex-wrap items-baseline justify-between gap-1">
+                      <strong class="text-sm text-primary-900">{{ cat.name }}</strong>
+                      <span class="rounded-full bg-bg px-2 py-0.5 text-xs text-ink-muted">{{ cat.total }}</span>
+                    </div>
+                    <ul v-if="cat.compounds?.length" class="list-none space-y-1">
+                      <li
+                          v-for="(comp, cidx) in cat.compounds"
+                          :key="cidx"
+                          class="flex items-baseline justify-between gap-2 border-b border-dashed border-ink/10 py-1 text-xs last:border-0"
+                      >
+                        <span class="font-medium text-ink">{{ comp.name }}</span>
+                        <span class="shrink-0 rounded-full bg-bg px-2 py-0.5 text-ink-muted">{{ comp.amount }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

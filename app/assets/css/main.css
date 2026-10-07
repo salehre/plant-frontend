@@ -390,6 +390,12 @@
 }
 
 @layer utilities {
+  .text-readable {
+    word-spacing: 0.09em;
+    letter-spacing: 0.02em;
+    line-height: 1.8;
+  }
+
   /* همون استایل اسکرول‌بار سراسری؛ برای سازگاری با کدهایی که کلاس رو صدا زدن */
   .custom-scrollbar {
     scrollbar-width: thin;
