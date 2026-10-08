@@ -44,7 +44,73 @@
     "lightTitle": "Measure light at home",
     "lightDescription": "How much light reaches each corner of your home, and which plants thrive there?",
     "pestTitle": "Spot pests early",
-    "pestDescription": "Recognize early signs of pests and disease before they spread."
+    "pestDescription": "Recognize early signs of pests and disease before they spread.",
+    "plantFinder": {
+      "title": "Find your perfect plant",
+      "subtitle": "Answer a few quick questions and we will suggest plants that fit your home and lifestyle.",
+      "stepOf": "Question {current} of {total}",
+      "back": "Back",
+      "next": "Next",
+      "submit": "Suggest plants",
+      "retry": "Try again",
+      "restart": "Start over",
+      "loading": "Finding the best plants for you…",
+      "error": "Could not get suggestions. Please try again.",
+      "resultsTitle": "These plants suit you",
+      "resultsSubtitle": "Picked based on your answers.",
+      "noResults": "No plant matched this combination. Change your answers a little and try again.",
+      "match": "Match",
+      "matched": {
+        "place": "Fits your space",
+        "light": "Right light",
+        "watering": "Fits your watering routine",
+        "experience": "Right for your experience",
+        "pets": "Safe for pets and kids"
+      },
+      "questions": {
+        "place": {
+          "title": "Where will the plant live?",
+          "options": {
+            "living": "Living room",
+            "bedroom": "Bedroom",
+            "office": "Workplace",
+            "balcony": "Balcony or terrace"
+          }
+        },
+        "light": {
+          "title": "How much light does that spot get?",
+          "options": {
+            "low": "Low light, away from windows",
+            "medium": "Soft, indirect light",
+            "high": "Bright light",
+            "direct": "Several hours of direct sun"
+          }
+        },
+        "watering": {
+          "title": "How often can you water?",
+          "options": {
+            "often": "Several times a week",
+            "weekly": "Once a week",
+            "rarely": "Every two weeks or less"
+          }
+        },
+        "experience": {
+          "title": "How experienced are you with plants?",
+          "options": {
+            "beginner": "Total beginner",
+            "intermediate": "Some experience",
+            "expert": "Seasoned grower"
+          }
+        },
+        "pets": {
+          "title": "Do you have pets or kids at home?",
+          "options": {
+            "safe": "Yes, the plant must be non-toxic",
+            "any": "No, it does not matter"
+          }
+        }
+      }
+    }
   },
   "identify": {
     "title": "Identify a plant",

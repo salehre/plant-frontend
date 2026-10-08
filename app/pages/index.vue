@@ -132,6 +132,11 @@ function onSearch() {
       </div>
     </section>
 
+    <!-- Plant Finder -->
+    <section class="mx-auto max-w-3xl px-4 pt-14">
+      <PlantFinder />
+    </section>
+
     <!-- Featured Plants -->
     <section class="mx-auto max-w-6xl px-4 py-14">
       <div class="mb-6 flex items-center justify-between">
