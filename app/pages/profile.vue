@@ -24,6 +24,14 @@ const wishlistStore = useWishlistStore()
       </p>
     </div>
 
+    <!-- اطلاعات کاربر -->
+    <section>
+      <h2 class="mb-3 font-bold text-ink">
+        {{ t('pages.profile.account') }}
+      </h2>
+      <ProfileInfoForm />
+    </section>
+
     <!-- تنظیمات -->
     <section>
       <h2 class="mb-3 font-bold text-ink">

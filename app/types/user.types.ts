@@ -1,9 +1,24 @@
+export type Gender = 'male' | 'female'
+
+/** اطلاعات قابل‌ویرایش پروفایل کاربر */
+export interface UserProfileData {
+  name: string
+  birthDate: string // YYYY-MM-DD
+  gender: Gender
+  phone: string
+  nationalId: string
+}
+
 export interface User {
   id: string
   name: string
   email: string
   avatar?: string
   joinedAt: string
+  birthDate?: string
+  gender?: Gender
+  phone?: string
+  nationalId?: string
 }
 
 export interface UserPlant {

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { User } from '~/types/user.types'
+import type { User, UserProfileData } from '~/types/user.types'
 
 type OtpPurpose = 'register' | 'reset'
 interface OtpEntry { code: string, expiresAt: number }
@@ -7,30 +7,28 @@ interface PendingRegistration { name: string, email: string, verified: boolean }
 
 const OTP_TTL_MS = 10 * 60 * 1000
 
-/**
- * فلوی auth کاملاً بر پایه‌ی OTP (کد ۶ رقمی) - بدون لینک ایمیل، بدون رمز عبور در
- * لحظه‌ی ثبت‌نام. دقیقاً هم‌شکل با پروژه‌ی رفرنس (Todolist)، با این تفاوت‌ها که
- * خودمون خواستیم: لاگین فقط با ایمیل (نه username)، و بعد از set-password مستقیم
- * می‌ره داشبورد (نه برگشت به صفحه‌ی login).
- *
- *   ثبت‌نام  → register(name, email)     → OTP می‌فرسته، pendingRegistration رو نگه می‌داره
- *            → verifyRegisterOtp(email, code) → کد رو verified می‌کنه (هنوز لاگین نشده)
- *            → setPassword(password)     → فقط اگه verified باشه، حساب واقعاً ساخته و لاگین می‌شه
- *
- *   فراموشی → forgotPassword(email)      → OTP می‌فرسته
- *            → resetPassword(email, code, newPassword) → کد و رمز جدید با هم توی یک
- *              درخواست چک می‌شن (نه دو مرحله‌ی جدا) - اگه کد غلط بود، صفحه برمی‌گردونه
- *              مرحله‌ی وارد کردن کد، بدون این‌که این‌جا خطا throw بشه.
- *
- * Phase 3: این Store به Laravel Sanctum وصل می‌شه. تولید/وریفای OTP واقعاً سمت سرور
- * انجام می‌شه (کد هیچ‌وقت به کلاینت برنمی‌گرده - برخلاف mock فعلی که چون ایمیل واقعی
- * ارسال نمی‌شه، کد رو برای تست توی toast/console نشون می‌ده).
- */
+const emailKey = (email: string) => email.trim().toLowerCase()
+
+function mockHash(value: string): string {
+  let h1 = 0xDEADBEEF
+  let h2 = 0x41C6CE57
+  for (let i = 0; i < value.length; i++) {
+    const ch = value.charCodeAt(i)
+    h1 = Math.imul(h1 ^ ch, 2654435761)
+    h2 = Math.imul(h2 ^ ch, 1597334677)
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909)
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909)
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36)
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: useLocalStorage<User | null>('bargyar-auth-user', null),
     pendingRegistration: useLocalStorage<PendingRegistration | null>('bargyar-pending-registration', null),
     otps: useLocalStorage<Record<string, OtpEntry>>('bargyar-otp-codes', {}),
+    credentials: useLocalStorage<Record<string, string>>('bargyar-credentials', {}),
+    profiles: useLocalStorage<Record<string, UserProfileData>>('bargyar-user-profiles', {}),
     loading: false,
     error: '',
   }),
@@ -38,7 +36,7 @@ export const useAuthStore = defineStore('auth', {
     isLoggedIn: state => !!state.user,
   },
   actions: {
-    async login(email: string, _password: string) {
+    async login(email: string, password: string) {
       this.loading = true
       this.error = ''
       try {
@@ -47,11 +45,21 @@ export const useAuthStore = defineStore('auth', {
           this.error = 'auth.errors.invalidCredentials'
           return false
         }
+        const key = emailKey(email)
+        const storedHash = this.credentials[key]
+        if (storedHash && storedHash !== mockHash(password)) {
+          this.error = 'auth.errors.invalidCredentials'
+          return false
+        }
+        if (!storedHash) {
+          this.credentials[key] = mockHash(password)
+        }
         this.user = {
           id: 'u_current',
           name: email.split('@')[0] ?? 'کاربر',
           email,
           joinedAt: new Date().toISOString().slice(0, 10),
+          ...this.profiles[key],
         }
         return true
       }
@@ -64,12 +72,6 @@ export const useAuthStore = defineStore('auth', {
       this.user = null
     },
 
-    /**
-     * تولید و «ارسال» یک کد ۶ رقمی. چون بک‌اند/ایمیل واقعی وصل نیست، این‌جا فقط توی
-     * localStorage (با ttl) ذخیره‌ش می‌کنیم و برای این‌که فلو قابل تست باشه، خودِ کد رو
-     * برمی‌گردونیم تا صفحه‌ی صداکننده با toast دِوِلوپری نشونش بده - Phase 3 این نشون‌دادن
-     * حذف می‌شه چون کد فقط سمت سرور و توی ایمیل واقعی می‌مونه.
-     */
     async sendOtp(email: string, purpose: OtpPurpose) {
       await simulateDelay(400)
       const code = Math.floor(100000 + Math.random() * 900000).toString()
@@ -87,7 +89,6 @@ export const useAuthStore = defineStore('auth', {
       return true
     },
 
-    /** ثبت‌نام قدم ۱: اسم/ایمیل رو موقتاً نگه می‌داره (هنوز verified نیست) و OTP می‌فرسته. */
     async register(name: string, email: string) {
       this.loading = true
       this.error = ''
@@ -102,7 +103,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /** ثبت‌نام قدم ۲: با کد درست، ایمیل verified می‌شه (ولی حساب هنوز ساخته نشده). */
     async verifyRegisterOtp(email: string, code: string) {
       this.loading = true
       this.error = ''
@@ -122,8 +122,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /** ثبت‌نام قدم ۳: فقط اگه pendingRegistration واقعاً verified باشه، حساب ساخته و لاگین می‌شه. */
-    async setPassword(_password: string) {
+    async setPassword(password: string) {
       this.loading = true
       this.error = ''
       try {
@@ -132,11 +131,14 @@ export const useAuthStore = defineStore('auth', {
           this.error = 'auth.errors.verifyEmailFirst'
           return false
         }
+        const key = emailKey(this.pendingRegistration.email)
+        this.credentials[key] = mockHash(password)
         this.user = {
           id: 'u_current',
           name: this.pendingRegistration.name,
           email: this.pendingRegistration.email,
           joinedAt: new Date().toISOString().slice(0, 10),
+          ...this.profiles[key],
         }
         this.pendingRegistration = null
         return true
@@ -164,12 +166,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /**
-     * بازیابی رمز قدم ۲: کد و رمز جدید با هم توی یک درخواست چک می‌شن (نه در دو مرحله‌ی
-     * جدا) - اگه کد غلط/منقضی بود false برمی‌گرده تا صفحه کاربر رو به قدم «وارد کردن
-     * کد» برگردونه.
-     */
-    async resetPassword(email: string, code: string, _newPassword: string) {
+    async resetPassword(email: string, code: string, newPassword: string) {
       this.loading = true
       this.error = ''
       try {
@@ -178,11 +175,76 @@ export const useAuthStore = defineStore('auth', {
           this.error = 'auth.errors.invalidCode'
           return false
         }
+        this.credentials[emailKey(email)] = mockHash(newPassword)
         return true
       }
       finally {
         this.loading = false
       }
+    },
+
+    async updateProfile(data: UserProfileData) {
+      this.loading = true
+      this.error = ''
+      try {
+        await simulateDelay(500)
+        if (!this.user) {
+          this.error = 'pages.profile.errors.notLoggedIn'
+          return false
+        }
+        this.user = { ...this.user, ...data }
+        this.profiles[emailKey(this.user.email)] = { ...data }
+        return true
+      }
+      finally {
+        this.loading = false
+      }
+    },
+
+    async verifyCurrentPassword(password: string) {
+      this.loading = true
+      this.error = ''
+      try {
+        await simulateDelay(400)
+        return this.checkCurrentPassword(password)
+      }
+      finally {
+        this.loading = false
+      }
+    },
+
+    async changePassword(currentPassword: string, newPassword: string) {
+      this.loading = true
+      this.error = ''
+      try {
+        await simulateDelay(500)
+        if (!this.checkCurrentPassword(currentPassword)) {
+          return false
+        }
+        this.credentials[emailKey(this.user!.email)] = mockHash(newPassword)
+        return true
+      }
+      finally {
+        this.loading = false
+      }
+    },
+
+    checkCurrentPassword(password: string) {
+      if (!this.user) {
+        this.error = 'pages.profile.errors.notLoggedIn'
+        return false
+      }
+      const key = emailKey(this.user.email)
+      const storedHash = this.credentials[key]
+      if (!storedHash) {
+        this.credentials[key] = mockHash(password)
+        return true
+      }
+      if (storedHash !== mockHash(password)) {
+        this.error = 'pages.profile.errors.currentPasswordWrong'
+        return false
+      }
+      return true
     },
   },
 })

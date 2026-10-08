@@ -169,6 +169,38 @@
         "forest": "سبز جنگلی",
         "brown": "قهوه‌ای",
         "navy": "سرمه‌ای"
+      },
+      "account": "اطلاعات کاربر",
+      "birthDate": "تاریخ تولد",
+      "gender": "جنسیت",
+      "genderMale": "مرد",
+      "genderFemale": "زن",
+      "phone": "شماره تلفن",
+      "nationalId": "کد ملی",
+      "saveChanges": "ذخیره تغییرات",
+      "saved": "اطلاعاتت ذخیره شد",
+      "loginRequired": "برای ثبت و ویرایش اطلاعات کاربری باید وارد حسابت بشی.",
+      "password": {
+        "change": "تغییر رمز عبور",
+        "title": "تغییر رمز عبور",
+        "verifySubtitle": "برای ادامه، رمز عبور فعلیت را وارد کن.",
+        "current": "رمز عبور فعلی",
+        "changeSubtitle": "رمز فعلی تایید شد. حالا رمز عبور جدیدت را وارد کن.",
+        "save": "ذخیره رمز جدید",
+        "changed": "رمز عبورت با موفقیت تغییر کرد"
+      },
+      "errors": {
+        "birthDateRequired": "تاریخ تولد را وارد کن",
+        "birthDateInvalid": "تاریخ تولد معتبر نیست",
+        "genderRequired": "جنسیت را انتخاب کن",
+        "phoneRequired": "شماره تلفن را وارد کن",
+        "phoneInvalid": "شماره موبایل معتبر نیست (مثال: 09123456789)",
+        "nationalIdRequired": "کد ملی را وارد کن",
+        "nationalIdInvalid": "کد ملی معتبر نیست",
+        "currentPasswordRequired": "رمز عبور فعلی را وارد کن",
+        "currentPasswordWrong": "رمز عبور فعلی اشتباه است.",
+        "sameAsOld": "رمز جدید نباید با رمز فعلی یکی باشد",
+        "notLoggedIn": "ابتدا باید وارد حسابت بشی."
       }
     },
     "history": {

@@ -169,6 +169,38 @@
         "forest": "Forest green",
         "brown": "Brown",
         "navy": "Navy"
+      },
+      "account": "Account information",
+      "birthDate": "Date of birth",
+      "gender": "Gender",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "phone": "Phone number",
+      "nationalId": "National ID",
+      "saveChanges": "Save changes",
+      "saved": "Your information has been saved",
+      "loginRequired": "You need to sign in to add and edit your account information.",
+      "password": {
+        "change": "Change password",
+        "title": "Change password",
+        "verifySubtitle": "Enter your current password to continue.",
+        "current": "Current password",
+        "changeSubtitle": "Current password verified. Now enter your new password.",
+        "save": "Save new password",
+        "changed": "Your password has been changed successfully"
+      },
+      "errors": {
+        "birthDateRequired": "Please enter your date of birth",
+        "birthDateInvalid": "The date of birth is not valid",
+        "genderRequired": "Please select your gender",
+        "phoneRequired": "Please enter your phone number",
+        "phoneInvalid": "The mobile number is not valid (e.g. 09123456789)",
+        "nationalIdRequired": "Please enter your national ID",
+        "nationalIdInvalid": "The national ID is not valid",
+        "currentPasswordRequired": "Please enter your current password",
+        "currentPasswordWrong": "The current password is incorrect.",
+        "sameAsOld": "The new password must be different from the current one",
+        "notLoggedIn": "Please sign in first."
       }
     },
     "history": {
