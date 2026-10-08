@@ -49,14 +49,31 @@ const [gender] = defineField('gender')
 const [phone, phoneAttrs] = defineField('phone')
 const [nationalId, nationalIdAttrs] = defineField('nationalId')
 
-const genderOptions: { value: Gender, label: string }[] = [
-  { value: 'female', label: 'pages.profile.genderFemale' },
-  { value: 'male', label: 'pages.profile.genderMale' },
-]
+const genderOptions = computed<{ value: Gender, label: string }[]>(() => [
+  { value: 'female', label: t('pages.profile.genderFemale') },
+  { value: 'male', label: t('pages.profile.genderMale') },
+])
+
+// فقط رقم قبول می‌کنه (تایپ، پیست و اعداد فارسی/عربی). مکان نشانگر هم حفظ می‌شه.
+function onDigitsInput(event: Event, set: (value: string) => void) {
+  const el = event.target as HTMLInputElement
+  const clean = onlyDigits(el.value)
+  if (el.value !== clean) {
+    const caret = onlyDigits(el.value.slice(0, el.selectionStart ?? el.value.length)).length
+    el.value = clean
+    el.setSelectionRange(caret, caret)
+  }
+  set(clean)
+}
 
 const birthDateLabel = computed(() => (birthDate.value ? toJalaliDate(birthDate.value) : ''))
 
-const inputClass = 'w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm text-ink placeholder:text-ink-muted/60 outline-none transition-colors focus:border-primary-500'
+const inputClass = 'w-full rounded-md border bg-transparent px-3 py-2.5 text-sm text-ink placeholder:text-ink-muted/60 outline-none transition-colors focus:border-primary-500'
+
+function onLogout() {
+  authStore.logout()
+  navigateTo('/')
+}
 
 const onSubmit = handleSubmit(async (values) => {
   const ok = await authStore.updateProfile({
@@ -95,134 +112,134 @@ const onSubmit = handleSubmit(async (values) => {
       novalidate
       @submit="onSubmit"
     >
-      <!-- ایمیل (فقط نمایش) -->
-      <div>
-        <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.email') }}</label>
-        <div
-          class="w-full rounded-lg border border-ink/10 bg-ink/5 px-3 py-2.5 text-sm text-ink-muted"
-          dir="ltr"
-        >
-          {{ authStore.user?.email }}
-        </div>
-      </div>
-
-      <!-- اسم -->
-      <div>
-        <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.name') }}</label>
-        <input
-          v-model="name"
-          v-bind="nameAttrs"
-          type="text"
-          autocomplete="name"
-          :class="[inputClass, errors.name ? 'border-status-danger' : 'border-ink/15']"
-          :placeholder="t('auth.namePlaceholder')"
-        >
-        <p
-          v-if="errors.name"
-          class="mt-1 text-xs text-status-danger"
-        >
-          {{ t(errors.name) }}
-        </p>
-      </div>
-
-      <!-- تاریخ تولد -->
-      <div>
-        <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.birthDate') }}</label>
-        <input
-          v-model="birthDate"
-          v-bind="birthDateAttrs"
-          type="date"
-          min="1900-01-01"
-          :max="today"
-          autocomplete="bday"
-          :class="[inputClass, errors.birthDate ? 'border-status-danger' : 'border-ink/15']"
-        >
-        <p
-          v-if="birthDateLabel && !errors.birthDate"
-          class="mt-1 text-xs text-ink-muted"
-        >
-          {{ birthDateLabel }}
-        </p>
-        <p
-          v-if="errors.birthDate"
-          class="mt-1 text-xs text-status-danger"
-        >
-          {{ t(errors.birthDate) }}
-        </p>
-      </div>
-
-      <!-- جنسیت -->
-      <div>
-        <span class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.gender') }}</span>
-        <div
-          class="flex gap-2"
-          role="radiogroup"
-          :aria-label="t('pages.profile.gender')"
-        >
-          <button
-            v-for="option in genderOptions"
-            :key="option.value"
-            type="button"
-            role="radio"
-            :aria-checked="gender === option.value"
-            class="flex-1 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors"
-            :class="gender === option.value
-              ? 'border-primary-600 bg-primary-600 text-white'
-              : 'border-ink/15 bg-transparent text-ink hover:bg-ink/5'"
-            @click="gender = option.value"
+      <div class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
+        <!-- اسم -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.name') }}</label>
+          <input
+            v-model="name"
+            v-bind="nameAttrs"
+            type="text"
+            autocomplete="name"
+            :class="[inputClass, errors.name ? 'border-status-danger' : 'border-ink/15']"
+            :placeholder="t('auth.namePlaceholder')"
           >
-            {{ t(option.label) }}
-          </button>
+          <p
+            v-if="errors.name"
+            class="mt-1 text-xs text-status-danger"
+          >
+            {{ t(errors.name) }}
+          </p>
         </div>
-        <p
-          v-if="errors.gender"
-          class="mt-1 text-xs text-status-danger"
-        >
-          {{ t(errors.gender) }}
-        </p>
-      </div>
 
-      <!-- شماره تلفن -->
-      <div>
-        <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.phone') }}</label>
-        <input
-          v-model="phone"
-          v-bind="phoneAttrs"
-          type="tel"
-          inputmode="numeric"
-          autocomplete="tel"
-          maxlength="11"
-          dir="ltr"
-          :class="[inputClass, 'text-start', errors.phone ? 'border-status-danger' : 'border-ink/15']"
-          placeholder="09123456789"
-        >
-        <p
-          v-if="errors.phone"
-          class="mt-1 text-xs text-status-danger"
-        >
-          {{ t(errors.phone) }}
-        </p>
-      </div>
+        <!-- ایمیل (فقط نمایش) -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.email') }}</label>
+          <div class="relative">
+            <input
+              :value="authStore.user?.email ?? ''"
+              type="email"
+              readonly
+              tabindex="-1"
+              dir="ltr"
+              class="w-full rounded-md border border-ink/10 bg-ink/5 px-3 py-2.5 pe-10 text-start text-sm text-ink outline-none"
+            >
+            <!-- ایمیل با کد تایید وریفای شده -->
+            <Icon
+              name="lucide:badge-check"
+              class="pointer-events-none absolute inset-y-0 end-3 my-auto size-5 text-primary-600"
+            />
+          </div>
+        </div>
 
-      <!-- کد ملی -->
-      <div>
-        <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.nationalId') }}</label>
-        <input
-          v-model="nationalId"
-          v-bind="nationalIdAttrs"
-          type="text"
-          inputmode="numeric"
-          maxlength="10"
-          dir="ltr"
-          :class="[inputClass, 'text-start', errors.nationalId ? 'border-status-danger' : 'border-ink/15']"
-          placeholder="0123456789"
-        >
-        <p
-          v-if="errors.nationalId"
-          class="mt-1 text-xs text-status-danger"
-        >
-          {{ t(errors.nationalId) }}
-        </p>
+        <!-- شماره تلفن -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.phone') }}</label>
+          <input
+            :value="phone"
+            v-bind="phoneAttrs"
+            type="tel"
+            inputmode="numeric"
+            autocomplete="tel"
+            maxlength="11"
+            dir="ltr"
+            :class="[inputClass, 'text-start', errors.phone ? 'border-status-danger' : 'border-ink/15']"
+            placeholder="09123456789"
+            @input="onDigitsInput($event, v => (phone = v))"
+          >
+          <p
+            v-if="errors.phone"
+            class="mt-1 text-xs text-status-danger"
+          >
+            {{ t(errors.phone) }}
+          </p>
+        </div>
+
+        <!-- جنسیت -->
+        <div>
+          <span class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.gender') }}</span>
+          <FormSelect
+            :model-value="gender"
+            :options="genderOptions"
+            :invalid="!!errors.gender"
+            :aria-label="t('pages.profile.gender')"
+            @update:model-value="gender = $event as Gender"
+          />
+          <p
+            v-if="errors.gender"
+            class="mt-1 text-xs text-status-danger"
+          >
+            {{ t(errors.gender) }}
+          </p>
+        </div>
+
+        <!-- کد ملی -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.nationalId') }}</label>
+          <input
+            :value="nationalId"
+            v-bind="nationalIdAttrs"
+            type="text"
+            inputmode="numeric"
+            maxlength="10"
+            dir="ltr"
+            :class="[inputClass, 'text-start', errors.nationalId ? 'border-status-danger' : 'border-ink/15']"
+            placeholder="0123456789"
+            @input="onDigitsInput($event, v => (nationalId = v))"
+          >
+          <p
+            v-if="errors.nationalId"
+            class="mt-1 text-xs text-status-danger"
+          >
+            {{ t(errors.nationalId) }}
+          </p>
+        </div>
+
+        <!-- تاریخ تولد (فعلاً input پیش‌فرض؛ در مرحله‌ی بعد با دیت‌پیکر شمسی عوض می‌شه) -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.birthDate') }}</label>
+          <input
+            v-model="birthDate"
+            v-bind="birthDateAttrs"
+            type="date"
+            min="1900-01-01"
+            :max="today"
+            autocomplete="bday"
+            :class="[inputClass, errors.birthDate ? 'border-status-danger' : 'border-ink/15']"
+          >
+          <p
+            v-if="birthDateLabel && !errors.birthDate"
+            class="mt-1 text-xs text-ink-muted"
+          >
+            {{ birthDateLabel }}
+          </p>
+          <p
+            v-if="errors.birthDate"
+            class="mt-1 text-xs text-status-danger"
+          >
+            {{ t(errors.birthDate) }}
+          </p>
+        </div>
       </div>
 
       <!-- رمز عبور: با کلیک، اول رمز فعلی پرسیده می‌شه و بعد رمز جدید -->
@@ -230,7 +247,7 @@ const onSubmit = handleSubmit(async (values) => {
         <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.password') }}</label>
         <button
           type="button"
-          class="flex w-full items-center justify-between rounded-lg border border-ink/15 px-3 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5"
+          class="flex w-full items-center justify-between rounded-md border border-ink/15 px-3 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5"
           @click="showPasswordModal = true"
         >
           <span
@@ -255,6 +272,18 @@ const onSubmit = handleSubmit(async (values) => {
       >
         {{ t('pages.profile.saveChanges') }}
       </AppButton>
+
+      <button
+        type="button"
+        class="flex w-full items-center justify-center gap-2 rounded-md border border-status-danger/30 px-4 py-2.5 text-sm font-medium text-status-danger transition-colors hover:bg-status-danger/10"
+        @click="onLogout"
+      >
+        <Icon
+          name="lucide:log-out"
+          class="size-4"
+        />
+        {{ t('pages.profile.logout') }}
+      </button>
     </form>
 
     <ChangePasswordModal v-model="showPasswordModal" />

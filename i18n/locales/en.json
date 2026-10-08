@@ -178,6 +178,7 @@
       "phone": "Phone number",
       "nationalId": "National ID",
       "saveChanges": "Save changes",
+      "logout": "Log out",
       "saved": "Your information has been saved",
       "loginRequired": "You need to sign in to add and edit your account information.",
       "password": {

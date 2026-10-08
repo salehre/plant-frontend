@@ -178,6 +178,7 @@
       "phone": "شماره تلفن",
       "nationalId": "کد ملی",
       "saveChanges": "ذخیره تغییرات",
+      "logout": "خروج از حساب",
       "saved": "اطلاعاتت ذخیره شد",
       "loginRequired": "برای ثبت و ویرایش اطلاعات کاربری باید وارد حسابت بشی.",
       "password": {
@@ -370,7 +371,7 @@
     "registerTitle": "ساخت حساب کاربری",
     "registerSubtitle": "رایگان ثبت‌نام کن و شروع کن به مراقبت هوشمند از گیاهانت.",
     "name": "اسم",
-    "namePlaceholder": "اسم و فامیل",
+    "namePlaceholder": "نام کامل",
     "otpSentDev": "کد تایید ارسال شد (dev: {code})",
     "haveAccount": "قبلاً حساب ساختی؟",
     "setPasswordTitle": "تنظیم رمز عبور",

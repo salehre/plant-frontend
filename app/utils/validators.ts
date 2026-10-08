@@ -8,6 +8,11 @@ export function normalizeDigits(value: string): string {
     .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
 }
 
+/** فقط رقم‌ها رو نگه می‌داره (اعداد فارسی/عربی هم به انگلیسی تبدیل می‌شن) - برای فیلدهای عددی مثل شماره تلفن و کد ملی */
+export function onlyDigits(value: string): string {
+  return normalizeDigits(value).replace(/\D/g, '')
+}
+
 /** شماره موبایل ایران: ۱۱ رقم و شروع با 09 */
 export function isValidIranMobile(value: string): boolean {
   return /^09\d{9}$/.test(normalizeDigits(value.trim()))
