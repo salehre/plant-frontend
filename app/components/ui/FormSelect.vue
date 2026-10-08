@@ -82,7 +82,7 @@ function onKeydown(event: KeyboardEvent) {
       :aria-expanded="open"
       :aria-controls="listId"
       :aria-label="ariaLabel"
-      class="flex w-full items-center justify-between gap-2 rounded-lg border bg-transparent px-3 py-2.5 text-sm outline-none transition-colors"
+      class="flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2.5 text-sm outline-none transition-colors"
       :class="[
         invalid ? 'border-status-danger' : open ? 'border-primary-500' : 'border-ink/15',
         selected ? 'text-ink' : 'text-ink-muted/60',
@@ -103,7 +103,7 @@ function onKeydown(event: KeyboardEvent) {
         v-if="open"
         :id="listId"
         role="listbox"
-        class="absolute inset-x-0 z-30 mt-1 origin-top overflow-hidden rounded-lg border border-ink/10 bg-surface py-1 shadow-card-hover"
+        class="absolute inset-x-0 z-30 mt-1 origin-top overflow-hidden rounded-md border border-ink/10 bg-surface py-1 shadow-card-hover"
       >
         <li
           v-for="(opt, index) in options"

@@ -57,17 +57,22 @@ watch(activeLocale, () => {
       </div>
     </header>
 
-    <!-- در حال دریافت پیشنهاد -->
+    <!-- در حال دریافت پیشنهاد (AI داره فکر می‌کنه) -->
     <div
       v-if="store.loading"
-      class="flex flex-col items-center gap-3 py-12 text-center"
+      class="flex min-h-64 flex-col items-center justify-center gap-4 py-12 text-center"
       role="status"
       aria-live="polite"
     >
-      <Icon
-        name="svg-spinners:180-ring"
-        class="size-8 text-primary-600"
-      />
+      <span class="relative flex size-16 items-center justify-center">
+        <span class="absolute inset-0 animate-ping rounded-full bg-primary-100 motion-reduce:animate-none" />
+        <span class="relative flex size-16 items-center justify-center rounded-full bg-primary-50">
+          <Icon
+            name="svg-spinners:180-ring"
+            class="size-8 text-primary-600"
+          />
+        </span>
+      </span>
       <p class="text-sm text-ink-muted">
         {{ t('home.plantFinder.loading') }}
       </p>
