@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const emit = defineEmits<{ capture: [string], close: [] }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 const videoEl = ref<HTMLVideoElement | null>(null)
 const stream = ref<MediaStream | null>(null)

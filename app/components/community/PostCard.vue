@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { Post } from '~/types/community.types'
 
 const props = defineProps<{ post: Post }>()
 
 const communityStore = useCommunityStore()
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 const showComments = ref(false)
 const commentText = ref('')
 

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { IdentifyResult } from '~/types/identify.types'
 import type { PlantResultItem } from '~/composables/usePlantResults'
 
 const props = defineProps<{ result: IdentifyResult }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 const identifyStore = useIdentifyStore()
 const uiStore = useUiStore()
 

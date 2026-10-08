@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { MockLocale } from '~/services/mock/mock-locale'
 import { suggestPlants } from '~/services/mock/plants.mock'
 
 const props = defineProps<{ modelValue: string }>()
 const emit = defineEmits<{ 'update:modelValue': [string], 'select': [string] }>()
-const { locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { locale } = useI18n()
 
 const isFocused = ref(false)
 const target = ref<HTMLElement | null>(null)

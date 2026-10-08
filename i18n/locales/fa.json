@@ -373,5 +373,520 @@
     "notFoundText": "ممکن است این مقاله حذف شده یا آدرسش اشتباه باشد.",
     "errorList": "دریافت مقالات با مشکل روبه‌رو شد.",
     "errorPost": "دریافت مقاله با مشکل روبه‌رو شد."
+  },
+  "components": {
+    "common": {
+      "confidence": "میزان اطمینان تشخیص",
+      "unlinkedPlant": "این مورد به گیاه مشخصی در دایرةالمعارف وصل نشده.",
+      "unlinkedScan": "این اسکن به گیاه مشخصی در دایرةالمعارف وصل نشده.",
+      "scanAgain": "اسکن دوباره",
+      "toxicFor": "سمی برای {target}",
+      "notToxic": "سمی نیست",
+      "plantNotFound": "اطلاعات این گیاه پیدا نشد.",
+      "fullPlantInfo": "مشاهده اطلاعات کامل گیاه",
+      "taskWater": "آبیاری",
+      "taskFertilize": "کوددهی",
+      "taskPrune": "هرس",
+      "taskRepot": "تعویض گلدان",
+      "taskMist": "مه‌پاشی",
+      "lightLow": "کم‌نور",
+      "lightMedium": "نور غیرمستقیم",
+      "lightHigh": "نور زیاد",
+      "lightDirect": "آفتاب مستقیم",
+      "waterLow": "کم",
+      "waterMedium": "متوسط",
+      "waterHigh": "زیاد",
+      "difficultyEasy": "آسان",
+      "difficultyMedium": "متوسط",
+      "difficultyHard": "سخت",
+      "human": "انسان",
+      "cat": "گربه",
+      "dog": "سگ"
+    },
+    "appDropdown": {
+      "select": "انتخاب کن"
+    },
+    "appModal": {
+      "close": "بستن"
+    },
+    "predictionCard": {
+      "identified": "گیاه تو شناسایی شد",
+      "similarSpecies": "گونه‌های مشابه احتمالی",
+      "confirmedToast": "تأیید شد و به تاریخچه‌ی اسکن‌ها اضافه شد",
+      "unconfirmedToast": "تأیید لغو شد و از تاریخچه حذف شد",
+      "compareHint": "برای مقایسه، دستگیره‌ی کنار یک گیاه را بکش و روی گیاه دیگر رها کن.",
+      "compareLink": "مقایسه این دو گیاه"
+    },
+    "imageUploader": {
+      "dropPrompt": "عکس گیاهت را اینجا بکش یا آپلود کن",
+      "supportedFormats": "فرمت JPG یا PNG، حداکثر ۱۰ مگابایت"
+    },
+    "cameraCapture": {
+      "permissionDenied": "دسترسی به دوربین ممکن نشد. مرورگر یا دستگاهت اجازه نداده.",
+      "cancel": "انصراف",
+      "capture": "گرفتن عکس"
+    },
+    "theHeader": {
+      "brand": "برگ‌یار",
+      "home": "خانه",
+      "identify": "شناسایی",
+      "catalog": "گیاهان",
+      "profile": "پروفایل",
+      "menu": "منو"
+    },
+    "theFooter": {
+      "brand": "برگ‌یار",
+      "tagline": "پلتفرم هوشمند شناخت و مراقبت از گیاهان",
+      "poweredBy": "طراحی و توسعه توسط",
+      "platform": "پلتفرم",
+      "identify": "تشخیص گیاه",
+      "encyclopedia": "دایرةالمعارف گیاهان",
+      "compare": "مقایسه گیاهان",
+      "city": "گیاه مناسب شهر",
+      "community": "انجمن گیاه‌دوستان",
+      "dashboard": "داشبورد",
+      "account": "حساب کاربری",
+      "myPlants": "گیاهان من",
+      "careCalendar": "تقویم مراقبت",
+      "profile": "پروفایل"
+    },
+    "mobileBottomNav": {
+      "home": "خانه",
+      "identify": "شناسایی",
+      "plants": "گیاهان",
+      "profile": "پروفایل",
+      "navigation": "ناوبری اصلی"
+    },
+    "taskCard": {
+      "complete": "انجام شد"
+    },
+    "growthChart": {
+      "title": "روند رشد",
+      "week": "هفته {week}"
+    },
+    "careCalendar": {
+      "saturday": "شنبه",
+      "sunday": "یکشنبه",
+      "monday": "دوشنبه",
+      "tuesday": "سه‌شنبه",
+      "wednesday": "چهارشنبه",
+      "thursday": "پنجشنبه",
+      "friday": "جمعه"
+    },
+    "userProfileCard": {
+      "follow": "دنبال کردن",
+      "following": "دنبال می‌کنی",
+      "plant": "گیاه",
+      "followers": "دنبال‌کننده",
+      "followingCount": "دنبال‌شونده"
+    },
+    "postCard": {
+      "minutesAgo": "چند دقیقه پیش",
+      "hourAgo": "{count} ساعت پیش",
+      "hoursAgo": "{count} ساعت پیش",
+      "dayAgo": "{count} روز پیش",
+      "daysAgo": "{count} روز پیش",
+      "commentPlaceholder": "نظرت رو بنویس...",
+      "send": "ارسال"
+    },
+    "compareTable": {
+      "light": "نور",
+      "watering": "آبیاری",
+      "everyDays": "هر {days} روز",
+      "temperature": "دما",
+      "temperatureValue": "{min} تا {max} درجه",
+      "humidity": "رطوبت",
+      "careLevel": "سطح مراقبت",
+      "toxicity": "سمیت",
+      "toxicForPets": "سمی برای حیوانات",
+      "safe": "بی‌خطر",
+      "feature": "ویژگی"
+    },
+    "careInfoCard": {
+      "light": "نور",
+      "watering": "آبیاری",
+      "everyDays": "هر {days} روز",
+      "temperature": "دما",
+      "temperatureValue": "{min} تا {max} درجه",
+      "humidity": "رطوبت",
+      "suitableSoil": "خاک مناسب"
+    },
+    "wishlistButton": {
+      "remove": "حذف از علاقه‌مندی‌ها",
+      "add": "افزودن به علاقه‌مندی‌ها",
+      "saved": "در علاقه‌مندی‌هاست",
+      "addedToast": "به علاقه‌مندی‌ها اضافه شد",
+      "removedToast": "از علاقه‌مندی‌ها حذف شد"
+    },
+    "plantDetailHeader": {
+      "careLevel": "سطح مراقبت: {level}",
+      "toxicForPets": "سمی برای حیوانات خانگی",
+      "family": "خانواده:",
+      "genus": "جنس:"
+    },
+    "confidenceScore": {
+      "percentage": "{value}٪"
+    },
+    "plantResultCard": {
+      "removeFromHistory": "حذف از تاریخچه",
+      "confirm": "تأیید این نتیجه (ثبت در تاریخچه)",
+      "undoConfirm": "لغو تأیید"
+    },
+    "historyCard": {
+      "removeFromHistory": "حذف از تاریخچه",
+      "fullPlantInfo": "مشاهده اطلاعات کامل گیاه"
+    },
+    "diseaseResultCard": {
+      "severityLow": "خفیف",
+      "severityMedium": "متوسط",
+      "severityHigh": "جدی",
+      "treatmentSteps": "مراحل درمان پیشنهادی"
+    },
+    "plantDetailFull": {
+      "plantName": "شیرین بیان",
+      "threatened": "در معرض تهدید",
+      "extinct": "منقرض شده",
+      "stable": "وضعیت پایدار",
+      "noStatusData": "اطلاعات کافی موجود نیست",
+      "galleryFlowerLeaves": "گل و برگ شیرین بیان",
+      "galleryBotanicalIllustration": "تصویر علمی گیاه",
+      "galleryRoots": "ریشه شیرین بیان",
+      "galleryPurpleFlowers": "گل‌های بنفش شیرین بیان",
+      "copiedLink": "لینک صفحه کپی شد",
+      "taxonomy": {
+        "subspecies": "معمولاً زیرگونه‌های شناخته‌شده ندارد",
+        "kingdom": "فرمانرو",
+        "division": "دسته",
+        "class": "رده",
+        "order": "راسته",
+        "family": "تیره",
+        "genus": "جنس",
+        "species": "گونه",
+        "subspeciesLabel": "زیرگونه",
+        "authority": "وضع‌کننده (Authority)",
+        "authorityPrefix": "وضع‌کننده"
+      },
+      "morphology": {
+        "plantTypeLabel": "نوع گیاه",
+        "leafLabel": "برگ",
+        "flowerLabel": "گل",
+        "stemLabel": "ساقه",
+        "rootLabel": "ریشه",
+        "fruitLabel": "میوه",
+        "seedLabel": "دانه",
+        "barkLabel": "پوست",
+        "latexLabel": "شیرابه",
+        "plantType": "علفی چندساله (perennial herb)",
+        "leaf": "مرکب شانه‌ای، حاشیه صاف، آرایش متناوب روی ساقه",
+        "flower": "بنفش کم‌رنگ تا آبی، گلبرگ‌های پروانه‌ای",
+        "stem": "راست یا متمایل، نیمه‌چوبی در پایه",
+        "root": "غده‌ای ـ راست ـ بسیار گسترده و منشعب (بخش دارویی اصلی)",
+        "fruit": "نیام کوچک",
+        "seed": "کوچک، تخم‌مرغی",
+        "bark": "پوست زرد ـ قهوه‌ای",
+        "latex": "ندارد (فاقد شیرابه لاتکسی)"
+      },
+      "chemical": {
+        "majorCompound": "گلیسیریزین (Glycyrrhizin) - یک ساپونین تری‌ترپنوئیدی",
+        "alkaloids": "آلکالوئیدها",
+        "traceBelow001": "بسیار کم (Trace, <0.01%)",
+        "thermopsine": "ترموپسین (Thermopsine)",
+        "cytisine": "سیتیسین (Cytisine)",
+        "glycosides": "گلیکوزیدها",
+        "mainlyGlycyrrhizin": "2-5% (عمدتاً گلیسیریزین)",
+        "glycyrrhizicAcid": "اسید گلیسیریزیک (Glycyrrhizic acid)",
+        "liquiritin": "لیکوریتین (Liquiritin)",
+        "flavonoids": "فلاونوئیدها",
+        "licochalcone": "لیکوکالکون A (Licochalcone A)",
+        "glabridin": "گلابریدین (Glabridin)",
+        "glabrene": "گلابرن (Glabrene)",
+        "tannins": "تانن‌ها",
+        "hydrolyzableTannins": "تانن‌های هیدرولیز شونده (گالوتانن‌ها)",
+        "proanthocyanidins": "پروآنتوسیانیدین‌ها",
+        "essentialOils": "اسانس‌ها (روغن فرار)",
+        "belowPointOne": "کمتر از 0.1%",
+        "caryophylleneOxide": "اکسید کاریوفیلن (Caryophyllene oxide)",
+        "linalool": "لینالول (Linalool)",
+        "eugenol": "یوژنول (Eugenol)",
+        "saponins": "ساپونین‌ها",
+        "relatedSaponins": "ساپونین‌های مرتبط (Glycyrrhizin analogues)",
+        "phenolicCompounds": "ترکیبات فنولی",
+        "variedFlavonoidsCoumarins": "متنوع، شامل فلاونوئیدها و کومارین‌ها",
+        "coumarins": "کومارین‌ها (مانند هیدروکسی کومارین)",
+        "phenolicAcids": "فنولیک اسیدها (p-coumaric, ferulic)",
+        "primaryIngredient": "ماده مؤثره اصلی:",
+        "primary": "اصلی",
+        "secondary": "فرعی"
+      },
+      "growthNeeds": {
+        "light": "آفتاب کامل",
+        "water": "متوسط؛ تحمل خشکی دارد",
+        "soil": "لومی، سبک، عمیق، با زهکشی خوب",
+        "temperature": "معتدل تا گرم؛ مقاومت مناسب در برابر گرما",
+        "growthAltitude": "حدود ۲۰۰ تا ۱۵۰۰ متر از سطح دریا",
+        "lightLabel": "نور",
+        "waterLabel": "آب",
+        "soilLabel": "خاک",
+        "temperatureLabel": "دما",
+        "growthAltitudeLabel": "ارتفاع رویش"
+      },
+      "applications": {
+        "food": "خوراکی:",
+        "industrial": "صنعتی:",
+        "therapeutic": "درمانی:",
+        "foodTea": "شیرین‌کننده طبیعی در دمنوش‌ها",
+        "foodFlavor": "طعم‌دهنده در صنعت شیرینی‌پزی",
+        "foodDrinks": "ماده اولیه نوشیدنی‌های سنتی",
+        "industrialExtract": "عصاره‌گیری برای صنایع داروسازی",
+        "industrialCosmetics": "افزودنی در محصولات آرایشی‌بهداشتی",
+        "industrialSweeteners": "ماده اولیه در تولید شیرین‌کننده‌های صنعتی",
+        "therapeuticUlcer": "درمان زخم معده و التهاب دستگاه گوارش",
+        "therapeuticCough": "کاهش سرفه و خلط‌آوری",
+        "therapeuticAntiviral": "ضدویروس در درمان تبخال",
+        "therapeuticLaxative": "ملین ملایم و ضد یبوست"
+      },
+      "toxicity": "مصرف زیاد باعث افزایش فشار خون، احتباس آب و سدیم، کاهش پتاسیم",
+      "conservationStatus": "در برخی مناطق ایران برداشت بی‌رویه باعث تهدید جمعیت طبیعی شده، اما به‌طور رسمی در لیست انقراض جهانی نیست",
+      "toxicLabel": "سمیت:",
+      "conservationLabel": "وضعیت حفاظتی:",
+      "localNames": {
+        "mahak": "مهک",
+        "mahuk": "مهوک",
+        "aslAlSus": "اصل‌السوس",
+        "saqezbian": "سقزبیان",
+        "shirinBuyeh": "شیرین‌بویه",
+        "lorestan": "لرستان",
+        "kurdistan": "کردستان",
+        "farsKhuzestan": "فارس و خوزستان",
+        "azerbaijan": "آذربایجان",
+        "khorasan": "خراسان"
+      },
+      "fossilPeriod": "شواهد نشان می‌دهد جنس Glycyrrhiza در دوران پلیوسن حضور داشته؛ تاریخچه تکاملی چندمیلیون ساله دارد.",
+      "plantStory": "شیرین‌بیان یکی از کهن‌ترین گیاهان دارویی دنیاست؛ در متون پزشکی مصر باستان، چین و ایران باستان از آن نام برده شده. سربازان ایرانی در دوره هخامنشی برای جلوگیری از تشنگی در سفرهای طولانی ریشهٔ آن را می‌جویدند، زیرا گلیسیریزین سبب احساس شیرینی و افزایش ترشح بزاق می‌شود.",
+      "quickStats": {
+        "origin": "مبدا",
+        "habitat": "زیستگاه",
+        "iranRange": "گستره ایران",
+        "worldRange": "گستره جهانی",
+        "easternMediterranean": "مدیترانه شرقی",
+        "dryRegions": "مناطق خشک، نیمه‌خشک",
+        "iranProvinces": "آذربایجان، خراسان، لرستان، فارس",
+        "mediterraneanAsia": "مدیترانه تا آسیا"
+      },
+      "statusLabel": "وضعیت حفاظتی: {status}",
+      "save": "ذخیره در نشان‌شده‌ها",
+      "share": "اشتراک‌گذاری",
+      "biology": "ویژگی‌های زیست‌شناسی",
+      "applicationsTitle": "کاربردها",
+      "phytochemistry": "ترکیبات شیمیایی",
+      "taxonomyTitle": "طبقه‌بندی علمی",
+      "growthRequirements": "نیازهای رشدی",
+      "plantStoryTitle": "داستان گیاه",
+      "toxicityTitle": "سمّیت",
+      "conservationTitle": "حفاظت",
+      "localNamesTitle": "نام‌های محلی",
+      "synonymsTitle": "مترادف‌های علمی",
+      "fossilRecordTitle": "دوره فسیلی",
+      "imageGalleryTitle": "گالری تصاویر",
+      "closeGallery": "بستن",
+      "previousImage": "قبلی",
+      "nextImage": "بعدی"
+    },
+    "plantResultList": {
+      "compareHandle": "برای مقایسه بکش"
+    }
+  },
+  "testDetail": {
+    "actions": {
+      "bookmarkAdd": "به نشان‌شده‌ها اضافه شد",
+      "bookmarkRemove": "از نشان‌شده‌ها حذف شد",
+      "copyLink": "لینک کپی شد",
+      "bookmark": "افزودن به نشان‌شده‌ها",
+      "share": "اشتراک‌گذاری",
+      "close": "بستن",
+      "previousImage": "تصویر قبلی",
+      "nextImage": "تصویر بعدی"
+    },
+    "plant": {
+      "name": "شیرین بیان",
+      "conservation": {
+        "threatened": "درمعرض تهدید",
+        "extinct": "منقرض شده",
+        "stable": "وضعیت پایدار",
+        "insufficient": "اطلاعات کافی موجود نیست"
+      },
+      "gallery": {
+        "flowersLeaves": "گل و برگ شیرین بیان",
+        "botanicalIllustration": "تصویر علمی گیاه",
+        "root": "ریشه شیرین بیان",
+        "purpleFlowers": "گل‌های بنفش شیرین بیان"
+      },
+      "taxonomy": {
+        "subspecies": "معمولاً زیرگونه‌های شناخته‌شده ندارد"
+      },
+      "morphology": {
+        "plantType": "علفی چندساله (perennial herb)",
+        "leaf": "مرکب شانه‌ای، حاشیه صاف، آرایش متناوب روی ساقه",
+        "flower": "بنفش کم‌رنگ تا آبی، گلبرگ‌های پروانه‌ای",
+        "stem": "راست یا متمایل، نیمه‌چوبی در پایه",
+        "root": "غده‌ای ـ راست ـ بسیار گسترده و منشعب (بخش دارویی اصلی)",
+        "fruit": "نیام کوچک",
+        "seed": "کوچک، تخم‌مرغی",
+        "bark": "پوست زرد ـ قهوه‌ای",
+        "latex": "ندارد (فاقد شیرابه لاتکسی)"
+      },
+      "chemistry": {
+        "major": "گلیسیریزین (Glycyrrhizin) - یک ساپونین تری‌ترپنوئیدی",
+        "alkaloids": "آلکالوئیدها",
+        "glycosides": "گلیکوزیدها",
+        "flavonoids": "فلاونوئیدها",
+        "tannins": "تانن‌ها",
+        "essentialOils": "اسانس‌ها (روغن فرار)",
+        "saponins": "ساپونین‌ها",
+        "phenolicCompounds": "ترکیبات فنولی",
+        "trace": "بسیار کم (Trace, <0.01%)",
+        "mainlyGlycyrrhizin": "2-5% (عمدتاً گلیسیریزین)",
+        "lessThanPointOne": "کمتر از 0.1%",
+        "variedFlavonoidsCoumarins": "متنوع، شامل فلاونوئیدها و کومارین‌ها",
+        "thermopsine": "ترموپسین (Thermopsine)",
+        "cytisine": "سیتیسین (Cytisine)",
+        "glycyrrhizicAcid": "اسید گلیسیریزیک (Glycyrrhizic acid)",
+        "liquiritin": "لیکوریتین (Liquiritin)",
+        "licochalcone": "لیکوکالکون A (Licochalcone A)",
+        "glabridin": "گلابریدین (Glabridin)",
+        "glabrene": "گلابرن (Glabrene)",
+        "hydrolysableTannins": "تانن‌های هیدرولیزشونده (گالوتانن‌ها)",
+        "proanthocyanidins": "پروآنتوسیانیدین‌ها",
+        "caryophylleneOxide": "اکسید کاریوفیلن (Caryophyllene oxide)",
+        "linalool": "لینالول (Linalool)",
+        "eugenol": "یوژنول (Eugenol)",
+        "relatedSaponins": "ساپونین‌های مرتبط (Glycyrrhizin analogues)",
+        "coumarins": "کومارین‌ها (مانند هیدروکسی‌کومارین)",
+        "phenolicAcids": "فنولیک اسیدها (p-coumaric, ferulic)",
+        "primary": "اصلی",
+        "secondary": "فرعی"
+      },
+      "growth": {
+        "light": "آفتاب کامل",
+        "water": "متوسط؛ تحمل خشکی دارد",
+        "soil": "لومی، سبک، عمیق، با زهکشی خوب",
+        "temperature": "معتدل تا گرم؛ مقاومت مناسب در برابر گرما",
+        "growthAltitude": "حدود 200 تا 1500 متر از سطح دریا"
+      },
+      "applications": {
+        "food": "خوراکی",
+        "industrial": "صنعتی",
+        "therapeutic": "درمانی",
+        "foodItems": [
+          "شیرین‌کننده طبیعی در دمنوش‌ها",
+          "طعم‌دهنده در صنعت شیرینی‌پزی",
+          "ماده اولیه نوشیدنی‌های سنتی"
+        ],
+        "industrialItems": [
+          "عصاره‌گیری برای صنایع داروسازی",
+          "افزودنی در محصولات آرایشی‌بهداشتی",
+          "ماده اولیه در تولید شیرین‌کننده‌های صنعتی"
+        ],
+        "therapeuticItems": [
+          "درمان زخم معده و التهاب دستگاه گوارش",
+          "کاهش سرفه و خلط‌آوری",
+          "ضدویروس در درمان تبخال",
+          "ملین ملایم و ضد یبوست"
+        ]
+      },
+      "toxicity": "مصرف زیاد باعث افزایش فشار خون، احتباس آب و سدیم، کاهش پتاسیم",
+      "conservationStatus": "در برخی مناطق ایران برداشت بی‌رویه باعث تهدید جمعیت طبیعی شده، اما به‌طور رسمی در لیست انقراض جهانی نیست",
+      "localNames": [
+        {
+          "name": "مهک",
+          "region": "لرستان"
+        },
+        {
+          "name": "مهوک",
+          "region": "کردستان"
+        },
+        {
+          "name": "اصل‌السوس",
+          "region": "فارس و خوزستان"
+        },
+        {
+          "name": "سقزبیان",
+          "region": "آذربایجان"
+        },
+        {
+          "name": "شیرین‌بویه",
+          "region": "خراسان"
+        }
+      ],
+      "fossilPeriod": "شواهد نشان می‌دهد جنس Glycyrrhiza در دوران پلیوسن حضور داشته؛ تاریخچه تکاملی چندمیلیون ساله دارد.",
+      "story": "شیرین‌بیان یکی از کهن‌ترین گیاهان دارویی دنیاست؛ در متون پزشکی مصر باستان، چین و ایران باستان از آن نام برده شده. سربازان ایرانی در دوره هخامنشی برای جلوگیری از تشنگی در سفرهای طولانی ریشهٔ آن را می‌جویدند، زیرا گلیسیریزین سبب احساس شیرینی و افزایش ترشح بزاق می‌شود."
+    },
+    "stats": {
+      "originLabel": "مبدا",
+      "origin": "مدیترانه شرقی",
+      "habitatLabel": "زیستگاه",
+      "habitat": "مناطق خشک، نیمه‌خشک",
+      "iranRangeLabel": "گستره ایران",
+      "iranRange": "آذربایجان، خراسان، لرستان، فارس",
+      "worldRangeLabel": "گستره جهانی",
+      "worldRange": "مدیترانه تا آسیا"
+    },
+    "labels": {
+      "authority": "وضع‌کننده",
+      "conservation": "وضعیت حفاظتی",
+      "taxonomy": "طبقه‌بندی علمی",
+      "taxonomyAuthority": "وضع‌کننده (Authority)",
+      "morphology": "ویژگی‌های زیست‌شناسی",
+      "applications": "کاربردها",
+      "chemistry": "ترکیبات شیمیایی",
+      "mainCompound": "ماده مؤثره اصلی:",
+      "growth": "نیازهای رشدی",
+      "story": "داستان گیاه",
+      "toxicity": "سمّیت",
+      "localNames": "نام‌های محلی",
+      "synonyms": "مترادف‌های علمی",
+      "fossilRecord": "دوره فسیلی",
+      "gallery": "گالری تصاویر",
+      "taxonomyEnglish": "Taxonomy",
+      "morphologyEnglish": "Morphology",
+      "applicationsEnglish": "Applications",
+      "chemistryEnglish": "Phytochemistry",
+      "growthEnglish": "Growth Requirements",
+      "storyEnglish": "Plant Story",
+      "toxicityEnglish": "Toxicity",
+      "conservationEnglish": "Status",
+      "localNamesEnglish": "Local Names",
+      "synonymsEnglish": "Synonyms",
+      "fossilRecordEnglish": "Fossil Record",
+      "galleryEnglish": "Image Gallery",
+      "taxonomyKeys": {
+        "kingdom": "فرمانرو",
+        "division": "دسته",
+        "class": "رده",
+        "order": "راسته",
+        "family": "تیره",
+        "genus": "جنس",
+        "species": "گونه",
+        "subspecies": "زیرگونه"
+      },
+      "morphologyKeys": {
+        "plantType": "نوع گیاه",
+        "leaf": "برگ",
+        "flower": "گل",
+        "stem": "ساقه",
+        "root": "ریشه",
+        "fruit": "میوه",
+        "seed": "دانه",
+        "bark": "پوست",
+        "latex": "شیرابه"
+      },
+      "growthKeys": {
+        "light": "نور",
+        "water": "آب",
+        "soil": "خاک",
+        "temperature": "دما",
+        "growthAltitude": "ارتفاع رویش"
+      }
+    }
   }
 }

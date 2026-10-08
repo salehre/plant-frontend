@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { CareTask } from '~/types/user.types'
 
 const props = defineProps<{ tasks: CareTask[] }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 const weekDays = [
   'components.careCalendar.saturday',

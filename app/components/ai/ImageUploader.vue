@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const emit = defineEmits<{ select: [string] }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)

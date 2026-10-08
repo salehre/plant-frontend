@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const route = useRoute()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 interface NavItem {
   to: string

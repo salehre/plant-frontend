@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const props = defineProps<{
   modelValue: boolean
   title?: string
 }>()
 
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>()
 
 function close() {

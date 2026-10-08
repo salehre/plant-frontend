@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const props = withDefaults(
   defineProps<{
     slug: string
@@ -11,7 +9,7 @@ const props = withDefaults(
 )
 
 const wishlistStore = useWishlistStore()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 const isSaved = computed(() => wishlistStore.isWishlisted(props.slug))
 
 function onClick(e: MouseEvent) {

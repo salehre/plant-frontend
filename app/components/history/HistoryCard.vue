@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { HistoryEntry } from '~/stores/history.store'
 import type { Plant } from '~/types/plant.types'
 import type { MockLocale } from '~/services/mock/mock-locale'
@@ -8,7 +7,7 @@ import { findPlantDetailBySlug } from '~/services/mock/plant-details.mock'
 
 const props = defineProps<{ entry: HistoryEntry }>()
 const emit = defineEmits<{ remove: [id: string] }>()
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 const mockLocale = computed<MockLocale>(() => locale.value === 'en' ? 'en' : 'fa')
 
 const open = ref(false)

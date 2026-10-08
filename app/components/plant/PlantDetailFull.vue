@@ -17,10 +17,8 @@
   ازاش نصف حجم کد و یه نقطه‌ی نگهداری داریم.
 -->
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const uiStore = useUiStore()
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 
 const targetSection = ref<HTMLElement | null>(null)
 

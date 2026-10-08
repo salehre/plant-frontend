@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { PlantResultItem, PlantResultOptions, PlantResultVariant } from '~/composables/usePlantResults'
 
 const props = withDefaults(
@@ -17,7 +16,7 @@ const emit = defineEmits<{
   confirm: [item: PlantResultItem]
 }>()
 
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 const resolved = usePlantResultOptions(() => props.variant, () => props.options)
 
 // اگه والد (مثل PredictionCard) useCompareLink رو provide کرده باشه، چک‌باکس مقایسه نمایش داده می‌شه

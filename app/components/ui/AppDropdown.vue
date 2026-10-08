@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const props = defineProps<{
   options: { label: string, value: string }[]
   // undefined یعنی «هنوز چیزی انتخاب نشده» - مثلاً وقتی این کامپوننت با defineField
@@ -9,7 +7,7 @@ const props = defineProps<{
   placeholder?: string
 }>()
 
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 const emit = defineEmits<{ 'update:modelValue': [string] }>()
 
 const open = ref(false)

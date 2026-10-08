@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { Plant } from '~/types/plant.types'
 
 const props = defineProps<{ plant: Plant }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 const lightKeys: Record<string, string> = {
   low: 'components.common.lightLow',

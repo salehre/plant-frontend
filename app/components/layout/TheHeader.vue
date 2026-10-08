@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const uiStore = useUiStore()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 // locale و setLocale فقط روی scope سراسری هستن
 const { locale, setLocale } = useI18n()
 

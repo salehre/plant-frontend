@@ -3,10 +3,9 @@
 // Health Check/Disease Detection از MVP فعلی کنار گذاشته شده؛ این کامپوننت جایی
 // استفاده نمی‌شه، فقط برای وقتی که آن فیچر برگرده نگه داشته شده - حذفش نکن.
 import type { DiseaseDetectionResult } from '~/types/identify.types'
-import { en, fa } from '~/i18n/componentMessages'
 
 const props = defineProps<{ result: DiseaseDetectionResult }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 const severityMap = {
   low: { label: 'components.diseaseResultCard.severityLow', class: 'bg-status-info/10 text-status-info' },

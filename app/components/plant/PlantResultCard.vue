@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { MockLocale } from '~/services/mock/mock-locale'
 import type { Plant } from '~/types/plant.types'
 
@@ -50,7 +49,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{ remove: [], confirm: [] }>()
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 const mockLocale = computed<MockLocale>(() => locale.value === 'en' ? 'en' : 'fa')
 
 const panelId = `plant-result-${useId()}`

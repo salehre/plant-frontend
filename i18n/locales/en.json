@@ -354,7 +354,7 @@
       "growthAltitude": "Growing altitude"
     }
   },
-    "blog": {
+  "blog": {
     "title": "From the blog",
     "subtitle": "Practical tips for taking better care of your plants",
     "seeAll": "See all",
@@ -373,5 +373,520 @@
     "notFoundText": "This article may have been removed or the address is wrong.",
     "errorList": "Failed to load articles.",
     "errorPost": "Failed to load the article."
+  },
+  "components": {
+    "common": {
+      "confidence": "Identification confidence",
+      "unlinkedPlant": "This result is not linked to a plant in the encyclopedia.",
+      "unlinkedScan": "This scan is not linked to a plant in the encyclopedia.",
+      "scanAgain": "Scan again",
+      "toxicFor": "Toxic to {target}",
+      "notToxic": "Non-toxic",
+      "plantNotFound": "Plant information could not be found.",
+      "fullPlantInfo": "View full plant details",
+      "taskWater": "Watering",
+      "taskFertilize": "Fertilizing",
+      "taskPrune": "Pruning",
+      "taskRepot": "Repotting",
+      "taskMist": "Misting",
+      "lightLow": "Low light",
+      "lightMedium": "Indirect light",
+      "lightHigh": "Bright light",
+      "lightDirect": "Direct sunlight",
+      "waterLow": "Low",
+      "waterMedium": "Moderate",
+      "waterHigh": "High",
+      "difficultyEasy": "Easy",
+      "difficultyMedium": "Moderate",
+      "difficultyHard": "Difficult",
+      "human": "Human",
+      "cat": "Cat",
+      "dog": "Dog"
+    },
+    "appDropdown": {
+      "select": "Select an option"
+    },
+    "appModal": {
+      "close": "Close"
+    },
+    "predictionCard": {
+      "identified": "Your plant has been identified",
+      "similarSpecies": "Possible similar species",
+      "confirmedToast": "Confirmed and added to your scan history",
+      "unconfirmedToast": "Confirmation undone and removed from history",
+      "compareHint": "To compare, drag the handle next to one plant onto another.",
+      "compareLink": "Compare these two plants"
+    },
+    "imageUploader": {
+      "dropPrompt": "Drag a plant photo here or upload one",
+      "supportedFormats": "JPG or PNG, up to 10 MB"
+    },
+    "cameraCapture": {
+      "permissionDenied": "Unable to access the camera. Your browser or device may not have granted permission.",
+      "cancel": "Cancel",
+      "capture": "Take photo"
+    },
+    "theHeader": {
+      "brand": "PlantPal",
+      "home": "Home",
+      "identify": "Identify",
+      "catalog": "Plants",
+      "profile": "Profile",
+      "menu": "Menu"
+    },
+    "theFooter": {
+      "brand": "PlantPal",
+      "tagline": "An intelligent platform for identifying and caring for plants",
+      "poweredBy": "Designed and built by",
+      "platform": "Platform",
+      "identify": "Identify a plant",
+      "encyclopedia": "Plant encyclopedia",
+      "compare": "Compare plants",
+      "city": "Plants for your city",
+      "community": "Plant lovers community",
+      "dashboard": "Dashboard",
+      "account": "Account",
+      "myPlants": "My plants",
+      "careCalendar": "Care calendar",
+      "profile": "Profile"
+    },
+    "mobileBottomNav": {
+      "home": "Home",
+      "identify": "Identify",
+      "plants": "Plants",
+      "profile": "Profile",
+      "navigation": "Main navigation"
+    },
+    "taskCard": {
+      "complete": "Mark as done"
+    },
+    "growthChart": {
+      "title": "Growth trend",
+      "week": "Week {week}"
+    },
+    "careCalendar": {
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday"
+    },
+    "userProfileCard": {
+      "follow": "Follow",
+      "following": "Following",
+      "plant": "Plant",
+      "followers": "Followers",
+      "followingCount": "Following"
+    },
+    "postCard": {
+      "minutesAgo": "A few minutes ago",
+      "hourAgo": "{count} hour ago",
+      "hoursAgo": "{count} hours ago",
+      "dayAgo": "{count} day ago",
+      "daysAgo": "{count} days ago",
+      "commentPlaceholder": "Write a comment...",
+      "send": "Send"
+    },
+    "compareTable": {
+      "light": "Light",
+      "watering": "Watering",
+      "everyDays": "Every {days} days",
+      "temperature": "Temperature",
+      "temperatureValue": "{min} to {max}°",
+      "humidity": "Humidity",
+      "careLevel": "Care level",
+      "toxicity": "Toxicity",
+      "toxicForPets": "Toxic to pets",
+      "safe": "Safe",
+      "feature": "Feature"
+    },
+    "careInfoCard": {
+      "light": "Light",
+      "watering": "Watering",
+      "everyDays": "Every {days} days",
+      "temperature": "Temperature",
+      "temperatureValue": "{min} to {max}°",
+      "humidity": "Humidity",
+      "suitableSoil": "Suitable soil"
+    },
+    "wishlistButton": {
+      "remove": "Remove from wishlist",
+      "add": "Add to wishlist",
+      "saved": "In your wishlist",
+      "addedToast": "Added to your wishlist",
+      "removedToast": "Removed from your wishlist"
+    },
+    "plantDetailHeader": {
+      "careLevel": "Care level: {level}",
+      "toxicForPets": "Toxic to pets",
+      "family": "Family:",
+      "genus": "Genus:"
+    },
+    "confidenceScore": {
+      "percentage": "{value}%"
+    },
+    "plantResultCard": {
+      "removeFromHistory": "Remove from history",
+      "confirm": "Confirm this result (save to history)",
+      "undoConfirm": "Undo confirmation"
+    },
+    "historyCard": {
+      "removeFromHistory": "Remove from history",
+      "fullPlantInfo": "View full plant details"
+    },
+    "diseaseResultCard": {
+      "severityLow": "Mild",
+      "severityMedium": "Moderate",
+      "severityHigh": "Severe",
+      "treatmentSteps": "Suggested treatment steps"
+    },
+    "plantDetailFull": {
+      "plantName": "Licorice",
+      "threatened": "Threatened",
+      "extinct": "Extinct",
+      "stable": "Stable",
+      "noStatusData": "Insufficient information",
+      "galleryFlowerLeaves": "Licorice flowers and leaves",
+      "galleryBotanicalIllustration": "Botanical illustration",
+      "galleryRoots": "Licorice roots",
+      "galleryPurpleFlowers": "Purple licorice flowers",
+      "copiedLink": "Page link copied",
+      "taxonomy": {
+        "subspecies": "No subspecies are generally recognized",
+        "kingdom": "Kingdom",
+        "division": "Division",
+        "class": "Class",
+        "order": "Order",
+        "family": "Family",
+        "genus": "Genus",
+        "species": "Species",
+        "subspeciesLabel": "Subspecies",
+        "authority": "Authority",
+        "authorityPrefix": "Taxonomic authority"
+      },
+      "morphology": {
+        "plantTypeLabel": "Plant type",
+        "leafLabel": "Leaf",
+        "flowerLabel": "Flower",
+        "stemLabel": "Stem",
+        "rootLabel": "Root",
+        "fruitLabel": "Fruit",
+        "seedLabel": "Seed",
+        "barkLabel": "Bark",
+        "latexLabel": "Latex",
+        "plantType": "Perennial herb",
+        "leaf": "Pinnately compound, with smooth margins and alternate arrangement on the stem",
+        "flower": "Pale purple to blue, with butterfly-shaped petals",
+        "stem": "Upright or ascending, woody near the base",
+        "root": "Tubular, upright, extensive, and branched; the main medicinal part",
+        "fruit": "Small pod",
+        "seed": "Small and ovoid",
+        "bark": "Yellowish-brown bark",
+        "latex": "None; lacks latex"
+      },
+      "chemical": {
+        "majorCompound": "Glycyrrhizin, a triterpenoid saponin",
+        "alkaloids": "Alkaloids",
+        "traceBelow001": "Very low (trace, <0.01%)",
+        "thermopsine": "Thermopsine",
+        "cytisine": "Cytisine",
+        "glycosides": "Glycosides",
+        "mainlyGlycyrrhizin": "2–5% (mainly glycyrrhizin)",
+        "glycyrrhizicAcid": "Glycyrrhizic acid",
+        "liquiritin": "Liquiritin",
+        "flavonoids": "Flavonoids",
+        "licochalcone": "Licochalcone A",
+        "glabridin": "Glabridin",
+        "glabrene": "Glabrene",
+        "tannins": "Tannins",
+        "hydrolyzableTannins": "Hydrolyzable tannins (gallotannins)",
+        "proanthocyanidins": "Proanthocyanidins",
+        "essentialOils": "Essential oils",
+        "belowPointOne": "Less than 0.1%",
+        "caryophylleneOxide": "Caryophyllene oxide",
+        "linalool": "Linalool",
+        "eugenol": "Eugenol",
+        "saponins": "Saponins",
+        "relatedSaponins": "Related saponins (glycyrrhizin analogues)",
+        "phenolicCompounds": "Phenolic compounds",
+        "variedFlavonoidsCoumarins": "Varied; includes flavonoids and coumarins",
+        "coumarins": "Coumarins (such as hydroxycoumarins)",
+        "phenolicAcids": "Phenolic acids (p-coumaric and ferulic)",
+        "primaryIngredient": "Primary active compound:",
+        "primary": "Major",
+        "secondary": "Minor"
+      },
+      "growthNeeds": {
+        "light": "Full sun",
+        "water": "Moderate; drought-tolerant",
+        "soil": "Light, deep loam with good drainage",
+        "temperature": "Temperate to warm; tolerates heat well",
+        "growthAltitude": "About 200–1,500 m above sea level",
+        "lightLabel": "Light",
+        "waterLabel": "Water",
+        "soilLabel": "Soil",
+        "temperatureLabel": "Temperature",
+        "growthAltitudeLabel": "Growing altitude"
+      },
+      "applications": {
+        "food": "Food:",
+        "industrial": "Industrial:",
+        "therapeutic": "Medicinal:",
+        "foodTea": "Natural sweetener in herbal teas",
+        "foodFlavor": "Flavoring in confectionery",
+        "foodDrinks": "Ingredient in traditional drinks",
+        "industrialExtract": "Extract used in pharmaceutical manufacturing",
+        "industrialCosmetics": "Additive in cosmetic products",
+        "industrialSweeteners": "Raw material for industrial sweeteners",
+        "therapeuticUlcer": "Used for stomach ulcers and gastrointestinal inflammation",
+        "therapeuticCough": "May ease cough and help loosen mucus",
+        "therapeuticAntiviral": "Antiviral use in cold sore treatment",
+        "therapeuticLaxative": "Mild laxative for constipation"
+      },
+      "toxicity": "Excessive consumption may raise blood pressure, cause water and sodium retention, and lower potassium levels.",
+      "conservationStatus": "Overharvesting has threatened wild populations in some parts of Iran, although the species is not officially listed as globally endangered.",
+      "toxicLabel": "Toxicity:",
+      "conservationLabel": "Conservation status:",
+      "localNames": {
+        "mahak": "Mahak",
+        "mahuk": "Mahuk",
+        "aslAlSus": "Asl al-Sus",
+        "saqezbian": "Saqezbian",
+        "shirinBuyeh": "Shirinbuyeh",
+        "lorestan": "Lorestan",
+        "kurdistan": "Kurdistan",
+        "farsKhuzestan": "Fars and Khuzestan",
+        "azerbaijan": "Azerbaijan",
+        "khorasan": "Khorasan"
+      },
+      "fossilPeriod": "Evidence indicates that the genus Glycyrrhiza was present during the Pliocene and has a history spanning several million years.",
+      "plantStory": "Licorice is one of the world’s oldest medicinal plants, mentioned in the medical writings of ancient Egypt, China, and Persia. During long journeys, soldiers in Achaemenid Persia chewed its root to relieve thirst; glycyrrhizin gives it a sweet taste and can stimulate saliva production.",
+      "quickStats": {
+        "origin": "Origin",
+        "habitat": "Habitat",
+        "iranRange": "Range in Iran",
+        "worldRange": "Global range",
+        "easternMediterranean": "Eastern Mediterranean",
+        "dryRegions": "Arid and semi-arid regions",
+        "iranProvinces": "Azerbaijan, Khorasan, Lorestan, Fars",
+        "mediterraneanAsia": "Mediterranean to Asia"
+      },
+      "statusLabel": "Conservation status: {status}",
+      "save": "Save to bookmarks",
+      "share": "Share",
+      "biology": "Biological characteristics",
+      "applicationsTitle": "Applications",
+      "phytochemistry": "Phytochemistry",
+      "taxonomyTitle": "Scientific classification",
+      "growthRequirements": "Growth requirements",
+      "plantStoryTitle": "Plant story",
+      "toxicityTitle": "Toxicity",
+      "conservationTitle": "Conservation",
+      "localNamesTitle": "Local names",
+      "synonymsTitle": "Scientific synonyms",
+      "fossilRecordTitle": "Fossil record",
+      "imageGalleryTitle": "Image gallery",
+      "closeGallery": "Close",
+      "previousImage": "Previous",
+      "nextImage": "Next"
+    },
+    "plantResultList": {
+      "compareHandle": "Drag to compare"
+    }
+  },
+  "testDetail": {
+    "actions": {
+      "bookmarkAdd": "Added to bookmarks",
+      "bookmarkRemove": "Removed from bookmarks",
+      "copyLink": "Link copied",
+      "bookmark": "Add to bookmarks",
+      "share": "Share",
+      "close": "Close",
+      "previousImage": "Previous image",
+      "nextImage": "Next image"
+    },
+    "plant": {
+      "name": "Licorice",
+      "conservation": {
+        "threatened": "Threatened",
+        "extinct": "Extinct",
+        "stable": "Stable",
+        "insufficient": "Insufficient information"
+      },
+      "gallery": {
+        "flowersLeaves": "Licorice flowers and leaves",
+        "botanicalIllustration": "Botanical illustration",
+        "root": "Licorice root",
+        "purpleFlowers": "Purple licorice flowers"
+      },
+      "taxonomy": {
+        "subspecies": "No commonly recognized subspecies"
+      },
+      "morphology": {
+        "plantType": "Perennial herb",
+        "leaf": "Pinnately compound, smooth margins, alternately arranged on the stem",
+        "flower": "Pale purple to blue, papilionaceous petals",
+        "stem": "Erect or leaning, semi-woody at the base",
+        "root": "Tubular, erect, extensive and branched (the primary medicinal part)",
+        "fruit": "Small legume",
+        "seed": "Small, ovoid",
+        "bark": "Yellow-brown bark",
+        "latex": "Absent (non-laticiferous)"
+      },
+      "chemistry": {
+        "major": "Glycyrrhizin - a triterpenoid saponin",
+        "alkaloids": "Alkaloids",
+        "glycosides": "Glycosides",
+        "flavonoids": "Flavonoids",
+        "tannins": "Tannins",
+        "essentialOils": "Essential oils (volatile oil)",
+        "saponins": "Saponins",
+        "phenolicCompounds": "Phenolic compounds",
+        "trace": "Very low (trace, <0.01%)",
+        "mainlyGlycyrrhizin": "2-5% (primarily glycyrrhizin)",
+        "lessThanPointOne": "Less than 0.1%",
+        "variedFlavonoidsCoumarins": "Varied; includes flavonoids and coumarins",
+        "thermopsine": "Thermopsine",
+        "cytisine": "Cytisine",
+        "glycyrrhizicAcid": "Glycyrrhizic acid",
+        "liquiritin": "Liquiritin",
+        "licochalcone": "Licochalcone A",
+        "glabridin": "Glabridin",
+        "glabrene": "Glabrene",
+        "hydrolysableTannins": "Hydrolysable tannins (gallotannins)",
+        "proanthocyanidins": "Proanthocyanidins",
+        "caryophylleneOxide": "Caryophyllene oxide",
+        "linalool": "Linalool",
+        "eugenol": "Eugenol",
+        "relatedSaponins": "Related saponins (glycyrrhizin analogues)",
+        "coumarins": "Coumarins (e.g. hydroxycoumarins)",
+        "phenolicAcids": "Phenolic acids (p-coumaric, ferulic)",
+        "primary": "Primary",
+        "secondary": "Secondary"
+      },
+      "growth": {
+        "light": "Full sun",
+        "water": "Moderate; drought-tolerant",
+        "soil": "Loamy, light, deep, well-drained",
+        "temperature": "Temperate to warm; good heat tolerance",
+        "growthAltitude": "Approximately 200 to 1,500 meters above sea level"
+      },
+      "applications": {
+        "food": "Food",
+        "industrial": "Industrial",
+        "therapeutic": "Therapeutic",
+        "foodItems": [
+          "Natural sweetener in herbal infusions",
+          "Flavoring in the confectionery industry",
+          "Ingredient in traditional beverages"
+        ],
+        "industrialItems": [
+          "Extraction for the pharmaceutical industry",
+          "Additive in cosmetics and personal-care products",
+          "Ingredient in industrial sweetener production"
+        ],
+        "therapeuticItems": [
+          "Treatment of gastric ulcers and gastrointestinal inflammation",
+          "Cough relief and expectorant",
+          "Antiviral use in cold sore treatment",
+          "Mild laxative and constipation relief"
+        ]
+      },
+      "toxicity": "Excessive consumption can increase blood pressure, cause water and sodium retention, and lower potassium levels.",
+      "conservationStatus": "In some regions of Iran, overharvesting threatens wild populations, though the species is not officially listed as globally endangered.",
+      "localNames": [
+        {
+          "name": "Mahak",
+          "region": "Lorestan"
+        },
+        {
+          "name": "Mahouk",
+          "region": "Kurdistan"
+        },
+        {
+          "name": "Asl al-Sus",
+          "region": "Fars and Khuzestan"
+        },
+        {
+          "name": "Saghezbian",
+          "region": "Azerbaijan"
+        },
+        {
+          "name": "Shirinbuyeh",
+          "region": "Khorasan"
+        }
+      ],
+      "fossilPeriod": "Evidence indicates that the genus Glycyrrhiza was present during the Pliocene and has an evolutionary history spanning several million years.",
+      "story": "Licorice is one of the world’s oldest medicinal plants; it is mentioned in the medical texts of ancient Egypt, China, and Persia. Persian soldiers during the Achaemenid period chewed its root on long journeys to ward off thirst, as glycyrrhizin produces a sweet taste and increases saliva secretion."
+    },
+    "stats": {
+      "originLabel": "Origin",
+      "origin": "Eastern Mediterranean",
+      "habitatLabel": "Habitat",
+      "habitat": "Arid and semi-arid regions",
+      "iranRangeLabel": "Range in Iran",
+      "iranRange": "Azerbaijan, Khorasan, Lorestan, Fars",
+      "worldRangeLabel": "Global range",
+      "worldRange": "Mediterranean to Asia"
+    },
+    "labels": {
+      "authority": "Authority",
+      "conservation": "Conservation status",
+      "taxonomy": "Scientific classification",
+      "taxonomyAuthority": "Authority",
+      "morphology": "Biological characteristics",
+      "applications": "Applications",
+      "chemistry": "Chemical compounds",
+      "mainCompound": "Major active compound:",
+      "growth": "Growth requirements",
+      "story": "Plant story",
+      "toxicity": "Toxicity",
+      "localNames": "Local names",
+      "synonyms": "Scientific synonyms",
+      "fossilRecord": "Fossil record",
+      "gallery": "Image gallery",
+      "taxonomyEnglish": "Taxonomy",
+      "morphologyEnglish": "Morphology",
+      "applicationsEnglish": "Applications",
+      "chemistryEnglish": "Phytochemistry",
+      "growthEnglish": "Growth requirements",
+      "storyEnglish": "Plant story",
+      "toxicityEnglish": "Toxicity",
+      "conservationEnglish": "Status",
+      "localNamesEnglish": "Local names",
+      "synonymsEnglish": "Synonyms",
+      "fossilRecordEnglish": "Fossil record",
+      "galleryEnglish": "Image gallery",
+      "taxonomyKeys": {
+        "kingdom": "Kingdom",
+        "division": "Division",
+        "class": "Class",
+        "order": "Order",
+        "family": "Family",
+        "genus": "Genus",
+        "species": "Species",
+        "subspecies": "Subspecies"
+      },
+      "morphologyKeys": {
+        "plantType": "Plant type",
+        "leaf": "Leaf",
+        "flower": "Flower",
+        "stem": "Stem",
+        "root": "Root",
+        "fruit": "Fruit",
+        "seed": "Seed",
+        "bark": "Bark",
+        "latex": "Latex"
+      },
+      "growthKeys": {
+        "light": "Light",
+        "water": "Water",
+        "soil": "Soil",
+        "temperature": "Temperature",
+        "growthAltitude": "Growing altitude"
+      }
+    }
   }
 }

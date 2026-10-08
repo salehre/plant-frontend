@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { CareTask } from '~/types/user.types'
 
 const props = defineProps<{ task: CareTask, plantName: string }>()
 const emit = defineEmits<{ done: [string] }>()
-const { t } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t } = useI18n()
 
 const taskIcon: Record<string, string> = {
   water: 'lucide:droplets',

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
 import type { CommunityUser } from '~/types/community.types'
 
 const props = withDefaults(
@@ -8,7 +7,7 @@ const props = withDefaults(
 )
 
 const communityStore = useCommunityStore()
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 const isOwnProfile = computed(() => props.user.id === communityStore.currentUser.id)
 function formatCount(value: number) {
   return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)

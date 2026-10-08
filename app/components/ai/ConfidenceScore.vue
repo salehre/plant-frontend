@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const props = defineProps<{ value: number }>()
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 
 const percent = computed(() => Math.round(props.value * 100))
 const formattedPercent = computed(() =>

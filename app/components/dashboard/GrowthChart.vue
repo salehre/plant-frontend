@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { en, fa } from '~/i18n/componentMessages'
-
 const props = withDefaults(
     defineProps<{
       data?: number[]
@@ -11,7 +9,7 @@ const props = withDefaults(
     },
 )
 
-const { t, locale } = useI18n({ messages: { en, fa }, useScope: 'local' })
+const { t, locale } = useI18n()
 const chartLabels = computed(() => props.labels ?? Array.from({ length: 7 }, (_, index) => {
   const week = new Intl.NumberFormat(locale.value, { useGrouping: false }).format(index + 1)
   return t('components.growthChart.week', { week })
