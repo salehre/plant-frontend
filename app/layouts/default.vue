@@ -3,12 +3,14 @@ import MobileBottomNav from '~/components/layout/MobileBottomNav.vue'
 import TheHeader from '~/components/layout/TheHeader.vue'
 import TheFooter from '~/components/layout/TheFooter.vue'
 import CornerGradient from '~/components/layout/CornerGradient.vue'
+import SeasonBackground from '~/components/layout/SeasonBackground.vue'
 
 const route = useRoute()
 </script>
 
 <template>
   <div class="relative flex min-h-screen flex-col overflow-x-clip">
+    <SeasonBackground />
     <CornerGradient />
     <TheHeader />
     <main class="flex-1 pb-24 md:pb-0">

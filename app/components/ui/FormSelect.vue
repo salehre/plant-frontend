@@ -103,7 +103,7 @@ function onKeydown(event: KeyboardEvent) {
         v-if="open"
         :id="listId"
         role="listbox"
-        class="absolute inset-x-0 z-30 mt-1 origin-top overflow-hidden rounded-md border border-ink/10 bg-surface py-1 shadow-card-hover"
+        class="absolute inset-x-0 z-30 mt-3 origin-top overflow-hidden rounded-[10px] border border-ink/10 bg-surface  shadow-card-hover"
       >
         <li
           v-for="(opt, index) in options"

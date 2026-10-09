@@ -35,6 +35,7 @@ const mistStyle = computed(() => ({
         class="mist-overlay absolute inset-0"
         :style="mistStyle"
     />
+    <SeasonBackground variant="absolute" />
 
     <div class="relative z-10 w-full max-w-md">
       <NuxtLink

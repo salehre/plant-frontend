@@ -34,6 +34,7 @@ function onSearch() {
         >
       </Transition>
       <div class="absolute inset-0 bg-black/25" />
+      <SeasonBackground variant="absolute" />
 
       <div class="relative z-10 mx-auto max-w-5xl">
         <LiquidGlassPanel>
