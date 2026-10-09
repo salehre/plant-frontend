@@ -48,6 +48,10 @@
     "plantFinder": {
       "title": "Find your perfect plant",
       "subtitle": "Answer a few quick questions and we will suggest plants that fit your home and lifestyle.",
+      "introDescription": "Instead of browsing dozens of plants, just tell us where it will live, how much light it gets and how much time you have for care. We handle the rest.",
+      "point1": "Just a few quick questions, no prior knowledge needed",
+      "point2": "Suggestions based on your light, watering and experience",
+      "point3": "Pick an option and you move on to the next question automatically",
       "stepOf": "Question {current} of {total}",
       "back": "Back",
       "next": "Next",
