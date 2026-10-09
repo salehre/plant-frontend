@@ -171,7 +171,7 @@ function onSearch() {
               v-for="disease in diseases"
               :key="disease.id"
               :to="`/identify`"
-              class="flex flex-col gap-2 rounded-lg bg-surface p-4 shadow-card transition-shadow hover:shadow-card-hover"
+              class="glass-card flex flex-col gap-2 p-4 transition-shadow hover:shadow-card-hover"
           >
             <img
                 :src="disease.image"

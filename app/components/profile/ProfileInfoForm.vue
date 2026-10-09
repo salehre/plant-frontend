@@ -105,7 +105,7 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div
     v-if="authStore.isLoggedIn"
-    class="rounded-lg bg-surface p-4 shadow-card"
+    class="glass-card p-4"
   >
     <form
       class="flex flex-col gap-4"
@@ -292,7 +292,7 @@ const onSubmit = handleSubmit(async (values) => {
   <!-- کاربر مهمان -->
   <div
     v-else
-    class="flex flex-col items-start gap-3 rounded-lg bg-surface p-4 shadow-card"
+    class="glass-card flex flex-col items-start gap-3 p-4"
   >
     <p class="text-sm leading-relaxed text-ink-muted">
       {{ t('pages.profile.loginRequired') }}

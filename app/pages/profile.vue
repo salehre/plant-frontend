@@ -56,7 +56,7 @@ const wishlistStore = useWishlistStore()
       </div>
 
       <!-- حالت روشن/تاریک -->
-      <div class="mt-3 flex items-center justify-between rounded-lg bg-surface px-4 py-3 shadow-card">
+      <div class="glass-card mt-3 flex items-center justify-between px-4 py-3">
         <div class="flex items-center gap-1 text-sm text-ink">
           <Icon
             :name="uiStore.mode === 'dark' ? 'material-symbols:dark-mode-outline' : 'material-symbols:light-mode-outline'"

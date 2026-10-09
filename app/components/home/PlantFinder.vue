@@ -34,7 +34,7 @@ watch(activeLocale, () => {
 
 <template>
   <section
-    class="rounded-2xl bg-surface p-5 shadow-card sm:p-8"
+    class="glass-card p-5 sm:p-8"
     aria-labelledby="plant-finder-title"
   >
     <header class="mb-6 flex items-start gap-3">
