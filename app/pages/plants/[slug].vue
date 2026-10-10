@@ -140,7 +140,7 @@ const growthIcons: Record<string, string> = {
 
   <div
       v-else-if="plant && detail"
-      class="plant-detail-page text-readable min-h-screen bg-bg pb-10"
+      class="plant-detail-page text-readable min-h-screen pb-10"
   >
     <!-- ========== هدر ========== -->
     <div class="relative overflow-visible bg-gradient-to-l from-primary-900 via-primary-800 to-primary-700 px-4 pb-4 pt-10 text-white sm:px-8 sm:pt-14">
@@ -331,7 +331,7 @@ const growthIcons: Record<string, string> = {
               <button
                   v-if="detail.chemicalCompounds.categories.length"
                   type="button"
-                  class="flex size-9 shrink-0 items-center justify-center rounded-lg text-primary-900 border border-transparent transition hover:border-primary-200 hover:text-primary-900"
+                  class="flex size-9 shrink-0 items-center justify-center rounded-lg text-primary-900 border border-primary-700 transition hover:border-primary-200 hover:text-primary-900"
                   :aria-expanded="chemicalCompoundsExpanded"
                   aria-controls="chemical-compound-details"
                   :aria-label="t(chemicalCompoundsExpanded ? 'plantDetail.hideCompounds' : 'plantDetail.showCompounds')"
@@ -343,7 +343,7 @@ const growthIcons: Record<string, string> = {
 
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
 
-            <div class="rounded-[14px] border-s-4 border-accent-400 bg-bg px-4 py-3">
+            <div class="rounded-md border-r-4 border-accent-400 bg-bg px-4 py-3">
               <span class="block text-xs font-semibold text-ink-muted">{{ t('plantDetail.mainActiveCompound') }}:</span>
               <span class="text-sm font-medium text-primary-900">{{ detail.chemicalCompounds.majorCompound }}</span>
             </div>
@@ -429,7 +429,7 @@ const growthIcons: Record<string, string> = {
               <span class="text-xs font-normal tracking-wide text-ink-muted">Toxicity</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
-            <div class="flex items-center gap-3 rounded-[14px] border-s-4 border-status-warning bg-status-warning/10 px-4 py-3">
+            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-warning bg-status-warning/10 px-4 py-3">
               <Icon name="lucide:triangle-alert" class="size-5 shrink-0 text-status-warning" />
               <div class="text-sm text-ink"><strong>{{ t('plantDetail.toxicity') }}:</strong> {{ detail.toxicityText }}</div>
             </div>
@@ -478,7 +478,7 @@ const growthIcons: Record<string, string> = {
               <span class="text-xs font-normal tracking-wide text-ink-muted">Status</span>
             </h2>
             <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
-            <div class="flex items-center gap-3 rounded-[14px] border-s-4 border-status-info bg-status-info/10 px-4 py-3">
+            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-info bg-status-info/10 px-4 py-3">
               <Icon name="lucide:shield" class="size-5 shrink-0 text-status-info" />
               <div class="text-sm text-ink"><strong>{{ t('plantDetail.conservationStatus') }}:</strong> {{ detail.conservationStatus }}</div>
             </div>

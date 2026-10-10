@@ -53,29 +53,29 @@
 @layer base {
   :root {
     /* حالت روشن (پیش‌فرض) - تم forest */
-    --color-surface: 247 248 248; /* #f7f8f8 */
-    --color-bg: 238 241 240; /* #eef1f0 */
+    --color-surface: 246 251 247;
+    --color-bg: 233 245 236;
     --color-ink: 12 48 36; /* #0c3024 */
-    --color-ink-muted: 81 100 94; /* #51645e */
+    --color-ink-muted: 76 104 92;
 
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
     --color-primary-100: 215 239 231; /* #d7efe7 */
     --color-primary-200: 175 222 207; /* #afdecf */
     --color-primary-300: 125 202 177; /* #7dcab1 */
-    --color-primary-400: 74 181 146; /* #4ab592 */
-    --color-primary-500: 53 130 105; /* #358269 */
-    --color-primary-600: 43 105 85; /* #2b6955 */
-    --color-primary-700: 34 83 67; /* #225343 */
+    --color-primary-400: 62 190 140;
+    --color-primary-500: 38 146 108;
+    --color-primary-600: 28 118 88;
+    --color-primary-700: 24 92 70;
     --color-primary-800: 28 69 56; /* #1c4538 */
     --color-primary-900: 15 61 46; /* #0f3d2e */
     --color-accent-50: 250 242 235; /* #faf2eb */
     --color-accent-100: 240 219 199; /* #f0dbc7 */
     --color-accent-200: 226 186 146; /* #e2ba92 */
-    --color-accent-300: 213 156 98; /* #d59c62 */
-    --color-accent-400: 205 135 66; /* #cd8742 */
-    --color-accent-500: 203 130 58; /* #cb823a */
-    --color-accent-600: 165 105 44; /* #a5692c */
+    --color-accent-300: 240 176 80;
+    --color-accent-400: 230 150 45;
+    --color-accent-500: 214 128 30;
+    --color-accent-600: 176 100 22;
     --color-accent-700: 129 82 34; /* #815222 */
     --color-accent-800: 93 59 25; /* #5d3b19 */
     --color-accent-900: 60 38 16; /* #3c2610 */
@@ -83,17 +83,17 @@
 
   :root.dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 57 106 90; /* #396a5a */
-    --color-bg: 41 87 72; /* #295748 */
+    --color-surface: 47 124 98;
+    --color-bg: 31 102 79;
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 205 219 214; /* #cddbd6 */
+    --color-ink-muted: 214 235 226;
   }
 
   [data-theme='wine'] {
-    --color-surface: 249 247 248; /* #f9f7f8 */
-    --color-bg: 243 239 240; /* #f3eff0 */
+    --color-surface: 255 250 248;
+    --color-bg: 251 240 237;
     --color-ink: 70 23 33; /* #461721 */
-    --color-ink-muted: 112 87 92; /* #70575c */
+    --color-ink-muted: 118 88 90;
 
     --color-brand: 90 30 42; /* #5a1e2a */
     --color-primary-50: 253 243 245; /* #fdf3f5 */
@@ -106,50 +106,50 @@
     --color-primary-700: 90 30 42; /* #5a1e2a */
     --color-primary-800: 68 29 37; /* #441d25 */
     --color-primary-900: 54 23 29; /* #36171d */
-    --color-accent-50: 242 250 241; /* #f2faf1 */
-    --color-accent-100: 220 240 218; /* #dcf0da */
-    --color-accent-200: 182 224 178; /* #b6e0b2 */
-    --color-accent-300: 140 203 133; /* #8ccb85 */
-    --color-accent-400: 99 178 90; /* #63b25a */
-    --color-accent-500: 71 149 64; /* #479540 */
-    --color-accent-600: 54 119 48; /* #367730 */
-    --color-accent-700: 43 93 39; /* #2b5d27 */
-    --color-accent-800: 33 69 30; /* #21451e */
-    --color-accent-900: 23 47 21; /* #172f15 */
+    --color-accent-50: 246 250 234;
+    --color-accent-100: 232 242 208;
+    --color-accent-200: 208 230 168;
+    --color-accent-300: 168 206 120;
+    --color-accent-400: 128 184 80;
+    --color-accent-500: 98 156 56;
+    --color-accent-600: 76 124 44;
+    --color-accent-700: 58 96 36;
+    --color-accent-800: 44 72 30;
+    --color-accent-900: 30 50 22;
   }
 
   [data-theme='wine'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 106 57 67; /* #6a3943 */
-    --color-bg: 87 41 50; /* #572932 */
+    --color-surface: 128 68 80;
+    --color-bg: 104 52 63;
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 219 205 207; /* #dbcdcf */
+    --color-ink-muted: 240 218 218;
   }
 
   [data-theme='forest'] {
-    --color-surface: 247 248 248; /* #f7f8f8 */
-    --color-bg: 238 241 240; /* #eef1f0 */
+    --color-surface: 246 251 247;
+    --color-bg: 233 245 236;
     --color-ink: 12 48 36; /* #0c3024 */
-    --color-ink-muted: 81 100 94; /* #51645e */
+    --color-ink-muted: 76 104 92;
 
     --color-brand: 15 61 46; /* #0f3d2e */
     --color-primary-50: 241 249 246; /* #f1f9f6 */
     --color-primary-100: 215 239 231; /* #d7efe7 */
     --color-primary-200: 175 222 207; /* #afdecf */
     --color-primary-300: 125 202 177; /* #7dcab1 */
-    --color-primary-400: 74 181 146; /* #4ab592 */
-    --color-primary-500: 53 130 105; /* #358269 */
-    --color-primary-600: 43 105 85; /* #2b6955 */
-    --color-primary-700: 34 83 67; /* #225343 */
+    --color-primary-400: 62 190 140;
+    --color-primary-500: 38 146 108;
+    --color-primary-600: 28 118 88;
+    --color-primary-700: 24 92 70;
     --color-primary-800: 28 69 56; /* #1c4538 */
     --color-primary-900: 15 61 46; /* #0f3d2e */
     --color-accent-50: 250 242 235; /* #faf2eb */
     --color-accent-100: 240 219 199; /* #f0dbc7 */
     --color-accent-200: 226 186 146; /* #e2ba92 */
-    --color-accent-300: 213 156 98; /* #d59c62 */
-    --color-accent-400: 205 135 66; /* #cd8742 */
-    --color-accent-500: 203 130 58; /* #cb823a */
-    --color-accent-600: 165 105 44; /* #a5692c */
+    --color-accent-300: 240 176 80;
+    --color-accent-400: 230 150 45;
+    --color-accent-500: 214 128 30;
+    --color-accent-600: 176 100 22;
     --color-accent-700: 129 82 34; /* #815222 */
     --color-accent-800: 93 59 25; /* #5d3b19 */
     --color-accent-900: 60 38 16; /* #3c2610 */
@@ -157,54 +157,54 @@
 
   [data-theme='forest'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 57 106 90; /* #396a5a */
-    --color-bg: 41 87 72; /* #295748 */
+    --color-surface: 47 124 98;
+    --color-bg: 31 102 79;
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 205 219 214; /* #cddbd6 */
+    --color-ink-muted: 214 235 226;
   }
 
   [data-theme='brown'] {
-    --color-surface: 249 248 246; /* #f9f8f6 */
-    --color-bg: 243 240 238; /* #f3f0ee */
-    --color-ink: 70 36 8; /* #462408 */
-    --color-ink-muted: 112 94 78; /* #705e4e */
+    --color-surface: 246 242 237;
+    --color-bg: 232 225 217;
+    --color-ink: 58 40 28;
+    --color-ink-muted: 108 96 86;
 
     --color-brand: 90 46 10; /* #5a2e0a */
-    --color-primary-50: 253 244 237; /* #fdf4ed */
-    --color-primary-100: 251 225 201; /* #fbe1c9 */
-    --color-primary-200: 246 192 144; /* #f6c090 */
-    --color-primary-300: 240 153 90; /* #f0995a */
-    --color-primary-400: 226 117 47; /* #e2752f */
-    --color-primary-500: 200 90 29; /* #c85a1d */
-    --color-primary-600: 160 69 23; /* #a04517 */
-    --color-primary-700: 122 53 18; /* #7a3512 */
-    --color-primary-800: 90 46 10; /* #5a2e0a */
-    --color-primary-900: 61 32 8; /* #3d2008 */
-    --color-accent-50: 253 241 238; /* #fdf1ee */
-    --color-accent-100: 249 220 211; /* #f9dcd3 */
-    --color-accent-200: 240 181 163; /* #f0b5a3 */
-    --color-accent-300: 226 138 109; /* #e28a6d */
-    --color-accent-400: 207 95 66; /* #cf5f42 */
-    --color-accent-500: 177 63 39; /* #b13f27 */
-    --color-accent-600: 143 47 29; /* #8f2f1d */
-    --color-accent-700: 112 36 25; /* #702419 */
-    --color-accent-800: 82 26 18; /* #521a12 */
-    --color-accent-900: 56 18 12; /* #38120c */
+    --color-primary-50: 247 240 232;
+    --color-primary-100: 238 220 200;
+    --color-primary-200: 224 190 150;
+    --color-primary-300: 205 154 105;
+    --color-primary-400: 184 118 70;
+    --color-primary-500: 158 92 52;
+    --color-primary-600: 128 72 42;
+    --color-primary-700: 100 58 36;
+    --color-primary-800: 76 46 30;
+    --color-primary-900: 52 34 22;
+    --color-accent-50: 244 242 240;
+    --color-accent-100: 228 224 222;
+    --color-accent-200: 204 196 194;
+    --color-accent-300: 176 164 164;
+    --color-accent-400: 148 134 136;
+    --color-accent-500: 120 106 110;
+    --color-accent-600: 96 85 90;
+    --color-accent-700: 76 68 72;
+    --color-accent-800: 56 50 54;
+    --color-accent-900: 40 36 38;
   }
 
   [data-theme='brown'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 106 79 57; /* #6a4f39 */
-    --color-bg: 87 61 41; /* #573d29 */
+    --color-surface: 88 74 65;
+    --color-bg: 66 55 48;
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 219 211 205; /* #dbd3cd */
+    --color-ink-muted: 205 195 187;
   }
 
   [data-theme='navy'] {
-    --color-surface: 246 247 248; /* #f6f7f8 */
-    --color-bg: 238 239 241; /* #eeeff1 */
-    --color-ink: 5 18 44; /* #05122c */
-    --color-ink-muted: 77 84 98; /* #4d5462 */
+    --color-surface: 244 247 250;
+    --color-bg: 229 235 242;
+    --color-ink: 8 20 44;
+    --color-ink-muted: 84 96 116;
 
     --color-brand: 7 23 57; /* #071739 */
     --color-primary-50: 241 243 249; /* #f1f3f9 */
@@ -231,10 +231,10 @@
 
   [data-theme='navy'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 57 73 106; /* #39496a */
-    --color-bg: 41 55 87; /* #293757 */
+    --color-surface: 38 52 82;
+    --color-bg: 24 35 60;
     --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 205 209 219; /* #cdd1db */
+    --color-ink-muted: 190 200 218;
   }
 
   html {
@@ -294,34 +294,70 @@
     --card-shadow: 0 10px 24px -18px rgb(0 0 0 / 0.7);
     --card-shadow-hover: 0 14px 30px -16px rgb(0 0 0 / 0.8);
   }
-  [data-theme='wine'] {
-    --shadow-tint: 87 41 50; /* #572932 */
-  }
+
+  /*
+   * «حس و حال» هر تم - فقط با رنگ: سایه‌ی رنگی کارت‌ها + جو (atmosphere) پس‌زمینه.
+   *  forest (تابستون): شاداب - نور خورشید زرد-لیمویی از بالا + آبی-سبز تازه از پایین
+   *  wine   (بهار)   : گرم و دلنشین - طلوع هلویی-طلایی + صورتیِ شکوفه، سطح‌های کِرِم‌مایل
+   *  brown  (پاییز)  : دلگیر و تنها - مه‌ی خاکستری-قهوه‌ای، فقط یک درخششِ کم‌جون کهربایی پایین صفحه
+   *  navy   (زمستون) : سرد و تنها - شب آبی کم‌رنگ، نور ماه کمرنگ و سایه‌ی نیلی؛ بدون هیچ رنگ گرم
+   * --mood-bg = لایه‌های گرادیان بدنه در حالت روشن، --mood-bg-dark = حالت تیره
+   */
+  :root,
   [data-theme='forest'] {
-    --shadow-tint: 41 87 72; /* #295748 */
+    --shadow-tint: 41 100 78;
+    --mood-bg:
+      radial-gradient(56rem 40rem at 100% 0%, rgb(255 233 140 / 0.34), transparent 62%),
+      radial-gradient(56rem 40rem at 0% 100%, rgb(110 214 190 / 0.30), transparent 65%),
+      linear-gradient(180deg, rgb(215 239 231 / 0.45) 0%, transparent 50%);
+    --mood-bg-dark:
+      radial-gradient(56rem 40rem at 100% 0%, rgb(214 240 130 / 0.20), transparent 62%),
+      radial-gradient(56rem 40rem at 0% 100%, rgb(110 231 200 / 0.18), transparent 65%),
+      linear-gradient(180deg, rgb(255 255 255 / 0.06) 0%, transparent 55%);
+  }
+  [data-theme='wine'] {
+    --shadow-tint: 120 55 70;
+    --mood-bg:
+      radial-gradient(56rem 40rem at 100% 0%, rgb(255 208 140 / 0.40), transparent 62%),
+      radial-gradient(56rem 40rem at 0% 100%, rgb(246 160 184 / 0.30), transparent 65%),
+      linear-gradient(180deg, rgb(253 223 230 / 0.50) 0%, transparent 50%);
+    --mood-bg-dark:
+      radial-gradient(56rem 40rem at 100% 0%, rgb(255 190 140 / 0.24), transparent 62%),
+      radial-gradient(56rem 40rem at 0% 100%, rgb(255 150 180 / 0.18), transparent 65%),
+      linear-gradient(180deg, rgb(255 255 255 / 0.05) 0%, transparent 55%);
   }
   [data-theme='brown'] {
-    --shadow-tint: 87 61 41; /* #573d29 */
+    --shadow-tint: 70 55 45;
+    --mood-bg:
+      radial-gradient(64rem 44rem at 50% 118%, rgb(222 140 72 / 0.28), transparent 62%),
+      radial-gradient(56rem 40rem at 0% 0%, rgb(150 152 160 / 0.24), transparent 65%),
+      linear-gradient(180deg, rgb(206 198 188 / 0.55) 0%, transparent 55%);
+    --mood-bg-dark:
+      radial-gradient(64rem 44rem at 50% 122%, rgb(235 150 70 / 0.26), transparent 62%),
+      radial-gradient(56rem 40rem at 0% 0%, rgb(170 176 190 / 0.12), transparent 65%),
+      linear-gradient(180deg, rgb(0 0 0 / 0.14) 0%, transparent 60%);
   }
   [data-theme='navy'] {
-    --shadow-tint: 41 55 87; /* #293757 */
+    --shadow-tint: 30 42 70;
+    --mood-bg:
+      radial-gradient(48rem 36rem at 50% -12%, rgb(255 255 255 / 0.75), transparent 62%),
+      radial-gradient(60rem 42rem at 100% 100%, rgb(120 150 205 / 0.22), transparent 65%),
+      linear-gradient(180deg, rgb(206 220 238 / 0.60) 0%, transparent 55%);
+    --mood-bg-dark:
+      radial-gradient(44rem 34rem at 86% 0%, rgb(190 215 255 / 0.20), transparent 62%),
+      radial-gradient(62rem 42rem at 0% 100%, rgb(70 90 165 / 0.26), transparent 65%),
+      linear-gradient(180deg, rgb(255 255 255 / 0.03) 0%, transparent 55%);
   }
 
   body {
     @apply bg-bg text-ink antialiased transition-colors duration-200;
-    background-image:
-            radial-gradient(60rem 42rem at 0% 0%, rgb(var(--color-primary-300) / 0.16), transparent 65%),
-            radial-gradient(52rem 38rem at 100% 100%, rgb(var(--color-accent-300) / 0.12), transparent 65%),
-            linear-gradient(180deg, rgb(var(--color-primary-100) / 0.35) 0%, transparent 50%);
+    background-image: var(--mood-bg);
     background-repeat: no-repeat;
     background-attachment: fixed;
   }
 
   .dark body {
-    background-image:
-            radial-gradient(60rem 42rem at 0% 0%, rgb(var(--color-primary-300) / 0.14), transparent 65%),
-            radial-gradient(52rem 38rem at 100% 100%, rgb(var(--color-accent-300) / 0.08), transparent 65%),
-            linear-gradient(180deg, rgb(255 255 255 / 0.05) 0%, transparent 55%);
+    background-image: var(--mood-bg-dark);
   }
 
   ::selection {
