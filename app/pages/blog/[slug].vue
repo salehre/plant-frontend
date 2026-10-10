@@ -72,7 +72,7 @@ async function sharePost() {
         class="flex flex-col gap-6"
       >
         <header class="flex flex-col gap-4">
-          <span class="w-fit rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">
+          <span class="w-fit rounded-lg bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">
             {{ post.categoryLabel }}
           </span>
           <h1 class="text-2xl font-extrabold leading-10 text-ink sm:text-3xl">
@@ -100,7 +100,7 @@ async function sharePost() {
             </div>
             <button
               type="button"
-              class="inline-flex h-9 items-center gap-1.5 rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+              class="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
               @click="sharePost"
             >
               <Icon
@@ -169,7 +169,7 @@ async function sharePost() {
           <span
             v-for="tag in post.tags"
             :key="tag"
-            class="rounded-full border border-ink/10 px-3 py-1 text-xs text-ink-muted"
+            class="rounded-lg border border-ink/10 px-3 py-1 text-xs text-ink-muted"
           >
             # {{ tag }}
           </span>

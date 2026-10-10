@@ -316,7 +316,7 @@ function getNeedLabel(key: string) {
 
           <button
             type="button"
-            class="mt-4 inline-flex items-center rounded-full bg-accent-400/90 px-3.5 py-1.5 text-xs font-semibold text-primary-900 transition-colors hover:bg-accent-400"
+            class="mt-4 inline-flex items-center rounded-lg bg-accent-400/90 px-3.5 py-1.5 text-xs font-semibold text-primary-900 transition-colors hover:bg-accent-400"
             @click="goToTarget"
           >
             {{ t('components.plantDetailFull.statusLabel', { status: toxitcityStatus.lame }) }}
@@ -325,7 +325,7 @@ function getNeedLabel(key: string) {
           <div class="mt-4 flex justify-center gap-2 md:justify-start">
             <button
               type="button"
-              class="flex size-10 items-center justify-center rounded-full bg-white/90 text-primary-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-500 hover:text-white hover:shadow-lg"
+              class="flex size-10 items-center justify-center rounded-lg bg-white/90 text-primary-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-500 hover:text-white hover:shadow-lg"
               :aria-label="t('components.plantDetailFull.save')"
             >
               <Icon
@@ -335,7 +335,7 @@ function getNeedLabel(key: string) {
             </button>
             <button
               type="button"
-              class="flex size-10 items-center justify-center rounded-full bg-white/90 text-primary-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-500 hover:text-white hover:shadow-lg"
+              class="flex size-10 items-center justify-center rounded-lg bg-white/90 text-primary-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-500 hover:text-white hover:shadow-lg"
               :aria-label="t('components.plantDetailFull.share')"
               @click="sharePlant"
             >
@@ -452,7 +452,7 @@ function getNeedLabel(key: string) {
               >
                 <div class="mb-2 flex flex-wrap items-baseline justify-between gap-1">
                   <strong class="text-sm font-semibold text-primary-800">{{ cat.name }}</strong>
-                  <span class="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs text-ink-muted">{{ cat.total }}</span>
+                  <span class="rounded-lg bg-primary-50 px-2.5 py-0.5 text-xs text-ink-muted">{{ cat.total }}</span>
                 </div>
                 <ul
                   v-if="cat.compounds?.length"
@@ -464,7 +464,7 @@ function getNeedLabel(key: string) {
                     class="flex items-baseline justify-between border-b border-dashed border-ink/10 py-1 text-sm last:border-0"
                   >
                     <span class="font-medium text-ink-muted">{{ comp.name }}</span>
-                    <span class="rounded-full bg-bg px-2 py-0.5 text-[11px] text-ink-muted">{{ comp.amount }}</span>
+                    <span class="rounded-lg bg-bg px-2 py-0.5 text-[11px] text-ink-muted">{{ comp.amount }}</span>
                   </li>
                 </ul>
               </div>
@@ -570,7 +570,7 @@ function getNeedLabel(key: string) {
               <div
                 v-for="item in localNames"
                 :key="item.name"
-                class="rounded-full bg-primary-50 px-3.5 py-1.5 text-sm"
+                class="rounded-lg bg-primary-50 px-3.5 py-1.5 text-sm"
               >
                 <span class="font-semibold text-primary-800">{{ item.name }}</span>
                 <span class="me-1 text-[11px] text-ink-muted">({{ item.region }})</span>
@@ -647,7 +647,7 @@ function getNeedLabel(key: string) {
               <span class="text-sm font-medium">{{ galleryCurrentImage?.title }}</span>
               <button
                 type="button"
-                class="rounded-full p-1.5 hover:bg-white/10"
+                class="rounded-lg p-1.5 hover:bg-white/10"
                 :aria-label="t('components.plantDetailFull.closeGallery')"
                 @click="galleryOpen = false"
               >
@@ -667,7 +667,7 @@ function getNeedLabel(key: string) {
             <div class="mt-4 flex items-center justify-center gap-4 text-white">
               <button
                 type="button"
-                class="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"
+                class="rounded-lg p-2 hover:bg-white/10 disabled:opacity-30"
                 :disabled="galleryIndex === 0"
                 :aria-label="t('components.plantDetailFull.previousImage')"
                 @click="prevImage"
@@ -680,7 +680,7 @@ function getNeedLabel(key: string) {
               <span class="text-sm tabular-nums">{{ formattedGalleryIndex }} / {{ formattedGalleryLength }}</span>
               <button
                 type="button"
-                class="rounded-full p-2 hover:bg-white/10 disabled:opacity-30"
+                class="rounded-lg p-2 hover:bg-white/10 disabled:opacity-30"
                 :disabled="galleryIndex === plantGallery.length - 1"
                 :aria-label="t('components.plantDetailFull.nextImage')"
                 @click="nextImage"

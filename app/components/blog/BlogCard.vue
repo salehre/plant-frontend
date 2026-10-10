@@ -20,7 +20,7 @@ const { t } = useI18n()
     </div>
     <div class="flex flex-1 flex-col gap-2 p-5">
       <div class="flex items-center justify-between gap-2 text-xs">
-        <span class="rounded-full bg-primary-50 px-2.5 py-1 font-medium text-primary-700">
+        <span class="rounded-lg bg-primary-50 px-2.5 py-1 font-medium text-primary-700">
           {{ props.post.categoryLabel }}
         </span>
         <span class="flex items-center gap-1 text-ink-muted">

@@ -26,7 +26,7 @@ function onClick(e: MouseEvent) {
   <button
     v-if="compact"
     type="button"
-    class="flex size-8 items-center justify-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur transition-colors hover:text-status-danger"
+    class="flex size-8 items-center justify-center rounded-lg bg-surface/90 text-ink shadow-card backdrop-blur transition-colors hover:text-status-danger"
     :class="{ 'text-status-danger': isSaved }"
     :aria-label="isSaved ? t('components.wishlistButton.remove') : t('components.wishlistButton.add')"
     @click="onClick"

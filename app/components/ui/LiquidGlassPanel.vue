@@ -5,7 +5,7 @@
   اگه یه‌روز چند نمونه هم‌زمان روی یه صفحه لازم شد، id فیلتر باید یکتا بشه (useId).
 -->
 <script setup lang="ts">
-withDefaults(defineProps<{ rounded?: string }>(), { rounded: '28px' })
+withDefaults(defineProps<{ rounded?: string }>(), { rounded: 'var(--radius-control)' })
 </script>
 
 <template>

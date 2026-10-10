@@ -23,16 +23,16 @@ const difficultyLabel = computed(() => {
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex flex-wrap items-center gap-2">
-      <span class="rounded-full bg-ink/5 px-2.5 py-1 text-xs text-ink-muted">{{ props.plant.category }}</span>
+      <span class="rounded-lg bg-ink/5 px-2.5 py-1 text-xs text-ink-muted">{{ props.plant.category }}</span>
       <span
-        class="rounded-full px-2.5 py-1 text-xs font-medium"
+        class="rounded-lg px-2.5 py-1 text-xs font-medium"
         :class="difficultyClass[props.plant.difficulty]"
       >
         {{ t('components.plantDetailHeader.careLevel', { level: difficultyLabel }) }}
       </span>
       <span
         v-if="props.plant.toxicity.isToxic"
-        class="inline-flex items-center gap-1 rounded-full bg-status-danger/10 px-2.5 py-1 text-xs text-status-danger"
+        class="inline-flex items-center gap-1 rounded-lg bg-status-danger/10 px-2.5 py-1 text-xs text-status-danger"
       >
         <Icon
           name="lucide:alert-triangle"

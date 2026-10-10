@@ -56,7 +56,7 @@ watch(activeLocale, () => {
 <template>
   <!-- باکس پیدا کردن گیاه با بک‌گراند داینامیک -->
   <section
-    class="relative isolate flex min-h-[460px] flex-col justify-center overflow-hidden rounded-[22px] p-6 text-white sm:min-h-[540px] sm:p-12"
+    class="relative isolate flex min-h-[460px] flex-col justify-center overflow-hidden rounded-lg p-6 text-white sm:min-h-[540px] sm:p-12"
     aria-labelledby="plant-finder-title"
   >
     <h2
@@ -132,7 +132,7 @@ watch(activeLocale, () => {
                 class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
               >
-              <span class="absolute end-2 top-2 rounded-full bg-primary-600 px-2.5 py-1 text-xs font-medium text-white">
+              <span class="absolute end-2 top-2 rounded-lg bg-primary-600 px-2.5 py-1 text-xs font-medium text-white">
                 {{ t('home.plantFinder.match') }} {{ formatScore(item.matchScore) }}
               </span>
             </div>
@@ -161,7 +161,7 @@ watch(activeLocale, () => {
                 <li
                   v-for="id in item.matchedOn"
                   :key="id"
-                  class="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs text-primary-700"
+                  class="inline-flex items-center gap-1 rounded-lg bg-primary-50 px-2 py-0.5 text-xs text-primary-700"
                 >
                   <Icon
                     name="lucide:check"

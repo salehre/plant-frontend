@@ -45,7 +45,7 @@ const chips = computed(() => [
         v-for="chip in chips"
         :key="chip.key"
         type="button"
-        class="shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors"
+        class="shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
         :class="blogStore.category === chip.key
           ? 'bg-primary-600 text-white'
           : 'bg-primary-50 text-primary-700 hover:bg-primary-100'"

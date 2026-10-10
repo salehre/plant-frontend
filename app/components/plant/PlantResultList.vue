@@ -38,7 +38,7 @@ function onHandleClick(id: string, e: MouseEvent) {
         :data-compare-id="compare ? item.id : undefined"
     >
       <div
-          class="min-w-0 flex-1 rounded-[28px] transition-shadow"
+          class="min-w-0 flex-1 rounded-lg transition-shadow"
           :class="compare && compare.hoverId === item.id ? 'ring-2 ring-primary-500 ring-offset-2 ring-offset-transparent' : ''"
       >
         <PlantResultCard

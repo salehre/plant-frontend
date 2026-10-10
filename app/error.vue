@@ -99,21 +99,21 @@ function goBack() {
             <div class="flex flex-wrap gap-3">
               <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 @click="goHome"
               >
                 {{ t('errors.home') }}
               </button>
               <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 @click="refreshPage"
               >
                 {{ t('errors.retry') }}
               </button>
               <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 @click="goBack"
               >
                 {{ t('errors.previousPage') }}
@@ -154,7 +154,7 @@ function goBack() {
   overflow: hidden;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--fl-line);
-  border-radius: 12px;
+  border-radius: var(--radius-control);
 }
 .flap-tile::after {
   content: '';

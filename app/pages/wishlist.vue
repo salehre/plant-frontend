@@ -47,7 +47,7 @@ await load()
           v-for="i in 3"
           :key="i"
           height="88px"
-          rounded="rounded-[28px]"
+          rounded="rounded-lg"
       />
     </div>
 

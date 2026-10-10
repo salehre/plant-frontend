@@ -49,7 +49,7 @@ function toggleLocale() {
         <!-- تغییر زبان -->
         <button
             type="button"
-            class="flex h-9 min-w-9 items-center justify-center rounded-full bg-primary-50 px-2.5 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+            class="flex h-9 min-w-9 items-center justify-center rounded-lg bg-primary-50 px-2.5 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
             :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
             :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
             @click="toggleLocale"
@@ -60,7 +60,7 @@ function toggleLocale() {
         <!-- دارک / لایت مود -->
         <button
             type="button"
-            class="flex size-9 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors hover:bg-primary-100"
+            class="flex size-9 items-center justify-center rounded-lg bg-primary-50 text-primary-700 transition-colors hover:bg-primary-100"
             :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
             :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
             @click="uiStore.toggleMode()"
@@ -73,7 +73,7 @@ function toggleLocale() {
 
         <NuxtLink
             to="/profile"
-            class="hidden size-9 items-center justify-center rounded-full bg-primary-50 text-primary-700 sm:flex"
+            class="hidden size-9 items-center justify-center rounded-lg bg-primary-50 text-primary-700 sm:flex"
             :aria-label="t('components.theHeader.profile')"
         >
           <Icon

@@ -25,7 +25,7 @@ const severityMap = {
         {{ props.result.diseaseName }}
       </h3>
       <span
-          class="rounded-full px-2.5 py-1 text-xs font-medium"
+          class="rounded-lg px-2.5 py-1 text-xs font-medium"
           :class="severityMap[props.result.severity].class"
       >
         {{ t(severityMap[props.result.severity].label) }}

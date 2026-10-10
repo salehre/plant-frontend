@@ -47,7 +47,7 @@ const wishlistStore = useWishlistStore()
         </div>
         <button
             type="button"
-            class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+            class="flex h-9 items-center justify-center rounded-lg bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
             :aria-label="locale === 'fa' ? t('common.switchToEnglish') : t('common.switchToPersian')"
             @click="toggleLocale"
         >
@@ -66,7 +66,7 @@ const wishlistStore = useWishlistStore()
         </div>
         <button
           type="button"
-          class="flex h-9 items-center justify-center rounded-full bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
+          class="flex h-9 items-center justify-center rounded-lg bg-primary-50 px-3 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
           :aria-label="uiStore.mode === 'dark' ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
         >

@@ -42,7 +42,7 @@ const localizedTaskLabel = computed(() => {
       </p>
     </div>
     <button
-        class="flex size-8 shrink-0 items-center justify-center rounded-full border border-primary-200 text-primary-600 hover:bg-primary-50"
+        class="flex size-8 shrink-0 items-center justify-center rounded-lg border border-primary-200 text-primary-600 hover:bg-primary-50"
         :aria-label="t('components.taskCard.complete')"
         @click="emit('done', props.task.id)"
     >

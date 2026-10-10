@@ -371,7 +371,7 @@
   }
 
   .glass-card {
-    @apply relative isolate rounded-[28px];
+    @apply relative isolate rounded-lg;
     border: 1px solid rgb(var(--shadow-tint) / 0.12);
     background:
       linear-gradient(160deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.12) 50%),

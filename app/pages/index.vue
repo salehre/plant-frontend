@@ -75,7 +75,7 @@ function onSearch() {
               <div class="flex flex-wrap gap-3">
                 <NuxtLink
                     to="/identify"
-                    class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                    class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 >
                   <Icon
                       name="lucide:scan-line"
@@ -85,7 +85,7 @@ function onSearch() {
                 </NuxtLink>
                 <NuxtLink
                     to="/plants"
-                    class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                    class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
                 >
                   {{ t('nav.catalog') }}
                 </NuxtLink>
@@ -108,7 +108,7 @@ function onSearch() {
                 v-model="searchQuery"
                 type="text"
                 :placeholder="$t('common.searchPlaceholder')"
-                class="w-full rounded-full border-0 bg-surface py-3 ps-9 pe-3 text-sm text-ink outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
+                class="w-full rounded-lg border-0 bg-surface py-3 ps-9 pe-3 text-sm text-ink outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
             >
           </div>
           <AppButton

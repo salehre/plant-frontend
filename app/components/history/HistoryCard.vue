@@ -199,7 +199,7 @@ function formatConfidenceLocalized(value: number) {
             <div class="flex flex-wrap gap-1.5">
               <span
                 v-if="plant.toxicity.isToxic"
-                class="inline-flex items-center gap-1 rounded-full bg-status-danger/10 px-2 py-1 text-xs text-status-danger"
+                class="inline-flex items-center gap-1 rounded-lg bg-status-danger/10 px-2 py-1 text-xs text-status-danger"
               >
                 <Icon
                   name="lucide:triangle-alert"
@@ -209,7 +209,7 @@ function formatConfidenceLocalized(value: number) {
               </span>
               <span
                 v-else
-                class="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-1 text-xs text-primary-700"
+                class="inline-flex items-center gap-1 rounded-lg bg-primary-50 px-2 py-1 text-xs text-primary-700"
               >
                 <Icon
                   name="lucide:shield-check"
@@ -219,7 +219,7 @@ function formatConfidenceLocalized(value: number) {
               </span>
               <span
                 v-if="detail?.conservationBadge"
-                class="inline-flex items-center gap-1 rounded-full bg-accent-50 px-2 py-1 text-xs text-accent-700"
+                class="inline-flex items-center gap-1 rounded-lg bg-accent-50 px-2 py-1 text-xs text-accent-700"
               >
                 <Icon
                   name="lucide:leaf"

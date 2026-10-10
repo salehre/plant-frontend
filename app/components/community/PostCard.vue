@@ -62,7 +62,7 @@ function relativeTime(iso: string) {
       <NuxtLink
           v-if="props.post.plantTag"
           :to="`/plants/${props.post.plantTag}`"
-          class="rounded-full bg-primary-50 px-2.5 py-1 text-xs text-primary-700 hover:bg-primary-100"
+          class="rounded-lg bg-primary-50 px-2.5 py-1 text-xs text-primary-700 hover:bg-primary-100"
       >
         <Icon
             name="lucide:leaf"

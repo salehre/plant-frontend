@@ -269,7 +269,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
           </p>
 
           <button
-              class="mt-1 inline-flex items-center gap-1 rounded-full bg-accent-400/90 px-3 py-1.5 text-xs font-semibold text-primary-900 transition hover:bg-accent-300"
+              class="mt-1 inline-flex items-center gap-1 rounded-lg bg-accent-400/90 px-3 py-1.5 text-xs font-semibold text-primary-900 transition hover:bg-accent-300"
               @click="goToTarget"
           >
             {{ t('testDetail.labels.conservation') }}: {{ toxitcityStatus.lame }}
@@ -277,7 +277,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
 
           <div class="mt-1 flex items-center gap-2">
             <button
-                class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                class="flex size-9 items-center justify-center rounded-lg bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
                 :aria-pressed="isBookmarked"
                 :aria-label="t('testDetail.actions.bookmark')"
                 @click="toggleBookmark"
@@ -285,7 +285,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
               <Icon :name="isBookmarked ? 'lucide:bookmark-check' : 'lucide:bookmark'" class="size-4" />
             </button>
             <button
-                class="flex size-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                class="flex size-9 items-center justify-center rounded-lg bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
                 :aria-label="t('testDetail.actions.share')"
                 @click="sharePlant"
             >
@@ -425,7 +425,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
               >
                 <div class="mb-2 flex flex-wrap items-baseline justify-between gap-1">
                   <strong class="text-sm text-primary-900">{{ cat.name }}</strong>
-                  <span class="rounded-full bg-bg px-2 py-0.5 text-xs text-ink-muted">{{ cat.total }}</span>
+                  <span class="rounded-lg bg-bg px-2 py-0.5 text-xs text-ink-muted">{{ cat.total }}</span>
                 </div>
                 <ul v-if="cat.compounds?.length" class="list-none space-y-1">
                   <li
@@ -434,7 +434,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
                       class="flex items-baseline justify-between gap-2 border-b border-dashed border-ink/10 py-1 text-xs last:border-0"
                   >
                     <span class="font-medium text-ink">{{ comp.name }}</span>
-                    <span class="shrink-0 rounded-full bg-bg px-2 py-0.5 text-ink-muted">{{ comp.amount }}</span>
+                    <span class="shrink-0 rounded-lg bg-bg px-2 py-0.5 text-ink-muted">{{ comp.amount }}</span>
                   </li>
                 </ul>
               </div>
@@ -521,7 +521,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
               <div
                   v-for="item in localNames"
                   :key="item.name"
-                  class="rounded-full bg-bg px-3.5 py-1.5 text-sm"
+                  class="rounded-lg bg-bg px-3.5 py-1.5 text-sm"
               >
                 <span class="font-semibold text-primary-900">{{ item.name }}</span>
                 <span class="mr-1 text-xs text-ink-muted">({{ item.region }})</span>
@@ -603,7 +603,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
         <div class="w-full max-w-2xl overflow-hidden rounded-lg bg-surface">
           <div class="flex items-center justify-between px-4 py-3">
             <span class="text-sm font-semibold text-ink">{{ galleryCurrentImage?.title }}</span>
-            <button class="flex size-8 items-center justify-center rounded-full text-ink-muted hover:bg-bg" :aria-label="t('testDetail.actions.close')" @click="closeGallery">
+            <button class="flex size-8 items-center justify-center rounded-lg text-ink-muted hover:bg-bg" :aria-label="t('testDetail.actions.close')" @click="closeGallery">
               <Icon name="lucide:x" class="size-4" />
             </button>
           </div>
@@ -614,7 +614,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
           >
           <div class="flex items-center justify-center gap-3 py-4">
             <button
-                class="flex size-9 items-center justify-center rounded-full border border-ink/10 text-ink disabled:opacity-30"
+                class="flex size-9 items-center justify-center rounded-lg border border-ink/10 text-ink disabled:opacity-30"
                 :disabled="galleryIndex === 0"
                 :aria-label="t('testDetail.actions.previousImage')"
                 @click="prevImage"
@@ -623,7 +623,7 @@ const getNeedLabel = (key: string) => t(`testDetail.labels.growthKeys.${key}`)
             </button>
             <span class="text-sm text-ink-muted">{{ galleryIndex + 1 }} / {{ plantGallery.length }}</span>
             <button
-                class="flex size-9 items-center justify-center rounded-full border border-ink/10 text-ink disabled:opacity-30"
+                class="flex size-9 items-center justify-center rounded-lg border border-ink/10 text-ink disabled:opacity-30"
                 :disabled="galleryIndex === plantGallery.length - 1"
                 :aria-label="t('testDetail.actions.nextImage')"
                 @click="nextImage"
