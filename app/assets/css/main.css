@@ -285,7 +285,7 @@
 
   :root {
     --shadow-tint: 41 87 72; /* #295748 */
-    --radius-control: 10px;
+    --radius-control: 18px;
 
     --card-shadow: 0 10px 24px -18px rgb(var(--shadow-tint) / 0.45);
     --card-shadow-hover: 0 14px 30px -16px rgb(var(--shadow-tint) / 0.55);
