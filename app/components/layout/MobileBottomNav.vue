@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { isNavigationFailure, NavigationFailureType } from 'vue-router'
+
 const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 
 interface NavItem {
@@ -16,14 +19,14 @@ const items: NavItem[] = [
   { to: '/profile', icon: 'lucide:user', label: 'components.mobileBottomNav.profile' },
 ]
 
+// تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه
 function isActive(to: string) {
-  return to === '/' ? route.path === '/' : route.path.startsWith(to)
+  return to === '/' ? route.path === '/' : (route.path === to || route.path.startsWith(`${to}/`))
 }
 
-const activeIndex = computed(() => {
-  const idx = items.findIndex(item => isActive(item.to))
-  return idx === -1 ? 0 : idx
-})
+// -1 = صفحه‌ای که توی نوار نیست (مثلاً /blog یا /contact): هیچ تبی هایلایت نمی‌شه
+// (قبلاً اینجا ۰ برمی‌گشت و تب «خانه» اشتباهی فعال می‌شد)
+const activeIndex = computed(() => items.findIndex(item => isActive(item.to)))
 
 // ---------- Spring physics ----------
 
@@ -72,10 +75,13 @@ const pressSpring = makeSpring(1)
 // before the route has actually changed (set on pointerdown).
 const pendingIndex = ref<number | null>(null)
 const displayActiveIndex = computed(() => pendingIndex.value ?? activeIndex.value)
+const pillHidden = ref(activeIndex.value === -1)
 
-// Safety-net timer: if a pointerdown never resolves into a real
-// navigation (tap swallowed, event lost, etc.) we clear the pending
-// state so the UI can't get stuck highlighting the wrong item.
+// Safety-net timer: آخرین خط دفاع اگه هیچ‌کدوم از راه‌های عادی پاک کردن pending
+// (رسیدن به مسیر، شکست ناوبری، pointercancel) اتفاق نیفتاد. عمداً طولانیه؛ صفحه‌هایی
+// که داده‌ی async دارن ممکنه چند ثانیه طول بکشن تا مسیر واقعاً عوض بشه و با تایمر کوتاه
+// پیل قبل از رسیدن مسیر به تب قبلی برمی‌گشت و بعد دوباره می‌پرید.
+const PENDING_TIMEOUT_MS = 10000
 let pendingFallbackTimer: number | null = null
 
 function clearPendingFallbackTimer() {
@@ -98,8 +104,21 @@ let lastTime = 0
 
 function measureAndSetTarget(instant = false) {
   const nav = navRef.value
-  const el = itemRefs.value[activeIndex.value]
+  // همیشه به تبی که «نمایش داده می‌شه» (pending یا مسیر فعلی) اشاره می‌کنیم، نه فقط مسیر.
+  // قبلاً با activeIndex اندازه می‌گرفت و هر resize/watch وسط ناوبری پیل رو به تب قبلی برمی‌گردوند.
+  const index = displayActiveIndex.value
+  if (index === -1) {
+    pillHidden.value = true
+    return
+  }
+  const el = itemRefs.value[index]
   if (!nav || !el) return
+
+  // اگه پیل مخفی بوده، بدون «کشیده شدن» از جای قبلی مستقیم میاد روی تب جدید
+  if (pillHidden.value) {
+    pillHidden.value = false
+    instant = true
+  }
 
   const navRect = nav.getBoundingClientRect()
   const elRect = el.getBoundingClientRect()
@@ -174,30 +193,34 @@ function tick(now: number) {
 // ---------- Pointer interaction ----------
 
 function onPointerDown(index: number, e: PointerEvent) {
+  // کلیک راست/دکمه‌های غیر اصلی ناوبری نمی‌سازن
+  if (e.pointerType === 'mouse' && e.button !== 0) return
+
+  // روی تب فعال: ناوبری‌ای در کار نیست، فقط انیمیشن فشردن. اگه pending ست می‌شد هیچ‌وقت
+  // پاک نمی‌شد و بعداً با رفتن به صفحه‌ی دیگه، تب اشتباه هایلایت می‌موند.
+  if (index === displayActiveIndex.value && pendingIndex.value === null) {
+    pressSpring.target = 1.1
+    triggerFeedback(e)
+    ensureLoop()
+    return
+  }
+
   pendingIndex.value = index
   pressSpring.target = 1.1
 
-  const el = itemRefs.value[index]
-  const nav = navRef.value
-  if (el && nav) {
-    const navRect = nav.getBoundingClientRect()
-    const elRect = el.getBoundingClientRect()
-    posSpring.target = elRect.left - navRect.left
-    widthSpring.target = elRect.width
-  }
+  // پیل رو همین حالا (خوش‌بینانه) به تب لمس‌شده می‌بره؛ مسیر که برسه همین‌جا می‌مونه
+  measureAndSetTarget(false)
 
   triggerFeedback(e)
   ensureLoop()
 
-  // Fallback: if navigation never actually happens (e.g. the click
-  // gets swallowed somewhere), don't leave the pill stuck forever.
   clearPendingFallbackTimer()
   pendingFallbackTimer = window.setTimeout(() => {
-    if (pendingIndex.value === index && activeIndex.value !== index) {
+    if (pendingIndex.value === index) {
       clearPending()
       measureAndSetTarget(false)
     }
-  }, 800)
+  }, PENDING_TIMEOUT_MS)
 }
 
 function onPointerUp() {
@@ -251,36 +274,43 @@ function triggerFeedback(e: PointerEvent) {
 
 // ---------- Watchers ----------
 
-watch(activeIndex, () => {
-  nextTick(() => measureAndSetTarget(false))
-})
-
+// مسیر عوض شد (از هر راهی: تب، لینک داخل صفحه، دکمه‌ی back)
 watch(activeIndex, (val) => {
   if (pendingIndex.value !== null && val === pendingIndex.value) {
     clearPending()
+  }
+  nextTick(() => measureAndSetTarget(false))
+})
+
+// ناوبری شکست خورد یا لغو/تکراری شد (مثلاً guard، یا کلیک روی همون صفحه): pending نباید
+// بمونه. ناوبری «cancelled» رو نادیده می‌گیریم چون یعنی ناوبری جدیدتری (تپ بعدی) جاش اومده
+// و pending جدیدش باید دست‌نخورده بمونه.
+const removeAfterEach = router.afterEach((_to, _from, failure) => {
+  if (failure && !isNavigationFailure(failure, NavigationFailureType.cancelled)) {
+    clearPending()
+    nextTick(() => measureAndSetTarget(false))
   }
 })
 
 // ---------- Lifecycle ----------
 
 let resizeObserver: ResizeObserver | null = null
-let onWindowResize: (() => void) | null = null
 
 onMounted(() => {
   nextTick(() => measureAndSetTarget(true))
 
+  // فقط وقتی اندازه‌ی خود نوار واقعاً عوض می‌شه دوباره اندازه می‌گیریم. listener روی
+  // window resize حذف شد: مرورگرهای موبایل با کوچک/بزرگ شدن نوار آدرس هنگام اسکرول
+  // resize می‌فرستن و پیل وسط انیمیشن به‌صورت instant می‌پرید.
   resizeObserver = new ResizeObserver(() => measureAndSetTarget(true))
   if (navRef.value) resizeObserver.observe(navRef.value)
-
-  onWindowResize = () => measureAndSetTarget(true)
-  window.addEventListener('resize', onWindowResize)
 })
 
 onBeforeUnmount(() => {
   if (rafId != null) cancelAnimationFrame(rafId)
   clearPendingFallbackTimer()
+  removeAfterEach()
   resizeObserver?.disconnect()
-  if (onWindowResize) window.removeEventListener('resize', onWindowResize)
 })
 </script>
 
@@ -302,6 +332,7 @@ onBeforeUnmount(() => {
       <div
         ref="pillRef"
         class="jelly-pill pointer-events-none absolute rounded-full"
+        :class="{ 'jelly-pill--hidden': pillHidden }"
       />
 
       <NuxtLink
@@ -350,12 +381,17 @@ onBeforeUnmount(() => {
 
 .jelly-pill {
   z-index: 1;
+  transition: opacity 0.2s ease;
   background: rgb(var(--color-primary-500));
   box-shadow:
     0 3px 10px -2px rgb(var(--color-primary-500) / 0.55),
     inset 0 1px 0 0 rgb(255 255 255 / 0.25);
   transform-origin: center;
   will-change: left, width, transform;
+}
+
+.jelly-pill--hidden {
+  opacity: 0;
 }
 
 .jelly-badge {

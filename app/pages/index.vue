@@ -126,6 +126,9 @@ function onSearch() {
       <PlantFinder />
     </section>
 
+    <!-- سوالات متداول -->
+    <FaqSection />
+
     <!-- Featured Plants -->
     <section class="mx-auto max-w-6xl px-4 py-14">
       <div class="mb-6 flex items-center justify-between">

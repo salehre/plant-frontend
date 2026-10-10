@@ -18,7 +18,7 @@ const socialLinks = [
   },
   {
     name: 'Gmail',
-    href: 'mailto:salehrezaeipoor123@gmail.com',
+    href: 'mailto:yourname@gmail.com',
     icon: 'lucide:mail',
   },
 ]
@@ -109,6 +109,11 @@ function subscribeToNewsletter() {
                 {{ t('components.theFooter.dashboard') }}
               </NuxtLink>
             </li>
+            <li>
+              <NuxtLink to="/contact" class="transition-colors hover:text-primary-700">
+                {{ t('components.theFooter.contact') }}
+              </NuxtLink>
+            </li>
           </ul>
         </div>
 
@@ -177,26 +182,37 @@ function subscribeToNewsletter() {
           <!-- Contact details -->
           <div class="mt-5 space-y-2 border-t border-ink/5 pt-4 text-sm">
             <a
-              href="tel:+989300377838"
+              href="tel:+989121234567"
               dir="ltr"
               class="flex w-fit items-center gap-2 text-ink-muted transition-colors hover:text-primary-700"
             >
               <Icon name="lucide:phone" class="size-4" />
-              <span>+98 930 037 7838</span>
+              <span>+98 912 123 4567</span>
             </a>
 
             <a
-              href="mailto:salehrezaeipoor123@gmail.com"
+              href="mailto:yourname@gmail.com"
               class="flex w-fit items-center gap-2 text-ink-muted transition-colors hover:text-primary-700"
             >
               <Icon name="lucide:mail" class="size-4" />
-              <span>salehrezaeipoor123@gmail.com</span>
+              <span>yourname@gmail.com</span>
             </a>
           </div>
         </div>
       </div>
 
       <div class="mt-8 border-t border-ink/5 pt-6 text-center text-xs text-ink-muted">
+        <nav class="mb-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          <NuxtLink to="/about" class="transition-colors hover:text-primary-700">
+            {{ t('components.theFooter.about') }}
+          </NuxtLink>
+          <NuxtLink to="/terms" class="transition-colors hover:text-primary-700">
+            {{ t('components.theFooter.terms') }}
+          </NuxtLink>
+          <NuxtLink to="/privacy" class="transition-colors hover:text-primary-700">
+            {{ t('components.theFooter.privacy') }}
+          </NuxtLink>
+        </nav>
         {{ t('components.theFooter.poweredBy') }}
         <span class="text-primary-700">Saleh Rezaei</span>
       </div>

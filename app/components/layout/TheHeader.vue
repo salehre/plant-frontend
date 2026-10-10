@@ -82,7 +82,7 @@ function toggleLocale() {
           />
         </NuxtLink>
 
-        <button
+        <!-- <button
             class="flex size-9 items-center justify-center rounded-md text-ink md:hidden"
             :aria-label="t('components.theHeader.menu')"
             @click="uiStore.mobileNavOpen = true"
@@ -91,7 +91,7 @@ function toggleLocale() {
               name="lucide:menu"
               class="size-5"
           />
-        </button>
+        </button> -->
       </div>
     </div>
   </header>

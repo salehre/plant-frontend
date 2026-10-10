@@ -45,6 +45,36 @@
     "lightDescription": "How much light reaches each corner of your home, and which plants thrive there?",
     "pestTitle": "Spot pests early",
     "pestDescription": "Recognize early signs of pests and disease before they spread.",
+    "faq": {
+      "title": "Frequently asked questions",
+      "subtitle": "Quick answers to the questions we hear most",
+      "items": [
+        {
+          "q": "How can I identify my plant from a photo?",
+          "a": "Open the plant identification page and take a clear photo of a leaf or flower, or pick one from your gallery. In a few seconds you'll see the most likely matches with a confidence score, and you can open each one to confirm the right plant."
+        },
+        {
+          "q": "How does the plant finder work?",
+          "a": "In the “Find your perfect plant” box you answer a few short questions about where the plant will live, how much light it gets and how much time you have for care, and we suggest plants that fit your home and lifestyle."
+        },
+        {
+          "q": "Do you have recommendations for different cities?",
+          "a": "Yes. Use the city-based plant finder to choose your city and see which plants suit that local climate best."
+        },
+        {
+          "q": "How do I keep track of watering and care?",
+          "a": "Add your plants to “My plants”, then use the care calendar to see and follow tasks such as watering and feeding."
+        },
+        {
+          "q": "What if my plant looks sick?",
+          "a": "Take a photo of the affected part on the identification page to see common problems and how to treat them. The home page also lists the most common plant problems."
+        },
+        {
+          "q": "Can I compare plants side by side?",
+          "a": "Yes. Select a few plants and open the comparison page to see their light, water and temperature needs next to each other. You can also save favourites to your wishlist."
+        }
+      ]
+    },
     "plantFinder": {
       "title": "Find your perfect plant",
       "subtitle": "Answer a few quick questions and we will suggest plants that fit your home and lifestyle.",
@@ -457,6 +487,168 @@
       "growthAltitude": "Growing altitude"
     }
   },
+  "contact": {
+    "pageTitle": "Contact us",
+    "title": "Contact us",
+    "subtitle": "Have a question, suggestion or problem? Send us a message and we'll get back to you as soon as we can.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address",
+    "addressValue": "No. 000, Valiasr St., Tehran, Iran",
+    "hoursLabel": "Support hours",
+    "hoursValue": "Saturday to Wednesday, 9 AM to 5 PM",
+    "formTitle": "Send us a message",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone number",
+    "optional": "optional",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send message",
+    "success": "Your message was sent. Thanks for getting in touch 🌿",
+    "error": "Couldn't send your message. Please try again.",
+    "errors": {
+      "nameMin": "Name must be at least 2 characters",
+      "phoneInvalid": "Enter a valid mobile number (e.g. 09123456789)",
+      "subjectMin": "Subject must be at least 3 characters",
+      "messageMin": "Message must be at least 10 characters",
+      "messageMax": "Message must be 1000 characters or less"
+    }
+  },
+  "about": {
+    "pageTitle": "About us",
+    "title": "About PlantPal",
+    "intro": "PlantPal is a platform for identifying and caring for plants, for anyone from someone who just bought their first pot to people who have lived with plants for years.",
+    "storyTitle": "Our story",
+    "storyBody": "PlantPal started with a simple question: why is it so hard to find reliable answers about a plant? We wanted a place where one photo tells you what you have, how much water and light it needs, and how to plan its care.",
+    "missionTitle": "Our mission",
+    "missionBody": "Our mission is to make plant care simple and enjoyable for everyone, with clear information, practical tools and a community of plant lovers who share what they learn.",
+    "featuresTitle": "What we offer",
+    "features": {
+      "identify": {
+        "title": "Identify from a photo",
+        "description": "Snap a leaf or flower and see the most likely plants with a confidence score."
+      },
+      "finder": {
+        "title": "Find your perfect plant",
+        "description": "Answer a few short questions about your space, light and time, and get plants that suit your home."
+      },
+      "care": {
+        "title": "Care calendar",
+        "description": "Plan and track watering, feeding and other tasks for your plants."
+      },
+      "community": {
+        "title": "Plant lovers community",
+        "description": "Share experiences, ask questions and learn from other plant lovers."
+      }
+    },
+    "valuesTitle": "What we believe in",
+    "values": {
+      "simple": {
+        "title": "Simple and clear",
+        "description": "We explain plant information in plain language, without jargon."
+      },
+      "honest": {
+        "title": "Honest and transparent",
+        "description": "Identifications are guidance, not a final verdict. We always show how confident we are and where our knowledge ends."
+      },
+      "care": {
+        "title": "Caring",
+        "description": "We respect plants, and our users' time and experience."
+      }
+    },
+    "ctaTitle": "Ready to get to know your plant?",
+    "ctaText": "Take a photo right now, or write to us. We'd love to hear from you.",
+    "ctaIdentify": "Identify a plant from a photo",
+    "ctaContact": "Contact us"
+  },
+  "legal": {
+    "lastUpdated": "Last updated",
+    "updatedDate": "October 10, 2026",
+    "toc": "Contents",
+    "questions": "Have a question about this document?",
+    "contactUs": "Get in touch",
+    "terms": {
+      "title": "Terms and conditions",
+      "intro": "By using PlantPal you agree to these terms. Please read them carefully before creating an account or using our services.",
+      "sections": [
+        {
+          "title": "Acceptance of terms",
+          "body": "Using the PlantPal website and services means you agree to these terms and to our privacy policy.\nIf you do not agree with any part of these terms, please do not use the services."
+        },
+        {
+          "title": "Our services",
+          "body": "PlantPal provides tools for identifying and caring for plants, including photo identification, a plant finder, a plant encyclopedia, plant comparison, a care calendar and a plant lovers community.\nWe may change, add or discontinue parts of the services at any time."
+        },
+        {
+          "title": "Your account",
+          "body": "Some features require an account. The information you give when signing up must be accurate and up to date.\nYou are responsible for keeping your password safe and for activity under your account. If you think someone accessed your account without permission, contact us right away."
+        },
+        {
+          "title": "Acceptable use",
+          "body": "You agree not to use the services for anything unlawful, to harass or threaten others, to post abusive or misleading content, or to try to gain unauthorized access to systems or other people's accounts.\nYou also must not scrape the site at scale with automated tools or disrupt how it works."
+        },
+        {
+          "title": "User content and the community",
+          "body": "You are responsible for the posts, photos and comments you publish, and you must have the right to publish them.\nYou allow us to use this content to display it on the site and provide the services. We may remove content that breaks these terms without prior notice."
+        },
+        {
+          "title": "Accuracy and plant identification",
+          "body": "Plant information and photo identification results are for guidance and education only and may not always be accurate. Photo quality and the plant's condition affect results.\nBefore any important decision, such as eating or using a plant medicinally or treating a disease, consult an expert. Some plants are toxic to people or pets."
+        },
+        {
+          "title": "Intellectual property",
+          "body": "The design, text, logo and components of the site belong to PlantPal or their respective owners and must not be copied or republished without written permission.\nContent you publish remains yours."
+        },
+        {
+          "title": "Limitation of liability",
+          "body": "The services are provided as they are, and we do not guarantee they will work without interruption or errors.\nTo the extent permitted by law, PlantPal is not liable for damages resulting from the use of information on the site, including harm to plants."
+        },
+        {
+          "title": "Changes and contact",
+          "body": "We may update these terms. The date of the latest change is shown at the top of the page, and continued use means you accept the new version.\nFor any question or report, send us a message from the contact page."
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy and security",
+      "intro": "Your privacy matters to us. This page explains what information we collect, why we use it and how we protect it.",
+      "sections": [
+        {
+          "title": "Information we collect",
+          "body": "Account information such as your name and email, and, if you provide them, your phone number and profile details.\nInformation you enter on the site, such as your plants, favourites, posts and messages you send through the contact form.\nPhotos you upload for plant identification."
+        },
+        {
+          "title": "How we use your information",
+          "body": "We use your information to create and manage your account, provide services such as plant identification and the care calendar, reply to your messages, improve the site and keep it secure.\nWe do not sell your personal information for advertising."
+        },
+        {
+          "title": "Photos",
+          "body": "Photos you send for identification are used only to provide that service.\nPlease avoid uploading photos that show people's faces or personal information."
+        },
+        {
+          "title": "Storage in your browser",
+          "body": "Some settings, such as your theme and display mode, are stored in your browser so the site opens the way you chose next time.\nYou can remove them by clearing the site's data in your browser settings."
+        },
+        {
+          "title": "Sharing information",
+          "body": "We do not sell your personal information. We may share it only with technical service providers we need to run the site (such as hosting), when required by law or by legal authorities, or when you agree.\nContent you post in the community is visible to other users."
+        },
+        {
+          "title": "Security",
+          "body": "We use reasonable technical and organizational measures to protect your information, but no system is completely secure and we cannot guarantee absolute security.\nDo not share your password, and use a strong, unique password for each site. We will never ask for your password by email or message.\nIf you notice a security problem or suspect unauthorized access, please tell us right away through the contact page."
+        },
+        {
+          "title": "Your rights",
+          "body": "You can view and edit your profile information from the profile page.\nTo ask for your account and data to be deleted, or if you have any other question about your information, send us a message from the contact page and we will look into it."
+        },
+        {
+          "title": "Changes and contact",
+          "body": "We may update this policy and will show the date of the latest change at the top of the page.\nIf you have a question about privacy or security, send us a message from the contact page."
+        }
+      ]
+    }
+  },
   "blog": {
     "title": "From the blog",
     "subtitle": "Practical tips for taking better care of your plants",
@@ -551,7 +743,11 @@
       "account": "Account",
       "myPlants": "My plants",
       "careCalendar": "Care calendar",
-      "profile": "Profile"
+      "profile": "Profile",
+      "contact": "Contact us",
+      "about": "About us",
+      "terms": "Terms and conditions",
+      "privacy": "Privacy and security"
     },
     "mobileBottomNav": {
       "home": "Home",
