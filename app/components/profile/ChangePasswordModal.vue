@@ -18,7 +18,7 @@ const showCurrent = ref(false)
 const showNew = ref(false)
 const showConfirm = ref(false)
 
-const inputClass = 'w-full rounded-lg border bg-transparent px-3 py-2.5 pe-10 text-sm text-ink placeholder:text-ink-muted/60 outline-none transition-colors focus:border-primary-500'
+const inputClass = 'field pe-10'
 
 /* ---------- مرحله‌ی ۱: رمز فعلی ---------- */
 const verifyForm = useForm({
@@ -108,8 +108,8 @@ watch(() => props.modelValue, (open) => {
             v-bind="currentPasswordAttrs"
             :type="showCurrent ? 'text' : 'password'"
             autocomplete="current-password"
-            :class="[inputClass, verifyForm.errors.value.currentPassword ? 'border-status-danger' : 'border-ink/15']"
-            placeholder="••••••••"
+            :class="[inputClass, verifyForm.errors.value.currentPassword ? 'border-status-danger' : '']"
+            placeholder="••••••"
           >
           <button
             type="button"

@@ -122,7 +122,7 @@ function onSearch() {
     </section>
 
     <!-- Plant Finder -->
-    <section class="mx-auto max-w-6xl px-4 pt-14">
+    <section class="mx-auto max-w-5xl px-4 pt-14">
       <PlantFinder />
     </section>
 

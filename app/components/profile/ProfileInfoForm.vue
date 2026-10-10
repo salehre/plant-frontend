@@ -68,7 +68,7 @@ function onDigitsInput(event: Event, set: (value: string) => void) {
 
 const birthDateLabel = computed(() => (birthDate.value ? toJalaliDate(birthDate.value) : ''))
 
-const inputClass = 'w-full rounded-md border bg-transparent px-3 py-2.5 text-sm text-ink placeholder:text-ink-muted/60 outline-none transition-colors focus:border-primary-500'
+const inputClass = 'field'
 
 function onLogout() {
   authStore.logout()
@@ -121,7 +121,7 @@ const onSubmit = handleSubmit(async (values) => {
             v-bind="nameAttrs"
             type="text"
             autocomplete="name"
-            :class="[inputClass, errors.name ? 'border-status-danger' : 'border-ink/15']"
+            :class="[inputClass, errors.name ? 'border-status-danger' : '']"
             :placeholder="t('auth.namePlaceholder')"
           >
           <p
@@ -142,7 +142,7 @@ const onSubmit = handleSubmit(async (values) => {
               readonly
               tabindex="-1"
               dir="ltr"
-              class="w-full rounded-md border border-ink/10 bg-ink/5 px-3 py-2.5 pe-10 text-start text-sm text-ink outline-none"
+              class="field pe-10 text-start"
             >
             <!-- ایمیل با کد تایید وریفای شده -->
             <Icon
@@ -163,7 +163,7 @@ const onSubmit = handleSubmit(async (values) => {
             autocomplete="tel"
             maxlength="11"
             dir="ltr"
-            :class="[inputClass, 'text-start', errors.phone ? 'border-status-danger' : 'border-ink/15']"
+            :class="[inputClass, 'text-start', errors.phone ? 'border-status-danger' : '']"
             placeholder="09123456789"
             @input="onDigitsInput($event, v => (phone = v))"
           >
@@ -203,7 +203,7 @@ const onSubmit = handleSubmit(async (values) => {
             inputmode="numeric"
             maxlength="10"
             dir="ltr"
-            :class="[inputClass, 'text-start', errors.nationalId ? 'border-status-danger' : 'border-ink/15']"
+            :class="[inputClass, 'text-start', errors.nationalId ? 'border-status-danger' : '']"
             placeholder="0123456789"
             @input="onDigitsInput($event, v => (nationalId = v))"
           >
@@ -225,7 +225,7 @@ const onSubmit = handleSubmit(async (values) => {
             min="1900-01-01"
             :max="today"
             autocomplete="bday"
-            :class="[inputClass, errors.birthDate ? 'border-status-danger' : 'border-ink/15']"
+            :class="[inputClass, errors.birthDate ? 'border-status-danger' : '']"
           >
           <p
             v-if="birthDateLabel && !errors.birthDate"
@@ -247,7 +247,7 @@ const onSubmit = handleSubmit(async (values) => {
         <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.password') }}</label>
         <button
           type="button"
-          class="flex w-full items-center justify-between rounded-md border border-ink/15 px-3 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5"
+          class="field flex items-center justify-between"
           @click="showPasswordModal = true"
         >
           <span
@@ -275,7 +275,7 @@ const onSubmit = handleSubmit(async (values) => {
 
       <button
         type="button"
-        class="flex w-full items-center justify-center gap-2 rounded-md border border-status-danger/30 px-4 py-2.5 text-sm font-medium text-status-danger transition-colors hover:bg-status-danger/10"
+        class="flex w-full items-center justify-center gap-2 rounded-[var(--radius-control)] border border-status-danger/30 px-4 py-2.5 text-sm font-medium text-status-danger transition-colors hover:bg-status-danger/10"
         @click="onLogout"
       >
         <Icon

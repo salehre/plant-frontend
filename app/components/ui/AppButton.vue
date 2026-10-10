@@ -23,7 +23,8 @@ const props = withDefaults(
 
 const variantClasses: Record<Variant, string> = {
   primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 disabled:bg-primary-200',
-  secondary: 'bg-primary-50 text-primary-700 hover:bg-primary-100 active:bg-primary-200',
+  // مثل دکمه‌های Google/Apple تو رفرنس: پس‌زمینه‌ی نیمه‌شفاف + بوردر ظریف (تم‌دار و سازگار با لایت/دارک)
+  secondary: 'border border-ink/15 bg-ink/5 text-ink hover:bg-ink/10 active:bg-ink/15',
   ghost: 'bg-transparent text-ink hover:bg-ink/5 active:bg-ink/10',
   danger: 'bg-status-danger text-white hover:opacity-90 active:opacity-80',
   // برای CTAهای روی زمینه‌ی شیشه‌ای (مثلاً صفحات auth) - رنگ گرم "چراغ رشد" که از پس‌زمینه‌ی سبز جدا دیده می‌شه
@@ -41,7 +42,7 @@ const sizeClasses: Record<Size, string> = {
   <button
     :type="props.type"
     :disabled="props.disabled || props.loading"
-    class="inline-flex items-center justify-center rounded-md font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60"
+    class="inline-flex items-center justify-center rounded-[var(--radius-control)] font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60"
     :class="[variantClasses[props.variant], sizeClasses[props.size], props.block ? 'w-full' : '']"
   >
     <Icon

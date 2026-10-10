@@ -28,7 +28,7 @@ const mistStyle = computed(() => ({
           :key="bgImage"
           :src="bgImage"
           alt=""
-          class="absolute inset-0 size-full object-cover"
+          class="bg-float absolute inset-0 size-full object-cover"
       >
     </Transition>
     <div
@@ -72,13 +72,24 @@ const mistStyle = computed(() => ({
   transition: background 0.6s ease;
 }
 
-@keyframes drift {
+/* عکس بک‌گراند ثابت نیست؛ خیلی کم و آروم شناور می‌شه (بدون زوم) */
+.bg-float {
+  scale: 1.04;
+  animation: bg-float 20s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes bg-float {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate(28px, -22px) scale(1.08);
+    transform: translate3d(-1%, -0.8%, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bg-float {
+    animation: none;
   }
 }
 </style>
