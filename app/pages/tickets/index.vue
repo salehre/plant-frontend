@@ -86,7 +86,7 @@ const list = computed(() => tab.value === 'all'
     <!-- لیست -->
     <div
       v-if="list.length"
-      class="grid grid-cols-1 gap-4 md:grid-cols-2"
+      class="flex flex-col gap-3"
     >
       <TicketCard
         v-for="ticket in list"
