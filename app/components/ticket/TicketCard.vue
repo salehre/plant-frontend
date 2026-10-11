@@ -9,16 +9,16 @@ const { formatDateTime, ticketCode } = useTicketFormat()
 <template>
   <NuxtLink
     :to="`/tickets/${props.ticket.slug}`"
-    class="glass-card flex flex-col gap-2 px-4 py-3 transition-transform duration-200 hover:-translate-y-0.5 sm:flex-row sm:items-center sm:gap-4"
+    class="glass-card flex flex-col gap-3 px-5 py-4 transition-transform duration-200 hover:-translate-y-0.5 sm:flex-row sm:items-center sm:gap-4"
   >
-    <div class="flex min-w-0 flex-1 items-center gap-3">
+    <div class="min-w-0 flex-1 flex-col gap-1">
+      <h2 class="min-w-0 truncate text-md font-medium text-ink">
+        {{ props.ticket.subject }}
+      </h2>
       <span
-        class="shrink-0 text-xs font-medium text-ink-muted"
+        class="text-[11px] text-ink-muted"
         dir="ltr"
       >{{ ticketCode(props.ticket.slug) }}</span>
-      <h3 class="min-w-0 truncate text-sm font-medium text-ink">
-        {{ props.ticket.subject }}
-      </h3>
     </div>
 
     <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
