@@ -139,6 +139,11 @@ function subscribeToNewsletter() {
                 {{ t('components.theFooter.profile') }}
               </NuxtLink>
             </li>
+            <li>
+              <NuxtLink to="/tickets" class="transition-colors hover:text-primary-700">
+                {{ t('components.theFooter.tickets') }}
+              </NuxtLink>
+            </li>
           </ul>
         </div>
 

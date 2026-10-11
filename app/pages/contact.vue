@@ -118,6 +118,32 @@ const onSubmit = handleSubmit(async (values) => {
             >{{ card.value }}</span>
           </span>
         </component>
+
+        <!-- کارت تیکت: لینک به صفحه‌ی تیکت‌های پشتیبانی -->
+        <NuxtLink
+          to="/tickets"
+          class="glass-card group flex flex-col gap-3 border-primary-500/30 p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:col-span-2 lg:col-span-1"
+        >
+          <span class="flex items-start gap-4">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white">
+              <Icon
+                name="lucide:ticket"
+                class="size-5"
+              />
+            </span>
+            <span class="min-w-0">
+              <span class="block text-sm font-bold text-ink">{{ t('contact.ticketTitle') }}</span>
+              <span class="mt-1 block text-sm leading-7 text-ink-muted">{{ t('contact.ticketText') }}</span>
+            </span>
+          </span>
+          <span class="inline-flex items-center gap-1 text-sm font-medium text-primary-600 group-hover:text-primary-700">
+            {{ t('contact.ticketCta') }}
+            <Icon
+              name="lucide:arrow-left"
+              class="size-4 rtl:rotate-0 ltr:rotate-180"
+            />
+          </span>
+        </NuxtLink>
       </div>
 
       <!-- فرم پیام -->

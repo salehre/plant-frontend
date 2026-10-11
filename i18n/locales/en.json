@@ -488,6 +488,9 @@
     }
   },
   "contact": {
+    "ticketTitle": "Need a follow-up?",
+    "ticketText": "For problems and questions that need a closer look, submit a ticket and track its status.",
+    "ticketCta": "Go to tickets",
     "pageTitle": "Contact us",
     "title": "Contact us",
     "subtitle": "Have a question, suggestion or problem? Send us a message and we'll get back to you as soon as we can.",
@@ -649,6 +652,101 @@
       ]
     }
   },
+  "tickets": {
+    "pageTitle": "Support tickets",
+    "title": "Support tickets",
+    "subtitle": "Submit your question or problem as a ticket and follow its status right here.",
+    "newTicket": "New ticket",
+    "filterLabel": "Filter tickets by status",
+    "backToList": "Back to tickets",
+    "tabs": {
+      "all": "All",
+      "pending": "Awaiting reply",
+      "answered": "Answered",
+      "closed": "Closed"
+    },
+    "status": {
+      "pending": "Awaiting reply",
+      "answered": "Answered",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "Urgent"
+    },
+    "category": {
+      "technical": "Technical issue",
+      "account": "Account",
+      "plants": "Plant information",
+      "suggestion": "Feedback and suggestions",
+      "other": "Other"
+    },
+    "author": {
+      "user": "You",
+      "support": "Support"
+    },
+    "messagesCount": "{count} messages",
+    "emptyTitle": "You haven't submitted any tickets yet",
+    "emptyText": "If you have a question or problem, submit a new ticket and our support team will look into it.",
+    "emptyFilterTitle": "No tickets in this category",
+    "emptyFilterText": "Pick another category to see your other tickets.",
+    "new": {
+      "pageTitle": "New ticket",
+      "title": "Submit a new ticket",
+      "subtitle": "Describe your problem or question in detail so we can look into it faster and more accurately.",
+      "subject": "Subject",
+      "category": "Category",
+      "priority": "Priority",
+      "message": "Describe the problem or question",
+      "messageHint": "What happened? What were you trying to do? Add any detail that might help.",
+      "messageNote": "The more detail you give, the more precise our answer.",
+      "submit": "Submit ticket",
+      "success": "Your ticket was submitted. We'll look into it soon 🌿",
+      "error": "Something went wrong. Please try again."
+    },
+    "detail": {
+      "notFoundTitle": "Ticket not found",
+      "notFoundText": "This ticket doesn't exist or belongs to another account.",
+      "category": "Category",
+      "priority": "Priority",
+      "createdAt": "Created",
+      "updatedAt": "Last activity",
+      "conversation": "Ticket conversation",
+      "replyTitle": "Send a reply",
+      "replyPlaceholder": "Write your new message...",
+      "send": "Send reply",
+      "replySent": "Your reply was sent",
+      "close": "Close ticket",
+      "reopen": "Reopen",
+      "closedNote": "This ticket is closed. Reopen it to continue the conversation.",
+      "closedToast": "Ticket closed",
+      "reopenedToast": "Ticket reopened"
+    },
+    "errors": {
+      "subjectMin": "Subject must be at least 3 characters",
+      "subjectMax": "Subject must be 120 characters or less",
+      "messageMin": "Description must be at least 10 characters",
+      "messageMax": "Message must be 2000 characters or less",
+      "replyMin": "Your reply is too short"
+    },
+    "seed": {
+      "answered": {
+        "subject": "Plant photo won't upload",
+        "question": "When I try to send a photo for plant identification, nothing happens after I pick the file. I tried on my phone.",
+        "answer": "Thanks for letting us know. Please make sure the photo is under 10 MB and in JPG or PNG format, then try again. If the problem continues, tell us which browser you use."
+      },
+      "pending": {
+        "subject": "Suggestion: add more plants to the encyclopedia",
+        "question": "I'd love to see more houseplants added to the encyclopedia, especially low-light ones."
+      },
+      "closed": {
+        "subject": "Change my account email",
+        "question": "I want to change the email on my account. Where can I do that?",
+        "answer": "Changing the email from the profile page isn't possible yet. If you send us your new email address, we'll look into it for you."
+      }
+    }
+  },
   "blog": {
     "title": "From the blog",
     "subtitle": "Practical tips for taking better care of your plants",
@@ -747,7 +845,8 @@
       "contact": "Contact us",
       "about": "About us",
       "terms": "Terms and conditions",
-      "privacy": "Privacy and security"
+      "privacy": "Privacy and security",
+      "tickets": "Support tickets"
     },
     "mobileBottomNav": {
       "home": "Home",
