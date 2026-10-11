@@ -240,6 +240,12 @@
   html {
     font-family: 'Peyda', sans-serif !important;
     color-scheme: light;
+    /* فاصله‌ی حروف و کلمات کل پروژه. برای تنظیم فقط این دو متغیر رو عوض کن.
+       توجه: توی فونت فارسی مقدارهای بالای حدود 0.05em حروف متصل رو از هم جدا نشون می‌ده. */
+    --letter-spacing: 0.01em;
+    --word-spacing: 0.02em;
+    letter-spacing: var(--letter-spacing);
+    word-spacing: var(--word-spacing);
   }
 
   html.dark {
@@ -438,9 +444,10 @@
 }
 
 @layer utilities {
+  /* کمی بازتر از حالت پایه‌ی کل پروژه (برای متن‌های طولانی) */
   .text-readable {
-    word-spacing: 0.09em;
-    letter-spacing: 0.02em;
+    word-spacing: calc(var(--word-spacing) + 0.03em);
+    letter-spacing: calc(var(--letter-spacing) + 0.01em);
     line-height: 1.8;
   }
 

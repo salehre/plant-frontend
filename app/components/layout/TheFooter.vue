@@ -18,7 +18,7 @@ const socialLinks = [
   },
   {
     name: 'Gmail',
-    href: 'mailto:yourname@gmail.com',
+    href: 'mailto:salehrezaeipoor123@gmail.com',
     icon: 'lucide:mail',
   },
 ]
@@ -192,15 +192,15 @@ function subscribeToNewsletter() {
               class="flex w-fit items-center gap-2 text-ink-muted transition-colors hover:text-primary-700"
             >
               <Icon name="lucide:phone" class="size-4" />
-              <span>+98 912 123 4567</span>
+              <span>0930 037 7838</span>
             </a>
 
             <a
-              href="mailto:yourname@gmail.com"
+              href="mailto:salehrezaeipoor123@gmail.com"
               class="flex w-fit items-center gap-2 text-ink-muted transition-colors hover:text-primary-700"
             >
               <Icon name="lucide:mail" class="size-4" />
-              <span>yourname@gmail.com</span>
+              <span>salehrezaeipoor123@gmail.com</span>
             </a>
           </div>
         </div>

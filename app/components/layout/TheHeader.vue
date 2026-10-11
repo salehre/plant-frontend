@@ -39,7 +39,7 @@ function toggleLocale() {
             :key="link.to"
             :to="link.to"
             class="rounded-md px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:text-opacity-70"
-            active-class="!text-primary-200"
+            active-class="!text-opacity-70"
         >
           {{ t(link.label) }}
         </NuxtLink>

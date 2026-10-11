@@ -11,8 +11,8 @@ const uiStore = useUiStore()
 useHead(() => ({ title: t('contact.pageTitle') }))
 
 // اطلاعات تماس - قبل از انتشار با اطلاعات واقعی خودت جایگزین کن (ایمیل، تلفن، آدرس و ساعت کاری در i18n)
-const email = 'info@example.com'
-const phone = '+98 21 0000 0000'
+const email = 'salehrezaeipoor123@gmail.com'
+const phone = '0930 037 7838'
 
 const infoCards = computed(() => [
   {
