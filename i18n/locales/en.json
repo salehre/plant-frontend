@@ -488,6 +488,12 @@
     }
   },
   "contact": {
+    "mapLoading": "Loading map...",
+    "mapNoKey": "Neshan map key is not set (VITE_NESHAN_MAP_KEY)",
+    "mapError": "The map couldn't be loaded. Please try again later.",
+    "openMap": "View on map",
+    "mapAlt": "Map of our location",
+    "mapPlaceholder": "Map coming soon",
     "ticketTitle": "Need a follow-up?",
     "ticketText": "For problems and questions that need a closer look, submit a ticket and track its status.",
     "ticketCta": "Go to tickets",

@@ -14,6 +14,12 @@ useHead(() => ({ title: t('contact.pageTitle') }))
 const email = 'salehrezaeipoor123@gmail.com'
 const phone = '0930 037 7838'
 
+// نقشه‌ی نشان: مختصات مکان به‌صورت [طول جغرافیایی, عرض جغرافیایی] - الان مرکز تهران (نمونه)،
+// با مختصات واقعی خودت جایگزین کن. کلید نقشه از VITE_NESHAN_MAP_KEY توی .env خونده می‌شه.
+// mapLink (اختیاری): لینک مکان توی نشان/گوگل‌مپ برای دکمه‌ی «مشاهده روی نقشه».
+const mapCenter: [number, number] = [51.389, 35.6892]
+const mapLink = ''
+
 const infoCards = computed(() => [
   {
     key: 'email',
@@ -28,13 +34,6 @@ const infoCards = computed(() => [
     label: t('contact.phoneLabel'),
     value: phone,
     href: `tel:${phone.replace(/\s/g, '')}`,
-  },
-  {
-    key: 'address',
-    icon: 'lucide:map-pin',
-    label: t('contact.addressLabel'),
-    value: t('contact.addressValue'),
-    href: undefined,
   },
   {
     key: 'hours',
@@ -290,5 +289,55 @@ const onSubmit = handleSubmit(async (values) => {
         </AppButton>
       </form>
     </div>
+
+    <!-- آدرس و نقشه: کل عرض، زیر هر دو ستون -->
+    <section
+      class="glass-card mt-6 grid grid-cols-1 gap-6 overflow-hidden p-5 sm:p-8 md:grid-cols-5"
+      :aria-label="t('contact.addressLabel')"
+    >
+      <div class="flex flex-col justify-center gap-4 md:col-span-2">
+        <span class="flex size-11 items-center justify-center rounded-lg bg-primary-50 text-primary-700">
+          <Icon
+            name="lucide:map-pin"
+            class="size-5"
+          />
+        </span>
+        <div>
+          <h2 class="text-lg font-bold text-ink">
+            {{ t('contact.addressLabel') }}
+          </h2>
+          <p class="mt-2 text-sm leading-8 text-ink-muted">
+            {{ t('contact.addressValue') }}
+          </p>
+        </div>
+        <a
+          v-if="mapLink"
+          :href="mapLink"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex w-fit items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700"
+        >
+          {{ t('contact.openMap') }}
+          <Icon
+            name="lucide:external-link"
+            class="size-4"
+          />
+        </a>
+      </div>
+
+      <div class="h-64 overflow-hidden rounded-lg sm:h-72 md:col-span-3 md:h-80">
+        <ClientOnly>
+          <NeshanMap
+            :center="mapCenter"
+            :popup-text="t('contact.addressValue')"
+          />
+          <template #fallback>
+            <div class="flex size-full items-center justify-center bg-primary-50 text-sm text-ink-muted">
+              {{ t('contact.mapLoading') }}
+            </div>
+          </template>
+        </ClientOnly>
+      </div>
+    </section>
   </div>
 </template>
