@@ -88,6 +88,15 @@ const list = computed(() => tab.value === 'all'
       v-if="list.length"
       class="flex flex-col gap-3"
     >
+      <div
+        class="hidden px-5 text-xs text-ink-muted sm:grid sm:grid-cols-[minmax(0,1fr)_8rem_9.5rem_8.5rem] sm:gap-x-4"
+        aria-hidden="true"
+      >
+        <span>{{ t('tickets.columns.subject') }}</span>
+        <span>{{ t('tickets.columns.category') }}</span>
+        <span>{{ t('tickets.columns.date') }}</span>
+        <span class="justify-self-end">{{ t('tickets.columns.status') }}</span>
+      </div>
       <TicketCard
         v-for="ticket in list"
         :key="ticket.id"

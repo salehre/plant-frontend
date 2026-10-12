@@ -16,10 +16,10 @@ const { formatDateTime, formatFileSize, formatDuration, ticketCode } = useTicket
 
 store.ensureSeeded()
 
-const ticket = computed(() => store.getBySlug(String(route.params.slug)))
+const ticket = computed(() => store.getById(String(route.params.id)))
 
 useHead(() => ({
-  title: ticket.value ? `${ticketCode(ticket.value.slug)} | ${ticket.value.subject}` : t('tickets.detail.notFoundTitle'),
+  title: ticket.value ? `${ticketCode(ticket.value.id)} | ${ticket.value.subject}` : t('tickets.detail.notFoundTitle'),
 }))
 
 const reply = ref('')
@@ -99,7 +99,7 @@ function removePending(id: string) {
 /* ---------- ارسال ---------- */
 async function submit(body: string, attachments: TicketAttachment[]): Promise<boolean> {
   if (!ticket.value) return false
-  const ok = await store.reply(ticket.value.slug, body, attachments)
+  const ok = await store.reply(ticket.value.id, body, attachments)
   if (ok) {
     uiStore.showToast(t('tickets.detail.replySent'))
     scrollToEnd()
@@ -173,7 +173,7 @@ async function finishVoice() {
 async function toggleClosed() {
   if (!ticket.value) return
   const close = ticket.value.status !== 'closed'
-  const ok = await store.setClosed(ticket.value.slug, close)
+  const ok = await store.setClosed(ticket.value.id, close)
   if (ok) uiStore.showToast(t(close ? 'tickets.detail.closedToast' : 'tickets.detail.reopenedToast'))
 }
 
@@ -230,7 +230,7 @@ watch(reply, () => {
               <span
                 class="text-sm font-medium text-ink-muted"
                 dir="ltr"
-              >{{ ticketCode(ticket.slug) }}</span>
+              >{{ ticketCode(ticket.id) }}</span>
               <TicketStatusBadge :status="ticket.status" />
             </div>
             <AppButton
@@ -261,43 +261,33 @@ watch(reply, () => {
           <h1 class="text-lg font-bold leading-8 text-ink sm:text-xl">
             {{ ticket.subject }}
           </h1>
-          <dl class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm sm:grid-cols-4">
-            <div>
-              <dt class="text-xs text-ink-muted">
-                {{ t('tickets.detail.category') }}
-              </dt>
-              <dd class="mt-0.5 text-ink">
-                {{ t(`tickets.category.${ticket.category}`) }}
-              </dd>
-            </div>
-            <div>
-              <dt class="text-xs text-ink-muted">
-                {{ t('tickets.detail.priority') }}
-              </dt>
-              <dd
-                class="mt-0.5"
-                :class="ticket.priority === 'high' ? 'font-medium text-status-danger' : 'text-ink'"
-              >
-                {{ t(`tickets.priority.${ticket.priority}`) }}
-              </dd>
-            </div>
-            <div>
-              <dt class="text-xs text-ink-muted">
-                {{ t('tickets.detail.createdAt') }}
-              </dt>
-              <dd class="mt-0.5 text-ink">
-                {{ formatDateTime(ticket.createdAt) }}
-              </dd>
-            </div>
-            <div>
-              <dt class="text-xs text-ink-muted">
-                {{ t('tickets.detail.updatedAt') }}
-              </dt>
-              <dd class="mt-0.5 text-ink">
-                {{ formatDateTime(ticket.updatedAt) }}
-              </dd>
-            </div>
-          </dl>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-lg bg-ink/[0.06] px-2.5 py-1 text-xs text-ink">
+              <Icon
+                name="lucide:tag"
+                class="size-3.5 text-ink-muted"
+              />
+              {{ t(`tickets.category.${ticket.category}`) }}
+            </span>
+            <span
+              class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs"
+              :class="ticket.priority === 'high' ? 'bg-status-danger/10 font-medium text-status-danger' : 'bg-ink/[0.06] text-ink'"
+            >
+              <Icon
+                name="lucide:flag"
+                class="size-3.5"
+                :class="ticket.priority === 'high' ? '' : 'text-ink-muted'"
+              />
+              {{ t(`tickets.priority.${ticket.priority}`) }}
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-lg bg-ink/[0.06] px-2.5 py-1 text-xs text-ink">
+              <Icon
+                name="lucide:calendar"
+                class="size-3.5 text-ink-muted"
+              />
+              {{ formatDateTime(ticket.createdAt) }}
+            </span>
+          </div>
         </header>
 
         <!-- پیام‌ها -->

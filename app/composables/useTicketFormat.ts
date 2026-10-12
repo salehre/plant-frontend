@@ -29,9 +29,9 @@ export function useTicketFormat() {
     return `${p.day}/${p.month}/${p.year}`
   }
 
-  /** TK-1001 با اعداد فارسی در حالت fa */
-  function ticketCode(slug: string) {
-    return toPersianDigits(slug.toUpperCase())
+  /** #1001 با اعداد فارسی در حالت fa */
+  function ticketCode(id: string) {
+    return `#${locale.value === 'fa' ? toPersianDigits(id) : id}`
   }
 
   /** 1.2 مگابایت / 1.2 MB */

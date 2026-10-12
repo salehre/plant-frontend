@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import type { CreateTicketPayload, Ticket, TicketAttachment, TicketMessage, TicketStatus } from '~/types/ticket.types'
 
-const SLUG_PREFIX = 'tk-'
 const FIRST_NUMBER = 1001
 
 function uid() {
@@ -44,21 +43,33 @@ export const useTicketStore = defineStore('tickets', {
     },
   },
   actions: {
-    getBySlug(slug: string): Ticket | undefined {
-      const s = slug.toLowerCase()
-      return (this.byUser[this.userKey] ?? []).find(t => t.slug === s)
+    getById(id: string): Ticket | undefined {
+      return (this.byUser[this.userKey] ?? []).find(t => t.id === id)
     },
 
-    nextSlug(): string {
+    /** تیکت‌های قدیمی که slug داشتن (tk-1001) رو به id عددی (1001) تبدیل می‌کنه */
+    migrate() {
+      for (const list of Object.values(this.byUser)) {
+        for (const ticket of list as (Ticket & { slug?: string })[]) {
+          if (ticket.slug) {
+            ticket.id = ticket.slug.replace(/^tk-/i, '')
+            delete ticket.slug
+          }
+        }
+      }
+    },
+
+    nextId(): string {
       const numbers = Object.values(this.byUser)
         .flat()
-        .map(t => Number(t.slug.replace(SLUG_PREFIX, '')))
+        .map(t => Number(t.id))
         .filter(n => Number.isFinite(n))
-      return `${SLUG_PREFIX}${Math.max(FIRST_NUMBER - 1, ...numbers) + 1}`
+      return String(Math.max(FIRST_NUMBER - 1, ...numbers) + 1)
     },
 
     /** فقط برای دمو: اولین بار که کاربر وارد بخش تیکت می‌شه چند تیکت نمونه می‌سازه */
     ensureSeeded() {
+      this.migrate()
       const key = this.userKey
       if (!key || this.seeded[key]) return
 
@@ -69,12 +80,11 @@ export const useTicketStore = defineStore('tickets', {
         body,
         createdAt,
       })
-      const base = Math.max(FIRST_NUMBER - 1, ...Object.values(this.byUser).flat().map(x => Number(x.slug.replace(SLUG_PREFIX, ''))).filter(Number.isFinite))
+      const base = Number(this.nextId()) - 1
 
       const demo: Ticket[] = [
         {
-          id: uid(),
-          slug: `${SLUG_PREFIX}${base + 1}`,
+          id: String(base + 1),
           subject: t('tickets.seed.answered.subject'),
           category: 'technical',
           priority: 'normal',
@@ -87,8 +97,7 @@ export const useTicketStore = defineStore('tickets', {
           ],
         },
         {
-          id: uid(),
-          slug: `${SLUG_PREFIX}${base + 2}`,
+          id: String(base + 2),
           subject: t('tickets.seed.pending.subject'),
           category: 'suggestion',
           priority: 'low',
@@ -98,8 +107,7 @@ export const useTicketStore = defineStore('tickets', {
           messages: [msg('user', t('tickets.seed.pending.question'), daysAgo(1))],
         },
         {
-          id: uid(),
-          slug: `${SLUG_PREFIX}${base + 3}`,
+          id: String(base + 3),
           subject: t('tickets.seed.closed.subject'),
           category: 'account',
           priority: 'high',
@@ -122,20 +130,26 @@ export const useTicketStore = defineStore('tickets', {
       try {
         await simulateDelay(500)
         const now = new Date().toISOString()
-        const slug = this.nextSlug()
+        this.migrate()
+        const id = this.nextId()
         const ticket: Ticket = {
-          id: uid(),
-          slug,
+          id,
           subject: payload.subject.trim(),
           category: payload.category,
           priority: payload.priority,
           status: 'pending',
           createdAt: now,
           updatedAt: now,
-          messages: [{ id: uid(), author: 'user', body: payload.message.trim(), createdAt: now }],
+          messages: [{
+            id: uid(),
+            author: 'user',
+            body: payload.message.trim(),
+            ...(payload.attachments?.length ? { attachments: payload.attachments } : {}),
+            createdAt: now,
+          }],
         }
         this.byUser[this.userKey] = [...(this.byUser[this.userKey] ?? []), ticket]
-        return slug
+        return id
       }
       finally {
         this.submitting = false
@@ -143,8 +157,8 @@ export const useTicketStore = defineStore('tickets', {
     },
 
     /** پاسخ کاربر: تیکت دوباره «در انتظار» پشتیبانی می‌شه (تیکت بسته‌شده اول باید باز بشه) */
-    async reply(slug: string, body: string, attachments: TicketAttachment[] = []): Promise<boolean> {
-      const ticket = this.getBySlug(slug)
+    async reply(id: string, body: string, attachments: TicketAttachment[] = []): Promise<boolean> {
+      const ticket = this.getById(id)
       if (!ticket || ticket.status === 'closed') return false
       this.submitting = true
       try {
@@ -169,8 +183,8 @@ export const useTicketStore = defineStore('tickets', {
       }
     },
 
-    async setClosed(slug: string, closed: boolean): Promise<boolean> {
-      const ticket = this.getBySlug(slug)
+    async setClosed(id: string, closed: boolean): Promise<boolean> {
+      const ticket = this.getById(id)
       if (!ticket) return false
       this.submitting = true
       try {

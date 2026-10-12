@@ -8,34 +8,40 @@ const { formatDateTime, ticketCode } = useTicketFormat()
 
 <template>
   <NuxtLink
-    :to="`/tickets/${props.ticket.slug}`"
-    class="glass-card flex flex-col gap-3 px-5 py-4 transition-transform duration-200 hover:-translate-y-0.5 sm:flex-row sm:items-center sm:gap-4"
+    :to="`/tickets/${props.ticket.id}`"
+    class="glass-card grid grid-cols-1 gap-x-4 gap-y-2 px-5 py-4 transition-transform duration-200 hover:-translate-y-0.5 sm:grid-cols-[minmax(0,1fr)_8rem_9.5rem_8.5rem] sm:items-center"
   >
-    <div class="min-w-0 flex-1 flex-col gap-1">
-      <h2 class="min-w-0 truncate text-md font-medium text-ink">
+    <!-- موضوع + شناسه -->
+    <div class="flex min-w-0 flex-col gap-1">
+      <h3 class="truncate text-sm font-medium text-ink">
         {{ props.ticket.subject }}
-      </h2>
+      </h3>
       <span
         class="text-[11px] text-ink-muted"
         dir="ltr"
-      >{{ ticketCode(props.ticket.slug) }}</span>
+      >{{ ticketCode(props.ticket.id) }}</span>
     </div>
 
-    <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
-      <span class="inline-flex items-center gap-1">
-        <Icon
-          name="lucide:tag"
-          class="size-3.5"
-        />
-        {{ t(`tickets.category.${props.ticket.category}`) }}
-      </span>
-      <span class="inline-flex items-center gap-1">
-        <Icon
-          name="lucide:clock"
-          class="size-3.5"
-        />
-        {{ formatDateTime(props.ticket.updatedAt) }}
-      </span>
+    <!-- دسته‌بندی -->
+    <span class="inline-flex items-center gap-1.5 text-xs text-ink-muted">
+      <Icon
+        name="lucide:tag"
+        class="size-3.5 shrink-0"
+      />
+      <span class="truncate">{{ t(`tickets.category.${props.ticket.category}`) }}</span>
+    </span>
+
+    <!-- تاریخ -->
+    <span class="inline-flex items-center gap-1.5 text-xs text-ink-muted">
+      <Icon
+        name="lucide:clock"
+        class="size-3.5 shrink-0"
+      />
+      {{ formatDateTime(props.ticket.updatedAt) }}
+    </span>
+
+    <!-- وضعیت -->
+    <div class="sm:justify-self-end">
       <TicketStatusBadge :status="props.ticket.status" />
     </div>
   </NuxtLink>

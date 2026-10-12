@@ -693,6 +693,12 @@
       "support": "Support"
     },
     "messagesCount": "{count} messages",
+    "columns": {
+      "subject": "Subject",
+      "category": "Category",
+      "date": "Last updated",
+      "status": "Status"
+    },
     "emptyTitle": "You haven't submitted any tickets yet",
     "emptyText": "If you have a question or problem, submit a new ticket and our support team will look into it.",
     "emptyFilterTitle": "No tickets in this category",
@@ -707,6 +713,9 @@
       "message": "Describe the problem or question",
       "messageHint": "What happened? What were you trying to do? Add any detail that might help.",
       "messageNote": "The more detail you give, the more precise our answer.",
+      "attachments": "Attachments (optional)",
+      "attachDrop": "Drop files here or click to choose",
+      "attachHint": "Up to {count} files, each up to {size} (image, pdf, doc, txt, zip)",
       "submit": "Submit ticket",
       "success": "Your ticket was submitted. We'll look into it soon 🌿",
       "error": "Something went wrong. Please try again."

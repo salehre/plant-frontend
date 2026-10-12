@@ -30,9 +30,8 @@ export interface TicketMessage {
 }
 
 export interface Ticket {
+  /** شناسه‌ی عددی تیکت (توی URL و نمایش): ‎/tickets/1001 و ‎#1001 */
   id: string
-  /** شناسه‌ی داخل URL و شماره‌ی تیکت، مثلاً tk-1001 (نمایش: TK-1001) */
-  slug: string
   subject: string
   category: TicketCategory
   priority: TicketPriority
@@ -47,6 +46,7 @@ export interface CreateTicketPayload {
   category: TicketCategory
   priority: TicketPriority
   message: string
+  attachments?: TicketAttachment[]
 }
 
 export const ticketCategories: TicketCategory[] = ['technical', 'account', 'plants', 'suggestion', 'other']
