@@ -727,14 +727,29 @@
       "reopen": "Reopen",
       "closedNote": "This ticket is closed. Reopen it to continue the conversation.",
       "closedToast": "Ticket closed",
-      "reopenedToast": "Ticket reopened"
+      "reopenedToast": "Ticket reopened",
+      "attach": "Attach a file or image",
+      "recordVoice": "Record a voice message",
+      "recording": "Recording...",
+      "cancelRecording": "Cancel recording",
+      "sendVoice": "Send voice message",
+      "removeAttachment": "Remove attachment",
+      "voiceMessage": "Voice message",
+      "play": "Play",
+      "pause": "Pause",
+      "download": "Download file",
+      "closePreview": "Close preview"
     },
     "errors": {
       "subjectMin": "Subject must be at least 3 characters",
       "subjectMax": "Subject must be 120 characters or less",
       "messageMin": "Description must be at least 10 characters",
       "messageMax": "Message must be 2000 characters or less",
-      "replyMin": "Your reply is too short"
+      "replyMin": "Your reply is too short",
+      "fileTooLarge": "Each file must be {max} or smaller",
+      "tooManyFiles": "You can attach up to {max} items per message",
+      "micDenied": "Microphone access was denied. Allow the microphone in your browser settings.",
+      "voiceTooShort": "The voice message is too short"
     },
     "seed": {
       "answered": {

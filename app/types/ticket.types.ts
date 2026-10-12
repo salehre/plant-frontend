@@ -5,10 +5,27 @@ export type TicketCategory = 'technical' | 'account' | 'plants' | 'suggestion' |
 
 export type TicketAuthor = 'user' | 'support'
 
+export type TicketAttachmentKind = 'image' | 'file' | 'voice'
+
+export interface TicketAttachment {
+  id: string
+  kind: TicketAttachmentKind
+  name: string
+  mime: string
+  /** حجم به بایت */
+  size: number
+  /** فعلاً Data URL (Mock)؛ با Backend بشه آدرس فایل آپلودشده */
+  url: string
+  /** فقط برای پیام صوتی، به ثانیه */
+  duration?: number
+}
+
 export interface TicketMessage {
   id: string
   author: TicketAuthor
+  /** برای پیام فقط-پیوست می‌تونه خالی باشه */
   body: string
+  attachments?: TicketAttachment[]
   createdAt: string // ISO
 }
 
@@ -34,3 +51,8 @@ export interface CreateTicketPayload {
 
 export const ticketCategories: TicketCategory[] = ['technical', 'account', 'plants', 'suggestion', 'other']
 export const ticketPriorities: TicketPriority[] = ['low', 'normal', 'high']
+
+/** محدودیت‌های پیوست (Mock: چون توی localStorage ذخیره می‌شن کوچیک نگه‌شون داشتیم) */
+export const TICKET_MAX_ATTACHMENTS = 3
+export const TICKET_MAX_FILE_BYTES = 1.5 * 1024 * 1024
+export const TICKET_MAX_VOICE_SECONDS = 120

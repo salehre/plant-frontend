@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { CreateTicketPayload, Ticket, TicketMessage, TicketStatus } from '~/types/ticket.types'
+import type { CreateTicketPayload, Ticket, TicketAttachment, TicketMessage, TicketStatus } from '~/types/ticket.types'
 
 const SLUG_PREFIX = 'tk-'
 const FIRST_NUMBER = 1001
@@ -143,14 +143,23 @@ export const useTicketStore = defineStore('tickets', {
     },
 
     /** پاسخ کاربر: تیکت دوباره «در انتظار» پشتیبانی می‌شه (تیکت بسته‌شده اول باید باز بشه) */
-    async reply(slug: string, body: string): Promise<boolean> {
+    async reply(slug: string, body: string, attachments: TicketAttachment[] = []): Promise<boolean> {
       const ticket = this.getBySlug(slug)
       if (!ticket || ticket.status === 'closed') return false
       this.submitting = true
       try {
         await simulateDelay(350)
         const now = new Date().toISOString()
-        ticket.messages = [...ticket.messages, { id: uid(), author: 'user', body: body.trim(), createdAt: now }]
+        ticket.messages = [
+          ...ticket.messages,
+          {
+            id: uid(),
+            author: 'user',
+            body: body.trim(),
+            ...(attachments.length ? { attachments } : {}),
+            createdAt: now,
+          },
+        ]
         ticket.status = 'pending'
         ticket.updatedAt = now
         return true

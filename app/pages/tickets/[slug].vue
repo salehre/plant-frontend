@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import {
+  TICKET_MAX_ATTACHMENTS,
+  TICKET_MAX_FILE_BYTES,
+  TICKET_MAX_VOICE_SECONDS,
+  type TicketAttachment,
+} from '~/types/ticket.types'
+
 definePageMeta({ layout: 'default', middleware: 'auth' })
 
 const { t } = useI18n()
 const route = useRoute()
 const store = useTicketStore()
 const uiStore = useUiStore()
-const { formatDateTime, ticketCode } = useTicketFormat()
+const { formatDateTime, formatFileSize, formatDuration, ticketCode } = useTicketFormat()
 
 store.ensureSeeded()
 
@@ -17,7 +24,16 @@ useHead(() => ({
 
 const reply = ref('')
 const replyError = ref('')
+const pending = ref<TicketAttachment[]>([])
+const previewUrl = ref<string | null>(null)
 const threadEl = ref<HTMLElement | null>(null)
+const inputEl = ref<HTMLTextAreaElement | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const recorder = useVoiceRecorder(TICKET_MAX_VOICE_SECONDS, () => finishVoice())
+
+const hasContent = computed(() => !!reply.value.trim() || pending.value.length > 0)
+const showMic = computed(() => recorder.supported && !hasContent.value)
 
 async function scrollToEnd(smooth = true) {
   await nextTick()
@@ -26,11 +42,78 @@ async function scrollToEnd(smooth = true) {
 }
 
 onMounted(() => scrollToEnd(false))
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape') previewUrl.value = null
+})
+
+function autoGrow() {
+  const el = inputEl.value
+  if (!el) return
+  el.style.height = 'auto'
+  el.style.height = `${Math.min(el.scrollHeight, 128)}px`
+}
+
+function readAsDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader()
+    r.onload = () => resolve(String(r.result))
+    r.onerror = () => reject(r.error)
+    r.readAsDataURL(blob)
+  })
+}
+
+function uid() {
+  return Math.random().toString(36).slice(2, 10)
+}
+
+/* ---------- فایل ---------- */
+async function onFilesPicked(e: Event) {
+  const input = e.target as HTMLInputElement
+  const files = Array.from(input.files ?? [])
+  input.value = ''
+  for (const file of files) {
+    if (pending.value.length >= TICKET_MAX_ATTACHMENTS) {
+      uiStore.showToast(t('tickets.errors.tooManyFiles', { max: TICKET_MAX_ATTACHMENTS }), 'error')
+      break
+    }
+    if (file.size > TICKET_MAX_FILE_BYTES) {
+      uiStore.showToast(t('tickets.errors.fileTooLarge', { max: formatFileSize(TICKET_MAX_FILE_BYTES) }), 'error')
+      continue
+    }
+    pending.value.push({
+      id: uid(),
+      kind: file.type.startsWith('image/') ? 'image' : 'file',
+      name: file.name,
+      mime: file.type,
+      size: file.size,
+      url: await readAsDataUrl(file),
+    })
+  }
+  replyError.value = ''
+}
+
+function removePending(id: string) {
+  pending.value = pending.value.filter(a => a.id !== id)
+}
+
+/* ---------- ارسال ---------- */
+async function submit(body: string, attachments: TicketAttachment[]): Promise<boolean> {
+  if (!ticket.value) return false
+  const ok = await store.reply(ticket.value.slug, body, attachments)
+  if (ok) {
+    uiStore.showToast(t('tickets.detail.replySent'))
+    scrollToEnd()
+  }
+  else {
+    uiStore.showToast(t('tickets.new.error'), 'error')
+  }
+  return ok
+}
 
 async function sendReply() {
-  if (!ticket.value) return
+  if (!ticket.value || store.submitting) return
   const body = reply.value.trim()
-  if (body.length < 2) {
+  if (!pending.value.length && body.length < 2) {
     replyError.value = t('tickets.errors.replyMin')
     return
   }
@@ -39,15 +122,52 @@ async function sendReply() {
     return
   }
   replyError.value = ''
-  const ok = await store.reply(ticket.value.slug, body)
+  const ok = await submit(body, [...pending.value])
   if (ok) {
     reply.value = ''
-    uiStore.showToast(t('tickets.detail.replySent'))
-    scrollToEnd()
+    pending.value = []
+    await nextTick()
+    autoGrow()
   }
-  else {
-    uiStore.showToast(t('tickets.new.error'), 'error')
+}
+
+function onEnter(e: KeyboardEvent) {
+  if (e.isComposing || e.shiftKey) return
+  e.preventDefault()
+  sendReply()
+}
+
+/* ---------- پیام صوتی ---------- */
+async function startVoice() {
+  try {
+    await recorder.start()
   }
+  catch {
+    uiStore.showToast(t('tickets.errors.micDenied'), 'error')
+  }
+}
+
+async function finishVoice() {
+  const result = await recorder.stop()
+  if (!result) return
+  if (result.duration < 1) {
+    uiStore.showToast(t('tickets.errors.voiceTooShort'), 'error')
+    return
+  }
+  if (result.blob.size > TICKET_MAX_FILE_BYTES * 2) {
+    uiStore.showToast(t('tickets.errors.fileTooLarge', { max: formatFileSize(TICKET_MAX_FILE_BYTES * 2) }), 'error')
+    return
+  }
+  const ext = result.mime.includes('mp4') ? 'm4a' : result.mime.includes('ogg') ? 'ogg' : 'webm'
+  await submit('', [{
+    id: uid(),
+    kind: 'voice',
+    name: `voice.${ext}`,
+    mime: result.mime,
+    size: result.blob.size,
+    duration: result.duration,
+    url: await readAsDataUrl(result.blob),
+  }])
 }
 
 async function toggleClosed() {
@@ -57,8 +177,9 @@ async function toggleClosed() {
   if (ok) uiStore.showToast(t(close ? 'tickets.detail.closedToast' : 'tickets.detail.reopenedToast'))
 }
 
-watch(() => reply.value, () => {
+watch(reply, () => {
   if (replyError.value) replyError.value = ''
+  nextTick(autoGrow)
 })
 </script>
 
@@ -188,29 +309,46 @@ watch(() => reply.value, () => {
           <article
             v-for="m in ticket.messages"
             :key="m.id"
-            class="flex max-w-[90%] flex-col gap-1 rounded-2xl px-4 py-3 shadow-sm sm:max-w-[80%]"
+            class="flex max-w-[90%] flex-col gap-2 rounded-2xl px-4 py-3 shadow-sm sm:max-w-[80%]"
             :class="m.author === 'user'
               ? 'self-start rounded-ss-sm bg-primary-600 text-white'
               : 'self-end rounded-se-sm border border-ink/10 bg-white/60 text-ink dark:bg-white/10'"
           >
+            <span
+              v-if="m.author === 'support'"
+              class="text-xs font-medium text-primary-700"
+            >{{ t(`tickets.author.${m.author}`) }}</span>
+
             <div
-              class="flex items-center justify-between gap-4 text-xs"
-              :class="m.author === 'user' ? 'text-white/80' : 'text-ink-muted'"
+              v-if="m.attachments?.length"
+              class="flex flex-col gap-2"
             >
-              <span class="font-medium">{{ t(`tickets.author.${m.author}`) }}</span>
-              <time :datetime="m.createdAt">{{ formatDateTime(m.createdAt) }}</time>
+              <TicketAttachmentItem
+                v-for="a in m.attachments"
+                :key="a.id"
+                :attachment="a"
+                :own="m.author === 'user'"
+                @preview="previewUrl = $event"
+              />
             </div>
+
             <p
+              v-if="m.body"
               class="whitespace-pre-line text-sm leading-7"
-              :class="m.author === 'user' ? 'text-white' : 'text-ink'"
             >
               {{ m.body }}
             </p>
+
+            <time
+              :datetime="m.createdAt"
+              class="text-[11px]"
+              :class="m.author === 'user' ? 'text-white/70' : 'text-ink-muted'"
+            >{{ formatDateTime(m.createdAt) }}</time>
           </article>
         </section>
 
         <!-- ورودی پاسخ / وضعیت بسته -->
-        <footer class="border-t border-ink/10 p-4 sm:p-5">
+        <footer class="border-t border-ink/10 p-3 sm:p-4">
           <p
             v-if="ticket.status === 'closed'"
             class="flex items-center gap-2 text-sm text-ink-muted"
@@ -222,48 +360,198 @@ watch(() => reply.value, () => {
             {{ t('tickets.detail.closedNote') }}
           </p>
 
-          <form
+          <div
             v-else
             class="flex flex-col gap-2"
-            novalidate
-            @submit.prevent="sendReply"
           >
-            <label
-              for="ticket-reply"
-              class="sr-only"
-            >{{ t('tickets.detail.replyTitle') }}</label>
-            <div class="flex items-end gap-2">
-              <textarea
-                id="ticket-reply"
-                v-model="reply"
-                rows="2"
-                maxlength="2000"
-                class="field min-h-12 resize-none"
-                :placeholder="t('tickets.detail.replyPlaceholder')"
-                :aria-invalid="!!replyError"
-                @keydown.enter.exact.prevent="sendReply"
-              />
-              <AppButton
-                type="submit"
-                :loading="store.submitting"
-                :aria-label="t('tickets.detail.send')"
+            <!-- پیوست‌های آماده‌ی ارسال -->
+            <ul
+              v-if="pending.length"
+              class="flex flex-wrap gap-2"
+            >
+              <li
+                v-for="a in pending"
+                :key="a.id"
+                class="flex max-w-full items-center gap-2 rounded-xl border border-ink/10 bg-ink/[0.04] py-1.5 pe-1.5 ps-2"
+              >
+                <img
+                  v-if="a.kind === 'image'"
+                  :src="a.url"
+                  :alt="a.name"
+                  class="size-8 rounded-md object-cover"
+                >
+                <Icon
+                  v-else
+                  name="lucide:file-text"
+                  class="size-5 shrink-0 text-primary-700"
+                />
+                <span class="flex min-w-0 flex-col">
+                  <span
+                    class="max-w-40 truncate text-xs text-ink"
+                    dir="auto"
+                  >{{ a.name }}</span>
+                  <span class="text-[10px] text-ink-muted">{{ formatFileSize(a.size) }}</span>
+                </span>
+                <button
+                  type="button"
+                  class="flex size-6 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-ink/10 hover:text-status-danger"
+                  :aria-label="t('tickets.detail.removeAttachment')"
+                  @click="removePending(a.id)"
+                >
+                  <Icon
+                    name="lucide:x"
+                    class="size-3.5"
+                  />
+                </button>
+              </li>
+            </ul>
+
+            <!-- حالت ضبط صدا -->
+            <div
+              v-if="recorder.recording.value"
+              class="flex items-center gap-3"
+            >
+              <button
+                type="button"
+                class="flex size-11 shrink-0 items-center justify-center rounded-lg text-status-danger transition-colors hover:bg-status-danger/10"
+                :aria-label="t('tickets.detail.cancelRecording')"
+                @click="recorder.cancel()"
+              >
+                <Icon
+                  name="lucide:trash-2"
+                  class="size-5"
+                />
+              </button>
+              <div
+                class="flex min-h-11 flex-1 items-center gap-3 rounded-lg bg-status-danger/10 px-4"
+                role="status"
+              >
+                <span class="size-2.5 animate-pulse rounded-full bg-status-danger" />
+                <span class="text-sm text-ink">{{ t('tickets.detail.recording') }}</span>
+                <span class="ms-auto text-sm tabular-nums text-ink-muted">{{ formatDuration(recorder.seconds.value) }}</span>
+              </div>
+              <button
+                type="button"
+                class="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white transition-colors hover:bg-primary-700 disabled:opacity-60"
+                :disabled="store.submitting"
+                :aria-label="t('tickets.detail.sendVoice')"
+                @click="finishVoice"
               >
                 <Icon
                   name="lucide:send"
-                  class="size-4 rtl:-scale-x-100"
+                  class="size-5 rtl:-scale-x-100"
                 />
-                {{ t('tickets.detail.send') }}
-              </AppButton>
+              </button>
             </div>
-            <p
-              v-if="replyError"
-              class="text-xs text-status-danger"
+
+            <!-- حالت عادی -->
+            <form
+              v-else
+              class="flex flex-col gap-1"
+              novalidate
+              @submit.prevent="sendReply"
             >
-              {{ replyError }}
-            </p>
-          </form>
+              <label
+                for="ticket-reply"
+                class="sr-only"
+              >{{ t('tickets.detail.replyTitle') }}</label>
+              <div class="flex items-end gap-2">
+                <input
+                  ref="fileInput"
+                  type="file"
+                  multiple
+                  class="hidden"
+                  accept="image/*,.pdf,.doc,.docx,.txt,.zip"
+                  @change="onFilesPicked"
+                >
+                <button
+                  type="button"
+                  class="flex size-11 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-ink/10 hover:text-primary-700"
+                  :aria-label="t('tickets.detail.attach')"
+                  :title="t('tickets.detail.attach')"
+                  @click="fileInput?.click()"
+                >
+                  <Icon
+                    name="lucide:paperclip"
+                    class="size-5"
+                  />
+                </button>
+                <textarea
+                  id="ticket-reply"
+                  ref="inputEl"
+                  v-model="reply"
+                  rows="1"
+                  maxlength="2000"
+                  class="field max-h-32 min-h-11 flex-1 resize-none"
+                  :placeholder="t('tickets.detail.replyPlaceholder')"
+                  :aria-invalid="!!replyError"
+                  @keydown.enter="onEnter"
+                />
+                <button
+                  v-if="showMic"
+                  type="button"
+                  class="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white transition-colors hover:bg-primary-700"
+                  :aria-label="t('tickets.detail.recordVoice')"
+                  :title="t('tickets.detail.recordVoice')"
+                  @click="startVoice"
+                >
+                  <Icon
+                    name="lucide:mic"
+                    class="size-5"
+                  />
+                </button>
+                <AppButton
+                  v-else
+                  type="submit"
+                  :loading="store.submitting"
+                  :aria-label="t('tickets.detail.send')"
+                >
+                  <Icon
+                    name="lucide:send"
+                    class="size-4 rtl:-scale-x-100"
+                  />
+                  <span class="hidden sm:inline">{{ t('tickets.detail.send') }}</span>
+                </AppButton>
+              </div>
+              <p
+                v-if="replyError"
+                class="text-xs text-status-danger"
+              >
+                {{ replyError }}
+              </p>
+            </form>
+          </div>
         </footer>
       </div>
     </template>
+
+    <!-- پیش‌نمایش تصویر -->
+    <Teleport to="body">
+      <div
+        v-if="previewUrl"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+        role="dialog"
+        aria-modal="true"
+        @click="previewUrl = null"
+      >
+        <button
+          type="button"
+          class="absolute end-4 top-4 flex size-10 items-center justify-center rounded-lg bg-white/15 text-white hover:bg-white/25"
+          :aria-label="t('tickets.detail.closePreview')"
+          @click="previewUrl = null"
+        >
+          <Icon
+            name="lucide:x"
+            class="size-5"
+          />
+        </button>
+        <img
+          :src="previewUrl"
+          alt=""
+          class="max-h-full max-w-full rounded-xl object-contain"
+          @click.stop
+        >
+      </div>
+    </Teleport>
   </div>
 </template>

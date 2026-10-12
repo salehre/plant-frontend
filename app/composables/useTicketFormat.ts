@@ -34,5 +34,26 @@ export function useTicketFormat() {
     return toPersianDigits(slug.toUpperCase())
   }
 
-  return { formatDateTime, formatDate, ticketCode }
+  /** 1.2 مگابایت / 1.2 MB */
+  function formatFileSize(bytes: number) {
+    const fa = locale.value === 'fa'
+    const units = fa ? ['بایت', 'کیلوبایت', 'مگابایت'] : ['B', 'KB', 'MB']
+    let i = 0
+    let n = bytes
+    while (n >= 1024 && i < units.length - 1) {
+      n /= 1024
+      i++
+    }
+    const text = i === 0 ? String(Math.round(n)) : (Math.round(n * 10) / 10).toString()
+    return `${fa ? toPersianDigits(text) : text} ${units[i]}`
+  }
+
+  /** 1:05 */
+  function formatDuration(seconds: number) {
+    const s = Math.max(0, Math.round(seconds))
+    const text = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+    return locale.value === 'fa' ? toPersianDigits(text) : text
+  }
+
+  return { formatDateTime, formatDate, ticketCode, formatFileSize, formatDuration }
 }
