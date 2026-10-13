@@ -1,16 +1,19 @@
 <script setup lang="ts">
 const route = useRoute()
 
+// منوی اصلی (مثل دیزاین: ۶ آیتم) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
 const links = [
   { to: '/', label: 'nav.home', icon: 'lucide:home' },
   { to: '/my-plants', label: 'nav.myPlants', icon: 'lucide:sprout' },
   { to: '/plants', label: 'nav.catalog', icon: 'lucide:compass' },
   { to: '/identify', label: 'nav.identify', icon: 'lucide:scan-line' },
   { to: '/care-calendar', label: 'nav.careCalendar', icon: 'lucide:calendar-check' },
+  { to: '/profile', label: 'nav.profile', icon: 'lucide:settings' },
+]
+const secondaryLinks = [
   { to: '/dashboard', label: 'nav.dashboard', icon: 'lucide:layout-dashboard' },
   { to: '/climate', label: 'nav.climate', icon: 'lucide:cloud-sun' },
   { to: '/community', label: 'nav.community', icon: 'lucide:users' },
-  { to: '/profile', label: 'nav.profile', icon: 'lucide:settings' },
 ]
 
 // تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه
@@ -49,6 +52,23 @@ function isActive(to: string) {
         <Icon
           :name="link.icon"
           class="size-5"
+        />
+        {{ $t(link.label) }}
+      </NuxtLink>
+      <div class="my-2 border-t border-ink/5" />
+
+      <NuxtLink
+        v-for="link in secondaryLinks"
+        :key="link.to"
+        :to="link.to"
+        class="flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium transition-colors"
+        :class="isActive(link.to)
+          ? 'bg-primary-50 font-bold text-primary-700'
+          : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
+      >
+        <Icon
+          :name="link.icon"
+          class="size-4"
         />
         {{ $t(link.label) }}
       </NuxtLink>

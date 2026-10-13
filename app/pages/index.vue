@@ -242,3 +242,9 @@ function onImageError(e: Event) {
     </section>
   </div>
 </template>
+
+<style scoped>
+.x{
+  stroke: none;
+}
+</style>

@@ -18,7 +18,6 @@ defineProps<{
         {{ title }}
         <span class="text-[11px] font-normal tracking-wide text-ink-muted">{{ titleEn }}</span>
       </h2>
-      <div class="mt-2 h-0.5 w-14 rounded-full bg-accent-500" />
     </div>
     <div class="px-5 pb-5">
       <slot />

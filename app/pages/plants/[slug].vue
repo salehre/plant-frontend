@@ -6,6 +6,7 @@ import { findPlantDetailBySlug } from '~/services/mock/plant-details.mock'
 const route = useRoute()
 const plantStore = usePlantStore()
 const wishlistStore = useWishlistStore()
+const userPlantsStore = useUserPlantsStore()
 const uiStore = useUiStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
@@ -42,6 +43,37 @@ function toggleBookmark() {
     removed: t('plantDetail.removedFromWishlist'),
   })
 }
+const lightKeys: Record<string, string> = {
+  low: 'components.common.lightLow',
+  medium: 'components.common.lightMedium',
+  high: 'components.common.lightHigh',
+  direct: 'components.common.lightDirect',
+}
+const waterKeys: Record<string, string> = {
+  low: 'components.common.waterLow',
+  medium: 'components.common.waterMedium',
+  high: 'components.common.waterHigh',
+}
+function careLabel(keys: Record<string, string>, value: string) {
+  const key = keys[value]
+  return key ? t(key) : value
+}
+
+function addToGarden() {
+  if (!plant.value || !detail.value) return
+  userPlantsStore.addPlant({
+    plantSlug: slug,
+    nickname: plant.value.name,
+    photo: detail.value.image,
+    acquiredAt: new Date().toISOString().slice(0, 10),
+    location: t('pages.myPlants.home'),
+    healthStatus: 'healthy',
+    lastWateredAt: null,
+    nextWateringAt: null,
+  })
+  uiStore.showToast(t('pages.myPlants.addedToast', { name: plant.value.name }))
+}
+
 async function sharePlant() {
   if (!plant.value) return
   const shareData = { title: plant.value.name, text: plant.value.scientificName, url: window.location.href }
@@ -140,42 +172,30 @@ const growthIcons: Record<string, string> = {
 
   <div
       v-else-if="plant && detail"
-      class="plant-detail-page text-readable min-h-screen pb-10"
+      class="plant-detail-page text-readable pb-10"
   >
     <!-- ========== هدر ========== -->
-    <div class="relative overflow-visible bg-gradient-to-l from-primary-900 via-primary-800 to-primary-700 px-4 pb-4 pt-10 text-white sm:px-8 sm:pt-14">
-      <div class="mx-auto flex max-w-6xl flex-col items-center gap-4 sm:flex-row sm:items-end">
-        <div class="relative -mb-14 shrink-0 sm:-mb-16">
-          <img
-              :src="detail.image"
-              :alt="plant.name"
-              class="size-28 rounded-full border-4 border-surface object-cover shadow-card-hover sm:size-40"
-          >
-        </div>
+    <div class="glass-card flex flex-col gap-5 p-4 sm:flex-row sm:p-6">
+      <img
+          :src="detail.image"
+          :alt="plant.name"
+          class="aspect-square w-full shrink-0 rounded-2xl object-cover sm:size-56 sm:w-56 lg:size-64 lg:w-64"
+      >
 
-        <div class="flex flex-1 flex-col items-center gap-2 text-center sm:items-start sm:text-right">
-          <h1 class="text-2xl font-bold sm:text-4xl">
-            {{ plant.name }}
-          </h1>
-          <p class="text-sm italic opacity-85 sm:text-base">
-            {{ plant.scientificName }}
-          </p>
-          <p class="text-xs opacity-70 sm:text-sm">
-            {{ t('plantDetail.authority') }}: {{ detail.taxonomy.authority }}
-          </p>
-
-          <button
-              type="button"
-              class="mt-1 inline-flex items-center gap-1 rounded-lg bg-accent-400/90 px-3 py-1.5 text-xs font-semibold text-primary-900 transition hover:bg-accent-300"
-              @click="goToTarget"
-          >
-            {{ t('plantDetail.conservationStatus') }}: {{ detail.conservationBadge }}
-          </button>
-
-          <div class="mt-1 flex items-center gap-2">
+      <div class="flex min-w-0 flex-1 flex-col gap-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h1 class="text-2xl font-bold text-ink sm:text-3xl">
+              {{ plant.name }}
+            </h1>
+            <p class="text-sm italic text-ink-muted sm:text-base">
+              {{ plant.scientificName }}
+            </p>
+          </div>
+          <div class="flex shrink-0 items-center gap-2">
             <button
                 type="button"
-                class="flex size-9 items-center justify-center rounded-lg bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                class="flex size-9 items-center justify-center rounded-xl border border-ink/10 text-primary-700 transition-colors hover:bg-primary-50"
                 :aria-pressed="isBookmarked"
                 :aria-label="isBookmarked ? t('plantDetail.removeFromWishlist') : t('plantDetail.addToWishlist')"
                 @click="toggleBookmark"
@@ -184,7 +204,7 @@ const growthIcons: Record<string, string> = {
             </button>
             <button
                 type="button"
-                class="flex size-9 items-center justify-center rounded-lg bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                class="flex size-9 items-center justify-center rounded-xl border border-ink/10 text-primary-700 transition-colors hover:bg-primary-50"
                 :aria-label="t('plantDetail.share')"
                 @click="sharePlant"
             >
@@ -192,7 +212,7 @@ const growthIcons: Record<string, string> = {
             </button>
             <button
                 type="button"
-                class="flex size-9 items-center justify-center rounded-lg bg-white/15 text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-accent-400 hover:text-primary-900"
+                class="flex size-9 items-center justify-center rounded-xl border border-ink/10 text-primary-700 transition-colors hover:bg-primary-50"
                 :aria-label="t('plantDetail.compare')"
                 @click="navigateTo(`/compare/${slug}`)"
             >
@@ -200,18 +220,64 @@ const growthIcons: Record<string, string> = {
             </button>
           </div>
         </div>
+
+        <!-- چیپ‌های خانواده / جنس / وضعیت حفاظتی -->
+        <div class="flex flex-wrap gap-2">
+          <NuxtLink
+              :to="{ path: '/plants', query: { family: plant.family } }"
+              class="rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 hover:bg-primary-100"
+          >
+            {{ t('components.plantDetailHeader.family') }} {{ plant.family }}
+          </NuxtLink>
+          <NuxtLink
+              :to="{ path: '/plants', query: { genus: plant.genus } }"
+              class="rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 hover:bg-primary-100"
+          >
+            {{ t('components.plantDetailHeader.genus') }} {{ plant.genus }}
+          </NuxtLink>
+          <button
+              type="button"
+              class="rounded-full bg-accent-50 px-3 py-1 text-xs font-medium text-accent-700 hover:bg-accent-100"
+              @click="goToTarget"
+          >
+            {{ t('plantDetail.conservationStatus') }}: {{ detail.conservationBadge }}
+          </button>
+        </div>
+
+        <p class="text-xs text-ink-muted">
+          {{ t('plantDetail.authority') }}: {{ detail.taxonomy.authority }}
+        </p>
+
+        <!-- نیازهای اصلی نگهداری -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex items-center gap-2.5 rounded-xl bg-primary-50/70 p-3">
+            <Icon name="lucide:sun" class="size-5 shrink-0 text-primary-600" />
+            <span class="text-sm font-bold text-ink">{{ careLabel(lightKeys, plant.care.light) }}</span>
+          </div>
+          <div class="flex items-center gap-2.5 rounded-xl bg-primary-50/70 p-3">
+            <Icon name="lucide:droplets" class="size-5 shrink-0 text-primary-600" />
+            <span class="text-sm font-bold text-ink">{{ careLabel(waterKeys, plant.care.water) }}</span>
+          </div>
+        </div>
+
+        <div class="mt-auto pt-1">
+          <AppButton variant="primary" @click="addToGarden">
+            <Icon name="lucide:plus" class="size-4" />
+            {{ $t('identify.addToGarden') }}
+          </AppButton>
+        </div>
       </div>
     </div>
 
-    <div class="mx-auto max-w-6xl px-4 pt-16 sm:px-8 sm:pt-20">
+    <div class="pt-6">
       <!-- ========== آمار سریع ========== -->
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <div
             v-for="stat in detail.quickStats"
             :key="stat.label"
-            class="glass-card flex flex-col items-center justify-center gap-1.5 px-3 py-4 text-center transition hover:-translate-y-0.5"
+            class="glass-card flex flex-col items-center justify-center gap-1.5 px-3 py-4 text-center"
         >
-          <span class="text-sm font-bold text-primary-900">{{ stat.value }}</span>
+          <span class="text-sm font-bold text-ink">{{ stat.value }}</span>
           <span class="text-[0.65rem] uppercase tracking-wide text-ink-muted">{{ stat.label }}</span>
         </div>
       </div>
@@ -222,21 +288,21 @@ const growthIcons: Record<string, string> = {
         <div class="flex flex-col gap-6 lg:col-span-7">
           <!-- راهنمای نگهداری روزانه -->
 <!--          <section class="glass-card p-5 sm:p-6">-->
-<!--            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">-->
+<!--            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">-->
 <!--              راهنمای نگهداری روزانه-->
 <!--              <span class="text-xs font-normal tracking-wide text-ink-muted">Care Guide</span>-->
 <!--            </h2>-->
-<!--            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />-->
+<!--            <div class="mb-4" />-->
 <!--            <CareInfoCard :plant="plant" />-->
 <!--          </section>-->
 
           <!-- طبقه‌بندی علمی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.taxonomyTitle') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Taxonomy</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <table class="w-full overflow-hidden rounded-md text-center text-sm">
               <tbody>
               <tr v-for="(value, key) in filteredTaxonomy" :key="key" class="border-b border-ink/10 last:border-0">
@@ -261,11 +327,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- ویژگی‌های زیست‌شناسی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.morphologyTitle') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Morphology</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="grid grid-cols-2 gap-3">
               <div
                   v-for="(value, key) in detail.morphology"
@@ -285,11 +351,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- کاربردها -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.applicationsTitle') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Applications</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="space-y-3">
               <div>
                 <span class="text-status-success">● </span>
@@ -324,7 +390,7 @@ const growthIcons: Record<string, string> = {
           <!-- ترکیبات شیمیایی -->
           <section class="glass-card p-5 sm:p-6">
             <div class="flex items-center justify-between gap-3">
-              <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+              <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
                 {{ t('plantDetail.chemicalCompounds') }}
                 <span class="text-xs font-normal tracking-wide text-ink-muted">Phytochemistry</span>
               </h2>
@@ -341,7 +407,7 @@ const growthIcons: Record<string, string> = {
               </button>
             </div>
 
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
 
             <div class="rounded-md border-r-4 border-accent-400 bg-bg px-4 py-3">
               <span class="block text-xs font-semibold text-ink-muted">{{ t('plantDetail.mainActiveCompound') }}:</span>
@@ -384,11 +450,11 @@ const growthIcons: Record<string, string> = {
         <div class="flex flex-col gap-6 lg:col-span-5">
           <!-- نیازهای رشدی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.growthRequirements') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Growth Requirements</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex flex-col gap-3">
               <div
                   v-for="(value, key) in detail.growthNeeds"
@@ -412,11 +478,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- داستان گیاه -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.story') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Plant Story</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <p class="text-justify text-sm leading-8 text-ink">
               {{ detail.plantStory }}
             </p>
@@ -424,11 +490,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- سمّیت -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.toxicity') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Toxicity</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex items-center gap-3 rounded-md border-r-4 border-status-warning bg-status-warning/10 px-4 py-3">
               <Icon name="lucide:triangle-alert" class="size-5 shrink-0 text-status-warning" />
               <div class="text-sm text-ink"><strong>{{ t('plantDetail.toxicity') }}:</strong> {{ detail.toxicityText }}</div>
@@ -440,11 +506,11 @@ const growthIcons: Record<string, string> = {
               v-if="plant.commonIssues.length"
               class="glass-card p-5 sm:p-6"
           >
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.commonProblems') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Common Issues</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex flex-col gap-3">
               <template v-for="issueId in plant.commonIssues" :key="issueId">
                 <NuxtLink
@@ -473,11 +539,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- حفاظت -->
           <section ref="targetSection" class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.conservation') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Status</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex items-center gap-3 rounded-md border-r-4 border-status-info bg-status-info/10 px-4 py-3">
               <Icon name="lucide:shield" class="size-5 shrink-0 text-status-info" />
               <div class="text-sm text-ink"><strong>{{ t('plantDetail.conservationStatus') }}:</strong> {{ detail.conservationStatus }}</div>
@@ -486,11 +552,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- نام‌های محلی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.localNames') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Local Names</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex flex-wrap gap-3">
               <div
                   v-for="item in detail.localNames"
@@ -505,11 +571,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- مترادف‌های علمی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.scientificSynonyms') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Synonyms</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex flex-col gap-2.5">
               <div
                   v-for="synonym in detail.scientificSynonyms"
@@ -524,11 +590,11 @@ const growthIcons: Record<string, string> = {
 
           <!-- دوره فسیلی -->
           <section class="glass-card p-5 sm:p-6">
-            <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.fossilPeriod') }}
               <span class="text-xs font-normal tracking-wide text-ink-muted">Fossil Record</span>
             </h2>
-            <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+            <div class="mb-4" />
             <div class="flex items-start gap-2 text-sm leading-relaxed text-ink-muted">
               <span class="mt-0.5 shrink-0 text-accent-500">◈</span>
               {{ detail.fossilPeriod }}
@@ -539,11 +605,11 @@ const growthIcons: Record<string, string> = {
 
       <!-- ========== گالری تصاویر ========== -->
       <section class="glass-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1">
-        <h2 class="flex items-baseline gap-2 font-serif text-lg font-semibold text-primary-900">
+        <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
           {{ t('plantDetail.gallery') }}
           <span class="text-xs font-normal tracking-wide text-ink-muted">Image Gallery</span>
         </h2>
-        <div class="mt-2 mb-4 h-0.5 w-14 bg-accent-400" />
+        <div class="mb-4" />
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           <button
               v-for="(image, index) in detail.gallery"

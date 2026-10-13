@@ -107,3 +107,9 @@ function onSearch() {
     </div>
   </header>
 </template>
+
+<style scoped>
+.x{
+  stroke: none;
+}
+</style>
