@@ -1,110 +1,109 @@
 <script setup lang="ts">
 const uiStore = useUiStore()
-const { t } = useI18n()
-// locale و setLocale فقط روی scope سراسری هستن
+const userPlantsStore = useUserPlantsStore()
 const { locale, setLocale } = useI18n()
 
-const navLinks = [
-  { to: '/', label: 'components.theHeader.home' },
-  { to: '/identify', label: 'components.theHeader.identify' },
-  { to: '/plants', label: 'components.theHeader.catalog' },
-  { to: '/profile', label: 'components.theHeader.profile' },
-]
-
+const query = ref('')
 const isDark = computed(() => uiStore.mode === 'dark')
+const todayCount = computed(() => userPlantsStore.todayTasks.length)
 
 function toggleLocale() {
   setLocale(locale.value === 'fa' ? 'en' : 'fa')
 }
 
+function onSearch() {
+  navigateTo({ path: '/plants', query: query.value ? { q: query.value } : {} })
+}
 </script>
 
 <template>
-  <header class="sticky top-0 z-30 border-b border-ink/5 bg-surface/90 backdrop-blur">
-    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+  <header class="sticky top-0 z-30 bg-bg/85 backdrop-blur">
+    <div class="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
+      <!-- لوگو (فقط موبایل؛ تو دسکتاپ لوگو توی سایدبار هست) -->
       <NuxtLink
-          to="/"
-          class="flex items-center gap-2 text-lg font-bold text-primary-700"
+        to="/"
+        class="flex items-center gap-2 text-primary-800 md:hidden"
+        :aria-label="$t('brand.name')"
       >
-        <Icon
+        <span class="flex size-9 items-center justify-center rounded-xl bg-primary-700 text-white">
+          <Icon
             name="lucide:leaf"
-            class="size-6"
-        />
-        <span>{{ t('components.theHeader.brand') }}</span>
+            class="size-5"
+          />
+        </span>
       </NuxtLink>
 
-      <nav class="hidden items-center gap-1 md:flex">
-        <NuxtLink
-            v-for="link in navLinks"
-            :key="link.to"
-            :to="link.to"
-            class="rounded-md px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:text-opacity-70"
-            active-class="!text-opacity-70"
+      <!-- جستجو -->
+      <form
+        class="relative max-w-xl flex-1"
+        @submit.prevent="onSearch"
+      >
+        <Icon
+          name="lucide:search"
+          class="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
+        />
+        <input
+          v-model="query"
+          type="search"
+          :placeholder="$t('common.searchPlaceholder')"
+          class="h-11 w-full border border-ink/10 bg-surface ps-10 pe-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15"
         >
-          {{ t(link.label) }}
-        </NuxtLink>
-      </nav>
+      </form>
 
-      <div class="flex items-center gap-2">
+      <div class="ms-auto flex items-center gap-2">
         <!-- تغییر زبان -->
         <button
-            type="button"
-            class="flex h-9 min-w-9 items-center justify-center rounded-lg bg-primary-50 px-2.5 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-100"
-            :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
-            :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
-            @click="toggleLocale"
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-xs font-bold text-primary-700 transition-colors hover:bg-primary-50"
+          :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
+          :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
+          @click="toggleLocale"
         >
           {{ locale === 'fa' ? 'EN' : 'فا' }}
         </button>
 
         <!-- دارک / لایت مود -->
         <button
-            type="button"
-            class="flex size-9 items-center justify-center rounded-lg bg-primary-50 text-primary-700 transition-colors hover:bg-primary-100"
-            :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
-            :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
-            @click="uiStore.toggleMode()"
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50"
+          :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
+          :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
+          @click="uiStore.toggleMode()"
         >
           <Icon
-              :name="isDark ? 'lucide:sun' : 'lucide:moon'"
-              class="size-4"
+            :name="isDark ? 'lucide:sun' : 'lucide:moon'"
+            class="size-[18px]"
           />
         </button>
 
+        <!-- اعلان: تسک‌های امروز -->
         <NuxtLink
-            to="/profile"
-            class="hidden size-9 items-center justify-center rounded-lg bg-primary-50 text-primary-700 sm:flex"
-            :aria-label="t('components.theHeader.profile')"
+          to="/care-calendar"
+          class="relative flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50"
+          :aria-label="$t('nav.careCalendar')"
         >
           <Icon
-              name="lucide:user"
-              class="size-4"
+            name="lucide:bell"
+            class="size-[18px]"
+          />
+          <span
+            v-if="todayCount"
+            class="absolute end-2 top-2 size-2 rounded-full bg-status-danger ring-2 ring-surface"
           />
         </NuxtLink>
 
-        <!-- <button
-            class="flex size-9 items-center justify-center rounded-md text-ink md:hidden"
-            :aria-label="t('components.theHeader.menu')"
-            @click="uiStore.mobileNavOpen = true"
+        <!-- پروفایل -->
+        <NuxtLink
+          to="/profile"
+          class="flex size-10 items-center justify-center rounded-full bg-primary-100 text-primary-700 transition-colors hover:bg-primary-200"
+          :aria-label="$t('nav.profile')"
         >
           <Icon
-              name="lucide:menu"
-              class="size-5"
+            name="lucide:user"
+            class="size-[18px]"
           />
-        </button> -->
+        </NuxtLink>
       </div>
     </div>
   </header>
 </template>
-
-<style scoped>
-.dropdown-fade-enter-active,
-.dropdown-fade-leave-active {
-  transition: all 0.12s ease;
-}
-.dropdown-fade-enter-from,
-.dropdown-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-</style>

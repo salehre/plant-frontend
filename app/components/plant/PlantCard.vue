@@ -24,9 +24,9 @@ function translatedValue(keys: Record<string, string>, value: string) {
 <template>
   <NuxtLink
     :to="`/plants/${props.plant.slug}`"
-    class="glass-card group flex flex-col overflow-hidden"
+    class="glass-card group flex flex-col p-2.5"
   >
-    <div class="relative aspect-square overflow-hidden bg-primary-50">
+    <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-primary-50">
       <img
         :src="props.plant.images[0]"
         :alt="props.plant.name"
@@ -39,9 +39,13 @@ function translatedValue(keys: Record<string, string>, value: string) {
         class="absolute end-2 top-2"
       />
     </div>
-    <div class="flex flex-1 flex-col gap-1 p-4">
-      <h3 class="font-bold text-ink">{{ props.plant.name }}</h3>
-      <p class="text-xs italic text-ink-muted">{{ props.plant.scientificName }}</p>
+    <div class="flex flex-1 flex-col gap-0.5 px-1.5 pb-1.5 pt-3">
+      <h3 class="font-bold text-ink">
+        {{ props.plant.name }}
+      </h3>
+      <p class="text-xs italic text-ink-muted">
+        {{ props.plant.scientificName }}
+      </p>
       <div class="mt-2 flex flex-wrap gap-1.5">
         <RequirementBadge
           icon="lucide:sun"

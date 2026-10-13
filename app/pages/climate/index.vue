@@ -26,93 +26,107 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
 </script>
 
 <template>
-  <div class="mx-auto max-w-5xl px-4 py-10">
-    <h1 class="mb-2 text-2xl font-bold text-ink">
-      {{ t('pages.climate.title') }}
-    </h1>
-    <p class="mb-6 text-ink-muted">
-      {{ t('pages.climate.subtitle') }}
-    </p>
+  <div class="flex flex-col gap-6">
+    <div>
+      <h1 class="text-2xl font-bold text-ink">
+        {{ t('pages.climate.title') }}
+      </h1>
+      <p class="mt-1 text-sm text-ink-muted">
+        {{ t('pages.climate.subtitle') }}
+      </p>
+    </div>
 
-    <div class="mb-8 max-w-xs">
+    <div class="max-w-xs">
       <AppDropdown
-          v-model="selectedCityId"
-          :options="cityOptions"
+        v-model="selectedCityId"
+        :options="cityOptions"
       />
     </div>
 
-    <div
-        v-if="selectedCity"
-        class="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4"
-    >
-      <div class="glass-card p-4 text-center">
-        <Icon
-            name="lucide:thermometer"
-            class="mx-auto mb-1 size-5 text-primary-600"
-        />
-        <p class="text-sm font-medium text-ink">
-          {{ toPersianDigits(selectedCity.avgTemp[0]) }}–{{ toPersianDigits(selectedCity.avgTemp[1]) }}°
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.climate.annualTemperature') }}
-        </p>
-      </div>
-      <div class="glass-card p-4 text-center">
-        <Icon
-            name="lucide:droplets"
-            class="mx-auto mb-1 size-5 text-primary-600"
-        />
-        <p class="text-sm font-medium text-ink">
-          {{ humidityLabelMap[selectedCity.humidity] }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.climate.humidity') }}
-        </p>
-      </div>
-      <div class="glass-card p-4 text-center">
-        <Icon
-            name="lucide:cloud"
-            class="mx-auto mb-1 size-5 text-primary-600"
-        />
-        <p class="text-sm font-medium text-ink">
-          {{ selectedCity.climateType }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.climate.climateType') }}
-        </p>
-      </div>
-      <div class="glass-card p-4 text-center">
-        <Icon
-            name="lucide:sprout"
-            class="mx-auto mb-1 size-5 text-primary-600"
-        />
-        <p class="text-sm font-medium text-ink">
-          {{ toPersianDigits(suitablePlants.length) }} {{ t('pages.climate.plantCount') }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.climate.suitableRecommendations') }}
-        </p>
-      </div>
-    </div>
+    <template v-if="selectedCity">
+      <!-- کارت اصلی آب‌وهوا -->
+      <div class="glass-card flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-4">
+          <span class="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
+            <Icon
+              name="lucide:cloud-sun"
+              class="size-9"
+            />
+          </span>
+          <div>
+            <p class="text-sm text-ink-muted">
+              {{ selectedCity.name }} · {{ selectedCity.province }}
+            </p>
+            <p class="text-3xl font-extrabold text-ink">
+              {{ toPersianDigits(selectedCity.avgTemp[0]) }}–{{ toPersianDigits(selectedCity.avgTemp[1]) }}°
+            </p>
+            <p class="text-sm text-ink-muted">
+              {{ t('pages.climate.annualTemperature') }}
+            </p>
+          </div>
+        </div>
 
-    <h2 class="mb-4 text-lg font-bold text-ink">
-      {{ t('pages.climate.plantsForCity', { city: selectedCity?.name }) }}
-    </h2>
-    <div
+        <div class="grid grid-cols-3 gap-3 sm:w-[420px]">
+          <div class="rounded-xl bg-primary-50/70 p-3 text-center">
+            <Icon
+              name="lucide:droplets"
+              class="mx-auto mb-1 size-5 text-primary-600"
+            />
+            <p class="text-sm font-bold text-ink">
+              {{ humidityLabelMap[selectedCity.humidity] }}
+            </p>
+            <p class="text-xs text-ink-muted">
+              {{ t('pages.climate.humidity') }}
+            </p>
+          </div>
+          <div class="rounded-xl bg-primary-50/70 p-3 text-center">
+            <Icon
+              name="lucide:cloud"
+              class="mx-auto mb-1 size-5 text-primary-600"
+            />
+            <p class="truncate text-sm font-bold text-ink">
+              {{ selectedCity.climateType }}
+            </p>
+            <p class="text-xs text-ink-muted">
+              {{ t('pages.climate.climateType') }}
+            </p>
+          </div>
+          <div class="rounded-xl bg-primary-50/70 p-3 text-center">
+            <Icon
+              name="lucide:sprout"
+              class="mx-auto mb-1 size-5 text-primary-600"
+            />
+            <p class="text-sm font-bold text-ink">
+              {{ toPersianDigits(suitablePlants.length) }} {{ t('pages.climate.plantCount') }}
+            </p>
+            <p class="truncate text-xs text-ink-muted">
+              {{ t('pages.climate.suitableRecommendations') }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div>
+      <h2 class="mb-4 text-lg font-bold text-ink">
+        {{ t('pages.climate.plantsForCity', { city: selectedCity?.name }) }}
+      </h2>
+      <div
         v-if="suitablePlants.length"
         class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
-    >
-      <PlantCard
+      >
+        <PlantCard
           v-for="plant in suitablePlants"
           :key="plant.id"
           :plant="plant"
-      />
-    </div>
-    <p
+        />
+      </div>
+      <p
         v-else
         class="text-ink-muted"
-    >
-      {{ t('pages.climate.empty') }}
-    </p>
+      >
+        {{ t('pages.climate.empty') }}
+      </p>
+    </div>
   </div>
 </template>

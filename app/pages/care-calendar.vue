@@ -4,29 +4,60 @@ definePageMeta({ layout: 'dashboard' }) // middleware: 'auth' فعلاً موق�
 const userPlantsStore = useUserPlantsStore()
 const { t } = useI18n()
 
+type Tab = 'upcoming' | 'week' | 'all'
+const tab = ref<Tab>('upcoming')
+const tabs: { key: Tab, label: string }[] = [
+  { key: 'upcoming', label: 'pages.careCalendar.upcoming' },
+  { key: 'week', label: 'pages.careCalendar.thisWeek' },
+  { key: 'all', label: 'common.all' },
+]
+
+const allTasks = computed(() => [...userPlantsStore.todayTasks, ...userPlantsStore.upcomingTasks])
+
+const visibleTasks = computed(() => {
+  if (tab.value === 'all') return allTasks.value
+  if (tab.value === 'week') {
+    const limit = new Date()
+    limit.setDate(limit.getDate() + 7)
+    const limitIso = limit.toISOString().slice(0, 10)
+    return allTasks.value.filter(task => task.dueDate <= limitIso)
+  }
+  return userPlantsStore.upcomingTasks
+})
+
 function plantNickname(userPlantId: string) {
   return userPlantsStore.plants.find(p => p.id === userPlantId)?.nickname ?? ''
 }
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-6">
     <h1 class="text-2xl font-bold text-ink">
       {{ t('nav.careCalendar') }}
     </h1>
 
-    <CareCalendar :tasks="[...userPlantsStore.todayTasks, ...userPlantsStore.upcomingTasks]" />
+    <CareCalendar :tasks="allTasks" />
 
     <div>
-      <h2 class="mb-3 font-bold text-ink">
-        {{ t('pages.careCalendar.upcoming') }}
-      </h2>
+      <div class="mb-4 flex gap-2 overflow-x-auto pb-1">
+        <button
+          v-for="item in tabs"
+          :key="item.key"
+          type="button"
+          class="chip"
+          :class="{ 'chip--active': tab === item.key }"
+          @click="tab = item.key"
+        >
+          {{ t(item.label) }}
+        </button>
+      </div>
+
       <div
-        v-if="userPlantsStore.upcomingTasks.length"
+        v-if="visibleTasks.length"
         class="flex flex-col gap-2"
       >
         <TaskCard
-          v-for="task in userPlantsStore.upcomingTasks"
+          v-for="task in visibleTasks"
           :key="task.id"
           :task="task"
           :plant-name="plantNickname(task.userPlantId)"

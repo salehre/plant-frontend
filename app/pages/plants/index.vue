@@ -87,12 +87,6 @@ function resetFilters() {
       <div class="relative flex-1">
         <SearchSuggestions v-model="plantStore.query" />
       </div>
-      <div class="sm:w-52">
-        <AppDropdown
-          v-model="plantStore.category"
-          :options="categories"
-        />
-      </div>
       <AppButton
         variant="ghost"
         @click="showAdvanced = !showAdvanced"
@@ -103,6 +97,20 @@ function resetFilters() {
         />
         {{ t('pages.catalog.advancedFilters') }}
       </AppButton>
+    </div>
+
+    <!-- دسته‌بندی به‌صورت چیپ -->
+    <div class="mb-4 flex gap-2 overflow-x-auto pb-1">
+      <button
+        v-for="c in categories"
+        :key="c.value"
+        type="button"
+        class="chip"
+        :class="{ 'chip--active': plantStore.category === c.value }"
+        @click="plantStore.category = c.value"
+      >
+        {{ c.label }}
+      </button>
     </div>
 
     <Transition name="dropdown-fade">

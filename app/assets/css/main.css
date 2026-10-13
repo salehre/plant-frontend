@@ -53,22 +53,22 @@
 @layer base {
   :root {
     /* حالت روشن (پیش‌فرض) - تم forest */
-    --color-surface: 247 248 248; /* #f7f8f8 */
-    --color-bg: 238 241 240; /* #eef1f0 */
-    --color-ink: 12 48 36; /* #0c3024 */
-    --color-ink-muted: 81 100 94; /* #51645e */
+    --color-surface: 255 255 255; /* #f7f8f8 */
+    --color-bg: 244 247 245; /* #eef1f0 */
+    --color-ink: 16 38 29; /* #0c3024 */
+    --color-ink-muted: 99 117 108; /* #51645e */
 
-    --color-brand: 15 61 46; /* #0f3d2e */
-    --color-primary-50: 241 249 246; /* #f1f9f6 */
-    --color-primary-100: 215 239 231; /* #d7efe7 */
-    --color-primary-200: 175 222 207; /* #afdecf */
-    --color-primary-300: 125 202 177; /* #7dcab1 */
-    --color-primary-400: 74 181 146; /* #4ab592 */
-    --color-primary-500: 53 130 105; /* #358269 */
-    --color-primary-600: 43 105 85; /* #2b6955 */
-    --color-primary-700: 34 83 67; /* #225343 */
-    --color-primary-800: 28 69 56; /* #1c4538 */
-    --color-primary-900: 15 61 46; /* #0f3d2e */
+    --color-brand: 22 83 56; /* #0f3d2e */
+    --color-primary-50: 240 248 243; /* #f1f9f6 */
+    --color-primary-100: 219 238 226; /* #d7efe7 */
+    --color-primary-200: 186 221 202; /* #afdecf */
+    --color-primary-300: 138 197 163; /* #7dcab1 */
+    --color-primary-400: 82 167 119; /* #4ab592 */
+    --color-primary-500: 45 134 89; /* #358269 */
+    --color-primary-600: 31 107 71; /* #2b6955 */
+    --color-primary-700: 26 85 58; /* #225343 */
+    --color-primary-800: 22 68 48; /* #1c4538 */
+    --color-primary-900: 15 52 37; /* #0f3d2e */
     --color-accent-50: 250 242 235; /* #faf2eb */
     --color-accent-100: 240 219 199; /* #f0dbc7 */
     --color-accent-200: 226 186 146; /* #e2ba92 */
@@ -83,10 +83,10 @@
 
   :root.dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 57 106 90; /* #396a5a */
-    --color-bg: 41 87 72; /* #295748 */
-    --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 205 219 214; /* #cddbd6 */
+    --color-surface: 25 40 33; /* #396a5a */
+    --color-bg: 16 27 22; /* #295748 */
+    --color-ink: 236 244 240; /* #ffffff */
+    --color-ink-muted: 154 176 166; /* #cddbd6 */
   }
 
   [data-theme='wine'] {
@@ -127,22 +127,22 @@
   }
 
   [data-theme='forest'] {
-    --color-surface: 247 248 248; /* #f7f8f8 */
-    --color-bg: 238 241 240; /* #eef1f0 */
-    --color-ink: 12 48 36; /* #0c3024 */
-    --color-ink-muted: 81 100 94; /* #51645e */
+    --color-surface: 255 255 255; /* #f7f8f8 */
+    --color-bg: 244 247 245; /* #eef1f0 */
+    --color-ink: 16 38 29; /* #0c3024 */
+    --color-ink-muted: 99 117 108; /* #51645e */
 
-    --color-brand: 15 61 46; /* #0f3d2e */
-    --color-primary-50: 241 249 246; /* #f1f9f6 */
-    --color-primary-100: 215 239 231; /* #d7efe7 */
-    --color-primary-200: 175 222 207; /* #afdecf */
-    --color-primary-300: 125 202 177; /* #7dcab1 */
-    --color-primary-400: 74 181 146; /* #4ab592 */
-    --color-primary-500: 53 130 105; /* #358269 */
-    --color-primary-600: 43 105 85; /* #2b6955 */
-    --color-primary-700: 34 83 67; /* #225343 */
-    --color-primary-800: 28 69 56; /* #1c4538 */
-    --color-primary-900: 15 61 46; /* #0f3d2e */
+    --color-brand: 22 83 56; /* #0f3d2e */
+    --color-primary-50: 240 248 243; /* #f1f9f6 */
+    --color-primary-100: 219 238 226; /* #d7efe7 */
+    --color-primary-200: 186 221 202; /* #afdecf */
+    --color-primary-300: 138 197 163; /* #7dcab1 */
+    --color-primary-400: 82 167 119; /* #4ab592 */
+    --color-primary-500: 45 134 89; /* #358269 */
+    --color-primary-600: 31 107 71; /* #2b6955 */
+    --color-primary-700: 26 85 58; /* #225343 */
+    --color-primary-800: 22 68 48; /* #1c4538 */
+    --color-primary-900: 15 52 37; /* #0f3d2e */
     --color-accent-50: 250 242 235; /* #faf2eb */
     --color-accent-100: 240 219 199; /* #f0dbc7 */
     --color-accent-200: 226 186 146; /* #e2ba92 */
@@ -157,10 +157,10 @@
 
   [data-theme='forest'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 57 106 90; /* #396a5a */
-    --color-bg: 41 87 72; /* #295748 */
-    --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 205 219 214; /* #cddbd6 */
+    --color-surface: 25 40 33; /* #396a5a */
+    --color-bg: 16 27 22; /* #295748 */
+    --color-ink: 236 244 240; /* #ffffff */
+    --color-ink-muted: 154 176 166; /* #cddbd6 */
   }
 
   [data-theme='brown'] {
@@ -285,10 +285,10 @@
 
   :root {
     --shadow-tint: 41 87 72; /* #295748 */
-    --radius-control: 10px;
+    --radius-control: 12px;
 
-    --card-shadow: 0 10px 24px -18px rgb(var(--shadow-tint) / 0.45);
-    --card-shadow-hover: 0 14px 30px -16px rgb(var(--shadow-tint) / 0.55);
+    --card-shadow: 0 1px 2px rgb(var(--shadow-tint) / 0.05), 0 10px 28px -16px rgb(var(--shadow-tint) / 0.18);
+    --card-shadow-hover: 0 2px 4px rgb(var(--shadow-tint) / 0.06), 0 16px 32px -14px rgb(var(--shadow-tint) / 0.28);
   }
   :root.dark {
     --card-shadow: 0 10px 24px -18px rgb(0 0 0 / 0.7);
@@ -337,54 +337,64 @@
   .field {
     @apply w-full border px-3 py-2.5 text-sm text-ink outline-none transition-colors duration-150 placeholder:text-ink-muted/60;
     border-radius: var(--radius-control);
-    border-color: rgb(var(--shadow-tint) / 0.2);
-    background-color: rgb(255 255 255 / 0.5);
+    border-color: rgb(var(--color-ink) / 0.12);
+    background-color: rgb(var(--color-surface));
   }
   .field:focus {
     border-color: rgb(var(--color-primary-500));
-    background-color: rgb(255 255 255 / 0.7);
+    box-shadow: 0 0 0 3px rgb(var(--color-primary-500) / 0.15);
   }
   :where(.dark) .field {
-    border-color: rgb(255 255 255 / 0.15);
-    background-color: rgb(0 0 0 / 0.15);
+    border-color: rgb(255 255 255 / 0.12);
+    background-color: rgb(255 255 255 / 0.04);
   }
   :where(.dark) .field:focus {
-    border-color: rgb(255 255 255 / 0.35);
-    background-color: rgb(0 0 0 / 0.2);
+    border-color: rgb(var(--color-primary-400));
   }
   .field[readonly] {
     cursor: default;
     opacity: 0.85;
   }
 
+  /* کارت تخت و روشن (دیزاین جدید). اسم کلاس برای سازگاری با همه‌ی کامپوننت‌های قبلی همون glass-card موند */
   .glass-card {
-    @apply relative isolate rounded-lg;
-    border: 1px solid rgb(var(--shadow-tint) / 0.12);
-    background:
-      linear-gradient(160deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.12) 50%),
-      linear-gradient(rgb(var(--color-primary-100) / 0.34), rgb(var(--color-primary-100) / 0.34));
+    @apply relative;
+    border-radius: 18px;
+    border: 1px solid rgb(var(--color-ink) / 0.06);
+    background-color: rgb(var(--color-surface));
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  a.glass-card:hover,
+  button.glass-card:hover {
+    border-color: rgb(var(--color-primary-500) / 0.3);
+    box-shadow: var(--card-shadow-hover);
   }
   .dark .glass-card {
-    @apply text-white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
-    --color-ink: 255 255 255;
-    --color-ink-muted: 224 230 237;
-    border-color: rgb(255 255 255 / 0.13);
-    background:
-      linear-gradient(160deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0) 45%),
-      linear-gradient(rgb(var(--color-primary-900) / 0.5), rgb(var(--color-primary-900) / 0.5));
+    border-color: rgb(255 255 255 / 0.08);
   }
-  /* بلور پشت کارت */
-  .glass-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    backdrop-filter: blur(22px) saturate(1.4);
-    -webkit-backdrop-filter: blur(22px) saturate(1.4);
-    isolation: isolate;
-    pointer-events: none;
+
+  /* چیپ‌های فیلتر (دسته‌بندی، وضعیت، تب‌ها) */
+  .chip {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-1.5 text-sm font-medium transition-colors;
+    border-color: rgb(var(--color-ink) / 0.1);
+    background-color: rgb(var(--color-surface));
+    color: rgb(var(--color-ink-muted));
+  }
+  .chip:hover {
+    border-color: rgb(var(--color-primary-500) / 0.4);
+    color: rgb(var(--color-primary-700));
+  }
+  .chip--active,
+  .chip--active:hover {
+    border-color: rgb(var(--color-primary-700));
+    background-color: rgb(var(--color-primary-700));
+    color: #fff;
+  }
+  .dark .chip--active,
+  .dark .chip--active:hover {
+    border-color: rgb(var(--color-primary-500));
+    background-color: rgb(var(--color-primary-500));
   }
 }
 

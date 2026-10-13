@@ -2,120 +2,84 @@
 const identifyStore = useIdentifyStore()
 const { locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
-const showCamera = ref(false)
+
+const hasResult = computed(() => identifyStore.status === 'done' && !!identifyStore.result)
 
 function onImageSelected(url: string) {
   identifyStore.setPreview(url)
   identifyStore.runIdentify(activeLocale.value)
 }
-
-function onCameraCapture(url: string) {
-  showCamera.value = false
-  onImageSelected(url)
-}
 </script>
 
 <template>
-  <div class="mx-auto max-w-2xl px-4 py-12">
-    <div class="mb-8 text-center">
-      <h1 class="text-2xl font-bold text-ink sm:text-3xl">
+  <div class="flex flex-col gap-5">
+    <div>
+      <h1 class="text-2xl font-bold text-ink">
         {{ $t('identify.title') }}
       </h1>
-      <p class="mt-2 text-ink-muted">
+      <p class="mt-1 text-sm text-ink-muted">
         {{ $t('identify.subtitle') }}
       </p>
     </div>
 
-    <!-- حالت اولیه: آپلود -->
-    <div v-if="identifyStore.status === 'idle' && !identifyStore.previewUrl">
-      <ImageUploader @select="onImageSelected">
-        <template #camera-trigger>
-          <AppButton
-            variant="secondary"
-            @click="showCamera = true"
-          >
-            <Icon
-              name="lucide:camera"
-              class="size-4"
-            />
-            {{ $t('identify.cameraCta') }}
-          </AppButton>
-        </template>
-      </ImageUploader>
-    </div>
-
-    <!-- حالت دوربین -->
-    <AppModal
-      v-model="showCamera"
-      :title="$t('identify.cameraModalTitle')"
-    >
-      <CameraCapture
-        @capture="onCameraCapture"
-        @close="showCamera = false"
-      />
-    </AppModal>
-
-    <!-- پیش‌نمایش + لودینگ / نتیجه -->
     <div
-      v-if="identifyStore.previewUrl"
-      class="flex flex-col items-center gap-6"
+      class="grid items-start gap-5"
+      :class="identifyStore.previewUrl ? 'lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]' : 'lg:grid-cols-[minmax(0,1fr)_320px]'"
     >
-      <div class="relative w-full max-w-sm overflow-hidden rounded-lg">
-        <img
-          :src="identifyStore.previewUrl"
-          :alt="$t('identify.uploadedImageAlt')"
-          class="aspect-square w-full object-cover"
-        >
-        <div
-          v-if="identifyStore.status === 'analyzing'"
-          class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink/50 text-white"
-        >
-          <Icon
-            name="svg-spinners:180-ring"
-            class="size-8"
-          />
-          <span class="text-sm">{{ $t('identify.analyzing') }}</span>
-        </div>
-      </div>
+      <!-- دوربین / عکس -->
+      <ScanViewfinder
+        :preview-url="identifyStore.previewUrl"
+        :analyzing="identifyStore.status === 'analyzing'"
+        @select="onImageSelected"
+        @reset="identifyStore.reset()"
+      />
+
+      <!-- نتیجه / لودینگ / خطا / نکته‌ها -->
+      <ScanResultPanel
+        v-if="hasResult && identifyStore.result"
+        :result="identifyStore.result"
+      />
 
       <div
-        v-if="identifyStore.status === 'analyzing'"
-        class="w-full max-w-sm"
+        v-else-if="identifyStore.status === 'analyzing'"
+        class="glass-card flex flex-col gap-4 p-5"
       >
+        <div class="flex items-center gap-3">
+          <AppSkeleton
+            height="4rem"
+            width="4rem"
+            rounded="rounded-xl"
+          />
+          <div class="flex flex-1 flex-col gap-2">
+            <AppSkeleton
+              height="1.25rem"
+              width="55%"
+            />
+            <AppSkeleton
+              height="0.875rem"
+              width="35%"
+            />
+          </div>
+        </div>
         <AppSkeleton
-          height="1.5rem"
+          height="2.25rem"
           width="60%"
-          class="mb-2"
+          rounded="rounded-full"
         />
-        <AppSkeleton
-          height="1rem"
-          width="90%"
-        />
+        <AppSkeleton height="4rem" />
       </div>
-
-      <PredictionCard
-        v-else-if="identifyStore.status === 'done' && identifyStore.result"
-        :result="identifyStore.result"
-        class="w-full"
-      />
 
       <div
         v-else-if="identifyStore.status === 'error'"
-        class="rounded-md bg-status-danger/10 p-4 text-sm text-status-danger"
+        class="flex flex-col gap-4"
       >
-        {{ $t(identifyStore.error) }}
+        <div class="rounded-xl bg-status-danger/10 p-4 text-sm text-status-danger">
+          {{ $t(identifyStore.error) }}
+        </div>
+        <ScanTips />
       </div>
 
-      <AppButton
-        variant="ghost"
-        @click="identifyStore.reset()"
-      >
-        <Icon
-          name="lucide:rotate-ccw"
-          class="size-4"
-        />
-        {{ $t('identify.tryAgain') }}
-      </AppButton>
+      <ScanTips v-else />
     </div>
   </div>
 </template>

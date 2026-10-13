@@ -12,6 +12,22 @@ const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const showAddModal = ref(false)
 
+// جستجو و فیلتر وضعیت
+const search = ref('')
+const statusFilter = ref<'all' | 'healthy' | 'needs_attention' | 'sick'>('all')
+const statusOptions = ['all', 'healthy', 'needs_attention', 'sick'] as const
+const statusBadge: Record<string, string> = {
+  healthy: 'bg-primary-50 text-primary-700',
+  needs_attention: 'bg-accent-50 text-accent-700',
+  sick: 'bg-status-danger/10 text-status-danger',
+}
+const filteredPlants = computed(() =>
+  userPlantsStore.plants.filter(p =>
+    (statusFilter.value === 'all' || p.healthStatus === statusFilter.value)
+    && (!search.value.trim() || p.nickname.includes(search.value.trim()) || p.location.includes(search.value.trim())),
+  ),
+)
+
 const plantOptions = computed(() => getMockPlants(activeLocale.value).map(p => ({ label: p.name, value: p.slug })))
 
 const schema = toTypedSchema(z.object({
@@ -54,7 +70,7 @@ function removePlant(id: string, nickname: string) {
 
 <template>
   <div>
-    <div class="mb-6 flex items-center justify-between">
+    <div class="mb-5 flex items-center justify-between">
       <h1 class="text-2xl font-bold text-ink">
         {{ t('nav.myPlants') }}
       </h1>
@@ -70,50 +86,92 @@ function removePlant(id: string, nickname: string) {
       </AppButton>
     </div>
 
+    <!-- جستجو و فیلتر -->
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div class="relative sm:w-72">
+        <Icon
+            name="lucide:search"
+            class="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
+        />
+        <input
+            v-model="search"
+            type="text"
+            :placeholder="$t('common.searchPlaceholder')"
+            class="field !ps-10"
+        >
+      </div>
+      <div class="flex gap-2 overflow-x-auto pb-1">
+        <button
+            v-for="option in statusOptions"
+            :key="option"
+            type="button"
+            class="chip"
+            :class="{ 'chip--active': statusFilter === option }"
+            @click="statusFilter = option"
+        >
+          {{ option === 'all' ? $t('common.all') : healthLabel(option) }}
+        </button>
+      </div>
+    </div>
+
     <div
-        v-if="userPlantsStore.plants.length"
+        v-if="filteredPlants.length"
         class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
     >
       <div
-          v-for="p in userPlantsStore.plants"
+          v-for="p in filteredPlants"
           :key="p.id"
-          class="glass-card group relative flex flex-col overflow-hidden"
+          class="glass-card group relative flex flex-col p-2.5"
       >
-        <img
-            :src="p.photo"
-            :alt="p.nickname"
-            class="h-40 w-full object-cover"
-            loading="lazy"
+        <NuxtLink
+            :to="`/my-plants/${p.id}`"
+            class="block overflow-hidden rounded-xl bg-primary-50"
         >
-        <div class="flex flex-1 flex-col gap-1 p-4">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-ink">
-              {{ p.nickname }}
-            </h3>
-            <button
-                :aria-label="t('common.delete')"
-                class="text-ink-muted hover:text-status-danger"
-                @click="removePlant(p.id, p.nickname)"
+          <img
+              :src="p.photo"
+              :alt="p.nickname"
+              class="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+          >
+        </NuxtLink>
+        <button
+            :aria-label="t('common.delete')"
+            class="absolute end-4 top-4 flex size-8 items-center justify-center rounded-lg bg-surface/90 text-ink-muted shadow-card backdrop-blur transition-colors hover:text-status-danger"
+            @click="removePlant(p.id, p.nickname)"
+        >
+          <Icon
+              name="lucide:trash-2"
+              class="size-4"
+          />
+        </button>
+        <div class="flex flex-1 flex-col gap-1 px-1.5 pb-1.5 pt-3">
+          <NuxtLink
+              :to="`/my-plants/${p.id}`"
+              class="font-bold text-ink"
+          >
+            {{ p.nickname }}
+          </NuxtLink>
+          <p class="text-xs text-ink-muted">
+            {{ p.location }}
+          </p>
+          <div class="mt-2 flex flex-wrap items-center gap-2">
+            <span
+                class="rounded-full px-2.5 py-0.5 text-xs font-bold"
+                :class="statusBadge[p.healthStatus]"
+            >
+              {{ healthLabel(p.healthStatus) }}
+            </span>
+            <span
+                v-if="p.nextWateringAt"
+                class="flex items-center gap-1 text-xs text-primary-700"
             >
               <Icon
-                  name="lucide:trash-2"
-                  class="size-4"
+                  name="lucide:droplets"
+                  class="size-3.5"
               />
-            </button>
+              {{ toJalaliDate(p.nextWateringAt) }}
+            </span>
           </div>
-          <p class="text-xs text-ink-muted">
-            {{ p.location }} · {{ healthLabel(p.healthStatus) }}
-          </p>
-          <p
-              v-if="p.nextWateringAt"
-              class="mt-2 flex items-center gap-1 text-xs text-primary-700"
-          >
-            <Icon
-                name="lucide:droplets"
-                class="size-3.5"
-            />
-            {{ t('pages.myPlants.nextWatering') }}: {{ toJalaliDate(p.nextWateringAt) }}
-          </p>
         </div>
       </div>
     </div>
@@ -126,7 +184,7 @@ function removePlant(id: string, nickname: string) {
           name="lucide:sprout"
           class="size-10"
       />
-      {{ t('pages.myPlants.empty') }}
+      {{ userPlantsStore.plants.length ? $t('pages.catalog.empty') : t('pages.myPlants.empty') }}
     </div>
 
     <AppModal

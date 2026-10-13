@@ -8,6 +8,13 @@ function plantNickname(userPlantId: string) {
   return userPlantsStore.plants.find(p => p.id === userPlantId)?.nickname ?? ''
 }
 
+const stats = computed(() => [
+  { icon: 'lucide:sprout', value: userPlantsStore.plants.length, label: 'pages.dashboard.plant', tone: 'bg-primary-50 text-primary-700' },
+  { icon: 'lucide:calendar-check', value: userPlantsStore.todayTasks.length, label: 'pages.dashboard.todayTask', tone: 'bg-accent-50 text-accent-700' },
+  { icon: 'lucide:heart-pulse', value: userPlantsStore.plants.filter(p => p.healthStatus === 'healthy').length, label: 'pages.dashboard.healthy', tone: 'bg-primary-50 text-primary-700' },
+  { icon: 'lucide:triangle-alert', value: userPlantsStore.plants.filter(p => p.healthStatus !== 'healthy').length, label: 'pages.dashboard.needsAttention', tone: 'bg-status-danger/10 text-status-danger' },
+])
+
 function completeTask(id: string) {
   userPlantsStore.completeTask(id)
 }
@@ -26,37 +33,28 @@ function completeTask(id: string) {
 
     <!-- خلاصه وضعیت -->
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <div class="glass-card p-4 text-center">
-        <p class="text-2xl font-bold text-primary-700">
-          {{ toPersianDigits(userPlantsStore.plants.length) }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.dashboard.plant') }}
-        </p>
-      </div>
-      <div class="glass-card p-4 text-center">
-        <p class="text-2xl font-bold text-status-warning">
-          {{ toPersianDigits(userPlantsStore.todayTasks.length) }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.dashboard.todayTask') }}
-        </p>
-      </div>
-      <div class="glass-card p-4 text-center">
-        <p class="text-2xl font-bold text-primary-700">
-          {{ toPersianDigits(userPlantsStore.plants.filter(p => p.healthStatus === 'healthy').length) }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.dashboard.healthy') }}
-        </p>
-      </div>
-      <div class="glass-card p-4 text-center">
-        <p class="text-2xl font-bold text-status-danger">
-          {{ toPersianDigits(userPlantsStore.plants.filter(p => p.healthStatus !== 'healthy').length) }}
-        </p>
-        <p class="text-xs text-ink-muted">
-          {{ t('pages.dashboard.needsAttention') }}
-        </p>
+      <div
+          v-for="stat in stats"
+          :key="stat.label"
+          class="glass-card flex items-center gap-3 p-4"
+      >
+        <span
+            class="flex size-11 shrink-0 items-center justify-center rounded-full"
+            :class="stat.tone"
+        >
+          <Icon
+              :name="stat.icon"
+              class="size-5"
+          />
+        </span>
+        <div class="min-w-0">
+          <p class="text-2xl font-extrabold leading-none text-ink">
+            {{ toPersianDigits(stat.value) }}
+          </p>
+          <p class="mt-1 truncate text-xs text-ink-muted">
+            {{ t(stat.label) }}
+          </p>
+        </div>
       </div>
     </div>
 

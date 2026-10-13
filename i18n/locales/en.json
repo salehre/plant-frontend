@@ -148,6 +148,22 @@
   },
   "identify": {
     "title": "Identify a plant",
+    "gallery": "Gallery",
+    "switchCamera": "Switch camera",
+    "viewfinderHint": "Turn on the camera or pick a photo from your gallery",
+    "tipsTitle": "Tips for better results",
+    "tips": {
+    "clear": "Use a clear, focused image",
+    "light": "Shoot in good lighting",
+    "frame": "Fill the frame with the plant",
+    "blur": "Avoid blurry photos"
+    },
+    "overview": "Overview",
+    "similarTab": "Similar species",
+    "viewDetails": "View details",
+    "addToGarden": "Add to my garden",
+    "confirmResult": "Confirm result",
+    "confirmedResult": "Confirmed",
     "subtitle": "Upload a clear photo of a leaf or the whole plant to identify it.",
     "uploadCta": "Upload photo",
     "cameraCta": "Take a photo",
@@ -292,6 +308,7 @@
     },
     "careCalendar": {
       "upcoming": "Upcoming tasks",
+      "thisWeek": "This week",
       "empty": "No upcoming tasks."
     },
     "compare": {

@@ -26,15 +26,15 @@ const localizedTaskLabel = computed(() => {
 </script>
 
 <template>
-  <div class="glass-card flex items-center gap-3 p-3">
-    <div class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-600">
+  <div class="glass-card flex items-center gap-3 p-3.5">
+    <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
       <Icon
           :name="taskIcon[props.task.type] ?? 'lucide:sprout'"
           class="size-4"
       />
     </div>
     <div class="min-w-0 flex-1">
-      <p class="truncate text-sm font-medium text-ink">
+      <p class="truncate text-sm font-bold text-ink">
         {{ localizedTaskLabel }} · {{ props.plantName }}
       </p>
       <p class="text-xs text-ink-muted">
@@ -42,7 +42,7 @@ const localizedTaskLabel = computed(() => {
       </p>
     </div>
     <button
-        class="flex size-8 shrink-0 items-center justify-center rounded-lg border border-primary-200 text-primary-600 hover:bg-primary-50"
+        class="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary-300 text-primary-700 transition-colors hover:bg-primary-600 hover:text-white"
         :aria-label="t('components.taskCard.complete')"
         @click="emit('done', props.task.id)"
     >

@@ -1,26 +1,78 @@
 <script setup lang="ts">
+const route = useRoute()
+
 const links = [
-  { to: '/dashboard', label: 'dashboard', icon: 'lucide:layout-dashboard' },
-  { to: '/my-plants', label: 'myPlants', icon: 'lucide:sprout' },
-  { to: '/care-calendar', label: 'careCalendar', icon: 'lucide:calendar-check' },
-  { to: '/profile', label: 'profile', icon: 'lucide:user' },
+  { to: '/', label: 'nav.home', icon: 'lucide:home' },
+  { to: '/my-plants', label: 'nav.myPlants', icon: 'lucide:sprout' },
+  { to: '/plants', label: 'nav.catalog', icon: 'lucide:compass' },
+  { to: '/identify', label: 'nav.identify', icon: 'lucide:scan-line' },
+  { to: '/care-calendar', label: 'nav.careCalendar', icon: 'lucide:calendar-check' },
+  { to: '/dashboard', label: 'nav.dashboard', icon: 'lucide:layout-dashboard' },
+  { to: '/climate', label: 'nav.climate', icon: 'lucide:cloud-sun' },
+  { to: '/community', label: 'nav.community', icon: 'lucide:users' },
+  { to: '/profile', label: 'nav.profile', icon: 'lucide:settings' },
 ]
+
+// تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه
+function isActive(to: string) {
+  return to === '/' ? route.path === '/' : (route.path === to || route.path.startsWith(`${to}/`))
+}
 </script>
 
 <template>
-  <aside class="hidden w-56 shrink-0 flex-col gap-1 border-e border-ink/5 p-4 md:flex">
+  <aside class="fixed inset-y-0 start-0 z-40 hidden w-64 flex-col gap-6 border-e border-ink/5 bg-surface px-4 py-5 md:flex">
+    <!-- لوگو -->
     <NuxtLink
-      v-for="link in links"
-      :key="link.to"
-      :to="link.to"
-      class="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium text-ink-muted hover:bg-primary-50 hover:text-primary-700"
-      active-class="!bg-primary-50 !text-primary-700"
+      to="/"
+      class="flex items-center gap-2.5 px-2"
     >
-      <Icon
-        :name="link.icon"
-        class="size-4"
-      />
-      {{ $t(`nav.${link.label}`) }}
+      <span class="flex size-10 items-center justify-center rounded-xl bg-primary-700 text-white">
+        <Icon
+          name="lucide:leaf"
+          class="size-5"
+        />
+      </span>
+      <span class="text-lg font-extrabold text-primary-800">{{ $t('brand.name') }}</span>
     </NuxtLink>
+
+    <!-- منو -->
+    <nav class="custom-scrollbar flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
+      <NuxtLink
+        v-for="link in links"
+        :key="link.to"
+        :to="link.to"
+        class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors"
+        :class="isActive(link.to)
+          ? 'bg-primary-50 font-bold text-primary-700'
+          : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
+      >
+        <Icon
+          :name="link.icon"
+          class="size-5"
+        />
+        {{ $t(link.label) }}
+      </NuxtLink>
+    </nav>
+
+    <!-- کارت دعوت به اسکن -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-600 to-primary-900 p-4 text-white">
+      <Icon
+        name="lucide:leaf"
+        class="absolute -bottom-3 -end-3 size-20 rotate-12 text-white/10"
+      />
+      <p class="relative mb-3 text-sm font-bold leading-6">
+        {{ $t('home.heroTitle') }}
+      </p>
+      <NuxtLink
+        to="/identify"
+        class="relative inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-primary-800 transition-colors hover:bg-primary-50"
+      >
+        <Icon
+          name="lucide:scan-line"
+          class="size-3.5"
+        />
+        {{ $t('home.identifyCta') }}
+      </NuxtLink>
+    </div>
   </aside>
 </template>
