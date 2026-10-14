@@ -89,19 +89,6 @@ function formatCount(value: number) {
   return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)
 }
 
-// عدد خامِ درصد (0 تا 100) - برای محاسبات SVG، همیشه باید رقم انگلیسی باشه
-function rawPercent(value: number) {
-  return Math.round(value * 100)
-}
-
-// متن نمایشیِ درصد (لوکالایزشده) - فقط برای نمایش به کاربر
-function displayPercent(value: number) {
-  return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(rawPercent(value))
-}
-
-const confidenceRaw = computed(() => rawPercent(selected.value.confidence))
-const confidenceDisplay = computed(() => displayPercent(selected.value.confidence))
-
 function isConfirmed(c: Candidate) {
   return identifyStore.isConfirmed(c.scientificName)
 }
@@ -172,36 +159,22 @@ function addToGarden() {
           {{ selected.scientificName }}
         </p>
       </div>
-
-      <!-- دایره‌ی درصد اطمینان -->
-      <div class="relative flex size-14 shrink-0 items-center justify-center">
-        <svg
-          viewBox="0 0 36 36"
-          class="size-14 -rotate-90"
-        >
-          <path
-            class="stroke-primary-100"
-            stroke-width="3"
-            fill="none"
-            d="M18 2.0845
-              a 15.9155 15.9155 0 0 1 0 31.831
-              a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-          <path
-            class="stroke-primary-600 transition-[stroke-dasharray] duration-500 ease-out"
-            stroke-width="3"
-            stroke-linecap="round"
-            fill="none"
-            :stroke-dasharray="`${confidenceRaw}, 100`"
-            d="M18 2.0845
-              a 15.9155 15.9155 0 0 1 0 31.831
-              a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-        </svg>
-        <span class="absolute text-[11px] font-bold text-primary-700">
-          {{ confidenceDisplay }}٪
-        </span>
-      </div>
+      <button
+        type="button"
+        class="inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-bold transition-colors"
+        :class="isConfirmed(selected)
+          ? 'border-primary-600 bg-primary-600 text-white'
+          : 'border-primary-500/40 text-primary-700 hover:bg-primary-50'"
+        :aria-pressed="isConfirmed(selected)"
+        :title="isConfirmed(selected) ? $t('components.plantResultCard.undoConfirm') : $t('components.plantResultCard.confirm')"
+        @click="onConfirm(selected)"
+      >
+        <Icon
+          name="lucide:check"
+          class="size-4"
+        />
+        {{ isConfirmed(selected) ? $t('identify.confirmedResult') : $t('identify.confirmResult') }}
+      </button>
     </div>
 
     <!-- تب‌ها -->
@@ -301,10 +274,10 @@ function addToGarden() {
             :key="stat.label"
             class="rounded-xl bg-primary-50/70 px-3 py-2"
           >
-            <p class="text-xs text-ink-muted">
+            <p class="text-xs text-center text-ink-muted">
               {{ stat.label }}
             </p>
-            <p class="line-clamp-2 text-sm font-medium text-ink">
+            <p class="line-clamp-2 text-sm text-center font-medium text-ink">
               {{ stat.value }}
             </p>
           </div>
@@ -316,23 +289,6 @@ function addToGarden() {
       >
         {{ $t('components.common.plantNotFound') }}
       </p>
-
-      <button
-        type="button"
-        class="inline-flex w-fit items-center gap-2 rounded-xl border px-3.5 py-2 text-sm font-medium transition-colors"
-        :class="isConfirmed(selected)
-          ? 'border-primary-600 bg-primary-600 text-white'
-          : 'border-primary-500/40 text-primary-700 hover:bg-primary-50'"
-        :aria-pressed="isConfirmed(selected)"
-        :title="isConfirmed(selected) ? $t('components.plantResultCard.undoConfirm') : $t('components.plantResultCard.confirm')"
-        @click="onConfirm(selected)"
-      >
-        <Icon
-          name="lucide:check"
-          class="size-4"
-        />
-        {{ isConfirmed(selected) ? $t('identify.confirmedResult') : $t('identify.confirmResult') }}
-      </button>
     </div>
 
     <!-- تب گونه‌های مشابه -->
@@ -369,36 +325,7 @@ function addToGarden() {
             <span class="block truncate text-sm font-bold text-ink">{{ c.name }}</span>
             <span class="block truncate text-xs italic text-ink-muted">{{ c.scientificName }}</span>
           </span>
-
-          <!-- دایره‌ی درصد اطمینان (سایز کوچک‌تر برای لیست) -->
-          <span class="relative flex size-10 shrink-0 items-center justify-center">
-            <svg
-              viewBox="0 0 36 36"
-              class="size-10 -rotate-90"
-            >
-              <path
-                class="stroke-primary-100"
-                stroke-width="4"
-                fill="none"
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                class="stroke-primary-600"
-                stroke-width="4"
-                stroke-linecap="round"
-                fill="none"
-                :stroke-dasharray="`${rawPercent(c.confidence)}, 100`"
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg>
-            <span class="absolute text-[9px] font-bold text-primary-700">
-              {{ displayPercent(c.confidence) }}٪
-            </span>
-          </span>
+          <span class="shrink-0 text-sm font-bold text-primary-700">{{ formatPercent(c.confidence) }}</span>
         </button>
 
         <NuxtLink
@@ -415,7 +342,7 @@ function addToGarden() {
         </NuxtLink>
         <button
           type="button"
-          class="flex size-8 shrink-0 items-center justify-center rounded-lg border transition-colors"
+          class="flex size-8 shrink-0 items-center justify-center !rounded-full border transition-colors"
           :class="isConfirmed(c)
             ? 'border-primary-600 bg-primary-600 text-white'
             : 'border-primary-500/40 text-primary-700 hover:bg-primary-50'"
@@ -437,7 +364,7 @@ function addToGarden() {
       <NuxtLink
         v-if="selected.slug"
         :to="`/plants/${selected.slug}`"
-        class="inline-flex items-center justify-center gap-2 rounded-xl border border-primary-600 px-4 py-2.5 text-sm font-bold text-primary-700 transition-colors hover:bg-primary-50"
+        class="inline-flex items-center justify-center gap-2 rounded-full border border-primary-600 px-4 py-2.5 text-sm font-bold text-primary-700 transition-colors hover:bg-primary-50"
       >
         {{ $t('identify.viewDetails') }}
       </NuxtLink>
