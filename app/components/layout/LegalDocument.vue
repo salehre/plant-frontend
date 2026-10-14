@@ -42,7 +42,7 @@ onBeforeUnmount(() => observer?.disconnect())
 <template>
   <div class="mx-auto max-w-6xl">
     <!-- نوار تصویری بالای صفحه -->
-    <div class="mb-6 h-16 overflow-hidden rounded-2xl sm:h-20">
+    <div class="mb-6 h-24 overflow-hidden sm:h-32 lg:h-40 [margin-inline:calc(50%_-_50vw)] md:[margin-inline:calc(50%_-_50vw_+_8rem)]">
       <img
         src="/images/plants/botanical-1.webp"
         alt=""

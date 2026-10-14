@@ -40,7 +40,7 @@ function subscribeToNewsletter() {
 </script>
 
 <template>
-  <footer class="relative overflow-hidden rounded-[22px] bg-primary-900 text-white">
+  <footer class="relative overflow-hidden bg-primary-900 pb-24 text-white md:pb-0">
     <!-- تزئین برگ -->
     <img
       src="/images/plants/botanical-1.webp"
@@ -49,7 +49,7 @@ function subscribeToNewsletter() {
     >
     <div class="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-900/95 to-primary-800/90" />
 
-    <div class="relative px-6 py-10 sm:px-10">
+    <div class="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
       <div class="grid grid-cols-2 gap-8 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
         <!-- برند -->
         <div class="col-span-2 lg:col-span-1">

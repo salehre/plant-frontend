@@ -24,7 +24,7 @@ const active = ref<SectionKey>('account')
 const sections: { key: SectionKey, icon: string, label: string }[] = [
   { key: 'account', icon: 'lucide:user', label: 'pages.profile.account' },
   { key: 'appearance', icon: 'lucide:palette', label: 'pages.profile.appearance' },
-  { key: 'language', icon: 'lucide:languages', label: 'swich_language' },
+  { key: 'language', icon: 'lucide:languages', label: 'pages.profile.language' },
   { key: 'library', icon: 'lucide:heart', label: 'pages.profile.library' },
   { key: 'about', icon: 'lucide:info', label: 'components.theFooter.about' },
 ]
@@ -236,12 +236,12 @@ const aboutRows = computed(() => [
           :class="panelClass('language')"
         >
           <h2 class="mb-2 font-bold text-ink">
-            {{ t('swich_language') }}
+            {{ t('pages.profile.language') }}
           </h2>
           <div
             class="divide-y divide-ink/5"
             role="radiogroup"
-            :aria-label="t('swich_language')"
+            :aria-label="t('pages.profile.language')"
           >
             <button
               v-for="lang in languages"

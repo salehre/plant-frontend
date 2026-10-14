@@ -10,16 +10,14 @@ import TheSidebar from '~/components/layout/TheSidebar.vue'
     <TheSidebar />
 
     <!-- md:ps-64 = عرض سایدبار (در RTL سایدبار سمت راسته و در LTR سمت چپ) -->
-    <div class="flex min-h-screen min-w-0 flex-col md:ps-64">
+    <div class="flex min-h-screen min-w-0 flex-col overflow-x-clip md:ps-64">
       <TheHeader />
       <main class="mx-auto w-full max-w-6xl flex-1 px-4 pt-4 sm:px-6">
         <slot />
       </main>
 
-      <!-- فوتر سبز تیره (مثل دیزاین) -->
-      <div class="mx-auto w-full max-w-6xl px-4 pb-28 pt-10 sm:px-6 md:pb-8">
-        <TheFooter />
-      </div>
+      <!-- فوتر سبز تیره: تمام عرض ستون محتوا (بدون سایدبار) -->
+      <TheFooter class="mt-12" />
     </div>
 
     <MobileBottomNav />

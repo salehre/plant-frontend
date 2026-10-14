@@ -25,6 +25,7 @@
     "all": "All",
     "continue": "Continue",
     "menu": "Menu",
+    "back": "Back",
     "switchToEnglish": "Switch language to English",
     "switchToPersian": "Switch language to Persian"
   },
@@ -158,6 +159,7 @@
     "frame": "Fill the frame with the plant",
     "blur": "Avoid blurry photos"
     },
+    "pointHint": "Position the plant inside the frame",
     "overview": "Overview",
     "similarTab": "Similar species",
     "viewDetails": "View details",
@@ -176,7 +178,6 @@
       "analysisFailed": "We couldn't analyze the image. Please try again."
     }
   },
-  "swich_language": "Change language",
   "errors": {
     "unknown": "An unknown error occurred",
     "pathLost": "We lost our way",
@@ -203,6 +204,16 @@
     "profile": {
       "title": "Profile",
       "subtitle": "Your scan history, favorites, and settings on this device.",
+      "editProfile": "Edit profile",
+      "joined": "Joined {date}",
+      "memberSince": "Member since",
+      "recentActivity": "Recent activity",
+      "identified": "Identified",
+      "myFavorites": "My favorites",
+      "quickActions": "Quick actions",
+      "library": "Favorites & history",
+      "settingsSubtitle": "Customize your experience and manage your account.",
+      "language": "Language",
       "settings": "Settings",
       "appearance": "Appearance",
       "switchToLight": "Switch to light mode",
@@ -297,6 +308,7 @@
     "dashboard": {
       "greeting": "Hello",
       "subtitle": "Here's how your plants are doing",
+      "healthRate": "Plant health",
       "plant": "Plants",
       "todayTask": "Today's tasks",
       "healthy": "Healthy",
@@ -814,6 +826,22 @@
     "errorList": "Failed to load articles.",
     "errorPost": "Failed to load the article."
   },
+  "support": {
+    "nav": "Help & Support",
+    "title": "How can we help you?",
+    "subtitle": "Find answers to common questions or get in touch with our support team.",
+    "searchPlaceholder": "Search help articles...",
+    "popularTopics": "Popular help topics",
+    "noResults": "No results found. Try another phrase or contact support.",
+    "stillNeedHelp": "Still need help?",
+    "stillNeedHelpText": "Send us a message and we'll get back to you as soon as possible.",
+    "cards": {
+      "faqHint": "Answers to common questions",
+      "guideHint": "Plant care guides and articles",
+      "contactHint": "Get in touch with our team",
+      "reportHint": "Report a problem with a ticket"
+    }
+  },
   "components": {
     "common": {
       "confidence": "Identification confidence",
@@ -893,7 +921,11 @@
       "about": "About us",
       "terms": "Terms and conditions",
       "privacy": "Privacy and security",
-      "tickets": "Support tickets"
+      "tickets": "Support tickets",
+      "newsletterTitle": "Join the plant lovers community",
+      "newsletterDescription": "Enter your email for plant care guides, helpful tips, and community news.",
+      "newsletterEmail": "Your email",
+      "newsletterSubscribe": "Join the community"
     },
     "mobileBottomNav": {
       "home": "Home",

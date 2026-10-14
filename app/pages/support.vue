@@ -35,14 +35,14 @@ const cards = [
 <template>
   <div class="mx-auto flex max-w-6xl flex-col gap-8">
     <!-- هیرو + جستجو -->
-    <section class="relative overflow-hidden rounded-[22px] bg-primary-900 text-white">
+    <section class="relative overflow-hidden bg-primary-900 text-white [margin-inline:calc(50%_-_50vw)] md:[margin-inline:calc(50%_-_50vw_+_8rem)]">
       <img
         src="/images/plants/botanical-1.webp"
         alt=""
         class="absolute inset-0 size-full object-cover opacity-60"
       >
       <div class="absolute inset-0 bg-gradient-to-t from-primary-900 via-primary-900/70 to-primary-900/30" />
-      <div class="relative flex flex-col gap-4 p-6 sm:p-10">
+      <div class="relative mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-10 sm:px-6 sm:py-14">
         <h1 class="text-2xl font-extrabold sm:text-4xl">
           {{ t('support.title') }}
         </h1>
