@@ -89,6 +89,19 @@ function formatCount(value: number) {
   return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(value)
 }
 
+// عدد خامِ درصد (0 تا 100) - برای محاسبات SVG، همیشه باید رقم انگلیسی باشه
+function rawPercent(value: number) {
+  return Math.round(value * 100)
+}
+
+// متن نمایشیِ درصد (لوکالایزشده) - فقط برای نمایش به کاربر
+function displayPercent(value: number) {
+  return new Intl.NumberFormat(locale.value, { useGrouping: false }).format(rawPercent(value))
+}
+
+const confidenceRaw = computed(() => rawPercent(selected.value.confidence))
+const confidenceDisplay = computed(() => displayPercent(selected.value.confidence))
+
 function isConfirmed(c: Candidate) {
   return identifyStore.isConfirmed(c.scientificName)
 }
@@ -159,13 +172,36 @@ function addToGarden() {
           {{ selected.scientificName }}
         </p>
       </div>
-      <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-50 px-3 py-1 text-sm font-bold text-primary-700">
-        <Icon
-          name="lucide:badge-check"
-          class="size-4"
-        />
-        {{ formatPercent(selected.confidence) }}
-      </span>
+
+      <!-- دایره‌ی درصد اطمینان -->
+      <div class="relative flex size-14 shrink-0 items-center justify-center">
+        <svg
+          viewBox="0 0 36 36"
+          class="size-14 -rotate-90"
+        >
+          <path
+            class="stroke-primary-100"
+            stroke-width="3"
+            fill="none"
+            d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+          <path
+            class="stroke-primary-600 transition-[stroke-dasharray] duration-500 ease-out"
+            stroke-width="3"
+            stroke-linecap="round"
+            fill="none"
+            :stroke-dasharray="`${confidenceRaw}, 100`"
+            d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+        </svg>
+        <span class="absolute text-[11px] font-bold text-primary-700">
+          {{ confidenceDisplay }}٪
+        </span>
+      </div>
     </div>
 
     <!-- تب‌ها -->
@@ -333,7 +369,36 @@ function addToGarden() {
             <span class="block truncate text-sm font-bold text-ink">{{ c.name }}</span>
             <span class="block truncate text-xs italic text-ink-muted">{{ c.scientificName }}</span>
           </span>
-          <span class="shrink-0 text-sm font-bold text-primary-700">{{ formatPercent(c.confidence) }}</span>
+
+          <!-- دایره‌ی درصد اطمینان (سایز کوچک‌تر برای لیست) -->
+          <span class="relative flex size-10 shrink-0 items-center justify-center">
+            <svg
+              viewBox="0 0 36 36"
+              class="size-10 -rotate-90"
+            >
+              <path
+                class="stroke-primary-100"
+                stroke-width="4"
+                fill="none"
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                class="stroke-primary-600"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+                :stroke-dasharray="`${rawPercent(c.confidence)}, 100`"
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+            <span class="absolute text-[9px] font-bold text-primary-700">
+              {{ displayPercent(c.confidence) }}٪
+            </span>
+          </span>
         </button>
 
         <NuxtLink
