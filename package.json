@@ -21,6 +21,7 @@
     "@vee-validate/zod": "^4.14.7",
     "@vueuse/core": "^12.4.0",
     "@vueuse/nuxt": "^12.4.0",
+    "echarts": "^6.1.0",
     "morphicons": "^1.7.0",
     "nuxt": "^4.5.1",
     "pinia": "^4.0.2",

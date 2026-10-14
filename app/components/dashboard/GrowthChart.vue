@@ -1,32 +1,78 @@
 <script setup lang="ts">
+import type { EChartsOption } from 'echarts'
+
 const props = withDefaults(
-    defineProps<{
-      data?: number[]
-      labels?: string[]
-    }>(),
-    {
-      data: () => [20, 35, 30, 50, 65, 60, 80],
-    },
+  defineProps<{
+    data?: number[]
+    labels?: string[]
+  }>(),
+  {
+    data: () => [20, 35, 30, 50, 65, 60, 80],
+    labels: undefined,
+  },
 )
 
 const { t, locale } = useI18n()
-const chartLabels = computed(() => props.labels ?? Array.from({ length: 7 }, (_, index) => {
-  const week = new Intl.NumberFormat(locale.value, { useGrouping: false }).format(index + 1)
-  return t('components.growthChart.week', { week })
-}))
-const width = 300
-const height = 100
-const max = computed(() => Math.max(...props.data))
+const colors = useChartColors()
 
-const points = computed(() =>
-    props.data
-        .map((v, i) => {
-          const x = (i / (props.data.length - 1)) * width
-          const y = height - (v / max.value) * (height - 10) - 5
-          return `${x},${y}`
-        })
-        .join(' '),
-)
+const numberFormat = computed(() => new Intl.NumberFormat(locale.value, { useGrouping: false }))
+const chartLabels = computed(() => props.labels ?? props.data.map((_, index) =>
+  t('components.growthChart.week', { week: numberFormat.value.format(index + 1) }),
+))
+
+const option = computed<EChartsOption>(() => {
+  const c = colors.value
+  return {
+    animationDuration: 700,
+    grid: { top: 12, right: 12, bottom: 4, left: 12, containLabel: true },
+    tooltip: {
+      trigger: 'axis',
+      confine: true,
+      backgroundColor: c.surface,
+      borderColor: c.grid,
+      textStyle: { color: c.ink, fontFamily: c.font, fontSize: 12 },
+      valueFormatter: value => numberFormat.value.format(Number(value)),
+    },
+    xAxis: {
+      type: 'category',
+      data: chartLabels.value,
+      boundaryGap: false,
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: { color: c.muted, fontFamily: c.font, fontSize: 10, hideOverlap: true },
+    },
+    yAxis: {
+      type: 'value',
+      min: 0,
+      show: false,
+      splitLine: { show: false },
+    },
+    series: [
+      {
+        type: 'line',
+        data: props.data,
+        smooth: true,
+        showSymbol: false,
+        symbolSize: 8,
+        lineStyle: { width: 2.5, color: c.primary, cap: 'round', join: 'round' },
+        itemStyle: { color: c.primary },
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: c.primarySoft },
+              { offset: 1, color: c.primaryFaint },
+            ],
+          },
+        },
+      },
+    ],
+  }
+})
 </script>
 
 <template>
@@ -34,23 +80,10 @@ const points = computed(() =>
     <p class="mb-3 text-sm font-medium text-ink">
       {{ t('components.growthChart.title') }}
     </p>
-    <svg
-        :viewBox="`0 0 ${width} ${height}`"
-        class="w-full text-primary-500"
-        preserveAspectRatio="none"
-    >
-      <polyline
-          :points="points"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linejoin="round"
-          stroke-linecap="round"
-      />
-    </svg>
-    <div class="mt-2 flex justify-between text-[10px] text-ink-muted">
-      <span>{{ chartLabels[0] }}</span>
-      <span>{{ chartLabels[chartLabels.length - 1] }}</span>
-    </div>
+    <AppChart
+      :option="option"
+      height="140px"
+      :aria-label="t('components.growthChart.title')"
+    />
   </div>
 </template>

@@ -22,9 +22,6 @@ const healthRate = computed(() => {
   const total = userPlantsStore.plants.length
   return total ? Math.round(healthyCount.value / total * 100) : 0
 })
-const RING_RADIUS = 34
-const ringCircumference = 2 * Math.PI * RING_RADIUS
-const ringOffset = computed(() => ringCircumference * (1 - healthRate.value / 100))
 
 function completeTask(id: string) {
   userPlantsStore.completeTask(id)
@@ -71,35 +68,10 @@ function completeTask(id: string) {
 
     <!-- نرخ سلامت -->
     <div class="glass-card flex items-center gap-5 p-4">
-      <div class="relative size-24 shrink-0">
-        <svg
-          viewBox="0 0 80 80"
-          class="size-full -rotate-90"
-        >
-          <circle
-            cx="40"
-            cy="40"
-            :r="RING_RADIUS"
-            fill="none"
-            stroke-width="7"
-            class="stroke-primary-100"
-          />
-          <circle
-            cx="40"
-            cy="40"
-            :r="RING_RADIUS"
-            fill="none"
-            stroke-width="7"
-            stroke-linecap="round"
-            class="stroke-primary-600 transition-all duration-700"
-            :stroke-dasharray="ringCircumference"
-            :stroke-dashoffset="ringOffset"
-          />
-        </svg>
-        <span class="absolute inset-0 flex items-center justify-center text-lg font-extrabold text-ink">
-          {{ toPersianDigits(healthRate) }}٪
-        </span>
-      </div>
+      <HealthRingChart
+        :value="healthRate"
+        class="size-24 shrink-0"
+      />
       <div>
         <p class="font-bold text-ink">
           {{ t('pages.dashboard.healthRate') }}
