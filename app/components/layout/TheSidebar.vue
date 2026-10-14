@@ -1,19 +1,21 @@
 <script setup lang="ts">
 const route = useRoute()
 
-// منوی اصلی (مثل دیزاین: ۶ آیتم) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
+// منوی اصلی (مثل دیزاین) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
 const links = [
   { to: '/', label: 'nav.home', icon: 'lucide:home' },
   { to: '/my-plants', label: 'nav.myPlants', icon: 'lucide:sprout' },
   { to: '/plants', label: 'nav.catalog', icon: 'lucide:compass' },
   { to: '/identify', label: 'nav.identify', icon: 'lucide:scan-line' },
   { to: '/care-calendar', label: 'nav.careCalendar', icon: 'lucide:calendar-check' },
-  { to: '/profile', label: 'nav.profile', icon: 'lucide:settings' },
+  { to: '/profile', label: 'nav.profile', icon: 'lucide:user' },
+  { to: '/settings', label: 'pages.profile.settings', icon: 'lucide:settings' },
 ]
 const secondaryLinks = [
   { to: '/dashboard', label: 'nav.dashboard', icon: 'lucide:layout-dashboard' },
   { to: '/climate', label: 'nav.climate', icon: 'lucide:cloud-sun' },
   { to: '/community', label: 'nav.community', icon: 'lucide:users' },
+  { to: '/support', label: 'support.nav', icon: 'lucide:life-buoy' },
 ]
 
 // تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه

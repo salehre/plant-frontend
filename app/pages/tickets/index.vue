@@ -37,12 +37,12 @@ const list = computed(() => tab.value === 'all'
 
 <template>
   <div class="mx-auto max-w-5xl">
-    <header class="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <header class="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div class="max-w-2xl">
         <h1 class="text-2xl font-bold text-ink sm:text-3xl">
           {{ t('tickets.title') }}
         </h1>
-        <p class="mt-2 text-sm leading-7 text-ink-muted sm:text-base">
+        <p class="mt-1 text-sm leading-7 text-ink-muted">
           {{ t('tickets.subtitle') }}
         </p>
       </div>
@@ -69,39 +69,36 @@ const list = computed(() => tab.value === 'all'
         type="button"
         role="tab"
         :aria-selected="tab === item.key"
-        class="inline-flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
-        :class="tab === item.key
-          ? 'bg-primary-600 text-white'
-          : 'bg-primary-50 text-primary-700 hover:bg-primary-100'"
+        class="chip shrink-0"
+        :class="{ 'chip--active': tab === item.key }"
         @click="tab = item.key"
       >
-        {{ item.label }}
-        <span
-          class="rounded-md px-1.5 text-xs"
-          :class="tab === item.key ? 'bg-white/20' : 'bg-primary-100'"
-        >{{ toPersianDigits(item.count) }}</span>
+        {{ item.label }} ({{ toPersianDigits(item.count) }})
       </button>
     </div>
 
     <!-- لیست -->
     <div
       v-if="list.length"
-      class="flex flex-col gap-3"
+      class="glass-card overflow-hidden"
     >
       <div
-        class="hidden px-5 text-xs text-ink-muted sm:grid sm:grid-cols-[minmax(0,1fr)_8rem_9.5rem_8.5rem] sm:gap-x-4"
+        class="hidden border-b border-ink/5 px-5 py-3 text-xs text-ink-muted sm:grid sm:grid-cols-[minmax(0,1fr)_9rem_8rem_9.5rem_1.25rem] sm:gap-x-4"
         aria-hidden="true"
       >
         <span>{{ t('tickets.columns.subject') }}</span>
         <span>{{ t('tickets.columns.category') }}</span>
+        <span>{{ t('tickets.columns.status') }}</span>
         <span>{{ t('tickets.columns.date') }}</span>
-        <span class="justify-self-end">{{ t('tickets.columns.status') }}</span>
+        <span />
       </div>
-      <TicketCard
-        v-for="ticket in list"
-        :key="ticket.id"
-        :ticket="ticket"
-      />
+      <div class="divide-y divide-ink/5">
+        <TicketCard
+          v-for="ticket in list"
+          :key="ticket.id"
+          :ticket="ticket"
+        />
+      </div>
     </div>
 
     <!-- حالت خالی -->
@@ -109,7 +106,7 @@ const list = computed(() => tab.value === 'all'
       v-else
       class="glass-card flex flex-col items-center gap-3 px-6 py-14 text-center"
     >
-      <span class="flex size-14 items-center justify-center rounded-lg bg-primary-50 text-primary-700">
+      <span class="flex size-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
         <Icon
           name="lucide:inbox"
           class="size-7"

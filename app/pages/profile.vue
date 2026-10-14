@@ -1,188 +1,274 @@
 <script setup lang="ts">
-import { themes } from '~/stores/ui.store'
-const { locale, setLocale, t } = useI18n()
-
-function toggleLocale() {
-  setLocale(locale.value === 'fa' ? 'en' : 'fa')
-}
-
 definePageMeta({ layout: 'default' })
 
-const uiStore = useUiStore()
-const historyStore = useHistoryStore()
-const wishlistStore = useWishlistStore()
+const { t, locale } = useI18n()
 const authStore = useAuthStore()
+const userPlantsStore = useUserPlantsStore()
+const historyStore = useHistoryStore()
+const { plants: favoritePlants, load: loadFavorites } = useWishlistPlants()
+
+onMounted(() => { void loadFavorites() })
+
+const intlLocale = computed(() => locale.value === 'fa' ? 'fa-IR' : 'en-US')
+const user = computed(() => authStore.user)
+const displayName = computed(() => user.value?.name || t('pages.profile.account'))
+
+const joinedLabel = computed(() => {
+  if (!user.value?.joinedAt) return ''
+  const date = new Intl.DateTimeFormat(intlLocale.value, { month: 'long', year: 'numeric' }).format(new Date(user.value.joinedAt))
+  return t('pages.profile.joined', { date })
+})
+
+function formatDate(timestamp: number) {
+  return new Intl.DateTimeFormat(intlLocale.value, { dateStyle: 'medium' }).format(new Date(timestamp))
+}
+function formatPercent(value: number) {
+  return t('components.confidenceScore.percentage', {
+    value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(Math.round(value * 100)),
+  })
+}
+
+const plantCount = computed(() => userPlantsStore.plants.length)
+const healthyCount = computed(() => userPlantsStore.plants.filter(p => p.healthStatus === 'healthy').length)
+const healthRate = computed(() => plantCount.value ? Math.round(healthyCount.value / plantCount.value * 100) : 0)
+
+const stats = computed(() => [
+  { icon: 'lucide:sprout', value: toPersianDigits(plantCount.value), label: 'pages.dashboard.plant' },
+  { icon: 'lucide:scan-line', value: toPersianDigits(historyStore.count), label: 'pages.dashboard.totalScans' },
+  { icon: 'lucide:leaf', value: toPersianDigits(new Set(historyStore.entries.map(e => e.scientificName)).size), label: 'pages.dashboard.speciesIdentified' },
+  { icon: 'lucide:heart-pulse', value: `${toPersianDigits(healthRate.value)}٪`, label: 'pages.dashboard.healthRate' },
+])
+
+const recent = computed(() => historyStore.sorted.slice(0, 5))
+const favorites = computed(() => favoritePlants.value.slice(0, 4))
+
+const quickActions = [
+  { to: '/identify', icon: 'lucide:scan-line', label: 'nav.identify' },
+  { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants' },
+  { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar' },
+  { to: '/dashboard', icon: 'lucide:layout-dashboard', label: 'nav.dashboard' },
+]
+
+function onImageError(e: Event) {
+  (e.target as HTMLImageElement).style.visibility = 'hidden'
+}
 </script>
 
 <template>
-  <div class="mx-auto flex max-w-3xl flex-col gap-6">
-    <div>
-      <h1 class="text-2xl font-bold text-ink">
-        {{ t('pages.profile.title') }}
-      </h1>
-      <p class="text-sm leading-relaxed text-ink-muted">
-        {{ t('pages.profile.subtitle') }}
-      </p>
-    </div>
-
-    <!-- هدر پروفایل -->
-    <div class="glass-card flex items-center gap-4 p-4">
-      <span class="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-700">
-        <Icon
-          name="lucide:user"
-          class="size-8"
-        />
-      </span>
-      <div class="min-w-0">
-        <p class="truncate text-lg font-bold text-ink">
-          {{ authStore.user?.name || t('pages.profile.account') }}
-        </p>
-        <p
-          v-if="authStore.user?.email"
-          class="truncate text-sm text-ink-muted"
+  <div class="flex flex-col gap-6">
+    <!-- کاور + مشخصات کاربر -->
+    <section class="glass-card overflow-hidden">
+      <div class="relative h-36 sm:h-44">
+        <img
+          src="/images/plants/botanical-1.webp"
+          :alt="$t('home.greenLeavesAlt')"
+          class="size-full object-cover"
         >
-          {{ authStore.user.email }}
-        </p>
+        <NuxtLink
+          to="/settings"
+          class="absolute end-3 top-3 flex size-9 items-center justify-center rounded-xl bg-surface/90 text-primary-700 shadow-card backdrop-blur transition-colors hover:bg-surface"
+          :aria-label="$t('pages.profile.settings')"
+        >
+          <Icon
+            name="lucide:settings"
+            class="size-[18px]"
+          />
+        </NuxtLink>
       </div>
-    </div>
 
-    <!-- تنظیمات: یک کارت با ردیف‌های جداشده -->
-    <section>
-      <h2 class="mb-3 font-bold text-ink">
-        {{ t('pages.profile.settings') }}
-      </h2>
-      <div class="glass-card divide-y divide-ink/5 overflow-hidden">
-        <div class="flex items-center justify-between gap-3 px-4 py-3.5">
-          <div class="flex items-center gap-3 text-sm text-ink">
-            <span class="flex size-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-              <Icon
-                name="lucide:languages"
-                class="size-[18px]"
-              />
-            </span>
-            {{ $t('swich_language') }}
-          </div>
-          <button
-            type="button"
-            class="chip"
-            :aria-label="locale === 'fa' ? t('common.switchToEnglish') : t('common.switchToPersian')"
-            @click="toggleLocale"
+      <div class="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end">
+        <span class="-mt-12 flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-100 text-primary-700 ring-4 ring-surface">
+          <img
+            v-if="user?.avatar"
+            :src="user.avatar"
+            :alt="displayName"
+            class="size-full object-cover"
           >
-            {{ locale === 'fa' ? 'English' : 'فارسی' }}
-          </button>
-        </div>
+          <Icon
+            v-else
+            name="lucide:user"
+            class="size-10"
+          />
+        </span>
 
-        <div class="flex items-center justify-between gap-3 px-4 py-3.5">
-          <div class="flex items-center gap-3 text-sm text-ink">
-            <span class="flex size-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-              <Icon
-                :name="uiStore.mode === 'dark' ? 'lucide:moon' : 'lucide:sun'"
-                class="size-[18px]"
-              />
-            </span>
-            {{ t('pages.profile.appearance') }}
-          </div>
-          <button
-            type="button"
-            role="switch"
-            :aria-checked="uiStore.mode === 'dark'"
-            :aria-label="uiStore.mode === 'dark' ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
-            class="relative h-6 w-11 shrink-0 rounded-full transition-colors"
-            :class="uiStore.mode === 'dark' ? 'bg-primary-600' : 'bg-ink/20'"
-            @click="uiStore.toggleMode()"
+        <div class="min-w-0 flex-1 sm:pb-1">
+          <h1 class="truncate text-2xl font-bold text-ink">
+            {{ displayName }}
+          </h1>
+          <p
+            v-if="user?.email"
+            class="truncate text-sm text-ink-muted"
           >
+            {{ user.email }}
+          </p>
+          <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
             <span
-              class="absolute top-0.5 size-5 rounded-full bg-white shadow transition-all"
-              :class="uiStore.mode === 'dark' ? 'start-[1.375rem]' : 'start-0.5'"
-            />
-          </button>
-        </div>
-
-        <div class="flex items-center justify-between gap-3 px-4 py-3.5">
-          <div class="flex items-center gap-3 text-sm text-ink">
-            <span class="flex size-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-              <Icon
-                name="lucide:palette"
-                class="size-[18px]"
-              />
-            </span>
-            {{ t('pages.profile.colorTheme') }}
-          </div>
-          <div class="flex items-center gap-2">
-            <button
-              v-for="theme in themes"
-              :key="theme.key"
-              type="button"
-              role="radio"
-              :aria-checked="uiStore.theme === theme.key"
-              :aria-label="t(`pages.profile.themes.${theme.key}`)"
-              :title="t(`pages.profile.themes.${theme.key}`)"
-              class="flex size-8 items-center justify-center rounded-full ring-offset-2 ring-offset-surface transition-all"
-              :class="uiStore.theme === theme.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
-              @click="uiStore.setTheme(theme.key)"
+              v-if="joinedLabel"
+              class="inline-flex items-center gap-1.5"
             >
-              <span
-                class="size-5 rounded-full"
-                :style="{ backgroundColor: theme.swatch }"
+              <Icon
+                name="lucide:calendar"
+                class="size-3.5"
               />
-            </button>
+              {{ joinedLabel }}
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+              <Icon
+                name="lucide:sprout"
+                class="size-3.5"
+              />
+              {{ $t('pages.dashboard.plant') }}: {{ toPersianDigits(plantCount) }}
+            </span>
           </div>
         </div>
 
         <NuxtLink
-          to="/wishlist"
-          class="group flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-primary-50/50"
+          to="/settings"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-ink/10 px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-primary-50 sm:mb-1"
         >
-          <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-            <Icon
-              name="lucide:heart"
-              class="size-[18px]"
-            />
-          </span>
-          <span class="min-w-0 flex-1">
-            <span class="block text-sm font-medium text-ink">
-              {{ t('pages.profile.wishlist') }}
-              <span class="font-normal text-ink-muted">({{ toPersianDigits(wishlistStore.count) }})</span>
-            </span>
-            <span class="block truncate text-xs text-ink-muted">{{ t('pages.profile.wishlistDescription') }}</span>
-          </span>
           <Icon
-            name="lucide:chevron-left"
-            class="size-5 shrink-0 text-ink-muted transition-transform group-hover:-translate-x-1 ltr:rotate-180"
+            name="lucide:pencil"
+            class="size-4"
           />
-        </NuxtLink>
-
-        <NuxtLink
-          to="/history"
-          class="group flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-primary-50/50"
-        >
-          <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-            <Icon
-              name="lucide:history"
-              class="size-[18px]"
-            />
-          </span>
-          <span class="min-w-0 flex-1">
-            <span class="block text-sm font-medium text-ink">
-              {{ t('pages.profile.history') }}
-              <span class="font-normal text-ink-muted">({{ toPersianDigits(historyStore.count) }})</span>
-            </span>
-            <span class="block truncate text-xs text-ink-muted">{{ t('pages.profile.historyDescription') }}</span>
-          </span>
-          <Icon
-            name="lucide:chevron-left"
-            class="size-5 shrink-0 text-ink-muted transition-transform group-hover:-translate-x-1 ltr:rotate-180"
-          />
+          {{ $t('pages.profile.editProfile') }}
         </NuxtLink>
       </div>
     </section>
 
-    <!-- اطلاعات کاربر -->
-    <section>
-      <h2 class="mb-3 font-bold text-ink">
-        {{ t('pages.profile.account') }}
-      </h2>
-      <ProfileInfoForm />
+    <!-- آمار -->
+    <section class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+      <div
+        v-for="stat in stats"
+        :key="stat.label"
+        class="glass-card flex flex-col gap-3 p-4"
+      >
+        <span class="flex size-10 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+          <Icon
+            :name="stat.icon"
+            class="size-5"
+          />
+        </span>
+        <div>
+          <p class="text-2xl font-extrabold leading-none text-ink">
+            {{ stat.value }}
+          </p>
+          <p class="mt-1.5 text-xs text-ink-muted">
+            {{ $t(stat.label) }}
+          </p>
+        </div>
+      </div>
     </section>
+
+    <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+      <div class="flex min-w-0 flex-col gap-5">
+        <!-- فعالیت اخیر -->
+        <section
+          v-if="recent.length"
+          class="glass-card p-4 sm:p-5"
+        >
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="font-bold text-ink">
+              {{ $t('pages.profile.recentActivity') }}
+            </h2>
+            <NuxtLink
+              to="/history"
+              class="text-xs font-medium text-primary-600 hover:text-primary-700"
+            >
+              {{ $t('common.seeAll') }}
+            </NuxtLink>
+          </div>
+          <ul class="divide-y divide-ink/5">
+            <li
+              v-for="entry in recent"
+              :key="entry.id"
+            >
+              <NuxtLink
+                :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
+                class="flex items-center gap-3 py-3"
+              >
+                <span class="relative size-11 shrink-0 overflow-hidden rounded-lg bg-primary-50">
+                  <Icon
+                    name="lucide:leaf"
+                    class="absolute inset-0 m-auto size-4 text-primary-400"
+                  />
+                  <img
+                    :src="entry.image"
+                    :alt="entry.plantName"
+                    class="relative size-full object-cover"
+                    loading="lazy"
+                    @error="onImageError"
+                  >
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-sm font-bold text-ink">{{ entry.plantName }}</span>
+                  <span class="block truncate text-xs text-ink-muted">
+                    {{ $t('pages.profile.identified') }} · {{ formatDate(entry.timestamp) }}
+                  </span>
+                </span>
+                <span class="shrink-0 rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-bold text-primary-700">
+                  {{ formatPercent(entry.confidence) }}
+                </span>
+              </NuxtLink>
+            </li>
+          </ul>
+        </section>
+
+        <!-- علاقه‌مندی‌ها -->
+        <section
+          v-if="favorites.length"
+          class="glass-card p-4 sm:p-5"
+        >
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="font-bold text-ink">
+              {{ $t('pages.profile.myFavorites') }}
+            </h2>
+            <NuxtLink
+              to="/wishlist"
+              class="text-xs font-medium text-primary-600 hover:text-primary-700"
+            >
+              {{ $t('common.seeAll') }}
+            </NuxtLink>
+          </div>
+          <div class="grid grid-cols-4 gap-3">
+            <PlantCard
+              v-for="plant in favorites"
+              :key="plant.id"
+              :plant="plant"
+              variant="mini"
+            />
+          </div>
+        </section>
+      </div>
+
+      <!-- دسترسی سریع -->
+      <section class="glass-card p-4 sm:p-5">
+        <h2 class="mb-2 font-bold text-ink">
+          {{ $t('pages.profile.quickActions') }}
+        </h2>
+        <ul class="divide-y divide-ink/5">
+          <li
+            v-for="action in quickActions"
+            :key="action.to"
+          >
+            <NuxtLink
+              :to="action.to"
+              class="flex items-center gap-3 py-3"
+            >
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+                <Icon
+                  :name="action.icon"
+                  class="size-5"
+                />
+              </span>
+              <span class="flex-1 text-sm font-medium text-ink">{{ $t(action.label) }}</span>
+              <Icon
+                name="lucide:chevron-left"
+                class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
+              />
+            </NuxtLink>
+          </li>
+        </ul>
+      </section>
+    </div>
   </div>
 </template>
