@@ -16,6 +16,19 @@
   transform-origin: center;
 }
 
+/* ───────── هاور: آیکن (یا آواتار پروفایل) کمی بزرگ‌تر می‌شه ─────────
+   از پراپرتی مستقل `scale` استفاده شده تا با `transform` انیمیشن‌های آیکن‌ها تداخل نکنه.
+   برای تغییر میزان بزرگ‌شدن، --si-hover-scale رو عوض کن. */
+.sidebar-link {
+  --si-hover-scale: 1.2;
+}
+.sidebar-link > :first-child {
+  transition: scale 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sidebar-link:hover > :first-child {
+  scale: var(--si-hover-scale);
+}
+
 /* ───────── خانه: سقف کمی بالا میره، در باز و بسته می‌شه ───────── */
 .sidebar-link--active .si--home .si-part--roof {
   animation: si-home-roof 1.6s ease-in-out var(--si-repeat);
@@ -198,5 +211,11 @@
   .sidebar-link--active .si,
   .sidebar-link--active .si-part {
     animation: none !important;
+  }
+  .sidebar-link > :first-child {
+    transition: none;
+  }
+  .sidebar-link:hover > :first-child {
+    scale: 1;
   }
 }

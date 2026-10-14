@@ -3,9 +3,9 @@ import { seasonByTheme } from '~/stores/ui.store'
 
 /**
  * پس‌زمینه‌ی متحرک هر تم (فصل) - ظریف و کم‌مزاحمت:
- *  navy (زمستون)    -> دانه‌های برف که آروم می‌افتن
- *  brown (پاییز)    -> برگ‌هایی که آروم می‌چرخن و سقوط می‌کنن
- *  wine (بهار)      -> شکوفه‌هایی که خیلی آروم دریفت می‌شن
+ *  navy (زمستون)    -> دانه‌های برف + ستاره‌های چشمک‌زن + هر از گاهی یه شهاب که از کنار صفحه رد می‌شه
+ *  brown (پاییز)    -> برگ‌هایی که آروم می‌چرخن و سقوط می‌کنن + دو پرنده‌ی مهاجر که آروم به سمت پایین می‌رن
+ *  wine (بهار)      -> شکوفه‌هایی که خیلی آروم دریفت می‌شن + دو زنبور عسل با پرواز زیگزاگی
  *  forest (تابستون) -> دو پروانه با مسیر منحنی و نامنظم + چندتا ذره‌ی نور
  * قواعد:
  *  - فقط حاشیه‌های چپ و راست صفحه؛ وسط صفحه (جایی که محتوا هست) خالی می‌مونه
@@ -39,8 +39,12 @@ interface Particle {
   extra: boolean
 }
 
-interface Butterfly {
+type FlyerKind = 'butterfly' | 'bee' | 'bird'
+
+/** موجود زنده‌ی هر فصل: پروانه (تابستون)، زنبور (بهار)، پرنده‌ی مهاجر (پاییز) */
+interface Flyer {
   id: number
+  kind: FlyerKind
   x: number
   size: number
   color: string
@@ -54,6 +58,46 @@ interface Butterfly {
   swayBDur: number
   wobbleDur: number
   flap: number
+  extra: boolean
+}
+
+interface FlyerConfig {
+  kind: FlyerKind
+  size: [number, number]
+  /** مدت یه بار عبور از بالا تا پایین صفحه (ثانیه) */
+  dur: [number, number]
+  swayA: [number, number]
+  swayADur: [number, number]
+  swayB: [number, number]
+  swayBDur: [number, number]
+  wobbleDur: [number, number]
+  /** پروانه/زنبور: دوره‌ی بال‌زدن؛ پرنده: دوره‌ی یه چرخه‌ی «چندتا بال‌زدن + سر خوردن» */
+  flap: [number, number]
+  opacity: [number, number]
+  /** جهت هر موجود: true = به بالا، false = به پایین */
+  up: boolean[]
+}
+
+interface Sparkle {
+  id: number
+  x: number
+  y: number
+  size: number
+  color: string
+  opacity: number
+  dur: number
+  delay: number
+  extra: boolean
+}
+
+interface Comet {
+  id: number
+  x: number
+  dur: number
+  delay: number
+  drift: number
+  tilt: number
+  peak: number
   extra: boolean
 }
 
@@ -128,6 +172,50 @@ const configs: Record<Season, SeasonConfig> = {
   },
 }
 
+// تابستون = پروانه (مقدارها همون قبلی‌ان)، بهار = زنبور (کوچیک‌تر، سریع‌تر و زیگزاگی‌تر)،
+// پاییز = پرنده‌ی مهاجر از نمای بالا (بزرگ‌تر، آروم و صاف؛ چندتا بال می‌زنه و بعد سر می‌خوره)
+const flyerConfigs: Partial<Record<Season, FlyerConfig>> = {
+  summer: {
+    kind: 'butterfly',
+    size: [16, 24],
+    dur: [46, 66],
+    swayA: [1.2, 2.5],
+    swayADur: [5, 9],
+    swayB: [0.4, 0.9],
+    swayBDur: [1.8, 3.2],
+    wobbleDur: [2.8, 4.4],
+    flap: [0.35, 0.55],
+    opacity: [0.55, 0.7],
+    up: [true, false],
+  },
+  spring: {
+    kind: 'bee',
+    size: [15, 21],
+    dur: [38, 54],
+    swayA: [1, 2],
+    swayADur: [4, 7],
+    swayB: [0.5, 1.1],
+    swayBDur: [1, 1.8],
+    wobbleDur: [1.2, 2],
+    flap: [0.12, 0.18],
+    opacity: [0.6, 0.78],
+    up: [true, false],
+  },
+  autumn: {
+    kind: 'bird',
+    size: [20, 28],
+    dur: [52, 72],
+    swayA: [1.5, 2.6],
+    swayADur: [8, 12],
+    swayB: [0.2, 0.4],
+    swayBDur: [3, 5],
+    wobbleDur: [5, 8],
+    flap: [3.6, 4.6],
+    opacity: [0.5, 0.65],
+    up: [false, false],
+  },
+}
+
 // همه‌ی ذرات فقط از رنگ primary همون تم استفاده می‌کنن (دو درجه برای کمی عمق)
 const colors = [
   'text-primary-300 dark:text-primary-200',
@@ -180,28 +268,68 @@ const particles = computed<Particle[]>(() => {
   })
 })
 
-// فقط دو پروانه، هرکدوم کنار یکی از لبه‌ها: عمودی و آروم حرکت می‌کنن و
-// دو لایه‌ی چپ-راست با دوره‌ی متفاوت، مسیرشون رو منحنی و نامنظم می‌کنه
-const butterflies = computed<Butterfly[]>(() => {
-  if (season.value !== 'summer') return []
-  const rnd = createRng(424242)
-  return Array.from({ length: 2 }, (_, i) => {
-    const dur = 46 + rnd() * 20
+// فقط دو موجود زنده (پروانه/زنبور/پرنده بسته به فصل)، هرکدوم کنار یکی از لبه‌ها: عمودی و آروم حرکت
+// می‌کنن و دو لایه‌ی چپ-راست با دوره‌ی متفاوت، مسیرشون رو منحنی و نامنظم می‌کنه
+const flyers = computed<Flyer[]>(() => {
+  const cfg = flyerConfigs[season.value]
+  if (!cfg) return []
+  const rnd = createRng(season.value === 'summer' ? 424242 : 424242 + season.value.length * 101)
+  const range = ([a, b]: [number, number]) => a + rnd() * (b - a)
+  return cfg.up.map((up, i) => {
+    const dur = range(cfg.dur)
     return {
       id: i,
+      kind: cfg.kind,
       x: i === 0 ? 3 + rnd() * 8 : 89 + rnd() * 6,
-      size: 16 + rnd() * 8,
+      size: range(cfg.size),
       color: colors[i % colors.length]!,
-      opacity: 0.55 + rnd() * 0.15,
+      opacity: range(cfg.opacity),
       dur,
       delay: rnd() * dur,
-      up: i === 0,
-      swayA: 1.2 + rnd() * 1.3,
-      swayADur: 5 + rnd() * 4,
-      swayB: 0.4 + rnd() * 0.5,
-      swayBDur: 1.8 + rnd() * 1.4,
-      wobbleDur: 2.8 + rnd() * 1.6,
-      flap: 0.35 + rnd() * 0.2,
+      up,
+      swayA: range(cfg.swayA),
+      swayADur: range(cfg.swayADur),
+      swayB: range(cfg.swayB),
+      swayBDur: range(cfg.swayBDur),
+      wobbleDur: range(cfg.wobbleDur),
+      flap: range(cfg.flap),
+      extra: i >= 1,
+    }
+  })
+})
+
+// زمستون: ستاره‌های چشمک‌زن ثابت کنار لبه‌ها (شب‌های بلند زمستون)
+const sparkles = computed<Sparkle[]>(() => {
+  if (season.value !== 'winter') return []
+  const rnd = createRng(777)
+  return Array.from({ length: 7 }, (_, i) => ({
+    id: i,
+    x: i % 2 === 0 ? 2 + rnd() * 11 : 87 + rnd() * 9,
+    y: 6 + rnd() * 86,
+    size: 8 + rnd() * 7,
+    color: colors[Math.floor(rnd() * colors.length)]!,
+    opacity: 0.45 + rnd() * 0.3,
+    dur: 2.6 + rnd() * 2.8,
+    delay: rnd() * 6,
+    extra: i >= 4,
+  }))
+})
+
+// زمستون: دو شهاب که هر ~۳۰ ثانیه یه بار، چند ثانیه از کنار صفحه رد می‌شن (نزدیک لبه‌ها می‌مونن)
+const comets = computed<Comet[]>(() => {
+  if (season.value !== 'winter') return []
+  const rnd = createRng(31337)
+  return Array.from({ length: 2 }, (_, i) => {
+    const dir = i === 0 ? 1 : -1
+    const dur = 24 + rnd() * 12
+    return {
+      id: i,
+      x: i === 0 ? 2 + rnd() * 5 : 91 + rnd() * 5,
+      dur,
+      delay: rnd() * dur,
+      drift: dir * 5,
+      tilt: -dir * 6,
+      peak: 0.55 + rnd() * 0.2,
       extra: i >= 1,
     }
   })
@@ -355,10 +483,88 @@ const spins = (kind: Kind) => kind !== 'dot' && kind !== 'firefly'
         </span>
       </span>
 
-      <!-- تابستون: پروانه‌ها (کنار لبه‌ها) -->
+      <!-- زمستون: ستاره‌های چشمک‌زن -->
       <span
-        v-for="b in butterflies"
-        :key="`bf-${b.id}`"
+        v-for="st in sparkles"
+        :key="`st-${st.id}`"
+        class="sb-star"
+        :class="{ 'sb-extra': st.extra }"
+        :style="{ left: `${st.x}%`, top: `${st.y}%`, opacity: st.opacity }"
+      >
+        <svg
+          :width="st.size"
+          :height="st.size"
+          viewBox="0 0 24 24"
+          class="sb-twinkle"
+          :class="st.color"
+          :style="{ '--spin': `${st.dur}s`, 'animationDelay': `-${st.delay}s` }"
+        >
+          <path
+            d="M12 2 14.2 9.8 22 12 14.2 14.2 12 22 9.8 14.2 2 12 9.8 9.8Z"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
+
+      <!-- زمستون: شهاب -->
+      <span
+        v-for="c in comets"
+        :key="`cm-${c.id}`"
+        class="sb-comet"
+        :class="{ 'sb-extra': c.extra }"
+        :style="{ left: `${c.x}%`, '--dur': `${c.dur}s`, '--delay': `${c.delay}s`, '--drift': `${c.drift}vw`, '--peak': c.peak }"
+      >
+        <svg
+          width="8"
+          height="52"
+          viewBox="0 0 8 52"
+          class="text-primary-300 dark:text-primary-200"
+          :style="{ transform: `rotate(${c.tilt}deg)` }"
+        >
+          <defs>
+            <linearGradient
+              :id="`sb-tail-${c.id}`"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="0"
+                stop-color="currentColor"
+                stop-opacity="0"
+              />
+              <stop
+                offset="1"
+                stop-color="currentColor"
+                stop-opacity=".85"
+              />
+            </linearGradient>
+          </defs>
+          <path
+            d="M4 0 6.6 46H1.4Z"
+            :fill="`url(#sb-tail-${c.id})`"
+          />
+          <circle
+            cx="4"
+            cy="47"
+            r="4.4"
+            fill="currentColor"
+            opacity=".22"
+          />
+          <circle
+            cx="4"
+            cy="47"
+            r="2.2"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
+
+      <!-- تابستون: پروانه | بهار: زنبور | پاییز: پرنده‌ی مهاجر (کنار لبه‌ها) -->
+      <span
+        v-for="b in flyers"
+        :key="`fl-${season}-${b.id}`"
         class="sb-fly"
         :class="[b.up ? 'sb-flyup' : 'sb-flydown', { 'sb-extra': b.extra }]"
         :style="{ left: `${b.x}%`, opacity: b.opacity, '--dur': `${b.dur}s`, '--delay': `${b.delay}s` }"
@@ -373,6 +579,7 @@ const spins = (kind: Kind) => kind !== 'dot' && kind !== 'firefly'
           >
             <span
               class="sb-wobble"
+              :class="{ 'sb-wobble-soft': b.kind === 'bird' }"
               :style="{ '--wobble-dur': `${b.wobbleDur}s` }"
             >
               <svg
@@ -385,46 +592,129 @@ const spins = (kind: Kind) => kind !== 'dot' && kind !== 'firefly'
                   'transform': b.up ? 'none' : 'rotate(180deg)',
                 }"
               >
-                <g
-                  class="sb-wing sb-wing-l"
-                  fill="currentColor"
-                >
-                  <path d="M12 11C9 4 3 2 2.5 6 2 9.5 7 12 12 12Z" />
-                  <path d="M12 12.5C8 12.5 4 14 5 18 6 21 10 19 12 14.5Z" />
-                  <circle
-                    cx="6.6"
-                    cy="6.6"
-                    r="1.2"
-                    fill="rgb(255 255 255 / .4)"
+                <!-- پروانه -->
+                <template v-if="b.kind === 'butterfly'">
+                  <g
+                    class="sb-wing sb-wing-l"
+                    fill="currentColor"
+                  >
+                    <path d="M12 11C9 4 3 2 2.5 6 2 9.5 7 12 12 12Z" />
+                    <path d="M12 12.5C8 12.5 4 14 5 18 6 21 10 19 12 14.5Z" />
+                    <circle
+                      cx="6.6"
+                      cy="6.6"
+                      r="1.2"
+                      fill="rgb(255 255 255 / .4)"
+                    />
+                  </g>
+                  <g
+                    class="sb-wing sb-wing-r"
+                    fill="currentColor"
+                  >
+                    <path d="M12 11C15 4 21 2 21.5 6 22 9.5 17 12 12 12Z" />
+                    <path d="M12 12.5C16 12.5 20 14 19 18 18 21 14 19 12 14.5Z" />
+                    <circle
+                      cx="17.4"
+                      cy="6.6"
+                      r="1.2"
+                      fill="rgb(255 255 255 / .4)"
+                    />
+                  </g>
+                  <ellipse
+                    cx="12"
+                    cy="12"
+                    rx=".9"
+                    ry="5"
+                    fill="rgb(0 0 0 / .5)"
                   />
-                </g>
-                <g
-                  class="sb-wing sb-wing-r"
-                  fill="currentColor"
-                >
-                  <path d="M12 11C15 4 21 2 21.5 6 22 9.5 17 12 12 12Z" />
-                  <path d="M12 12.5C16 12.5 20 14 19 18 18 21 14 19 12 14.5Z" />
-                  <circle
-                    cx="17.4"
-                    cy="6.6"
-                    r="1.2"
-                    fill="rgb(255 255 255 / .4)"
+                  <path
+                    d="M11.6 7.5C11 5.5 10 4.5 9.2 4.2M12.4 7.5C13 5.5 14 4.5 14.8 4.2"
+                    fill="none"
+                    stroke="rgb(0 0 0 / .5)"
+                    stroke-width=".6"
+                    stroke-linecap="round"
                   />
-                </g>
-                <ellipse
-                  cx="12"
-                  cy="12"
-                  rx=".9"
-                  ry="5"
-                  fill="rgb(0 0 0 / .5)"
-                />
-                <path
-                  d="M11.6 7.5C11 5.5 10 4.5 9.2 4.2M12.4 7.5C13 5.5 14 4.5 14.8 4.2"
-                  fill="none"
-                  stroke="rgb(0 0 0 / .5)"
-                  stroke-width=".6"
-                  stroke-linecap="round"
-                />
+                </template>
+
+                <!-- زنبور عسل -->
+                <template v-else-if="b.kind === 'bee'">
+                  <g
+                    class="sb-wing sb-wing-l"
+                    fill="currentColor"
+                    opacity=".5"
+                  >
+                    <ellipse
+                      cx="7.2"
+                      cy="10.2"
+                      rx="5.2"
+                      ry="2.7"
+                      transform="rotate(-28 7.2 10.2)"
+                    />
+                  </g>
+                  <g
+                    class="sb-wing sb-wing-r"
+                    fill="currentColor"
+                    opacity=".5"
+                  >
+                    <ellipse
+                      cx="16.8"
+                      cy="10.2"
+                      rx="5.2"
+                      ry="2.7"
+                      transform="rotate(28 16.8 10.2)"
+                    />
+                  </g>
+                  <ellipse
+                    cx="12"
+                    cy="14.2"
+                    rx="3.6"
+                    ry="5.8"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M8.6 12.9h6.8M8.6 15.9h6.8M9.7 18.6h4.6"
+                    fill="none"
+                    stroke="rgb(0 0 0 / .42)"
+                    stroke-width="1.5"
+                  />
+                  <circle
+                    cx="12"
+                    cy="7.4"
+                    r="2.5"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M11 5.4C10.6 4.2 10 3.6 9.2 3.3M13 5.4C13.4 4.2 14 3.6 14.8 3.3"
+                    fill="none"
+                    stroke="rgb(0 0 0 / .5)"
+                    stroke-width=".7"
+                    stroke-linecap="round"
+                  />
+                </template>
+
+                <!-- پرنده‌ی مهاجر (نمای بالا) -->
+                <template v-else>
+                  <g
+                    class="sb-wing sb-wing-bird sb-wing-l"
+                    fill="currentColor"
+                  >
+                    <path d="M10.7 9C8 8.4 4 9.8 1.5 13.6c3-1.4 5.6-1.6 9.2-.9Z" />
+                  </g>
+                  <g
+                    class="sb-wing sb-wing-bird sb-wing-r"
+                    fill="currentColor"
+                  >
+                    <path d="M13.3 9C16 8.4 20 9.8 22.5 13.6c-3-1.4-5.6-1.6-9.2-.9Z" />
+                  </g>
+                  <path
+                    d="M12 3c1.5 1.7 2 4.4 1.7 7.4L12.9 16 12 21l-.9-5-.8-5.6C10 7.4 10.5 4.7 12 3Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M12 16.2 14.4 21.6 12 20 9.6 21.6Z"
+                    fill="currentColor"
+                  />
+                </template>
               </svg>
             </span>
           </span>
@@ -496,6 +786,24 @@ const spins = (kind: Kind) => kind !== 'dot' && kind !== 'firefly'
 .sb-wing-l { transform-origin: 100% 50%; }
 .sb-wing-r { transform-origin: 0% 50%; }
 
+.sb-wobble-soft { animation-name: sb-wobble-soft; }
+.sb-wing-bird { animation: sb-bird-flap var(--flap) ease-in-out infinite; }
+
+/* ---- زمستون: ستاره و شهاب ---- */
+.sb-star {
+  position: absolute;
+  display: block;
+}
+.sb-comet {
+  position: absolute;
+  top: 0;
+  display: block;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: sb-comet var(--dur) linear infinite;
+  animation-delay: calc(var(--delay) * -1);
+}
+
 @keyframes sb-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -540,6 +848,23 @@ const spins = (kind: Kind) => kind !== 'dot' && kind !== 'firefly'
 @keyframes sb-flap {
   from { transform: scaleX(1); }
   to { transform: scaleX(0.35); }
+}
+/* پرنده: چندتا بال زدن پشت‌سرهم و بعد سر خوردن */
+@keyframes sb-bird-flap {
+  0%, 32%, 100% { transform: scaleX(1); }
+  8%, 24% { transform: scaleX(0.5); }
+  16% { transform: scaleX(1); }
+}
+@keyframes sb-wobble-soft {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+/* شهاب: ~۱۳٪ از چرخه حرکت می‌کنه (چند ثانیه)، بقیه‌ی وقت نامرئیه؛ سرعت ثابت */
+@keyframes sb-comet {
+  0% { transform: translate3d(0, -14vh, 0); opacity: 0; }
+  2% { opacity: var(--peak); }
+  10% { opacity: var(--peak); }
+  13%, 100% { transform: translate3d(calc(var(--drift) * 1.3), 87vh, 0); opacity: 0; }
 }
 
 /* موبایل: ذرات اضافه مخفی می‌شن تا سبک بمونه */

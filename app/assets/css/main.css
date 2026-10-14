@@ -207,22 +207,22 @@
   }
 
   [data-theme='wine'] {
-    --color-surface: 249 247 248; /* #f9f7f8 */
-    --color-bg: 243 239 240; /* #f3eff0 */
-    --color-ink: 70 23 33; /* #461721 */
-    --color-ink-muted: 112 87 92; /* #70575c */
+    --color-surface: 255 255 255; /* #ffffff */
+    --color-bg: 249 245 246; /* #f9f5f6 */
+    --color-ink: 47 26 28; /* #2f1a1c */
+    --color-ink-muted: 126 106 107; /* #7e6a6b */
 
-    --color-brand: 90 30 42; /* #5a1e2a */
-    --color-primary-50: 253 243 245; /* #fdf3f5 */
-    --color-primary-100: 251 223 230; /* #fbdfe6 */
-    --color-primary-200: 245 185 200; /* #f5b9c8 */
-    --color-primary-300: 236 143 166; /* #ec8fa6 */
-    --color-primary-400: 219 100 131; /* #db6483 */
-    --color-primary-500: 184 66 95; /* #b8425f */
-    --color-primary-600: 143 45 71; /* #8f2d47 */
-    --color-primary-700: 90 30 42; /* #5a1e2a */
-    --color-primary-800: 68 29 37; /* #441d25 */
-    --color-primary-900: 54 23 29; /* #36171d */
+    --color-brand: 105 51 61; /* #69333d */
+    --color-primary-50: 253 243 244; /* #fdf3f4 */
+    --color-primary-100: 249 226 229; /* #f9e2e5 */
+    --color-primary-200: 239 200 203; /* #efc8cb */
+    --color-primary-300: 226 161 171; /* #e2a1ab */
+    --color-primary-400: 204 117 135; /* #cc7587 */
+    --color-primary-500: 168 85 103; /* #a85567 */
+    --color-primary-600: 135 67 81; /* #874351 */
+    --color-primary-700: 107 54 63; /* #6b363f */
+    --color-primary-800: 85 44 50; /* #552c32 */
+    --color-primary-900: 66 33 37; /* #422125 */
     --color-accent-50: 242 250 241; /* #f2faf1 */
     --color-accent-100: 220 240 218; /* #dcf0da */
     --color-accent-200: 182 224 178; /* #b6e0b2 */
@@ -237,10 +237,10 @@
 
   [data-theme='wine'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 106 57 67; /* #6a3943 */
-    --color-bg: 87 41 50; /* #572932 */
-    --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 219 205 207; /* #dbcdcf */
+    --color-surface: 47 31 33; /* #2f1f21 */
+    --color-bg: 32 21 21; /* #201515 */
+    --color-ink: 248 239 240; /* #f8eff0 */
+    --color-ink-muted: 187 163 164; /* #bba3a4 */
   }
 
   [data-theme='forest'] {
@@ -281,22 +281,22 @@
   }
 
   [data-theme='brown'] {
-    --color-surface: 249 248 246; /* #f9f8f6 */
-    --color-bg: 243 240 238; /* #f3f0ee */
-    --color-ink: 70 36 8; /* #462408 */
-    --color-ink-muted: 112 94 78; /* #705e4e */
+    --color-surface: 255 255 255; /* #ffffff */
+    --color-bg: 249 245 244; /* #f9f5f4 */
+    --color-ink: 45 28 17; /* #2d1c11 */
+    --color-ink-muted: 125 108 99; /* #7d6c63 */
 
-    --color-brand: 90 46 10; /* #5a2e0a */
-    --color-primary-50: 253 244 237; /* #fdf4ed */
-    --color-primary-100: 251 225 201; /* #fbe1c9 */
-    --color-primary-200: 246 192 144; /* #f6c090 */
-    --color-primary-300: 240 153 90; /* #f0995a */
-    --color-primary-400: 226 117 47; /* #e2752f */
-    --color-primary-500: 200 90 29; /* #c85a1d */
-    --color-primary-600: 160 69 23; /* #a04517 */
-    --color-primary-700: 122 53 18; /* #7a3512 */
-    --color-primary-800: 90 46 10; /* #5a2e0a */
-    --color-primary-900: 61 32 8; /* #3d2008 */
+    --color-brand: 103 57 30; /* #67391e */
+    --color-primary-50: 252 244 240; /* #fcf4f0 */
+    --color-primary-100: 248 228 218; /* #f8e4da */
+    --color-primary-200: 237 203 185; /* #edcbb9 */
+    --color-primary-300: 224 166 139; /* #e0a68b */
+    --color-primary-400: 202 124 87; /* #ca7c57 */
+    --color-primary-500: 167 92 55; /* #a75c37 */
+    --color-primary-600: 134 73 41; /* #864929 */
+    --color-primary-700: 105 59 33; /* #693b21 */
+    --color-primary-800: 84 48 27; /* #54301b */
+    --color-primary-900: 64 36 19; /* #402413 */
     --color-accent-50: 253 241 238; /* #fdf1ee */
     --color-accent-100: 249 220 211; /* #f9dcd3 */
     --color-accent-200: 240 181 163; /* #f0b5a3 */
@@ -311,29 +311,29 @@
 
   [data-theme='brown'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 106 79 57; /* #6a4f39 */
-    --color-bg: 87 61 41; /* #573d29 */
-    --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 219 211 205; /* #dbd3cd */
+    --color-surface: 46 33 25; /* #2e2119 */
+    --color-bg: 31 22 16; /* #1f1610 */
+    --color-ink: 248 240 236; /* #f8f0ec */
+    --color-ink-muted: 185 166 154; /* #b9a69a */
   }
 
   [data-theme='navy'] {
-    --color-surface: 246 247 248; /* #f6f7f8 */
-    --color-bg: 238 239 241; /* #eeeff1 */
-    --color-ink: 5 18 44; /* #05122c */
-    --color-ink-muted: 77 84 98; /* #4d5462 */
+    --color-surface: 255 255 255; /* #ffffff */
+    --color-bg: 245 246 249; /* #f5f6f9 */
+    --color-ink: 27 32 49; /* #1b2031 */
+    --color-ink-muted: 106 112 127; /* #6a707f */
 
-    --color-brand: 7 23 57; /* #071739 */
-    --color-primary-50: 241 243 249; /* #f1f3f9 */
-    --color-primary-100: 216 223 238; /* #d8dfee */
-    --color-primary-200: 176 191 221; /* #b0bfdd */
-    --color-primary-300: 126 150 200; /* #7e96c8 */
-    --color-primary-400: 77 109 178; /* #4d6db2 */
-    --color-primary-500: 55 79 129; /* #374f81 */
-    --color-primary-600: 44 63 104; /* #2c3f68 */
-    --color-primary-700: 35 50 82; /* #233252 */
-    --color-primary-800: 29 41 68; /* #1d2944 */
-    --color-primary-900: 7 23 57; /* #071739 */
+    --color-brand: 51 69 112; /* #334570 */
+    --color-primary-50: 242 246 253; /* #f2f6fd */
+    --color-primary-100: 224 233 250; /* #e0e9fa */
+    --color-primary-200: 198 211 242; /* #c6d3f2 */
+    --color-primary-300: 157 181 232; /* #9db5e8 */
+    --color-primary-400: 111 146 215; /* #6f92d7 */
+    --color-primary-500: 81 113 179; /* #5171b3 */
+    --color-primary-600: 65 89 144; /* #415990 */
+    --color-primary-700: 53 71 114; /* #354772 */
+    --color-primary-800: 44 57 90; /* #2c395a */
+    --color-primary-900: 34 43 70; /* #222b46 */
     --color-accent-50: 240 248 251; /* #f0f8fb */
     --color-accent-100: 217 237 245; /* #d9edf5 */
     --color-accent-200: 179 219 236; /* #b3dbec */
@@ -348,10 +348,10 @@
 
   [data-theme='navy'].dark {
     /* حالت تاریک - بک‌گراند نرم‌تر و روشن‌تر */
-    --color-surface: 57 73 106; /* #39496a */
-    --color-bg: 41 55 87; /* #293757 */
-    --color-ink: 255 255 255; /* #ffffff */
-    --color-ink-muted: 205 209 219; /* #cdd1db */
+    --color-surface: 32 36 48; /* #202430 */
+    --color-bg: 21 24 33; /* #151821 */
+    --color-ink: 239 242 249; /* #eff2f9 */
+    --color-ink-muted: 164 169 188; /* #a4a9bc */
   }
 
   html {
@@ -421,16 +421,16 @@
     --card-shadow-hover: 0 14px 30px -16px rgb(0 0 0 / 0.8);
   }
   [data-theme='wine'] {
-    --shadow-tint: 87 41 50; /* #572932 */
+    --shadow-tint: 105 64 64; /* #694040 */
   }
   [data-theme='forest'] {
     --shadow-tint: 41 87 72; /* #295748 */
   }
   [data-theme='brown'] {
-    --shadow-tint: 87 61 41; /* #573d29 */
+    --shadow-tint: 100 69 44; /* #64452c */
   }
   [data-theme='navy'] {
-    --shadow-tint: 41 55 87; /* #293757 */
+    --shadow-tint: 68 74 108; /* #444a6c */
   }
 
   body {

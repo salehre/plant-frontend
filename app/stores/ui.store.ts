@@ -6,10 +6,10 @@ import { toast } from 'vue-sonner'
 // main.css، بلاک‌های [data-theme]) و مستقل از دارک‌مود هستن. label برای UI
 // انتخاب تم (پروفایل) و swatch برای پیش‌نمایش رنگی دایره‌ی هر گزینه استفاده می‌شه.
 export const themes = [
-  { key: 'wine', label: 'زرشکی', swatch: '#5A1E2A' },
+  { key: 'wine', label: 'زرشکی', swatch: '#4D2729' },
   { key: 'forest', label: 'سبز جنگلی', swatch: '#0F3D2E' },
-  { key: 'brown', label: 'قهوه‌ای', swatch: '#5A2E0A' },
-  { key: 'navy', label: 'سرمه‌ای', swatch: '#071739' },
+  { key: 'brown', label: 'قهوه‌ای', swatch: '#4A2C15' },
+  { key: 'navy', label: 'سرمه‌ای', swatch: '#2B3151' },
 ] as const
 
 export type ThemeKey = typeof themes[number]['key']
