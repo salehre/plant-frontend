@@ -84,11 +84,17 @@ const authStore = useAuthStore()
           </div>
           <button
             type="button"
-            class="chip"
+            role="switch"
+            :aria-checked="uiStore.mode === 'dark'"
             :aria-label="uiStore.mode === 'dark' ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
+            class="relative h-6 w-11 shrink-0 rounded-full transition-colors"
+            :class="uiStore.mode === 'dark' ? 'bg-primary-600' : 'bg-ink/20'"
             @click="uiStore.toggleMode()"
           >
-            {{ uiStore.mode === 'dark' ? t('pages.profile.dark') : t('pages.profile.light') }}
+            <span
+              class="absolute top-0.5 size-5 rounded-full bg-white shadow transition-all"
+              :class="uiStore.mode === 'dark' ? 'start-[1.375rem]' : 'start-0.5'"
+            />
           </button>
         </div>
 

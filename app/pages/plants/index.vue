@@ -12,6 +12,12 @@ const categories = computed(() => [
   { label: t('pages.catalog.filters.hanging'), value: 'hanging' },
   { label: t('pages.catalog.filters.medicinal'), value: 'medicinal' },
 ])
+const categoryIcons: Record<string, string> = {
+  all: 'lucide:layout-grid',
+  indoor: 'lucide:flower-2',
+  hanging: 'lucide:sprout',
+  medicinal: 'lucide:heart-pulse',
+}
 const difficulties = computed(() => [
   { label: t('pages.catalog.filters.allDifficulties'), value: 'all' },
   { label: t('pages.catalog.filters.easy'), value: 'easy' },
@@ -99,17 +105,31 @@ function resetFilters() {
       </AppButton>
     </div>
 
-    <!-- دسته‌بندی به‌صورت چیپ -->
-    <div class="mb-4 flex gap-2 overflow-x-auto pb-1">
+    <!-- دسته‌بندی با آیکن گرد (مثل دیزاین) -->
+    <div class="mb-5 flex gap-4 overflow-x-auto pb-1">
       <button
         v-for="c in categories"
         :key="c.value"
         type="button"
-        class="chip"
-        :class="{ 'chip--active': plantStore.category === c.value }"
+        class="flex w-16 shrink-0 flex-col items-center gap-1.5"
+        :aria-pressed="plantStore.category === c.value"
         @click="plantStore.category = c.value"
       >
-        {{ c.label }}
+        <span
+          class="flex size-14 items-center justify-center rounded-full border transition-colors"
+          :class="plantStore.category === c.value
+            ? 'border-primary-600 bg-primary-600 text-white'
+            : 'border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100'"
+        >
+          <Icon
+            :name="categoryIcons[c.value] ?? 'lucide:leaf'"
+            class="size-6"
+          />
+        </span>
+        <span
+          class="w-full truncate text-center text-xs font-medium"
+          :class="plantStore.category === c.value ? 'text-primary-700' : 'text-ink-muted'"
+        >{{ c.label }}</span>
       </button>
     </div>
 
@@ -155,7 +175,7 @@ function resetFilters() {
 
     <div
       v-if="plantStore.loading"
-      class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+      class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
     >
       <div
         v-for="i in 8"
@@ -179,7 +199,7 @@ function resetFilters() {
 
     <div
       v-else-if="plantStore.list.length"
-      class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+      class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
     >
       <PlantCard
         v-for="plant in plantStore.list"

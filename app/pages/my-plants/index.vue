@@ -110,33 +110,34 @@ function removePlant(id: string, nickname: string) {
             @click="statusFilter = option"
         >
           {{ option === 'all' ? $t('common.all') : healthLabel(option) }}
+          ({{ toPersianDigits(option === 'all' ? userPlantsStore.plants.length : userPlantsStore.plants.filter(p => p.healthStatus === option).length) }})
         </button>
       </div>
     </div>
 
     <div
         v-if="filteredPlants.length"
-        class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
     >
       <div
           v-for="p in filteredPlants"
           :key="p.id"
-          class="glass-card group relative flex flex-col p-2.5"
+          class="glass-card group relative flex items-center gap-3 p-2.5 sm:flex-col sm:items-stretch sm:gap-0"
       >
         <NuxtLink
             :to="`/my-plants/${p.id}`"
-            class="block overflow-hidden rounded-xl bg-primary-50"
+            class="block size-16 shrink-0 overflow-hidden rounded-xl bg-primary-50 sm:size-auto sm:w-full"
         >
           <img
               :src="p.photo"
               :alt="p.nickname"
-              class="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              class="size-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-44"
               loading="lazy"
           >
         </NuxtLink>
         <button
             :aria-label="t('common.delete')"
-            class="absolute end-4 top-4 flex size-8 items-center justify-center rounded-lg bg-surface/90 text-ink-muted shadow-card backdrop-blur transition-colors hover:text-status-danger"
+            class="absolute end-3 top-3 flex size-8 items-center justify-center rounded-lg sm:end-4 sm:top-4 sm:bg-surface/90 text-ink-muted shadow-card backdrop-blur transition-colors hover:text-status-danger"
             @click="removePlant(p.id, p.nickname)"
         >
           <Icon
@@ -144,7 +145,7 @@ function removePlant(id: string, nickname: string) {
               class="size-4"
           />
         </button>
-        <div class="flex flex-1 flex-col gap-1 px-1.5 pb-1.5 pt-3">
+        <div class="flex min-w-0 flex-1 flex-col gap-1 pe-9 sm:px-1.5 sm:pb-1.5 sm:pe-1.5 sm:pt-3">
           <NuxtLink
               :to="`/my-plants/${p.id}`"
               class="font-bold text-ink"

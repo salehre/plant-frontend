@@ -15,7 +15,8 @@ interface NavItem {
 const items: NavItem[] = [
   { to: '/', icon: 'lucide:home', label: 'components.mobileBottomNav.home' },
   { to: '/identify', icon: 'lucide:scan-line', label: 'components.mobileBottomNav.identify' },
-  { to: '/plants', icon: 'lucide:sprout', label: 'components.mobileBottomNav.plants' },
+  { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants' },
+  { to: '/plants', icon: 'lucide:compass', label: 'nav.catalog' },
   { to: '/profile', icon: 'lucide:user', label: 'components.mobileBottomNav.profile' },
 ]
 

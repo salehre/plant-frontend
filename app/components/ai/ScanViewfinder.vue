@@ -78,7 +78,7 @@ onBeforeUnmount(stopCamera)
 
 <template>
   <div
-    class="relative aspect-[4/5] w-full overflow-hidden rounded-[22px] bg-primary-900 ring-2 transition-shadow lg:max-h-[620px]"
+    class="relative aspect-[3/4] w-full sm:aspect-[4/5] overflow-hidden rounded-[22px] bg-primary-900 ring-2 transition-shadow lg:max-h-[620px]"
     :class="isDragging ? 'ring-primary-400' : 'ring-transparent'"
     @dragover.prevent="isDragging = true"
     @dragleave.prevent="isDragging = false"
@@ -126,6 +126,14 @@ onBeforeUnmount(stopCamera)
       <span class="absolute bottom-0 left-0 size-12 rounded-bl-3xl border-b-4 border-l-4 border-white" />
       <span class="absolute bottom-0 right-0 size-12 rounded-br-3xl border-b-4 border-r-4 border-white" />
     </div>
+
+    <!-- راهنمای زیر کادر -->
+    <p
+      v-if="!previewUrl"
+      class="pointer-events-none absolute inset-x-8 bottom-36 text-center text-sm leading-6 text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]"
+    >
+      {{ $t('identify.pointHint') }}
+    </p>
 
     <!-- در حال تحلیل -->
     <div

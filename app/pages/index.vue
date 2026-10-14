@@ -14,10 +14,9 @@ await useAsyncData(
 watch(activeLocale, locale => plantStore.fetchFeatured(locale, t('errors.featuredPlants')))
 
 const quickActions = [
-  { to: '/identify', icon: 'lucide:scan-line', label: 'nav.identify' },
-  { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants' },
-  { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar' },
-  { to: '/plants', icon: 'lucide:compass', label: 'nav.catalog' },
+  { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
+  { to: '/plants', icon: 'lucide:compass', label: 'nav.catalog', hint: 'home.quickHints.catalog' },
+  { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar', hint: 'home.quickHints.care' },
 ]
 
 const recentScans = computed(() => historyStore.sorted.slice(0, 4))
@@ -45,8 +44,8 @@ function onImageError(e: Event) {
       >
       <div class="absolute inset-0 from-primary-900 via-primary-900/85 to-primary-900/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r" />
 
-      <div class="relative flex min-h-[300px] max-w-xl flex-col justify-center gap-5 p-6 sm:min-h-[340px] sm:p-10">
-        <h1 class="text-3xl font-extrabold leading-tight sm:text-5xl">
+      <div class="relative flex min-h-[240px] max-w-xl flex-col justify-center gap-5 p-6 sm:min-h-[340px] sm:p-10">
+        <h1 class="text-2xl font-extrabold leading-tight sm:text-5xl">
           {{ t('home.heroTitle') }}
         </h1>
         <p class="max-w-md text-sm leading-7 text-white/80 sm:text-base">
@@ -74,7 +73,7 @@ function onImageError(e: Event) {
     </section>
 
     <!-- دسترسی سریع -->
-    <section class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+    <section class="grid grid-cols-3 gap-3 sm:gap-4">
       <NuxtLink
         v-for="action in quickActions"
         :key="action.to"
@@ -87,7 +86,10 @@ function onImageError(e: Event) {
             class="size-6"
           />
         </span>
-        <span class="text-sm font-bold text-ink">{{ t(action.label) }}</span>
+        <span class="flex flex-col gap-0.5">
+          <span class="text-sm font-bold text-ink">{{ t(action.label) }}</span>
+          <span class="text-[11px] text-ink-muted">{{ t(action.hint) }}</span>
+        </span>
       </NuxtLink>
     </section>
 
@@ -104,12 +106,13 @@ function onImageError(e: Event) {
           {{ t('common.seeAll') }}
         </NuxtLink>
       </div>
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+      <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4">
         <NuxtLink
-          v-for="entry in recentScans"
+          v-for="(entry, index) in recentScans"
           :key="entry.id"
           :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
-          class="glass-card group flex flex-col p-2.5"
+          class="glass-card group flex-col p-2"
+          :class="index === 3 ? 'hidden sm:flex' : 'flex'"
         >
           <div class="relative aspect-square overflow-hidden rounded-xl bg-primary-50">
             <Icon
@@ -155,11 +158,12 @@ function onImageError(e: Event) {
           {{ t('common.seeAll') }}
         </NuxtLink>
       </div>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6">
         <PlantCard
           v-for="plant in featured"
           :key="plant.id"
           :plant="plant"
+          variant="mini"
         />
       </div>
     </section>

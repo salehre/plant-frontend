@@ -6,6 +6,7 @@ const { t } = useI18n()
 
 type Tab = 'upcoming' | 'week' | 'all'
 const tab = ref<Tab>('upcoming')
+const selectedDay = ref<string | null>(null) // روز انتخاب‌شده توی نوار هفته؛ null = بدون فیلتر روز
 const tabs: { key: Tab, label: string }[] = [
   { key: 'upcoming', label: 'pages.careCalendar.upcoming' },
   { key: 'week', label: 'pages.careCalendar.thisWeek' },
@@ -15,6 +16,7 @@ const tabs: { key: Tab, label: string }[] = [
 const allTasks = computed(() => [...userPlantsStore.todayTasks, ...userPlantsStore.upcomingTasks])
 
 const visibleTasks = computed(() => {
+  if (selectedDay.value) return allTasks.value.filter(task => task.dueDate === selectedDay.value)
   if (tab.value === 'all') return allTasks.value
   if (tab.value === 'week') {
     const limit = new Date()
@@ -36,7 +38,10 @@ function plantNickname(userPlantId: string) {
       {{ t('nav.careCalendar') }}
     </h1>
 
-    <CareCalendar :tasks="allTasks" />
+    <CareCalendar
+      v-model="selectedDay"
+      :tasks="allTasks"
+    />
 
     <div>
       <div class="mb-4 flex gap-2 overflow-x-auto pb-1">
@@ -45,8 +50,8 @@ function plantNickname(userPlantId: string) {
           :key="item.key"
           type="button"
           class="chip"
-          :class="{ 'chip--active': tab === item.key }"
-          @click="tab = item.key"
+          :class="{ 'chip--active': tab === item.key && !selectedDay }"
+          @click="tab = item.key; selectedDay = null"
         >
           {{ t(item.label) }}
         </button>

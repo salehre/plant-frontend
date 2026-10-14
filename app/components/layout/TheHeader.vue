@@ -54,7 +54,7 @@ function onSearch() {
         <!-- تغییر زبان -->
         <button
           type="button"
-          class="flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-xs font-bold text-primary-700 transition-colors hover:bg-primary-50"
+          class="hidden size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-xs font-bold md:flex text-primary-700 transition-colors hover:bg-primary-50"
           :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           @click="toggleLocale"
@@ -65,7 +65,7 @@ function onSearch() {
         <!-- دارک / لایت مود -->
         <button
           type="button"
-          class="flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50"
+          class="hidden size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50 md:flex"
           :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
@@ -95,7 +95,7 @@ function onSearch() {
         <!-- پروفایل -->
         <NuxtLink
           to="/profile"
-          class="flex size-10 items-center justify-center rounded-full bg-primary-100 text-primary-700 transition-colors hover:bg-primary-200"
+          class="hidden size-10 items-center justify-center rounded-full bg-primary-100 text-primary-700 md:flex transition-colors hover:bg-primary-200"
           :aria-label="$t('nav.profile')"
         >
           <Icon
