@@ -39,6 +39,11 @@
     "greenLeavesAlt": "برگ‌های سبز",
     "natureJoy": "لذت طبیعت",
     "connectWithNature": "ارتباط با طبیعت",
+    "quickHints": {
+      "myPlants": "مدیریت گیاهانت",
+      "catalog": "گشت‌وگذار در گیاهان",
+      "care": "پیگیری زمان مراقبت"
+    },
     "guidesTitle": "شروع کن با این راهنماها",
     "wateringTitle": "آبیاری اصولی",
     "wateringDescription": "یاد بگیر چطور آبیاری بیش‌ازحد را تشخیص بدی و از پوسیدگی ریشه جلوگیری کنی.",
@@ -309,6 +314,8 @@
       "greeting": "سلام",
       "subtitle": "خلاصه‌ای از وضعیت گیاهانت",
       "healthRate": "نرخ سلامت",
+      "totalScans": "تعداد اسکن‌ها",
+      "speciesIdentified": "گونه‌های شناسایی‌شده",
       "plant": "گیاه",
       "todayTask": "وظیفه امروز",
       "healthy": "سالم",

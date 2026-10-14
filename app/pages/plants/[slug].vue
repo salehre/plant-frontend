@@ -300,7 +300,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.taxonomyTitle') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Taxonomy</span>
             </h2>
             <div class="mb-4" />
             <table class="w-full overflow-hidden rounded-md text-center text-sm">
@@ -315,7 +314,7 @@ const growthIcons: Record<string, string> = {
               </tr>
               <tr>
                 <td class="w-2/5 bg-bg px-4 py-3 text-xs font-semibold text-primary-900">
-                  {{ t('plantDetail.authority') }} (Authority)
+                  {{ t('plantDetail.authority') }}
                 </td>
                 <td class="px-4 py-3 text-xs text-ink">
                   {{ detail.taxonomy.authority }}
@@ -329,7 +328,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.morphologyTitle') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Morphology</span>
             </h2>
             <div class="mb-4" />
             <div class="grid grid-cols-2 gap-3">
@@ -353,7 +351,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.applicationsTitle') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Applications</span>
             </h2>
             <div class="mb-4" />
             <div class="space-y-3">
@@ -392,7 +389,6 @@ const growthIcons: Record<string, string> = {
             <div class="flex items-center justify-between gap-3">
               <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
                 {{ t('plantDetail.chemicalCompounds') }}
-                <span class="text-xs font-normal tracking-wide text-ink-muted">Phytochemistry</span>
               </h2>
               <button
                   v-if="detail.chemicalCompounds.categories.length"
@@ -452,7 +448,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.growthRequirements') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Growth Requirements</span>
             </h2>
             <div class="mb-4" />
             <div class="flex flex-col gap-3">
@@ -480,7 +475,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.story') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Plant Story</span>
             </h2>
             <div class="mb-4" />
             <p class="text-justify text-sm leading-8 text-ink">
@@ -492,7 +486,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.toxicity') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Toxicity</span>
             </h2>
             <div class="mb-4" />
             <div class="flex items-center gap-3 rounded-md border-r-4 border-status-warning bg-status-warning/10 px-4 py-3">
@@ -508,7 +501,6 @@ const growthIcons: Record<string, string> = {
           >
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.commonProblems') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Common Issues</span>
             </h2>
             <div class="mb-4" />
             <div class="flex flex-col gap-3">
@@ -541,7 +533,6 @@ const growthIcons: Record<string, string> = {
           <section ref="targetSection" class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.conservation') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Status</span>
             </h2>
             <div class="mb-4" />
             <div class="flex items-center gap-3 rounded-md border-r-4 border-status-info bg-status-info/10 px-4 py-3">
@@ -554,7 +545,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.localNames') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Local Names</span>
             </h2>
             <div class="mb-4" />
             <div class="flex flex-wrap gap-3">
@@ -573,7 +563,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.scientificSynonyms') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Synonyms</span>
             </h2>
             <div class="mb-4" />
             <div class="flex flex-col gap-2.5">
@@ -592,7 +581,6 @@ const growthIcons: Record<string, string> = {
           <section class="glass-card p-5 sm:p-6">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.fossilPeriod') }}
-              <span class="text-xs font-normal tracking-wide text-ink-muted">Fossil Record</span>
             </h2>
             <div class="mb-4" />
             <div class="flex items-start gap-2 text-sm leading-relaxed text-ink-muted">
@@ -607,7 +595,6 @@ const growthIcons: Record<string, string> = {
       <section class="glass-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1">
         <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
           {{ t('plantDetail.gallery') }}
-          <span class="text-xs font-normal tracking-wide text-ink-muted">Image Gallery</span>
         </h2>
         <div class="mb-4" />
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">

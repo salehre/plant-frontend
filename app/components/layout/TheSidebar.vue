@@ -77,17 +77,19 @@ function isActive(to: string) {
     </nav>
 
     <!-- کارت دعوت به اسکن -->
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-600 to-primary-900 p-4 text-white">
-      <Icon
-        name="lucide:leaf"
-        class="absolute -bottom-3 -end-3 size-20 rotate-12 text-white/10"
-      />
-      <p class="relative mb-3 text-sm font-bold leading-6">
+    <div class="relative overflow-hidden rounded-2xl bg-primary-900 p-4 text-white">
+      <img
+        src="/images/plants/dd.jpg"
+        alt=""
+        class="pointer-events-none absolute inset-0 size-full object-cover"
+      >
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/55 via-primary-900/45 to-primary-800/50" />
+      <p class="relative z-10 mb-3 text-sm font-bold leading-6">
         {{ $t('home.heroTitle') }}
       </p>
       <NuxtLink
         to="/identify"
-        class="relative inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-primary-800 transition-colors hover:bg-primary-50"
+        class="relative z-10 inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-primary-800 transition-colors hover:bg-primary-50"
       >
         <Icon
           name="lucide:scan-line"

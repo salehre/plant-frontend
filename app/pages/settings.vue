@@ -17,6 +17,45 @@ const memberSince = computed(() => user.value?.joinedAt
   ? new Intl.DateTimeFormat(intlLocale.value, { month: 'long', year: 'numeric' }).format(new Date(user.value.joinedAt))
   : '')
 
+// انتخاب عکس پروفایل
+const avatarInput = ref<HTMLInputElement | null>(null)
+const avatarError = ref('')
+const MAX_AVATAR_SIZE = 2 * 1024 * 1024 // ۲ مگابایت
+
+function pickAvatar() {
+  avatarInput.value?.click()
+}
+
+function onAvatarChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+
+  avatarError.value = ''
+
+  if (!file.type.startsWith('image/')) {
+    avatarError.value = t('pages.profile.avatarInvalid')
+    input.value = ''
+    return
+  }
+  if (file.size > MAX_AVATAR_SIZE) {
+    avatarError.value = t('pages.profile.avatarTooLarge')
+    input.value = ''
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = () => {
+    const dataUrl = reader.result as string
+    // TODO: اینجا رو به اکشن واقعی استورت وصل کن، مثلاً:
+    // authStore.updateProfile({ avatar: dataUrl })
+    // یا اگه آپلود به سرور داری، به‌جای dataUrl خود `file` رو بفرست.
+    if (authStore.user) authStore.user.avatar = dataUrl
+  }
+  reader.readAsDataURL(file)
+  input.value = '' // تا انتخاب دوباره‌ی همون فایل هم کار کنه
+}
+
 type SectionKey = 'account' | 'appearance' | 'language' | 'library' | 'about'
 
 // روی دسکتاپ فقط بخش انتخاب‌شده دیده می‌شه؛ روی موبایل همه‌ی بخش‌ها زیر هم‌ان
@@ -113,19 +152,40 @@ const aboutRows = computed(() => [
               {{ t('pages.profile.account') }}
             </h2>
             <div class="mb-4 flex items-center gap-4">
-              <span class="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-100 text-primary-700">
-                <img
-                  v-if="user?.avatar"
-                  :src="user.avatar"
-                  :alt="user.name"
-                  class="size-full object-cover"
+              <div class="relative shrink-0">
+                <span class="flex size-16 items-center justify-center overflow-hidden rounded-full bg-primary-100 text-primary-700">
+                  <img
+                    v-if="user?.avatar"
+                    :src="user.avatar"
+                    :alt="user.name"
+                    class="size-full object-cover"
+                  >
+                  <Icon
+                    v-else
+                    name="lucide:user"
+                    class="size-8"
+                  />
+                </span>
+                <button
+                  type="button"
+                  class="absolute -bottom-1 -end-1 flex size-7 items-center justify-center rounded-full bg-primary-600 text-white shadow ring-2 ring-surface transition-colors hover:bg-primary-700"
+                  :aria-label="t('pages.profile.changeAvatar')"
+                  :title="t('pages.profile.changeAvatar')"
+                  @click="pickAvatar"
                 >
-                <Icon
-                  v-else
-                  name="lucide:user"
-                  class="size-8"
-                />
-              </span>
+                  <Icon
+                    name="lucide:pencil"
+                    class="size-3.5"
+                  />
+                </button>
+                <input
+                  ref="avatarInput"
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  @change="onAvatarChange"
+                >
+              </div>
               <div class="min-w-0">
                 <p class="truncate text-lg font-bold text-ink">
                   {{ user?.name || t('pages.profile.account') }}
@@ -138,6 +198,13 @@ const aboutRows = computed(() => [
                 </p>
               </div>
             </div>
+            <p
+              v-if="avatarError"
+              class="mb-3 text-xs text-red-600"
+              role="alert"
+            >
+              {{ avatarError }}
+            </p>
             <dl
               v-if="user"
               class="divide-y divide-ink/5 text-sm"

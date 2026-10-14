@@ -49,7 +49,7 @@ export default <Partial<Config>>{
         },
       },
       fontFamily: {
-        sans: ['Vazirmatn', 'system-ui', 'sans-serif'],
+        sans: ['var(--app-font-family)', 'system-ui', 'sans-serif'],
       },
       // همه‌ی rounded ها (به‌جز rounded-full) هم‌شعاع فیلدها و دکمه‌های auth؛
       // مقدار واقعی در main.css با --radius-control تعریف شده.

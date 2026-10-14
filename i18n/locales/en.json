@@ -39,6 +39,11 @@
     "greenLeavesAlt": "Green leaves",
     "natureJoy": "The joy of nature",
     "connectWithNature": "Connect with nature",
+    "quickHints": {
+      "myPlants": "Manage your plants",
+      "catalog": "Explore the plant catalog",
+      "care": "Keep track of plant care"
+    },
     "guidesTitle": "Get started with these guides",
     "wateringTitle": "Water the right way",
     "wateringDescription": "Learn to spot overwatering and prevent root rot.",
@@ -309,6 +314,8 @@
       "greeting": "Hello",
       "subtitle": "Here's how your plants are doing",
       "healthRate": "Plant health",
+      "totalScans": "Total scans",
+      "speciesIdentified": "Species identified",
       "plant": "Plants",
       "todayTask": "Today's tasks",
       "healthy": "Healthy",

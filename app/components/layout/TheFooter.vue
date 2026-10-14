@@ -129,10 +129,10 @@ function subscribeToNewsletter() {
         <!-- خبرنامه و تماس -->
         <div class="col-span-2 lg:col-span-1">
           <p class="text-sm font-bold">
-            عضویت در انجمن گیاه‌دوستان
+            {{ t('components.theFooter.newsletterTitle') }}
           </p>
           <p class="mt-2 text-sm leading-6 text-white/70">
-            برای دریافت آموزش‌ها، نکات مراقبت از گیاهان و اخبار انجمن ایمیل خود را وارد کنید.
+            {{ t('components.theFooter.newsletterDescription') }}
           </p>
 
           <form
@@ -143,7 +143,7 @@ function subscribeToNewsletter() {
               for="newsletter-email"
               class="sr-only"
             >
-              ایمیل شما
+              {{ t('components.theFooter.newsletterEmail') }}
             </label>
             <input
               id="newsletter-email"
@@ -163,7 +163,7 @@ function subscribeToNewsletter() {
                 name="lucide:send"
                 class="size-4"
               />
-              عضویت
+              {{ t('components.theFooter.newsletterSubscribe') }}
             </button>
           </form>
         </div>
