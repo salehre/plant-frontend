@@ -48,10 +48,6 @@ const list = computed(() => tab.value === 'all'
       </div>
       <NuxtLink to="/tickets/new">
         <AppButton variant="primary">
-          <Icon
-            name="lucide:plus"
-            class="size-4"
-          />
           {{ t('tickets.newTicket') }}
         </AppButton>
       </NuxtLink>

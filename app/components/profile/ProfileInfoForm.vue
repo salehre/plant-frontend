@@ -6,10 +6,18 @@ import type { Gender } from '~/types/user.types'
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const today = new Date().toISOString().slice(0, 10)
+const minBirthDate = '1900-01-01'
 const showPasswordModal = ref(false)
+
+// پکیج تقویم به window وابسته‌ست؛ فقط سمت کلاینت و به‌صورت lazy لود می‌شه.
+const PersianDatePicker = defineAsyncComponent(async () => {
+  const mod: any = await import('vue3-persian-datetime-picker')
+  return mod.default?.default ?? mod.default ?? mod
+})
+const birthDateInputId = `birth-date-${useId()}`
 
 const schema = toTypedSchema(
   z.object({
@@ -17,7 +25,7 @@ const schema = toTypedSchema(
     birthDate: z
       .string()
       .min(1, 'pages.profile.errors.birthDateRequired')
-      .refine(value => value >= '1900-01-01' && value <= today, 'pages.profile.errors.birthDateInvalid'),
+      .refine(value => value >= minBirthDate && value <= today, 'pages.profile.errors.birthDateInvalid'),
     gender: z.enum(['male', 'female'], {
       errorMap: () => ({ message: 'pages.profile.errors.genderRequired' }),
     }),
@@ -44,7 +52,7 @@ const { handleSubmit, defineField, errors, meta, resetForm } = useForm({
 })
 
 const [name, nameAttrs] = defineField('name')
-const [birthDate, birthDateAttrs] = defineField('birthDate')
+const [birthDate] = defineField('birthDate')
 const [gender] = defineField('gender')
 const [phone, phoneAttrs] = defineField('phone')
 const [nationalId, nationalIdAttrs] = defineField('nationalId')
@@ -66,7 +74,20 @@ function onDigitsInput(event: Event, set: (value: string) => void) {
   set(clean)
 }
 
-const birthDateLabel = computed(() => (birthDate.value ? toJalaliDate(birthDate.value) : ''))
+// مقدار فرم/ذخیره همیشه میلادی (YYYY-MM-DD) می‌مونه؛ فقط نمایشش شمسیه (YYYY/MM/DD).
+const birthDateDisplay = computed(() => {
+  if (!birthDate.value) return ''
+  const [y, m, d] = birthDate.value.slice(0, 10).split('-').map(Number)
+  if (!y || !m || !d) return ''
+  const parts = new Intl.DateTimeFormat('fa-IR-u-ca-persian-nu-latn', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'UTC',
+  }).formatToParts(new Date(Date.UTC(y, m - 1, d)))
+  const get = (type: string) => parts.find(p => p.type === type)?.value ?? ''
+  return `${get('relatedYear') || get('year')}/${get('month')}/${get('day')}`
+})
 
 const inputClass = 'field'
 
@@ -215,24 +236,43 @@ const onSubmit = handleSubmit(async (values) => {
           </p>
         </div>
 
-        <!-- تاریخ تولد (فعلاً input پیش‌فرض؛ در مرحله‌ی بعد با دیت‌پیکر شمسی عوض می‌شه) -->
+        <!-- تاریخ تولد (دیت‌پیکر شمسی؛ مقدار ذخیره‌شده میلادیه) -->
         <div>
-          <label class="mb-1 block text-sm font-medium text-ink">{{ t('pages.profile.birthDate') }}</label>
-          <input
-            v-model="birthDate"
-            v-bind="birthDateAttrs"
-            type="date"
-            min="1900-01-01"
-            :max="today"
-            autocomplete="bday"
-            :class="[inputClass, errors.birthDate ? 'border-status-danger' : '']"
-          >
-          <p
-            v-if="birthDateLabel && !errors.birthDate"
-            class="mt-1 text-xs text-ink-muted"
-          >
-            {{ birthDateLabel }}
-          </p>
+          <label
+            :for="birthDateInputId"
+            class="mb-1 block text-sm font-medium text-ink"
+          >{{ t('pages.profile.birthDate') }}</label>
+          <div class="relative">
+            <input
+              :id="birthDateInputId"
+              :value="birthDateDisplay"
+              type="text"
+              readonly
+              autocomplete="off"
+              :dir="locale === 'fa' ? 'rtl' : 'ltr'"
+              placeholder="1370/01/01"
+              :class="[inputClass, '!cursor-pointer pe-10 text-start', errors.birthDate ? 'border-status-danger' : '']"
+            >
+            <Icon
+              name="lucide:calendar"
+              class="pointer-events-none absolute inset-y-0 end-3 my-auto size-5 text-ink-muted"
+            />
+            <PersianDatePicker
+              :model-value="birthDate"
+              type="date"
+              locale="fa"
+              simple
+              :show-now-btn="false"
+              color="#2b6955"
+              format="YYYY-MM-DD"
+              display-format="jYYYY/jMM/jDD"
+              :min="minBirthDate"
+              :max="today"
+              :custom-input="`#${birthDateInputId}`"
+              append-to="body"
+              @update:model-value="birthDate = $event || ''"
+            />
+          </div>
           <p
             v-if="errors.birthDate"
             class="mt-1 text-xs text-status-danger"
@@ -305,3 +345,69 @@ const onSubmit = handleSubmit(async (values) => {
     </NuxtLink>
   </div>
 </template>
+
+<style>
+/*
+  تم تقویم (vue3-persian-datetime-picker) هماهنگ با تم‌های پروژه (forest/wine/brown/navy) و حالت تاریک.
+  پاپ‌آپ با append-to="body" بیرون از کامپوننت رندر می‌شه، پس این استایل‌ها عمداً سراسری‌ان
+  و از همون CSS variableهای main.css استفاده می‌کنن.
+*/
+.vpd-content {
+  background-color: rgb(var(--color-surface)) !important;
+  color: rgb(var(--color-ink));
+  border: 1px solid rgb(var(--color-ink) / 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow-hover) !important;
+  font-family: inherit;
+}
+.vpd-header {
+  background-color: rgb(var(--color-primary-700)) !important;
+  color: #fff;
+}
+.dark .vpd-header {
+  background-color: rgb(var(--color-primary-600)) !important;
+}
+.vpd-simple-content .vpd-column .vpd-column-header {
+  color: rgb(var(--color-ink-muted));
+}
+.vpd-addon-list {
+  background-color: rgb(var(--color-surface)) !important;
+}
+.vpd-addon-list-item {
+  color: rgb(var(--color-ink));
+  border-color: transparent !important;
+  border-radius: var(--radius-control);
+}
+.vpd-addon-list-item:hover {
+  background-color: rgb(var(--color-primary-500) / 0.1) !important;
+}
+.vpd-addon-list-item.vpd-selected {
+  background-color: rgb(var(--color-primary-500) / 0.15) !important;
+  color: rgb(var(--color-primary-700)) !important;
+  font-weight: 700;
+}
+.dark .vpd-addon-list-item.vpd-selected {
+  color: rgb(var(--color-primary-200)) !important;
+}
+.vpd-addon-list-item[disabled='true'] {
+  color: rgb(var(--color-ink-muted)) !important;
+  opacity: 0.4;
+}
+.vpd-actions button {
+  color: rgb(var(--color-primary-700)) !important;
+  border-radius: var(--radius-control);
+}
+.dark .vpd-actions button {
+  color: rgb(var(--color-primary-200)) !important;
+}
+.vpd-actions button:hover {
+  background-color: rgb(var(--color-primary-500) / 0.1) !important;
+}
+.vpd-simple-content .vpd-column .vpd-column-content::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+}
+.vpd-simple-content .vpd-column .vpd-column-content::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+</style>

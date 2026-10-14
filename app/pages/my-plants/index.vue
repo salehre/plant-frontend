@@ -50,7 +50,7 @@ const onSubmit = handleSubmit((values) => {
   userPlantsStore.addPlant({
     plantSlug: values.plantSlug,
     nickname: values.nickname,
-    photo: plant?.images[0] ?? '/images/plants/botanical-1.webp',
+    photo: plant?.images[0] ?? '/images/plants/header.png',
     acquiredAt: new Date().toISOString().slice(0, 10),
     location: values.location || t('pages.myPlants.home'),
     healthStatus: 'healthy',

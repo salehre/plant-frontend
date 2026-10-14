@@ -60,7 +60,7 @@ function onImageError(e: Event) {
     <section class="glass-card overflow-hidden">
       <div class="relative h-36 sm:h-44">
         <img
-          src="/images/plants/botanical-1.webp"
+          src="/images/plants/header.png"
           :alt="$t('home.greenLeavesAlt')"
           class="size-full object-cover"
         >

@@ -123,7 +123,7 @@ function addToGarden() {
     plantSlug: c.slug ?? '',
     nickname: c.name,
     // عکس اسکن (blob) بعد از رفرش از بین می‌ره؛ پس عکس خود گیاه ذخیره می‌شه
-    photo: c.image || '/images/plants/botanical-1.webp',
+    photo: c.image || '/images/plants/header.png',
     acquiredAt: new Date().toISOString().slice(0, 10),
     location: t('pages.myPlants.home'),
     healthStatus: 'healthy',

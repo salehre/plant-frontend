@@ -36,9 +36,9 @@ function onImageError(e: Event) {
 <template>
   <div class="flex flex-col gap-10">
     <!-- هیرو -->
-    <section class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white [margin-inline:calc(50%_-_50vw_+_0.95rem)] md:[margin-inline:calc(50%_-_50vw_+_8.95rem)]">
+    <section class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white">
       <img
-        src="/images/plants/botanical-1.webp"
+        src="/images/plants/header.png"
         :alt="t('home.greenLeavesAlt')"
         class="absolute inset-y-0 inset-x-2 object-cover"
       >

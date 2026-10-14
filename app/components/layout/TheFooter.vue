@@ -43,11 +43,11 @@ function subscribeToNewsletter() {
   <footer class="relative overflow-hidden rounded-t-lg bg-primary-900 pb-24 text-white md:pb-0">
     <!-- تزئین برگ -->
     <img
-      src="/images/plants/botanical-1.webp"
+      src="/images/plants/foot.png"
       alt=""
-      class="pointer-events-none absolute inset-0 size-full object-cover opacity-15 mix-blend-luminosity"
+      class="pointer-events-none absolute inset-0 size-full object-cover"
     >
-    <div class="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-900/95 to-primary-800/90" />
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-900/90 via-primary-900/70 to-primary-800/60" />
 
     <div class="relative mx-auto w-full max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12 sm:pb-6">
       <div class="grid grid-cols-2 gap-8 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
@@ -136,7 +136,7 @@ function subscribeToNewsletter() {
           </p>
 
           <form
-            class="mt-4 flex flex-col gap-2"
+            class="mt-4 flex flex-row-reverse items-stretch gap-2 lg:flex-col"
             @submit.prevent="subscribeToNewsletter"
           >
             <label
@@ -153,17 +153,17 @@ function subscribeToNewsletter() {
               required
               autocomplete="email"
               placeholder="example@email.com"
-              class="h-11 w-full border-0 bg-white px-3 text-sm text-ink outline-none placeholder:text-ink-muted/70 focus:ring-2 focus:ring-primary-300"
+              class="h-11 min-w-0 w-full flex-1 border-0 bg-white px-3 text-sm text-ink outline-none placeholder:text-ink-muted/70 focus:ring-2 focus:ring-primary-300 lg:flex-none"
             >
             <button
               type="submit"
-              class="flex h-11 items-center justify-center gap-2 rounded-xl bg-primary-600 text-sm font-bold text-white transition-colors hover:bg-primary-500"
+              class="flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-primary-600 px-4 text-sm font-bold text-white transition-colors hover:bg-primary-500 lg:w-full"
             >
               <Icon
                 name="lucide:send"
                 class="size-4"
               />
-              عضویت 
+              عضویت
             </button>
           </form>
         </div>
