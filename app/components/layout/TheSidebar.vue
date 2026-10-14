@@ -22,6 +22,14 @@ const secondaryLinks = [
   { to: '/support', label: 'support.nav', icon: sidebarIcons.lifeBuoy },
 ]
 
+// با هر کلیک آیکن لینک دوباره ساخته می‌شه (تغییر key) تا انیمیشنش از اول اجرا بشه،
+// حتی وقتی روی لینکی که همین الان اکتیوه کلیک می‌کنیم.
+const replay = reactive<Record<string, number>>({})
+function onLinkClick(to: string) {
+  replay[to] = (replay[to] ?? 0) + 1
+}
+const iconKey = (to: string) => `${to}-${replay[to] ?? 0}`
+
 // تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه
 function isActive(to: string) {
   return to === '/' ? route.path === '/' : (route.path === to || route.path.startsWith(`${to}/`))
@@ -54,6 +62,7 @@ function isActive(to: string) {
         :class="isActive(link.to)
           ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
           : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
+        @click="onLinkClick(link.to)"
       >
         <UserAvatar
           v-if="link.to === '/profile' && authStore.user?.avatar"
@@ -64,6 +73,7 @@ function isActive(to: string) {
         <component
           :is="link.icon"
           v-else
+          :key="iconKey(link.to)"
           class="size-5"
         />
         {{ $t(link.label) }}
@@ -78,9 +88,11 @@ function isActive(to: string) {
         :class="isActive(link.to)
           ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
           : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
+        @click="onLinkClick(link.to)"
       >
         <component
           :is="link.icon"
+          :key="iconKey(link.to)"
           class="size-4"
         />
         {{ $t(link.label) }}

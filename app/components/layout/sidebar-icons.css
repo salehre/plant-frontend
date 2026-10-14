@@ -1,8 +1,15 @@
 /*
-  انیمیشن آیکن‌های سایدبار: فقط وقتی لینک اکتیوه (کلاس .sidebar-link--active) و تا وقتی
-  اکتیو می‌مونه تکرار می‌شه. هر آیکن پارت‌هایی با کلاس .si-part--<name> داره (sidebarIcons.ts).
+  انیمیشن آیکن‌های سایدبار: وقتی لینک اکتیو می‌شه (یا روی لینک اکتیو دوباره کلیک می‌شه)
+  ۳ بار تکرار می‌شه و بعدش آیکن به حالت اولش برمی‌گرده.
+  برای تغییر تعداد تکرار، فقط --si-repeat رو عوض کن.
+  هر آیکن پارت‌هایی با کلاس .si-part--<name> داره (sidebarIcons.ts).
   مقدارهای px داخل transform در SVG واحد خود viewBox (۲۴×۲۴) ـن، نه پیکسل صفحه.
+  نکته: اول و آخر همه‌ی keyframe ها باید با حالت عادی آیکن یکی باشه تا آخرِ انیمیشن نپره.
 */
+
+.sidebar-link {
+  --si-repeat: 2;
+}
 
 .si-part {
   transform-box: fill-box;
@@ -11,11 +18,11 @@
 
 /* ───────── خانه: سقف کمی بالا میره، در باز و بسته می‌شه ───────── */
 .sidebar-link--active .si--home .si-part--roof {
-  animation: si-home-roof 2.4s ease-in-out infinite;
+  animation: si-home-roof 1.6s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--home .si-part--door {
   transform-origin: 50% 100%;
-  animation: si-home-door 2.4s ease-in-out infinite;
+  animation: si-home-door 1.6s ease-in-out var(--si-repeat);
 }
 @keyframes si-home-roof {
   0%, 100% { transform: translateY(0); }
@@ -29,11 +36,11 @@
 /* ───────── گیاهان من: برگ‌ها با باد تکون می‌خورن ───────── */
 .sidebar-link--active .si--sprout .si-part--leaf-left {
   transform-origin: 100% 100%;
-  animation: si-sway-left 2.8s ease-in-out infinite;
+  animation: si-sway-left 1.8s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--sprout .si-part--leaf-right {
   transform-origin: 0% 100%;
-  animation: si-sway-right 2.8s ease-in-out 0.2s infinite;
+  animation: si-sway-right 1.8s ease-in-out 0.15s var(--si-repeat);
 }
 @keyframes si-sway-left {
   0%, 100% { transform: rotate(0deg); }
@@ -50,7 +57,7 @@
 
 /* ───────── کاتالوگ: عقربه‌ی قطب‌نما جهتش رو عوض می‌کنه ───────── */
 .sidebar-link--active .si--compass .si-part--needle {
-  animation: si-compass 3.6s ease-in-out infinite;
+  animation: si-compass 2s ease-in-out var(--si-repeat);
 }
 @keyframes si-compass {
   0%, 100% { transform: rotate(0deg); }
@@ -62,32 +69,31 @@
 
 /* ───────── تشخیص گیاه: خط اسکن بالا و پایین می‌ره ───────── */
 .sidebar-link--active .si--scan-line .si-part--line {
-  animation: si-scan 1.6s ease-in-out infinite;
+  animation: si-scan 1.2s ease-in-out var(--si-repeat);
 }
 @keyframes si-scan {
-  0%, 100% { transform: translateY(-5px); }
-  50% { transform: translateY(5px); }
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  75% { transform: translateY(5px); }
 }
 
 /* ───────── تقویم مراقبت: تیک کشیده می‌شه ───────── */
 .sidebar-link--active .si--calendar-check .si-part--check {
   stroke-dasharray: 9;
-  animation: si-check 2.4s ease-in-out infinite;
+  animation: si-check 1.6s ease-in-out var(--si-repeat);
 }
 @keyframes si-check {
-  0% { stroke-dashoffset: 9; opacity: 1; }
-  35% { stroke-dashoffset: 0; }
-  85% { stroke-dashoffset: 0; opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
+  0% { stroke-dashoffset: 9; }
+  40%, 100% { stroke-dashoffset: 0; }
 }
 
 /* ───────── پروفایل: سر بالا و پایین می‌ره، بدن نفس می‌کشه ───────── */
 .sidebar-link--active .si--user .si-part--head {
-  animation: si-user-head 2s ease-in-out infinite;
+  animation: si-user-head 1.4s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--user .si-part--body {
   transform-origin: 50% 100%;
-  animation: si-user-body 2s ease-in-out infinite;
+  animation: si-user-body 1.4s ease-in-out var(--si-repeat);
 }
 @keyframes si-user-head {
   0%, 100% { transform: translateY(0); }
@@ -100,10 +106,10 @@
 
 /* ───────── درباره: نقطه می‌پره و حلقه ضربان می‌زنه ───────── */
 .sidebar-link--active .si--info .si-part--ring {
-  animation: si-info-ring 2s ease-in-out infinite;
+  animation: si-info-ring 1.4s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--info .si-part--dot {
-  animation: si-info-dot 2s ease-in-out infinite;
+  animation: si-info-dot 1.4s ease-in-out var(--si-repeat);
 }
 @keyframes si-info-ring {
   0%, 100% { transform: scale(1); }
@@ -115,11 +121,11 @@
   55% { transform: translateY(0); }
 }
 
-/* ───────── تنظیمات: دنده می‌چرخه ───────── */
+/* ───────── تنظیمات: دنده می‌چرخه (هر تکرار = یک دور کامل) ───────── */
 .sidebar-link--active .si--settings .si-part--teeth {
   transform-box: view-box;
   transform-origin: 50% 50%;
-  animation: si-spin 6s linear infinite;
+  animation: si-spin 1.8s linear var(--si-repeat);
 }
 @keyframes si-spin {
   to { transform: rotate(360deg); }
@@ -127,11 +133,11 @@
 
 /* ───────── داشبورد: کاشی‌ها پشت سر هم ضربان می‌زنن ───────── */
 .sidebar-link--active .si--layout-dashboard .si-part {
-  animation: si-tile 2s ease-in-out infinite;
+  animation: si-tile 1.6s ease-in-out var(--si-repeat);
 }
-.sidebar-link--active .si--layout-dashboard .si-part--tile-2 { animation-delay: 0.25s; }
-.sidebar-link--active .si--layout-dashboard .si-part--tile-3 { animation-delay: 0.5s; }
-.sidebar-link--active .si--layout-dashboard .si-part--tile-4 { animation-delay: 0.75s; }
+.sidebar-link--active .si--layout-dashboard .si-part--tile-2 { animation-delay: 0.2s; }
+.sidebar-link--active .si--layout-dashboard .si-part--tile-3 { animation-delay: 0.4s; }
+.sidebar-link--active .si--layout-dashboard .si-part--tile-4 { animation-delay: 0.6s; }
 @keyframes si-tile {
   0%, 60%, 100% { transform: scale(1); }
   30% { transform: scale(0.8); }
@@ -139,37 +145,38 @@
 
 /* ───────── آب‌وهوا: خورشید ضربان می‌زنه، ابر کمی جابه‌جا می‌شه ───────── */
 .sidebar-link--active .si--cloud-sun .si-part--sun {
-  animation: si-sun 2.4s ease-in-out infinite;
+  animation: si-sun 1.6s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--cloud-sun .si-part--rays {
   transform-box: view-box;
   transform-origin: 8px 8px;
-  animation: si-rays 2.4s ease-in-out infinite;
+  animation: si-rays 1.6s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--cloud-sun .si-part--cloud {
-  animation: si-cloud 3.2s ease-in-out infinite;
+  animation: si-cloud 2s ease-in-out var(--si-repeat);
 }
 @keyframes si-sun {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.18); }
 }
 @keyframes si-rays {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.25); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.6; }
 }
 @keyframes si-cloud {
-  0%, 100% { transform: translateX(-1px); }
-  50% { transform: translateX(1.4px); }
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-1px); }
+  70% { transform: translateX(1.4px); }
 }
 
 /* ───────── انجمن: دو نفر به‌نوبت بالا و پایین می‌رن ───────── */
 .sidebar-link--active .si--users .si-part--front-head,
 .sidebar-link--active .si--users .si-part--front-body {
-  animation: si-bob 1.8s ease-in-out infinite;
+  animation: si-bob 1.4s ease-in-out var(--si-repeat);
 }
 .sidebar-link--active .si--users .si-part--back-head,
 .sidebar-link--active .si--users .si-part--back-body {
-  animation: si-bob 1.8s ease-in-out -0.9s infinite;
+  animation: si-bob 1.4s ease-in-out 0.35s var(--si-repeat);
 }
 @keyframes si-bob {
   0%, 100% { transform: translateY(0); }
@@ -178,11 +185,12 @@
 
 /* ───────── پشتیبانی: حلقه‌ی نجات روی آب تاب می‌خوره ───────── */
 .sidebar-link--active .si--life-buoy {
-  animation: si-buoy 2.6s ease-in-out infinite;
+  animation: si-buoy 1.8s ease-in-out var(--si-repeat);
 }
 @keyframes si-buoy {
-  0%, 100% { transform: rotate(-12deg) translateY(0); }
-  50% { transform: rotate(12deg) translateY(-1px); }
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  25% { transform: rotate(-12deg) translateY(0); }
+  75% { transform: rotate(12deg) translateY(-1px); }
 }
 
 /* کاربرایی که انیمیشن کم می‌خوان */
