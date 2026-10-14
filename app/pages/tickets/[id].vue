@@ -184,7 +184,7 @@ watch(reply, () => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl px-4 py-10 sm:py-14">
+  <div class="mx-auto max-w-3xl">
     <NuxtLink
       to="/tickets"
       class="mb-6 inline-flex items-center gap-1 text-sm text-ink-muted transition-colors hover:text-primary-700"

@@ -75,7 +75,7 @@ function resetFilters() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl px-4 py-10">
+  <div class="mx-auto max-w-6xl">
     <h1 class="mb-2 text-2xl font-bold text-ink">
       {{ t('nav.catalog') }}
     </h1>

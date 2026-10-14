@@ -13,7 +13,7 @@ const pending = computed(() => status.value === 'pending' && !blogStore.featured
 </script>
 
 <template>
-  <section class="mx-auto max-w-6xl px-4 py-14">
+  <section class="mx-auto w-full max-w-6xl">
     <div class="mb-6 flex items-end justify-between gap-4">
       <div>
         <h2 class="text-xl font-bold text-ink">

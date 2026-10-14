@@ -30,7 +30,7 @@ const chips = computed(() => [
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl px-4 py-10">
+  <div class="mx-auto max-w-6xl">
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-ink">
         {{ t('blog.pageTitle') }}

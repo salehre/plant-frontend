@@ -21,7 +21,7 @@ const sections = computed(() =>
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl px-4 py-10 sm:py-14">
+  <div class="mx-auto max-w-6xl">
     <header class="mb-8 max-w-3xl">
       <h1 class="text-2xl font-bold text-ink sm:text-3xl">
         {{ t(`legal.${ns}.title`) }}

@@ -21,7 +21,7 @@ function toggle(i: number) {
 
 <template>
   <section
-    class="mx-auto max-w-3xl px-4 pt-14"
+    class="mx-auto w-full max-w-3xl"
     aria-labelledby="faq-title"
   >
     <div class="mb-6 text-center">

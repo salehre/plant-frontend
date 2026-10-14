@@ -56,7 +56,7 @@ watch(activeLocale, () => {
 <template>
   <!-- باکس پیدا کردن گیاه با بک‌گراند داینامیک -->
   <section
-    class="relative isolate flex min-h-[460px] flex-col justify-center overflow-hidden rounded-lg p-6 text-white sm:min-h-[540px] sm:p-12"
+    class="relative isolate flex min-h-[460px] flex-col justify-center overflow-hidden rounded-[22px] p-6 text-white sm:min-h-[540px] sm:p-12"
     aria-labelledby="plant-finder-title"
   >
     <h2

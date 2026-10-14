@@ -9,7 +9,7 @@ await load()
 </script>
 
 <template>
-  <div class="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
+  <div class="mx-auto flex max-w-3xl flex-col gap-6">
     <NuxtLink
         to="/profile"
         class="inline-flex items-center gap-1 text-sm text-ink-muted hover:text-primary-700"

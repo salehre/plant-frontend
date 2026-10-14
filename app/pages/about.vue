@@ -22,7 +22,7 @@ const values = [
 <template>
   <div>
     <!-- معرفی -->
-    <section class="mx-auto max-w-4xl px-4 py-12 text-center sm:py-20">
+    <section class="mx-auto max-w-4xl py-8 text-center sm:py-12">
       <span class="mx-auto mb-4 flex size-14 items-center justify-center rounded-lg bg-primary-50 text-primary-700">
         <Icon
           name="lucide:leaf"
@@ -38,7 +38,7 @@ const values = [
     </section>
 
     <!-- داستان و ماموریت -->
-    <section class="mx-auto max-w-5xl px-4">
+    <section class="mx-auto max-w-5xl">
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div class="glass-card p-6 sm:p-8">
           <h2 class="mb-3 text-lg font-bold text-ink">
@@ -60,7 +60,7 @@ const values = [
     </section>
 
     <!-- چی ارائه می‌دیم -->
-    <section class="mx-auto max-w-6xl px-4 pt-14">
+    <section class="mx-auto max-w-6xl pt-12">
       <h2 class="mb-6 text-xl font-bold text-ink">
         {{ t('about.featuresTitle') }}
       </h2>
@@ -88,8 +88,8 @@ const values = [
     </section>
 
     <!-- ارزش‌ها -->
-    <section class="mt-14 bg-primary-50/50 py-14">
-      <div class="mx-auto max-w-6xl px-4">
+    <section class="mt-12 rounded-[22px] bg-primary-50/70 py-10">
+      <div class="mx-auto max-w-6xl px-5 sm:px-8">
         <h2 class="mb-6 text-xl font-bold text-ink">
           {{ t('about.valuesTitle') }}
         </h2>
@@ -97,7 +97,7 @@ const values = [
           <div
             v-for="v in values"
             :key="v.key"
-            class="rounded-lg border border-ink/5 bg-surface p-5"
+            class="glass-card p-5"
           >
             <Icon
               :name="v.icon"
@@ -115,7 +115,7 @@ const values = [
     </section>
 
     <!-- دعوت به اقدام -->
-    <section class="mx-auto max-w-3xl px-4 py-14 text-center">
+    <section class="mx-auto max-w-3xl py-12 text-center">
       <h2 class="text-xl font-bold text-ink">
         {{ t('about.ctaTitle') }}
       </h2>

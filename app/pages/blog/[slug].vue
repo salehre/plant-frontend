@@ -45,7 +45,7 @@ async function sharePost() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl px-4 py-10">
+  <div class="mx-auto max-w-6xl">
     <div class="mx-auto max-w-3xl">
       <NuxtLink
         to="/blog"

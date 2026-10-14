@@ -162,7 +162,7 @@ const growthIcons: Record<string, string> = {
 <template>
   <div
       v-if="plantStore.loading"
-      class="mx-auto max-w-5xl px-4 py-10"
+      class="mx-auto max-w-5xl"
   >
     <AppSkeleton
         height="400px"

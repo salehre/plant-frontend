@@ -40,7 +40,7 @@ function backToIdentify() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-4xl px-4 py-10">
+  <div class="mx-auto max-w-4xl">
     <AppButton
         v-if="cameFromIdentify"
         variant="ghost"

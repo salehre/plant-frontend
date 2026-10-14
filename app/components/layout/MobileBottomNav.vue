@@ -367,7 +367,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .jelly-nav {
-  background-color: rgb(255 255 255 / 0.55);
+  background-color: rgb(var(--color-surface) / 0.85);
+  border: 1px solid rgb(var(--color-ink) / 0.06);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
@@ -401,7 +402,7 @@ onBeforeUnmount(() => {
   height: 15px;
   padding: 0 3px;
   background: #ef4444;
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.55);
+  box-shadow: 0 0 0 2px rgb(var(--color-surface));
 }
 
 .jelly-feedback {
