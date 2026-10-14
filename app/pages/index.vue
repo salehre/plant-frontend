@@ -36,13 +36,13 @@ function onImageError(e: Event) {
 <template>
   <div class="flex flex-col gap-10">
     <!-- هیرو -->
-    <section class="relative overflow-hidden rounded-[22px] bg-primary-900 text-white [margin-inline:calc(50%_-_50vw)] md:[margin-inline:calc(50%_-_50vw_+_8rem)]">
+    <section class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white [margin-inline:calc(50%_-_50vw_+_0.95rem)] md:[margin-inline:calc(50%_-_50vw_+_8.95rem)]">
       <img
         src="/images/plants/botanical-1.webp"
         :alt="t('home.greenLeavesAlt')"
-        class="absolute inset-0 size-full object-cover"
+        class="absolute inset-y-0 inset-x-2 object-cover"
       >
-      <div class="absolute inset-0 from-primary-900 via-primary-900/85 to-primary-900/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r" />
+      <div class="absolute inset-y-0 inset-x-2 from-primary-900 via-primary-900/85 to-primary-900/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r" />
 
       <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div class="flex min-h-[240px] max-w-xl flex-col justify-center gap-5 py-8 sm:min-h-[340px] sm:py-12">

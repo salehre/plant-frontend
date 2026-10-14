@@ -40,7 +40,7 @@ function subscribeToNewsletter() {
 </script>
 
 <template>
-  <footer class="relative overflow-hidden bg-primary-900 pb-24 text-white md:pb-0">
+  <footer class="relative overflow-hidden rounded-t-lg bg-primary-900 pb-24 text-white md:pb-0">
     <!-- تزئین برگ -->
     <img
       src="/images/plants/botanical-1.webp"
@@ -49,7 +49,7 @@ function subscribeToNewsletter() {
     >
     <div class="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-900/95 to-primary-800/90" />
 
-    <div class="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
+    <div class="relative mx-auto w-full max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12 sm:pb-6">
       <div class="grid grid-cols-2 gap-8 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
         <!-- برند -->
         <div class="col-span-2 lg:col-span-1">
@@ -148,6 +148,7 @@ function subscribeToNewsletter() {
             <input
               id="newsletter-email"
               v-model="email"
+              dir="ltr"
               type="email"
               required
               autocomplete="email"
@@ -162,33 +163,9 @@ function subscribeToNewsletter() {
                 name="lucide:send"
                 class="size-4"
               />
-              عضویت در انجمن
+              عضویت 
             </button>
           </form>
-
-          <div class="mt-4 space-y-2 text-sm text-white/70">
-            <a
-              href="tel:+989121234567"
-              dir="ltr"
-              class="flex w-fit items-center gap-2 transition-colors hover:text-white"
-            >
-              <Icon
-                name="lucide:phone"
-                class="size-4"
-              />
-              <span>0930 037 7838</span>
-            </a>
-            <a
-              href="mailto:salehrezaeipoor123@gmail.com"
-              class="flex w-fit items-center gap-2 transition-colors hover:text-white"
-            >
-              <Icon
-                name="lucide:mail"
-                class="size-4"
-              />
-              <span>salehrezaeipoor123@gmail.com</span>
-            </a>
-          </div>
         </div>
       </div>
 
@@ -211,6 +188,12 @@ function subscribeToNewsletter() {
             />
             {{ locale === 'fa' ? 'English' : 'فارسی' }}
           </button>
+          <NuxtLink
+            to="/contact"
+            class="transition-colors hover:text-white"
+          >
+            {{ t('components.theFooter.contact') }}
+          </NuxtLink>
           <NuxtLink
             to="/terms"
             class="transition-colors hover:text-white"
