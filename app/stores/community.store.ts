@@ -1,8 +1,19 @@
 import { defineStore } from 'pinia'
 import { StorageSerializers } from '@vueuse/core'
-import type { Post, Comment } from '~/types/community.types'
+import type { Post, Comment, CommunityUser } from '~/types/community.types'
 import { getMockComments, getMockPosts, getMockUsers, commentsForPost, findUserById } from '~/services/mock/community.mock'
 import type { MockLocale } from '~/services/mock/mock-locale'
+
+/**
+ * «کاربر فعلی» کامیونیتی یه کاربر mock ـه؛ وقتی کاربر واقعی لاگین کرده،
+ * اسم و عکس پروفایل خودش جای اطلاعات mock نشون داده می‌شه.
+ */
+function withOwnProfile(user: CommunityUser, ownId: string): CommunityUser {
+  if (user.id !== ownId) return user
+  const authUser = useAuthStore().user
+  if (!authUser) return user
+  return { ...user, name: authUser.name || user.name, avatar: authUser.avatar || user.avatar }
+}
 
 export const useCommunityStore = defineStore('community', {
   state: () => ({
@@ -39,7 +50,7 @@ export const useCommunityStore = defineStore('community', {
         return {
           ...comment,
           content: translated?.content ?? comment.content,
-          author: translatedUsers.get(comment.author.id) ?? translated?.author ?? comment.author,
+          author: withOwnProfile(translatedUsers.get(comment.author.id) ?? translated?.author ?? comment.author, this.currentUser.id),
         }
       })
     },
@@ -76,7 +87,7 @@ export const useCommunityStore = defineStore('community', {
         const translated = translatedPosts.get(post.id)
         return {
           ...(translated ?? post),
-          author: translatedUsers.get(post.author.id) ?? translated?.author ?? post.author,
+          author: withOwnProfile(translatedUsers.get(post.author.id) ?? translated?.author ?? post.author, this.currentUser.id),
           likesCount: post.likesCount,
           commentsCount: post.commentsCount,
           likedByMe: post.likedByMe,
@@ -84,13 +95,15 @@ export const useCommunityStore = defineStore('community', {
       })
     },
     currentUserFor(locale: MockLocale) {
-      return getMockUsers(locale).find(user => user.id === this.currentUser.id) ?? this.currentUser
+      const user = getMockUsers(locale).find(user => user.id === this.currentUser.id) ?? this.currentUser
+      return withOwnProfile(user, this.currentUser.id)
     },
     postsByUser(userId: string, locale: MockLocale) {
       return this.localizedPosts(locale).filter(p => p.author.id === userId)
     },
     getUser(userId: string, locale: MockLocale) {
-      return findUserById(userId, locale)
+      const user = findUserById(userId, locale)
+      return user ? withOwnProfile(user, this.currentUser.id) : user
     },
   },
 })

@@ -230,6 +230,13 @@
       "wishlistDescription": "گیاه‌هایی که علامت زدی تا بعداً سراغشون بری",
       "history": "تاریخچه‌ی اسکن‌ها",
       "historyDescription": "گیاه‌هایی که قبلاً تشخیص دادی",
+      "changeAvatar": "تغییر عکس پروفایل",
+      "removeAvatar": "حذف عکس پروفایل",
+      "avatarInvalid": "فقط فایل تصویری قابل قبوله.",
+      "avatarTooLarge": "حجم عکس باید کمتر از ۵ مگابایت باشه.",
+      "avatarUpdated": "عکس پروفایل به‌روز شد.",
+      "avatarRemoved": "عکس پروفایل حذف شد.",
+      "avatarFailed": "بارگذاری عکس انجام نشد. یه عکس دیگه امتحان کن.",
       "themes": {
         "wine": "زرشکی",
         "forest": "سبز جنگلی",

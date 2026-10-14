@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const uiStore = useUiStore()
 const userPlantsStore = useUserPlantsStore()
+const authStore = useAuthStore()
 const { locale, setLocale } = useI18n()
 
 const query = ref('')
@@ -95,12 +96,13 @@ function onSearch() {
         <!-- پروفایل -->
         <NuxtLink
           to="/profile"
-          class="hidden size-10 items-center justify-center rounded-full bg-primary-100 text-primary-700 md:flex transition-colors hover:bg-primary-200"
+          class="hidden rounded-full ring-2 ring-transparent transition hover:ring-primary-300 md:block"
           :aria-label="$t('nav.profile')"
         >
-          <Icon
-            name="lucide:user"
-            class="size-[18px]"
+          <UserAvatar
+            :src="authStore.user?.avatar"
+            :name="authStore.user?.name"
+            class="size-10"
           />
         </NuxtLink>
       </div>

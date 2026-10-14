@@ -77,22 +77,10 @@ function onImageError(e: Event) {
       </div>
 
       <div class="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end">
-        <span
-          class="-mt-12 flex size-24 shrink-0 items-center z-50 justify-center overflow-hidden rounded-full text-primary-700"
-          :class="user?.avatar ? 'bg-primary-100' : 'border-2 border-primary-200 bg-white'"
-        >
-          <img
-            v-if="user?.avatar"
-            :src="user.avatar"
-            :alt="displayName"
-            class="size-full object-cover"
-          >
-          <Icon
-            v-else
-            name="lucide:user"
-            class="size-10"
-          />
-        </span>
+        <AvatarUploader
+          avatar-class="size-24 ring-4 ring-surface"
+          class="-mt-12 z-50"
+        />
 
         <div class="min-w-0 flex-1 pt-2 sm:pb-1">
           <h1 class="truncate text-2xl font-bold text-ink">

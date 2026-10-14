@@ -42,7 +42,7 @@ function onImageError(e: Event) {
         :alt="t('home.greenLeavesAlt')"
         class="absolute inset-y-0 inset-x-2 object-cover"
       >
-      <div class="absolute inset-y-0 inset-x-2 from-primary-900 via-primary-900/85 to-primary-900/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r" />
+      <div class="absolute inset-y-0 inset-x-2 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r" />
 
       <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div class="flex min-h-[240px] max-w-xl flex-col justify-center gap-5 py-8 sm:min-h-[340px] sm:py-12">

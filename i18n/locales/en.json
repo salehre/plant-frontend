@@ -230,6 +230,13 @@
       "wishlistDescription": "Plants you've saved to come back to later",
       "history": "Scan history",
       "historyDescription": "Plants you've identified before",
+      "changeAvatar": "Change profile photo",
+      "removeAvatar": "Remove profile photo",
+      "avatarInvalid": "Only image files are allowed.",
+      "avatarTooLarge": "The photo must be smaller than 5 MB.",
+      "avatarUpdated": "Profile photo updated.",
+      "avatarRemoved": "Profile photo removed.",
+      "avatarFailed": "Could not upload the photo. Try another one.",
       "themes": {
         "wine": "Burgundy",
         "forest": "Forest green",

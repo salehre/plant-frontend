@@ -29,6 +29,8 @@ export const useAuthStore = defineStore('auth', {
     otps: useLocalStorage<Record<string, OtpEntry>>('bargyar-otp-codes', {}),
     credentials: useLocalStorage<Record<string, string>>('bargyar-credentials', {}),
     profiles: useLocalStorage<Record<string, UserProfileData>>('bargyar-user-profiles', {}),
+    // عکس پروفایل هر ایمیل (دیتا‌یو‌آر‌ال فشرده)؛ جدا از profiles تا ذخیره‌ی فرم پروفایل پاکش نکنه
+    avatars: useLocalStorage<Record<string, string>>('bargyar-user-avatars', {}),
     loading: false,
     error: '',
   }),
@@ -60,6 +62,7 @@ export const useAuthStore = defineStore('auth', {
           email,
           joinedAt: new Date().toISOString().slice(0, 10),
           ...this.profiles[key],
+          avatar: this.avatars[key],
         }
         return true
       }
@@ -139,6 +142,7 @@ export const useAuthStore = defineStore('auth', {
           email: this.pendingRegistration.email,
           joinedAt: new Date().toISOString().slice(0, 10),
           ...this.profiles[key],
+          avatar: this.avatars[key],
         }
         this.pendingRegistration = null
         return true
@@ -199,6 +203,26 @@ export const useAuthStore = defineStore('auth', {
       finally {
         this.loading = false
       }
+    },
+
+    /** عکس پروفایل رو ذخیره می‌کنه (یا با null حذف می‌کنه). */
+    setAvatar(avatar: string | null) {
+      this.error = ''
+      if (!this.user) {
+        this.error = 'pages.profile.errors.notLoggedIn'
+        return false
+      }
+      const key = emailKey(this.user.email)
+      if (avatar) {
+        this.avatars[key] = avatar
+        this.user = { ...this.user, avatar }
+      }
+      else {
+        delete this.avatars[key]
+        const { avatar: _removed, ...rest } = this.user
+        this.user = rest
+      }
+      return true
     },
 
     async verifyCurrentPassword(password: string) {

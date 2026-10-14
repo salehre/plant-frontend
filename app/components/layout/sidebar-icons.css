@@ -1,0 +1,194 @@
+/*
+  انیمیشن آیکن‌های سایدبار: فقط وقتی لینک اکتیوه (کلاس .sidebar-link--active) و تا وقتی
+  اکتیو می‌مونه تکرار می‌شه. هر آیکن پارت‌هایی با کلاس .si-part--<name> داره (sidebarIcons.ts).
+  مقدارهای px داخل transform در SVG واحد خود viewBox (۲۴×۲۴) ـن، نه پیکسل صفحه.
+*/
+
+.si-part {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ───────── خانه: سقف کمی بالا میره، در باز و بسته می‌شه ───────── */
+.sidebar-link--active .si--home .si-part--roof {
+  animation: si-home-roof 2.4s ease-in-out infinite;
+}
+.sidebar-link--active .si--home .si-part--door {
+  transform-origin: 50% 100%;
+  animation: si-home-door 2.4s ease-in-out infinite;
+}
+@keyframes si-home-roof {
+  0%, 100% { transform: translateY(0); }
+  35%, 65% { transform: translateY(-1.6px); }
+}
+@keyframes si-home-door {
+  0%, 100% { transform: scaleY(1); }
+  35%, 65% { transform: scaleY(0.7); }
+}
+
+/* ───────── گیاهان من: برگ‌ها با باد تکون می‌خورن ───────── */
+.sidebar-link--active .si--sprout .si-part--leaf-left {
+  transform-origin: 100% 100%;
+  animation: si-sway-left 2.8s ease-in-out infinite;
+}
+.sidebar-link--active .si--sprout .si-part--leaf-right {
+  transform-origin: 0% 100%;
+  animation: si-sway-right 2.8s ease-in-out 0.2s infinite;
+}
+@keyframes si-sway-left {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-16deg); }
+  55% { transform: rotate(7deg); }
+  80% { transform: rotate(-8deg); }
+}
+@keyframes si-sway-right {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(16deg); }
+  55% { transform: rotate(-7deg); }
+  80% { transform: rotate(8deg); }
+}
+
+/* ───────── کاتالوگ: عقربه‌ی قطب‌نما جهتش رو عوض می‌کنه ───────── */
+.sidebar-link--active .si--compass .si-part--needle {
+  animation: si-compass 3.6s ease-in-out infinite;
+}
+@keyframes si-compass {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(75deg); }
+  42% { transform: rotate(-40deg); }
+  62% { transform: rotate(28deg); }
+  82% { transform: rotate(-12deg); }
+}
+
+/* ───────── تشخیص گیاه: خط اسکن بالا و پایین می‌ره ───────── */
+.sidebar-link--active .si--scan-line .si-part--line {
+  animation: si-scan 1.6s ease-in-out infinite;
+}
+@keyframes si-scan {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+}
+
+/* ───────── تقویم مراقبت: تیک کشیده می‌شه ───────── */
+.sidebar-link--active .si--calendar-check .si-part--check {
+  stroke-dasharray: 9;
+  animation: si-check 2.4s ease-in-out infinite;
+}
+@keyframes si-check {
+  0% { stroke-dashoffset: 9; opacity: 1; }
+  35% { stroke-dashoffset: 0; }
+  85% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* ───────── پروفایل: سر بالا و پایین می‌ره، بدن نفس می‌کشه ───────── */
+.sidebar-link--active .si--user .si-part--head {
+  animation: si-user-head 2s ease-in-out infinite;
+}
+.sidebar-link--active .si--user .si-part--body {
+  transform-origin: 50% 100%;
+  animation: si-user-body 2s ease-in-out infinite;
+}
+@keyframes si-user-head {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.3px); }
+}
+@keyframes si-user-body {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.94); }
+}
+
+/* ───────── درباره: نقطه می‌پره و حلقه ضربان می‌زنه ───────── */
+.sidebar-link--active .si--info .si-part--ring {
+  animation: si-info-ring 2s ease-in-out infinite;
+}
+.sidebar-link--active .si--info .si-part--dot {
+  animation: si-info-dot 2s ease-in-out infinite;
+}
+@keyframes si-info-ring {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes si-info-dot {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-1.6px); }
+  55% { transform: translateY(0); }
+}
+
+/* ───────── تنظیمات: دنده می‌چرخه ───────── */
+.sidebar-link--active .si--settings .si-part--teeth {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: si-spin 6s linear infinite;
+}
+@keyframes si-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ───────── داشبورد: کاشی‌ها پشت سر هم ضربان می‌زنن ───────── */
+.sidebar-link--active .si--layout-dashboard .si-part {
+  animation: si-tile 2s ease-in-out infinite;
+}
+.sidebar-link--active .si--layout-dashboard .si-part--tile-2 { animation-delay: 0.25s; }
+.sidebar-link--active .si--layout-dashboard .si-part--tile-3 { animation-delay: 0.5s; }
+.sidebar-link--active .si--layout-dashboard .si-part--tile-4 { animation-delay: 0.75s; }
+@keyframes si-tile {
+  0%, 60%, 100% { transform: scale(1); }
+  30% { transform: scale(0.8); }
+}
+
+/* ───────── آب‌وهوا: خورشید ضربان می‌زنه، ابر کمی جابه‌جا می‌شه ───────── */
+.sidebar-link--active .si--cloud-sun .si-part--sun {
+  animation: si-sun 2.4s ease-in-out infinite;
+}
+.sidebar-link--active .si--cloud-sun .si-part--rays {
+  transform-box: view-box;
+  transform-origin: 8px 8px;
+  animation: si-rays 2.4s ease-in-out infinite;
+}
+.sidebar-link--active .si--cloud-sun .si-part--cloud {
+  animation: si-cloud 3.2s ease-in-out infinite;
+}
+@keyframes si-sun {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+@keyframes si-rays {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.25); opacity: 1; }
+}
+@keyframes si-cloud {
+  0%, 100% { transform: translateX(-1px); }
+  50% { transform: translateX(1.4px); }
+}
+
+/* ───────── انجمن: دو نفر به‌نوبت بالا و پایین می‌رن ───────── */
+.sidebar-link--active .si--users .si-part--front-head,
+.sidebar-link--active .si--users .si-part--front-body {
+  animation: si-bob 1.8s ease-in-out infinite;
+}
+.sidebar-link--active .si--users .si-part--back-head,
+.sidebar-link--active .si--users .si-part--back-body {
+  animation: si-bob 1.8s ease-in-out -0.9s infinite;
+}
+@keyframes si-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.4px); }
+}
+
+/* ───────── پشتیبانی: حلقه‌ی نجات روی آب تاب می‌خوره ───────── */
+.sidebar-link--active .si--life-buoy {
+  animation: si-buoy 2.6s ease-in-out infinite;
+}
+@keyframes si-buoy {
+  0%, 100% { transform: rotate(-12deg) translateY(0); }
+  50% { transform: rotate(12deg) translateY(-1px); }
+}
+
+/* کاربرایی که انیمیشن کم می‌خوان */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-link--active .si,
+  .sidebar-link--active .si-part {
+    animation: none !important;
+  }
+}

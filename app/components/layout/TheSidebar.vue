@@ -1,22 +1,25 @@
 <script setup lang="ts">
+import { sidebarIcons } from './sidebarIcons'
+
 const route = useRoute()
+const authStore = useAuthStore()
 
 // منوی اصلی (مثل دیزاین) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
 const links = [
-  { to: '/', label: 'nav.home', icon: 'lucide:home' },
-  { to: '/my-plants', label: 'nav.myPlants', icon: 'lucide:sprout' },
-  { to: '/plants', label: 'nav.catalog', icon: 'lucide:compass' },
-  { to: '/identify', label: 'nav.identify', icon: 'lucide:scan-line' },
-  { to: '/care-calendar', label: 'nav.careCalendar', icon: 'lucide:calendar-check' },
-  { to: '/profile', label: 'nav.profile', icon: 'lucide:user' },
-  { to: '/about', label: 'components.theFooter.about', icon: 'lucide:info' },
-  { to: '/settings', label: 'pages.profile.settings', icon: 'lucide:settings' },
+  { to: '/', label: 'nav.home', icon: sidebarIcons.home },
+  { to: '/my-plants', label: 'nav.myPlants', icon: sidebarIcons.sprout },
+  { to: '/plants', label: 'nav.catalog', icon: sidebarIcons.compass },
+  { to: '/identify', label: 'nav.identify', icon: sidebarIcons.scanLine },
+  { to: '/care-calendar', label: 'nav.careCalendar', icon: sidebarIcons.calendarCheck },
+  { to: '/profile', label: 'nav.profile', icon: sidebarIcons.user },
+  { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
+  { to: '/settings', label: 'pages.profile.settings', icon: sidebarIcons.settings },
 ]
 const secondaryLinks = [
-  { to: '/dashboard', label: 'nav.dashboard', icon: 'lucide:layout-dashboard' },
-  { to: '/climate', label: 'nav.climate', icon: 'lucide:cloud-sun' },
-  { to: '/community', label: 'nav.community', icon: 'lucide:users' },
-  { to: '/support', label: 'support.nav', icon: 'lucide:life-buoy' },
+  { to: '/dashboard', label: 'nav.dashboard', icon: sidebarIcons.layoutDashboard },
+  { to: '/climate', label: 'nav.climate', icon: sidebarIcons.cloudSun },
+  { to: '/community', label: 'nav.community', icon: sidebarIcons.users },
+  { to: '/support', label: 'support.nav', icon: sidebarIcons.lifeBuoy },
 ]
 
 // تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه
@@ -33,8 +36,8 @@ function isActive(to: string) {
       class="flex items-center gap-2.5 px-2"
     >
       <span class="flex size-10 items-center justify-center rounded-xl bg-primary-700 text-white">
-        <Icon
-          name="lucide:leaf"
+        <component
+          :is="sidebarIcons.leaf"
           class="size-5"
         />
       </span>
@@ -47,13 +50,20 @@ function isActive(to: string) {
         v-for="link in links"
         :key="link.to"
         :to="link.to"
-        class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors"
+        class="sidebar-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors"
         :class="isActive(link.to)
-          ? 'bg-primary-50 font-bold text-primary-700'
+          ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
           : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
       >
-        <Icon
-          :name="link.icon"
+        <UserAvatar
+          v-if="link.to === '/profile' && authStore.user?.avatar"
+          :src="authStore.user.avatar"
+          :name="authStore.user.name"
+          class="size-5"
+        />
+        <component
+          :is="link.icon"
+          v-else
           class="size-5"
         />
         {{ $t(link.label) }}
@@ -64,13 +74,13 @@ function isActive(to: string) {
         v-for="link in secondaryLinks"
         :key="link.to"
         :to="link.to"
-        class="flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium transition-colors"
+        class="sidebar-link flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium transition-colors"
         :class="isActive(link.to)
-          ? 'bg-primary-50 font-bold text-primary-700'
+          ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
           : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
       >
-        <Icon
-          :name="link.icon"
+        <component
+          :is="link.icon"
           class="size-4"
         />
         {{ $t(link.label) }}
@@ -92,8 +102,8 @@ function isActive(to: string) {
         to="/identify"
         class="relative z-10 inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-primary-800 transition-colors hover:bg-primary-50"
       >
-        <Icon
-          name="lucide:scan-line"
+        <component
+          :is="sidebarIcons.scanLine"
           class="size-3.5"
         />
         {{ $t('home.identifyCta') }}
