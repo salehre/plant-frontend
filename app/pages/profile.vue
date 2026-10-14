@@ -43,7 +43,7 @@ const recent = computed(() => historyStore.sorted.slice(0, 5))
 const favorites = computed(() => favoritePlants.value.slice(0, 4))
 
 const quickActions = [
-  { to: '/identify', icon: 'lucide:scan-line', label: 'nav.identify' },
+  { to: '/climate', icon: 'lucide:cloud-sun', label: 'nav.climate' },
   { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants' },
   { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar' },
   { to: '/dashboard', icon: 'lucide:layout-dashboard', label: 'nav.dashboard' },

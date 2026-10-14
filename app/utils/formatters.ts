@@ -25,18 +25,6 @@ export function formatConfidence(value: number): string {
   return `${percentage}${getLocale().startsWith('en') ? '%' : '٪'}`
 }
 
-const taskLabels: Record<string, Record<'fa' | 'en', string>> = {
-  water: { fa: 'آبیاری', en: 'Watering' },
-  fertilize: { fa: 'کوددهی', en: 'Fertilizing' },
-  prune: { fa: 'هرس', en: 'Pruning' },
-  repot: { fa: 'تعویض گلدان', en: 'Repotting' },
-  mist: { fa: 'مه‌پاشی', en: 'Misting' },
-}
-
-export function taskLabel(type: string): string {
-  return taskLabels[type]?.[getLanguage()] ?? type
-}
-
 const difficultyLabels: Record<string, Record<'fa' | 'en', string>> = {
   easy: { fa: 'آسان', en: 'Easy' },
   medium: { fa: 'متوسط', en: 'Moderate' },

@@ -9,6 +9,7 @@ const links = [
   { to: '/identify', label: 'nav.identify', icon: 'lucide:scan-line' },
   { to: '/care-calendar', label: 'nav.careCalendar', icon: 'lucide:calendar-check' },
   { to: '/profile', label: 'nav.profile', icon: 'lucide:user' },
+  { to: '/about', label: 'components.theFooter.about', icon: 'lucide:info' },
   { to: '/settings', label: 'pages.profile.settings', icon: 'lucide:settings' },
 ]
 const secondaryLinks = [
@@ -25,7 +26,7 @@ function isActive(to: string) {
 </script>
 
 <template>
-  <aside class="fixed inset-y-0 start-0 z-40 hidden w-64 flex-col gap-6 border-e border-ink/5 bg-surface px-4 py-5 md:flex">
+  <aside class="fixed inset-y-0 start-0 z-40 hidden w-64 flex-col gap-6 rounded-e-3xl border-e border-ink/5 bg-surface px-4 py-5 md:flex">
     <!-- لوگو -->
     <NuxtLink
       to="/"
@@ -79,7 +80,7 @@ function isActive(to: string) {
     <!-- کارت دعوت به اسکن -->
     <div class="relative overflow-hidden rounded-2xl bg-primary-900 p-4 text-white">
       <img
-        src="/images/plants/dd.jpg"
+        src="/images/plants/footer.jpg"
         alt=""
         class="pointer-events-none absolute inset-0 size-full object-cover"
       >

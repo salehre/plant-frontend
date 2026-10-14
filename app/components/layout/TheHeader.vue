@@ -62,10 +62,10 @@ function onSearch() {
           {{ locale === 'fa' ? 'EN' : 'فا' }}
         </button>
 
-        <!-- دارک / لایت مود -->
+        <!-- دارک / لایت مود (موبایل و دسکتاپ) -->
         <button
           type="button"
-          class="hidden size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50 md:flex"
+          class="flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50"
           :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"

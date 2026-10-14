@@ -56,17 +56,16 @@ function onAvatarChange(event: Event) {
   input.value = '' // تا انتخاب دوباره‌ی همون فایل هم کار کنه
 }
 
-type SectionKey = 'account' | 'appearance' | 'language' | 'library' | 'about'
+type SectionKey = 'account' | 'appearance' | 'library' | 'about'
 
 // روی دسکتاپ فقط بخش انتخاب‌شده دیده می‌شه؛ روی موبایل همه‌ی بخش‌ها زیر هم‌ان
 const active = ref<SectionKey>('account')
-const sections: { key: SectionKey, icon: string, label: string }[] = [
-  { key: 'account', icon: 'lucide:user', label: 'pages.profile.account' },
-  { key: 'appearance', icon: 'lucide:palette', label: 'pages.profile.appearance' },
-  { key: 'language', icon: 'lucide:languages', label: 'pages.profile.language' },
-  { key: 'library', icon: 'lucide:heart', label: 'pages.profile.library' },
-  { key: 'about', icon: 'lucide:info', label: 'components.theFooter.about' },
-]
+const sections = computed<{ key: SectionKey, icon: string, label: string }[]>(() => [
+  { key: 'account', icon: 'lucide:user', label: t('pages.profile.account') },
+  { key: 'appearance', icon: 'lucide:palette', label: `${t('pages.profile.appearance')} / ${t('pages.profile.language')}` },
+  { key: 'library', icon: 'lucide:heart', label: t('pages.profile.library') },
+  { key: 'about', icon: 'lucide:info', label: t('components.theFooter.about') },
+])
 
 function panelClass(key: SectionKey) {
   return active.value === key ? '' : 'lg:hidden'
@@ -137,7 +136,7 @@ const aboutRows = computed(() => [
             :name="section.icon"
             class="size-[18px]"
           />
-          {{ t(section.label) }}
+          {{ section.label }}
         </button>
       </nav>
 
@@ -234,103 +233,101 @@ const aboutRows = computed(() => [
           <ProfileInfoForm />
         </section>
 
-        <!-- ظاهر -->
+        <!-- ظاهر و زبان -->
         <section
-          class="glass-card p-4 sm:p-5"
+          class="flex flex-col gap-5"
           :class="panelClass('appearance')"
         >
-          <h2 class="mb-2 font-bold text-ink">
-            {{ t('pages.profile.appearance') }}
-          </h2>
-          <div class="divide-y divide-ink/5">
-            <div class="flex items-center gap-3 py-4">
-              <Icon
-                :name="isDark ? 'lucide:moon' : 'lucide:sun'"
-                class="size-5 shrink-0 text-primary-700"
-              />
-              <span class="flex-1 text-sm font-medium text-ink">{{ isDark ? t('pages.profile.dark') : t('pages.profile.light') }}</span>
-              <button
-                type="button"
-                role="switch"
-                :aria-checked="isDark"
-                :aria-label="isDark ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
-                class="relative h-6 w-11 shrink-0 rounded-full transition-colors"
-                :class="isDark ? 'bg-primary-600' : 'bg-ink/20'"
-                @click="uiStore.toggleMode()"
-              >
-                <span
-                  class="absolute top-0.5 size-5 rounded-full bg-white shadow transition-all"
-                  :class="isDark ? 'start-[1.375rem]' : 'start-0.5'"
+          <div class="glass-card p-4 sm:p-5">
+            <h2 class="mb-2 font-bold text-ink">
+              {{ t('pages.profile.appearance') }}
+            </h2>
+            <div class="divide-y divide-ink/5">
+              <div class="flex items-center gap-3 py-4">
+                <Icon
+                  :name="isDark ? 'lucide:moon' : 'lucide:sun'"
+                  class="size-5 shrink-0 text-primary-700"
                 />
-              </button>
-            </div>
-            <div class="flex items-center gap-3 py-4">
-              <Icon
-                name="lucide:palette"
-                class="size-5 shrink-0 text-primary-700"
-              />
-              <span class="flex-1 text-sm font-medium text-ink">{{ t('pages.profile.colorTheme') }}</span>
-              <div
-                class="flex items-center gap-2"
-                role="radiogroup"
-                :aria-label="t('pages.profile.colorTheme')"
-              >
+                <span class="flex-1 text-sm font-medium text-ink">{{ isDark ? t('pages.profile.dark') : t('pages.profile.light') }}</span>
                 <button
-                  v-for="theme in themes"
-                  :key="theme.key"
                   type="button"
-                  role="radio"
-                  :aria-checked="uiStore.theme === theme.key"
-                  :aria-label="t(`pages.profile.themes.${theme.key}`)"
-                  :title="t(`pages.profile.themes.${theme.key}`)"
-                  class="flex size-8 items-center justify-center rounded-full ring-offset-2 ring-offset-surface transition-all"
-                  :class="uiStore.theme === theme.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
-                  @click="uiStore.setTheme(theme.key)"
+                  role="switch"
+                  :aria-checked="isDark"
+                  :aria-label="isDark ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
+                  class="relative h-6 w-11 shrink-0 rounded-full transition-colors"
+                  :class="isDark ? 'bg-primary-600' : 'bg-ink/20'"
+                  @click="uiStore.toggleMode()"
                 >
                   <span
-                    class="size-5 rounded-full"
-                    :style="{ backgroundColor: theme.swatch }"
+                    class="absolute top-0.5 size-5 rounded-full bg-white shadow transition-all"
+                    :class="isDark ? 'start-[1.375rem]' : 'start-0.5'"
                   />
                 </button>
               </div>
+              <div class="flex items-center gap-3 py-4">
+                <Icon
+                  name="lucide:palette"
+                  class="size-5 shrink-0 text-primary-700"
+                />
+                <span class="flex-1 text-sm font-medium text-ink">{{ t('pages.profile.colorTheme') }}</span>
+                <div
+                  class="flex items-center gap-2"
+                  role="radiogroup"
+                  :aria-label="t('pages.profile.colorTheme')"
+                >
+                  <button
+                    v-for="theme in themes"
+                    :key="theme.key"
+                    type="button"
+                    role="radio"
+                    :aria-checked="uiStore.theme === theme.key"
+                    :aria-label="t(`pages.profile.themes.${theme.key}`)"
+                    :title="t(`pages.profile.themes.${theme.key}`)"
+                    class="flex size-8 items-center justify-center rounded-full ring-offset-2 ring-offset-surface transition-all"
+                    :class="uiStore.theme === theme.key ? 'ring-2 ring-ink/60' : 'ring-1 ring-ink/10'"
+                    @click="uiStore.setTheme(theme.key)"
+                  >
+                    <span
+                      class="size-5 rounded-full"
+                      :style="{ backgroundColor: theme.swatch }"
+                    />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
 
-        <!-- زبان -->
-        <section
-          class="glass-card p-4 sm:p-5"
-          :class="panelClass('language')"
-        >
-          <h2 class="mb-2 font-bold text-ink">
-            {{ t('pages.profile.language') }}
-          </h2>
-          <div
-            class="divide-y divide-ink/5"
-            role="radiogroup"
-            :aria-label="t('pages.profile.language')"
-          >
-            <button
-              v-for="lang in languages"
-              :key="lang.code"
-              type="button"
-              role="radio"
-              :aria-checked="locale === lang.code"
-              class="flex w-full items-center gap-3 py-4 text-start"
-              @click="setLocale(lang.code)"
+          <div class="glass-card p-4 sm:p-5">
+            <h2 class="mb-2 font-bold text-ink">
+              {{ t('pages.profile.language') }}
+            </h2>
+            <div
+              class="divide-y divide-ink/5"
+              role="radiogroup"
+              :aria-label="t('pages.profile.language')"
             >
-              <span class="flex-1 text-sm font-medium text-ink">{{ lang.label }}</span>
-              <span
-                class="flex size-5 items-center justify-center rounded-full border-2 transition-colors"
-                :class="locale === lang.code ? 'border-primary-600 bg-primary-600' : 'border-ink/20'"
+              <button
+                v-for="lang in languages"
+                :key="lang.code"
+                type="button"
+                role="radio"
+                :aria-checked="locale === lang.code"
+                class="flex w-full items-center gap-3 py-4 text-start"
+                @click="setLocale(lang.code)"
               >
-                <Icon
-                  v-if="locale === lang.code"
-                  name="lucide:check"
-                  class="size-3 text-white"
-                />
-              </span>
-            </button>
+                <span class="flex-1 text-sm font-medium text-ink">{{ lang.label }}</span>
+                <span
+                  class="flex size-5 items-center justify-center rounded-full border-2 transition-colors"
+                  :class="locale === lang.code ? 'border-primary-600 bg-primary-600' : 'border-ink/20'"
+                >
+                  <Icon
+                    v-if="locale === lang.code"
+                    name="lucide:check"
+                    class="size-3 text-white"
+                  />
+                </span>
+              </button>
+            </div>
           </div>
         </section>
 
