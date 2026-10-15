@@ -168,6 +168,7 @@ const onSubmit = handleSubmit(async (values) => {
             <!-- ایمیل با کد تایید وریفای شده -->
             <Icon
               name="lucide:badge-check"
+              dir="ltr"
               class="pointer-events-none absolute inset-y-0 end-3 my-auto size-5 text-primary-600"
             />
           </div>

@@ -9,6 +9,18 @@ const OTP_TTL_MS = 10 * 60 * 1000
 
 const emailKey = (email: string) => email.trim().toLowerCase()
 
+function jsonStorage<T>() {
+  return {
+    serializer: {
+      read: (raw: string) => JSON.parse(raw) as T,
+      write: (value: T) => JSON.stringify(value),
+    },
+    onError: (error: unknown) => {
+      if (!(error instanceof SyntaxError)) console.error(error)
+    },
+  }
+}
+
 function mockHash(value: string): string {
   let h1 = 0xDEADBEEF
   let h2 = 0x41C6CE57
@@ -24,8 +36,8 @@ function mockHash(value: string): string {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: useLocalStorage<User | null>('bargyar-auth-user', null),
-    pendingRegistration: useLocalStorage<PendingRegistration | null>('bargyar-pending-registration', null),
+    user: useLocalStorage<User | null>('bargyar-auth-user', null, jsonStorage<User | null>()),
+    pendingRegistration: useLocalStorage<PendingRegistration | null>('bargyar-pending-registration', null, jsonStorage<PendingRegistration | null>()),
     otps: useLocalStorage<Record<string, OtpEntry>>('bargyar-otp-codes', {}),
     credentials: useLocalStorage<Record<string, string>>('bargyar-credentials', {}),
     profiles: useLocalStorage<Record<string, UserProfileData>>('bargyar-user-profiles', {}),

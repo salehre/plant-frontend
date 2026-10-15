@@ -71,8 +71,8 @@ function onSearch() {
           :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
         >
-          <Icon
-            :name="isDark ? 'lucide:sun' : 'lucide:moon'"
+          <ThemeModeIcon
+            :dark="!isDark"
             class="size-[18px]"
           />
         </button>
@@ -96,13 +96,13 @@ function onSearch() {
         <!-- پروفایل -->
         <NuxtLink
           to="/profile"
-          class="hidden rounded-full ring-2 ring-transparent transition hover:ring-primary-300 md:block"
+          class="hidden size-10 items-center justify-center rounded-full ring-2 ring-transparent transition md:flex"
           :aria-label="$t('nav.profile')"
         >
           <UserAvatar
             :src="authStore.user?.avatar"
             :name="authStore.user?.name"
-            class="size-10"
+            class="size-full"
           />
         </NuxtLink>
       </div>

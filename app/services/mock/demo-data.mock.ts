@@ -29,7 +29,7 @@ export const DEMO_ACCOUNT = {
 }
 
 export const demoProfile: UserProfileData = {
-  name: 'مریم کاظمی',
+  name: 'maryam kazemi',
   birthDate: '1995-04-12',
   gender: 'female',
   phone: '09121234567',

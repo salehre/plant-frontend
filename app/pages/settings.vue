@@ -165,8 +165,8 @@ const aboutRows = computed(() => [
             </h2>
             <div class="divide-y divide-ink/5">
               <div class="flex items-center gap-3 py-4">
-                <Icon
-                  :name="isDark ? 'lucide:moon' : 'lucide:sun'"
+                <ThemeModeIcon
+                  :dark="isDark"
                   class="size-5 shrink-0 text-primary-700"
                 />
                 <span class="flex-1 text-sm font-medium text-ink">{{ isDark ? t('pages.profile.dark') : t('pages.profile.light') }}</span>

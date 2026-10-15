@@ -49,40 +49,71 @@ export default defineNuxtPlugin(async () => {
   catch { /* localStorage در دسترس نیست */ }
   if (!force && seededVersion === DEMO_SEED_VERSION) return
 
+  // هر بخش جدا اجرا می‌شه تا خطا توی یکی (مثلاً داده‌ی قدیمی و خراب توی localStorage) هیچ‌وقت
+  // کل اپ رو از کار نندازه و بقیه‌ی بخش‌ها هم سید بشن.
+  const seed = async (label: string, fn: () => void | Promise<void>) => {
+    try {
+      await fn()
+    }
+    catch (error) {
+      console.warn(`[demo] سید «${label}» انجام نشد:`, error)
+    }
+  }
+
   // ---- گیاهان من + وظایف مراقبت + تاریخچه + علاقه‌مندی‌ها ----
-  const userPlants = useUserPlantsStore()
-  userPlants.plants = buildDemoUserPlants()
-  userPlants.tasks = buildDemoTasks()
-  useHistoryStore().entries = buildDemoHistory()
-  useWishlistStore().slugs = [...demoWishlistSlugs]
+  await seed('گیاهان من', () => {
+    const userPlants = useUserPlantsStore()
+    userPlants.plants = buildDemoUserPlants()
+    userPlants.tasks = buildDemoTasks()
+  })
+  await seed('تاریخچه', () => {
+    useHistoryStore().entries = buildDemoHistory()
+  })
+  await seed('علاقه‌مندی‌ها', () => {
+    useWishlistStore().slugs = [...demoWishlistSlugs]
+  })
 
   // ---- انجمن: فالو، لایک و یک کامنت از طرف کاربر دمو ----
-  const community = useCommunityStore()
-  community.posts = getMockPosts().map((post) => {
-    const shouldLike = demoCommunity.likedPostIds.includes(post.id) && !post.likedByMe
-    return shouldLike ? { ...post, likedByMe: true, likesCount: post.likesCount + 1 } : post
+  await seed('انجمن', () => {
+    const community = useCommunityStore()
+    community.posts = getMockPosts().map((post) => {
+      const shouldLike = demoCommunity.likedPostIds.includes(post.id) && !post.likedByMe
+      return shouldLike ? { ...post, likedByMe: true, likesCount: post.likesCount + 1 } : post
+    })
+    community.comments = {}
+    community.followingIds = new Set(demoCommunity.followingIds)
+    // اول کامنت‌های seed بارگذاری می‌شن تا اضافه‌کردن کامنت جدید اون‌ها رو پاک نکنه
+    community.loadComments(demoCommunity.comment.postId)
+    community.addComment(demoCommunity.comment.postId, demoCommunity.comment.content)
   })
-  community.comments = {}
-  community.followingIds = new Set(demoCommunity.followingIds)
-  // اول کامنت‌های seed بارگذاری می‌شن تا اضافه‌کردن کامنت جدید اون‌ها رو پاک نکنه
-  community.loadComments(demoCommunity.comment.postId)
-  community.addComment(demoCommunity.comment.postId, demoCommunity.comment.content)
 
   // ---- تیکت‌ها: seed خودِ استور (ensureSeeded) موقع ورود به صفحه‌ی تیکت‌ها دوباره ۳ تیکت می‌سازه ----
-  const tickets = useTicketStore()
-  delete tickets.byUser[DEMO_ACCOUNT.email]
-  delete tickets.seeded[DEMO_ACCOUNT.email]
+  await seed('تیکت‌ها', () => {
+    const tickets = useTicketStore()
+    delete tickets.byUser[DEMO_ACCOUNT.email]
+    delete tickets.seeded[DEMO_ACCOUNT.email]
+  })
 
   // ---- حساب کاربری دمو ----
-  const auth = useAuthStore()
-  auth.profiles[DEMO_ACCOUNT.email] = { ...demoProfile }
-  auth.avatars[DEMO_ACCOUNT.email] = demoAvatar()
-  // اگه کاربر دیگه‌ای لاگین باشه، خرابش نمی‌کنیم
-  if (!auth.user || auth.user.email.trim().toLowerCase() === DEMO_ACCOUNT.email) {
-    const ok = await auth.login(DEMO_ACCOUNT.email, DEMO_ACCOUNT.password)
-    if (ok && !DEMO_AUTO_LOGIN) auth.logout()
-    auth.error = ''
-  }
+  await seed('حساب کاربری', async () => {
+    const auth = useAuthStore()
+    auth.profiles[DEMO_ACCOUNT.email] = { ...demoProfile }
+    auth.avatars[DEMO_ACCOUNT.email] = demoAvatar()
+
+    // به ساختار auth.user اعتماد نمی‌کنیم: مقدار قدیمی/خراب (مثلاً رشته‌ی "[object Object]" که نسخه‌های
+    // قبلی استور توی localStorage می‌نوشتن) ایمیل نداره و حساب‌نشده حساب می‌شه.
+    const rawUser = auth.user as unknown
+    const currentEmail = rawUser && typeof rawUser === 'object' && typeof (rawUser as { email?: unknown }).email === 'string'
+      ? (rawUser as { email: string }).email.trim().toLowerCase()
+      : ''
+
+    // اگه کاربر واقعی دیگه‌ای لاگین باشه، خرابش نمی‌کنیم
+    if (!currentEmail || currentEmail === DEMO_ACCOUNT.email) {
+      const ok = await auth.login(DEMO_ACCOUNT.email, DEMO_ACCOUNT.password)
+      if (ok && !DEMO_AUTO_LOGIN) auth.logout()
+      auth.error = ''
+    }
+  })
 
   try {
     localStorage.setItem(FLAG_KEY, DEMO_SEED_VERSION)
