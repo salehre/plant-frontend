@@ -2,6 +2,10 @@
 import type { NuxtError } from '#app'
 import type { ThemeKey } from '~/stores/ui.store'
 
+definePageMeta({
+  layout: false
+})
+
 const props = defineProps<{ error: NuxtError }>()
 const { t } = useI18n()
 const uiStore = useUiStore()
@@ -41,8 +45,8 @@ function refreshPage() {
 </script>
 
 <template>
-  <NuxtLayout name="default">
-    <section class="relative isolate flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center overflow-hidden px-2 py-12 text-center">
+  <NuxtLayout name="sidebar-only">
+    <section class="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden px-2 py-12 text-center">
       <!-- بلاب پس‌زمینه -->
       <div class="absolute left-1/2 top-[6%] -z-10 h-72 w-[min(36rem,92%)] -translate-x-1/2 rounded-[45%_55%_50%_50%/55%_45%_55%_45%] bg-primary-100/70 dark:bg-primary-500/15" />
 
