@@ -7,11 +7,12 @@ const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const diseases = computed(() => getMockDiseases(activeLocale.value))
 const featured = computed(() => plantStore.featured)
-await useAsyncData(
-  `featured-plants-${activeLocale.value}`,
-  () => plantStore.fetchFeatured(activeLocale.value, t('errors.featuredPlants')).then(() => plantStore.featured),
+const { status: featuredStatus } = useAsyncData(
+  'home-featured-plants',
+  () => plantStore.fetchFeatured(activeLocale.value, t('errors.featuredPlants')).then(() => true),
+  { watch: [activeLocale] },
 )
-watch(activeLocale, locale => plantStore.fetchFeatured(locale, t('errors.featuredPlants')))
+const featuredPending = computed(() => featuredStatus.value === 'pending' && !featured.value.length)
 
 const quickActions = [
   { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
@@ -161,12 +162,21 @@ function onImageError(e: Event) {
         </NuxtLink>
       </div>
       <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6">
-        <PlantCard
-          v-for="plant in featured"
-          :key="plant.id"
-          :plant="plant"
-          variant="mini"
-        />
+        <template v-if="featuredPending">
+          <PlantCardSkeleton
+            v-for="i in 6"
+            :key="i"
+            variant="mini"
+          />
+        </template>
+        <template v-else>
+          <PlantCard
+            v-for="plant in featured"
+            :key="plant.id"
+            :plant="plant"
+            variant="mini"
+          />
+        </template>
       </div>
     </section>
 

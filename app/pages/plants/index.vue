@@ -177,24 +177,10 @@ function resetFilters() {
       v-if="plantStore.loading"
       class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
     >
-      <div
+      <PlantCardSkeleton
         v-for="i in 8"
         :key="i"
-        class="flex flex-col gap-2"
-      >
-        <AppSkeleton
-          height="180px"
-          rounded="rounded-lg"
-        />
-        <AppSkeleton
-          height="1rem"
-          width="70%"
-        />
-        <AppSkeleton
-          height="0.75rem"
-          width="50%"
-        />
-      </div>
+      />
     </div>
 
     <div

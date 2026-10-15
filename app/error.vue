@@ -1,204 +1,125 @@
-<script setup>
-const props = defineProps({
-  error: Object,
-})
+<script setup lang="ts">
+import type { NuxtError } from '#app'
+
+const props = defineProps<{ error: NuxtError }>()
 const { t } = useI18n()
 
-const statusCode = props.error?.statusCode || 404
-const spinPool = [
-  ['4', '8', 'K', '2'],
-  ['0', '3', 'X', '7'],
-  ['4', '9', 'A', '1'],
-]
-
-const flapDigits = computed(() => String(statusCode).padStart(3, '0').split(''))
-
-const flapStrips = computed(() =>
-  flapDigits.value.map((digit, i) => [...spinPool[i], digit]),
-)
+const statusCode = computed(() => props.error?.statusCode || 404)
+const isNotFound = computed(() => statusCode.value === 404)
 
 const errorMessage = computed(() =>
   props.error?.statusMessage || props.error?.message || t('errors.unknown'),
 )
+const title = computed(() => isNotFound.value ? t('errors.notFoundTitle') : t('errors.serverTitle'))
+const description = computed(() => isNotFound.value ? t('errors.notFoundText') : errorMessage.value)
 
-const router = useRouter()
+useHead(() => ({ title: `${statusCode.value} | ${t('brand.name')}` }))
 
-function goHome() {
-  clearError({ redirect: '/' })
+function goTo(path: string) {
+  clearError({ redirect: path })
 }
 
 function refreshPage() {
   clearError()
   location.reload()
 }
-
-function goBack() {
-  clearError()
-  router.back()
-}
 </script>
 
 <template>
-  <div class="hero-leaves relative flex min-h-screen items-center overflow-hidden px-4 py-10">
-    <div class="relative z-10 mx-auto w-full max-w-5xl">
-      <LiquidGlassPanel>
-        <div class="flex flex-col gap-8 p-6 sm:p-10">
-          <!-- نوار بالا -->
-          <div class="flex items-center gap-3 text-white/90">
-            <Icon
-              name="lucide:leaf"
-              class="size-5 text-accent-300"
-            />
-            <span class="text-sm">{{ t('brand.name') }}</span>
-          </div>
+  <NuxtLayout name="default">
+    <section class="relative isolate flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center overflow-hidden px-2 py-12 text-center">
+      <!-- بلاب پس‌زمینه -->
+      <div class="absolute left-1/2 top-[6%] -z-10 h-72 w-[min(36rem,92%)] -translate-x-1/2 rounded-[45%_55%_50%_50%/55%_45%_55%_45%] bg-primary-100/70 dark:bg-primary-500/15" />
 
-          <div class="grid grid-cols-1 items-center gap-8 sm:grid-cols-[220px_1fr]">
-            <div
-              class="flap-404"
-              role="img"
-              :aria-label="t('errors.animation', { status: statusCode, digits: flapDigits.join('') })"
-            >
-              <div class="flap-row">
-                <span
-                  v-for="(strip, i) in flapStrips"
-                  :key="i"
-                  class="flap-tile"
-                >
-                  <span
-                    class="flap-strip"
-                    :class="`flap-strip-${i}`"
-                  >
-                    <span
-                      v-for="(char, j) in strip"
-                      :key="j"
-                      class="flap-char"
-                    >{{ char }}</span>
-                  </span>
-                </span>
-              </div>
-            </div>
+      <!-- برگ‌های دکوری گوشه‌ها -->
+      <MonsteraLeaf class="pointer-events-none absolute -bottom-12 -start-10 -z-10 w-48 rotate-[28deg] text-primary-700 sm:w-72" />
+      <MonsteraLeaf class="pointer-events-none absolute -bottom-20 start-24 -z-10 hidden w-40 rotate-[-12deg] text-primary-300/60 sm:block" />
+      <MonsteraLeaf class="pointer-events-none absolute -bottom-16 -end-12 -z-10 w-52 -rotate-[32deg] text-primary-800 sm:w-80" />
 
-            <div>
-              <h1 class="mb-6 text-3xl font-extrabold leading-tight text-white [text-shadow:0_2px_14px_rgba(0,0,0,0.35)] sm:text-5xl">
-                {{ t('errors.pathLost') }}
-              </h1>
+      <!-- ۴ گلدان ۴ -->
+      <div
+        v-if="isNotFound"
+        class="flex items-end justify-center gap-0 sm:gap-2"
+        dir="ltr"
+        role="img"
+        :aria-label="t('errors.statusLabel', { status: statusCode })"
+      >
+        <span class="select-none text-[8rem] font-black leading-[0.8] text-primary-700 dark:text-primary-300 sm:text-[12rem]">4</span>
+        <PottedMonstera class="-mx-2 mb-1 w-28 shrink-0 sm:-mx-3 sm:w-44" />
+        <span class="select-none text-[8rem] font-black leading-[0.8] text-primary-700 dark:text-primary-300 sm:text-[12rem]">4</span>
+      </div>
 
-              <div class="max-w-md border-t border-white/25 pt-4">
-                <h2 class="mb-3 text-lg font-semibold text-white sm:text-xl">
-                  {{ t('errors.unavailable') }}
-                </h2>
-                <p class="text-sm leading-7 text-white/80">
-                  {{ errorMessage }}
-                </p>
-              </div>
-            </div>
-          </div>
+      <!-- سایر خطاها: گلدان بالای کد خطا -->
+      <div
+        v-else
+        class="flex flex-col items-center gap-2"
+        dir="ltr"
+        role="img"
+        :aria-label="t('errors.statusLabel', { status: statusCode })"
+      >
+        <PottedMonstera class="w-28 sm:w-36" />
+        <span class="select-none text-7xl font-black leading-none text-primary-700 dark:text-primary-300 sm:text-8xl">{{ statusCode }}</span>
+      </div>
 
-          <div class="flex flex-wrap items-center justify-between gap-4 border-t border-white/20 pt-5">
-            <span class="text-sm text-white/90">{{ t('errors.returnTo') }}</span>
-            <div class="flex flex-wrap gap-3">
-              <button
-                type="button"
-                class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
-                @click="goHome"
-              >
-                {{ t('errors.home') }}
-              </button>
-              <button
-                type="button"
-                class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
-                @click="refreshPage"
-              >
-                {{ t('errors.retry') }}
-              </button>
-              <button
-                type="button"
-                class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
-                @click="goBack"
-              >
-                {{ t('errors.previousPage') }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </LiquidGlassPanel>
-    </div>
-  </div>
+      <h1 class="mt-8 text-2xl font-extrabold text-ink sm:text-4xl">
+        {{ title }}
+      </h1>
+      <p class="mt-3 max-w-md text-sm leading-8 text-ink-muted sm:text-base">
+        {{ description }}
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full bg-primary-700 px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-800"
+          @click="goTo('/')"
+        >
+          <Icon
+            name="lucide:house"
+            class="size-4"
+          />
+          {{ t('errors.backHome') }}
+        </button>
+        <button
+          v-if="isNotFound"
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border border-primary-600/40 px-7 py-3 text-sm font-bold text-primary-700 transition-colors hover:bg-primary-50 dark:text-primary-300 dark:hover:bg-primary-500/10"
+          @click="goTo('/plants')"
+        >
+          <Icon
+            name="lucide:search"
+            class="size-4"
+          />
+          {{ t('errors.explorePlants') }}
+        </button>
+        <button
+          v-else
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border border-primary-600/40 px-7 py-3 text-sm font-bold text-primary-700 transition-colors hover:bg-primary-50 dark:text-primary-300 dark:hover:bg-primary-500/10"
+          @click="refreshPage"
+        >
+          <Icon
+            name="lucide:rotate-cw"
+            class="size-4"
+          />
+          {{ t('errors.retry') }}
+        </button>
+      </div>
+
+      <div class="mt-14 flex w-full max-w-sm items-center justify-center gap-2 border-t border-ink/10 pt-5 text-sm">
+        <span class="text-ink-muted">{{ t('errors.needHelp') }}</span>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 font-medium text-primary-700 hover:underline dark:text-primary-300"
+          @click="goTo('/support')"
+        >
+          {{ t('errors.contactSupport') }}
+          <Icon
+            name="lucide:arrow-left"
+            class="size-3.5 ltr:rotate-180"
+          />
+        </button>
+      </div>
+    </section>
+  </NuxtLayout>
 </template>
-
-<style scoped>
-.hero-leaves {
-  min-height: 100vh;
-  background:
-      radial-gradient(90% 70% at 50% 18%, #3a6b48 0%, #2a4f38 35%, transparent 65%),
-      radial-gradient(140% 140% at 50% 50%, transparent 20%, #0d1f14 100%),#1e3d2a;
-}
-
-.flap-404 {
-  --fl-accent: #f4f8ef;
-  --fl-line: rgba(255, 255, 255, 0.22);
-  display: grid;
-  place-items: center;
-  font-family: inherit;
-}
-
-.flap-row {
-  display: flex;
-  gap: 8px;
-}
-.flap-tile {
-  position: relative;
-  isolation: isolate;
-  width: 44px;
-  height: 58px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--fl-line);
-  border-radius: var(--radius-control);
-}
-.flap-tile::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.16);
-  z-index: 1;
-}
-.flap-strip {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-}
-.flap-char {
-  display: block;
-  width: 100%;
-  height: 58px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 58px;
-  color: var(--fl-accent);
-}
-.flap-strip-0 { animation: flap-roll 7s cubic-bezier(.65,0,.35,1) infinite; }
-.flap-strip-1 { animation: flap-roll-b 7s cubic-bezier(.65,0,.35,1) infinite; }
-.flap-strip-2 { animation: flap-roll-c 7s cubic-bezier(.65,0,.35,1) infinite; }
-@keyframes flap-roll {
-  0%, 6%    { transform: translateY(0); }
-  30%, 100% { transform: translateY(-232px); }
-}
-@keyframes flap-roll-b {
-  0%, 12%   { transform: translateY(0); }
-  38%, 100% { transform: translateY(-232px); }
-}
-@keyframes flap-roll-c {
-  0%, 18%   { transform: translateY(0); }
-  46%, 100% { transform: translateY(-232px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .flap-404 .flap-strip { animation: none; }
-  .flap-404 .flap-strip { transform: translateY(-232px); }
-}
-</style>

@@ -1,20 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
-/**
- * آیکن شب/روز: خورشید و ماه یک SVG واحدن و موقع عوض شدن حالت به هم تبدیل می‌شن.
- *
- *  خورشید -> ماه:  پرتوها می‌چرخن و داخل قرص فرو می‌رن، قرص بزرگ می‌شه، یه دایره‌ی «گاز»
- *                 از گوشه‌ی بالا-راست میاد و هلال رو می‌سازه، بعدش چند ستاره‌ی کوچیک ظاهر می‌شن.
- *  ماه -> خورشید: همین مسیر برعکس.
- *
- * همه‌ی شکل‌ها با یه عدد `progress` (۰ = خورشید، ۱ = ماه) محاسبه می‌شن و با requestAnimationFrame
- * جلو می‌رن؛ نه CSS transition روی mask (که توی بعضی مرورگرها درست آپدیت نمی‌شه) و نه
- * `d` ی path (که همه‌جا پشتیبانی نمی‌شه). با prefers-reduced-motion بدون انیمیشن عوض می‌شه.
- *
- * رنگ از currentColor گرفته می‌شه و اندازه رو از بیرون با کلاس بده:
- *   <ThemeModeIcon :dark="isDark" class="size-5" />
- */
 const props = withDefaults(defineProps<{
   dark: boolean
   /** مدت انیمیشن (میلی‌ثانیه) */
@@ -51,43 +37,59 @@ watch(() => props.dark, (isDark) => {
 
 onBeforeUnmount(() => cancelAnimationFrame(frame))
 
-// id یکتا برای mask تا چند نمونه از آیکن توی یک صفحه با هم قاطی نشن
-const maskId = `tm-mask-${Math.random().toString(36).slice(2, 9)}`
-
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value))
+const fmt = (value: number) => Number(value.toFixed(3))
 
-// قرص: شعاع ۵ (خورشید) -> ۹ (ماه)
-const coreR = computed(() => 5 + 4 * progress.value)
+// ---- هندسه ----
+const CENTER = 12
+// شعاع دایره‌ی گاز = نصف فاصله‌ی دو نوک هلال (۱۲,۳) و (۲۱,۱۲) مثل ماه lucide
+const BITE_R = 6.364
 
-// دایره‌ی گاز: از بیرون آیکن (بالا-راست) تا جای هلال (مرکز ۱۶.۵ و ۷.۵ با شعاع ۶.۴)
-const biteX = computed(() => 27 - 10.5 * progress.value)
-const biteY = computed(() => -3 + 10.5 * progress.value)
+/** مسیر خط دور شکل: دایره‌ی خورشید که کم‌کم به هلال ماه تبدیل می‌شه */
+const bodyPath = computed(() => {
+  const p = progress.value
+  // دایره‌ی بدنه: شعاع ۴ (خورشید lucide) -> ۹ (ماه lucide)
+  const r1 = 4 + 5 * p
+  // دایره‌ی گاز: از بیرون آیکن (بالا-راست) تا مرکز (۱۶.۵ و ۷.۵)
+  const bx = 27 - 10.5 * p
+  const by = -3 + 10.5 * p
+  const dx = bx - CENTER
+  const dy = by - CENTER
+  const d = Math.hypot(dx, dy)
+
+  // دایره‌ها همدیگه رو قطع نمی‌کنن: فقط یه دایره‌ی کامل
+  if (d >= r1 + BITE_R || d <= Math.abs(r1 - BITE_R)) {
+    return `M${fmt(CENTER - r1)} ${CENTER}A${fmt(r1)} ${fmt(r1)} 0 1 0 ${fmt(CENTER + r1)} ${CENTER}A${fmt(r1)} ${fmt(r1)} 0 1 0 ${fmt(CENTER - r1)} ${CENTER}Z`
+  }
+
+  // نقطه‌های تقاطع دو دایره
+  const a = (r1 * r1 - BITE_R * BITE_R + d * d) / (2 * d)
+  const h = Math.sqrt(Math.max(0, r1 * r1 - a * a))
+  const ux = dx / d
+  const uy = dy / d
+  const mx = CENTER + a * ux
+  const my = CENTER + a * uy
+  const plusX = mx - h * uy
+  const plusY = my + h * ux
+  const minusX = mx + h * uy
+  const minusY = my - h * ux
+
+  // کمان بیرونی دایره‌ی بدنه (جهت مثبت) + کمان درونیِ دایره‌ی گاز (جهت منفی) برای برگشت
+  const largeOuter = a > 0 ? 1 : 0
+  const largeInner = d - a < 0 ? 1 : 0
+  return `M${fmt(plusX)} ${fmt(plusY)}A${fmt(r1)} ${fmt(r1)} 0 ${largeOuter} 1 ${fmt(minusX)} ${fmt(minusY)}A${BITE_R} ${BITE_R} 0 ${largeInner} 0 ${fmt(plusX)} ${fmt(plusY)}Z`
+})
 
 // کمی کج شدن آیکن وسط انیمیشن (اول و آخر صفره)
 const tilt = computed(() => -Math.sin(Math.PI * clamp(progress.value)) * 22)
 
-// پرتوها: می‌چرخن و به مرکز کوچیک می‌شن
-const raysTransform = computed(() => {
-  // سریع‌تر از رشد قرص جمع می‌شن تا زود زیرش برن و برآمدگی ریزی دورش نمونه
-  const scale = clamp(1 - progress.value * 1.5, 0.001, 1.15)
-  return `translate(12 12) rotate(${progress.value * 90}) scale(${scale}) translate(-12 -12)`
+// پرتوها: می‌چرخن، از سمت بیرون کوتاه می‌شن و محو می‌شن (برگشت: با کمی جهش بلندتر از حد نهایی می‌شن)
+const rayAngle = computed(() => progress.value * 90)
+const rayPath = computed(() => {
+  const shrink = clamp(progress.value * 1.8, -0.25, 1)
+  return `M12 4V${fmt(12 - (10 - 2 * shrink))}`
 })
 const raysOpacity = computed(() => clamp(1 - progress.value * 1.8))
-
-// ستاره‌های ماه: هرکدوم از یه لحظه‌ی مشخص شروع به ظاهر شدن می‌کنن
-const stars = [
-  { x: 17.6, y: 8.6, size: 1.7, from: 0.55, dot: false },
-  { x: 14.8, y: 4.6, size: 1.1, from: 0.7, dot: false },
-  { x: 20, y: 5.2, size: 0.9, from: 0.8, dot: true },
-]
-function starTransform(star: typeof stars[number]) {
-  const scale = clamp((progress.value - star.from) / (1 - star.from), 0, 1.25)
-  // چرخش تا ۹۰ درجه تموم می‌شه تا علامت «+» توی حالت نهایی صاف بمونه
-  return `translate(${star.x} ${star.y}) rotate(${progress.value * 90}) scale(${Math.max(scale, 0.001)})`
-}
-function starOpacity(star: typeof stars[number]) {
-  return clamp((progress.value - star.from) / ((1 - star.from) * 0.6))
-}
 </script>
 
 <template>
@@ -102,75 +104,22 @@ function starOpacity(star: typeof stars[number]) {
     aria-hidden="true"
     focusable="false"
   >
-    <defs>
-      <mask
-        :id="maskId"
-        maskUnits="userSpaceOnUse"
-        x="0"
-        y="0"
-        width="24"
-        height="24"
-      >
-        <rect
-          width="24"
-          height="24"
-          fill="#fff"
-          stroke="none"
-        />
-        <circle
-          :cx="biteX"
-          :cy="biteY"
-          r="6.4"
-          fill="#000"
-          stroke="none"
-        />
-      </mask>
-    </defs>
-
     <g :transform="`rotate(${tilt} 12 12)`">
       <!-- پرتوهای خورشید -->
       <g
-        :transform="raysTransform"
+        :transform="`rotate(${rayAngle} 12 12)`"
         :opacity="raysOpacity"
       >
         <path
           v-for="i in 8"
           :key="i"
-          d="M12 2v2"
+          :d="rayPath"
           :transform="`rotate(${(i - 1) * 45} 12 12)`"
         />
       </g>
 
-      <!-- قرص خورشید / بدنه‌ی ماه -->
-      <circle
-        cx="12"
-        cy="12"
-        :r="coreR"
-        fill="currentColor"
-        stroke="none"
-        :mask="`url(#${maskId})`"
-      />
-
-      <!-- ستاره‌های کنار ماه -->
-      <g stroke-width="1.4">
-        <g
-          v-for="(star, index) in stars"
-          :key="index"
-          :transform="starTransform(star)"
-          :opacity="starOpacity(star)"
-        >
-          <circle
-            v-if="star.dot"
-            r="1"
-            fill="currentColor"
-            stroke="none"
-          />
-          <path
-            v-else
-            :d="`M0 ${-star.size}V${star.size}M${-star.size} 0H${star.size}`"
-          />
-        </g>
-      </g>
+      <!-- دایره‌ی خورشید / هلال ماه -->
+      <path :d="bodyPath" />
     </g>
   </svg>
 </template>

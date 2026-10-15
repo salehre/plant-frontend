@@ -59,24 +59,10 @@ const chips = computed(() => [
       v-if="blogStore.loading"
       class="flex flex-col"
     >
-      <div
+      <BlogListItemSkeleton
         v-for="n in 3"
         :key="n"
-        class="flex flex-col gap-4 border-b border-ink/10 py-6 first:pt-0 last:border-b-0 sm:flex-row sm:gap-8"
-      >
-        <div class="aspect-[2/1] w-full shrink-0 animate-pulse rounded-xl bg-ink/10 sm:w-72 lg:w-80" />
-        <div class="flex flex-1 flex-col gap-3 sm:py-1">
-          <AppSkeleton
-            width="6rem"
-            height="0.75rem"
-          />
-          <AppSkeleton height="1.5rem" />
-          <AppSkeleton
-            width="80%"
-            height="1rem"
-          />
-        </div>
-      </div>
+      />
     </div>
 
     <div
