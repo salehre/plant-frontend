@@ -11,6 +11,8 @@ const bgImage = computed(() => `/images/bg-image/${seasonByTheme[uiStore.theme]}
 
 const activeLocale = computed<MockLocale>(() => (locale.value === 'fa' ? 'fa' : 'en'))
 const question = computed(() => store.currentQuestion)
+// هدر معرفی فقط وقتی سؤال‌ها نشون داده می‌شن دیده بشه
+const isAsking = computed(() => !store.loading && !store.done)
 
 const percentFormatter = computed(() => new Intl.NumberFormat(locale.value, { useGrouping: false }))
 const formatScore = (score: number) =>
@@ -56,15 +58,23 @@ watch(activeLocale, () => {
 <template>
   <!-- باکس پیدا کردن گیاه با بک‌گراند داینامیک -->
   <section
-    class="relative isolate flex min-h-[460px] flex-col justify-center overflow-hidden rounded-[22px] p-6 text-white sm:min-h-[540px] sm:p-12"
+    class="relative isolate flex min-h-[400px] flex-col justify-center overflow-hidden rounded-2xl p-6 text-white sm:min-h-[460px] sm:p-10"
     aria-labelledby="plant-finder-title"
   >
     <h2
       id="plant-finder-title"
-      class="sr-only"
+      :class="isAsking
+        ? 'text-lg font-extrabold text-white [text-shadow:0_2px_14px_rgba(0,0,0,0.35)] sm:text-xl'
+        : 'sr-only'"
     >
       {{ t('home.plantFinder.title') }}
     </h2>
+    <p
+      v-if="isAsking"
+      class="mb-7 mt-2 max-w-2xl text-xs leading-6 text-white/85 sm:text-sm"
+    >
+      {{ t('home.plantFinder.introDescription') }}
+    </p>
 
     <Transition name="bg-fade">
       <img
@@ -79,16 +89,16 @@ watch(activeLocale, () => {
     <!-- در حال دریافت پیشنهاد (AI داره فکر می‌کنه) -->
     <div
       v-if="store.loading"
-      class="flex min-h-80 flex-col items-center justify-center gap-4 py-12 text-center"
+      class="flex min-h-64 flex-col items-center justify-center gap-3.5 py-10 text-center"
       role="status"
       aria-live="polite"
     >
-      <span class="relative flex size-16 items-center justify-center">
+      <span class="relative flex size-12 items-center justify-center">
         <span class="absolute inset-0 animate-ping rounded-full bg-white/25 motion-reduce:animate-none" />
-        <span class="relative flex size-16 items-center justify-center rounded-full bg-white/20">
+        <span class="relative flex size-12 items-center justify-center rounded-full bg-white/20">
           <Icon
             name="svg-spinners:180-ring"
-            class="size-8 text-white"
+            class="size-6 text-white"
           />
         </span>
       </span>
@@ -99,16 +109,16 @@ watch(activeLocale, () => {
 
     <!-- نتایج -->
     <div v-else-if="store.done">
-      <h3 class="text-lg font-bold text-white">
+      <h3 class="text-base font-bold text-white">
         {{ t('home.plantFinder.resultsTitle') }}
       </h3>
-      <p class="mb-5 mt-1 text-sm text-white/80">
+      <p class="mb-5 mt-1 text-xs text-white/80 sm:text-sm">
         {{ t('home.plantFinder.resultsSubtitle') }}
       </p>
 
       <p
         v-if="!store.suggestions.length"
-        class="rounded-lg bg-white/15 p-4 text-sm text-white/90"
+        class="rounded-lg bg-white/15 p-3 text-xs text-white/90 sm:text-sm"
       >
         {{ t('home.plantFinder.noResults') }}
       </p>
@@ -125,21 +135,21 @@ watch(activeLocale, () => {
             :to="`/plants/${item.plant.slug}`"
             class="group flex h-full flex-col overflow-hidden rounded-xl border border-ink/10 bg-surface text-ink transition-shadow hover:shadow-card-hover"
           >
-            <div class="relative aspect-[4/3] overflow-hidden bg-primary-50">
+            <div class="relative aspect-[16/10] overflow-hidden bg-primary-50">
               <img
                 :src="item.plant.image"
                 :alt="item.plant.name"
                 class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
               >
-              <span class="absolute end-2 top-2 rounded-lg bg-primary-600 px-2.5 py-1 text-xs font-medium text-white">
+              <span class="absolute end-2 top-2 rounded-md bg-primary-600 px-2 py-0.5 text-[11px] font-medium text-white">
                 {{ t('home.plantFinder.match') }} {{ formatScore(item.matchScore) }}
               </span>
             </div>
 
             <div class="flex flex-1 flex-col gap-2 p-4">
               <div>
-                <h4 class="font-bold text-ink">
+                <h4 class="text-sm font-bold text-ink">
                   {{ item.plant.name }}
                 </h4>
                 <p class="text-xs italic text-ink-muted">
@@ -150,7 +160,7 @@ watch(activeLocale, () => {
               <!-- اگه AI توضیح متنی داده همونو نشون می‌دیم، وگرنه چیپ‌های «چی با چی جور شد» -->
               <p
                 v-if="item.reason"
-                class="text-sm leading-6 text-ink-muted"
+                class="text-xs leading-5 text-ink-muted"
               >
                 {{ item.reason }}
               </p>
@@ -171,7 +181,7 @@ watch(activeLocale, () => {
                 </li>
               </ul>
 
-              <span class="mt-auto pt-2 text-xs text-ink-muted">
+              <span class="mt-auto pt-1 text-xs text-ink-muted">
                 {{ t(difficultyKeys[item.plant.difficulty] ?? '') }}
               </span>
             </div>
@@ -179,9 +189,10 @@ watch(activeLocale, () => {
         </li>
       </ul>
 
-      <div class="mt-6 flex justify-end">
+      <div class="mt-5 flex justify-end">
         <AppButton
           variant="secondary"
+          size="sm"
           @click="store.reset()"
         >
           <Icon
@@ -195,8 +206,8 @@ watch(activeLocale, () => {
 
     <!-- سؤال‌ها -->
     <div v-else>
-      <div class="mb-8">
-        <div class="mb-3 text-sm text-white/85">
+      <div class="mb-6">
+        <div class="mb-2.5 text-xs text-white/85">
           {{ t('home.plantFinder.stepOf', {
             current: percentFormatter.format(store.step + 1),
             total: percentFormatter.format(store.totalSteps),
@@ -204,7 +215,7 @@ watch(activeLocale, () => {
         </div>
         <!-- نوار مراحل: هر مرحله یه تکه‌ی جدا با فاصله -->
         <div
-          class="flex gap-2"
+          class="flex gap-1.5"
           role="progressbar"
           :aria-valuemin="1"
           :aria-valuemax="store.totalSteps"
@@ -213,7 +224,7 @@ watch(activeLocale, () => {
           <span
             v-for="i in store.totalSteps"
             :key="i"
-            class="h-2 flex-1 rounded-full transition-colors duration-300"
+            class="h-1.5 flex-1 rounded-full transition-colors duration-300"
             :class="i <= store.step + 1 ? 'bg-white' : 'bg-white/30'"
           />
         </div>
@@ -230,18 +241,18 @@ watch(activeLocale, () => {
         >
           <h3
             :id="`finder-q-${question.id}`"
-            class="mb-6 text-xl font-bold text-white sm:text-2xl"
+            class="mb-5 text-base font-bold text-white sm:text-lg"
           >
             {{ t(`home.plantFinder.questions.${question.id}.title`) }}
           </h3>
 
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button
               v-for="option in question.options"
               :key="option.value"
               type="button"
               :aria-pressed="store.currentAnswer === option.value"
-              class="flex items-center gap-4 rounded-2xl border p-5 text-start text-base backdrop-blur-sm transition-colors sm:p-6"
+              class="flex items-center gap-3 rounded-xl border px-4 py-4 text-start text-sm backdrop-blur-sm transition-colors"
               :class="store.currentAnswer === option.value
                 ? 'border-white bg-white text-primary-700'
                 : 'border-white/30 bg-white/10 text-white hover:bg-white/20'"
@@ -249,7 +260,7 @@ watch(activeLocale, () => {
             >
               <Icon
                 :name="option.icon"
-                class="size-6 shrink-0"
+                class="size-5 shrink-0"
               />
               <span>{{ t(`home.plantFinder.questions.${question.id}.options.${option.value}`) }}</span>
             </button>
@@ -259,16 +270,16 @@ watch(activeLocale, () => {
 
       <p
         v-if="store.error"
-        class="mt-4 rounded-lg bg-status-danger/90 p-3 text-sm text-white"
+        class="mt-3 rounded-lg bg-status-danger/90 p-2.5 text-xs text-white"
         role="alert"
       >
         {{ store.error }}
       </p>
 
-      <div class="mt-8 flex items-center justify-between gap-3">
+      <div class="mt-7 flex items-center justify-between gap-3">
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+          class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
           :disabled="store.isFirstStep"
           @click="store.back()"
         >
@@ -283,6 +294,7 @@ watch(activeLocale, () => {
         <AppButton
           v-if="store.isLastStep && store.error"
           variant="primary"
+          size="sm"
           @click="submit"
         >
           {{ t('home.plantFinder.retry') }}

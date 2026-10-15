@@ -41,9 +41,9 @@ function onImageError(e: Event) {
       <img
         src="/images/plants/header.png"
         :alt="t('home.greenLeavesAlt')"
-        class="absolute inset-y-0 inset-x-2 object-cover"
+        class="absolute inset-0 size-full object-cover object-center"
       >
-      <div class="absolute inset-y-0 inset-x-2 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r" />
+       <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
 
       <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div class="flex min-h-[240px] max-w-xl flex-col justify-center gap-5 py-8 sm:min-h-[340px] sm:py-12">
