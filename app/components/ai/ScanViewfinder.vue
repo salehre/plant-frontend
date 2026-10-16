@@ -77,131 +77,133 @@ onBeforeUnmount(stopCamera)
 </script>
 
 <template>
+  <!-- کارت بیرونی: ناحیه‌ی اسکن + نوار کنترل، هر دو توی یک کادر -->
   <div
-    class="relative aspect-[3/4] w-full sm:aspect-[4/5] overflow-hidden rounded-[22px] bg-primary-900 ring-2 transition-shadow lg:max-h-[620px]"
+    class="flex w-full flex-col overflow-hidden rounded-[22px] bg-primary-900 ring-2 transition-shadow"
     :class="isDragging ? 'ring-primary-400' : 'ring-transparent'"
     @dragover.prevent="isDragging = true"
     @dragleave.prevent="isDragging = false"
     @drop.prevent="onDrop"
   >
-    <!-- دوربین زنده -->
-    <video
-      v-show="cameraOn && !previewUrl"
-      ref="videoEl"
-      autoplay
-      playsinline
-      muted
-      class="absolute inset-0 size-full object-cover"
-    />
-
-    <!-- عکس انتخاب‌شده -->
-    <img
-      v-if="previewUrl"
-      :src="previewUrl"
-      :alt="$t('identify.uploadedImageAlt')"
-      class="absolute inset-0 size-full object-cover"
-    >
-
-    <!-- حالت اولیه (دوربین خاموش) -->
-    <div
-      v-if="!cameraOn && !previewUrl"
-      class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-primary-800 to-primary-900 px-10 text-center text-white/80"
-    >
-      <Icon
-        name="lucide:scan-line"
-        class="size-12 text-primary-300"
+    <!-- ناحیه‌ی اسکن -->
+    <div class="relative aspect-[5/7] w-full overflow-hidden lg:max-h-[620px]">
+      <!-- دوربین زنده -->
+      <video
+        v-show="cameraOn && !previewUrl"
+        ref="videoEl"
+        autoplay
+        playsinline
+        muted
+        class="absolute inset-0 size-full object-cover"
       />
-      <p
-        class="max-w-xs text-sm leading-7"
-        :class="error ? 'text-red-200' : ''"
+
+      <!-- عکس انتخاب‌شده -->
+      <img
+        v-if="previewUrl"
+        :src="previewUrl"
+        :alt="$t('identify.uploadedImageAlt')"
+        class="absolute inset-0 size-full object-cover"
       >
-        {{ error || $t('identify.viewfinderHint') }}
-      </p>
-    </div>
 
-    <!-- کادر نشانه‌گیری -->
-    <div class="pointer-events-none absolute inset-8 sm:inset-12">
-      <span class="absolute left-0 top-0 size-12 rounded-tl-3xl border-l-4 border-t-4 border-white" />
-      <span class="absolute right-0 top-0 size-12 rounded-tr-3xl border-r-4 border-t-4 border-white" />
-      <span class="absolute bottom-0 left-0 size-12 rounded-bl-3xl border-b-4 border-l-4 border-white" />
-      <span class="absolute bottom-0 right-0 size-12 rounded-br-3xl border-b-4 border-r-4 border-white" />
-    </div>
-
-    <!-- راهنمای زیر کادر -->
-    <p
-      v-if="!previewUrl"
-      class="pointer-events-none absolute inset-x-8 bottom-36 text-center text-sm leading-6 text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]"
-    >
-      {{ $t('identify.pointHint') }}
-    </p>
-
-    <!-- در حال تحلیل -->
-    <div
-      v-if="analyzing"
-      class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-primary-900/55 text-white"
-    >
-      <span class="scan-line absolute inset-x-8 h-0.5 rounded-full bg-primary-300 shadow-[0_0_16px_4px_rgba(138,197,163,0.8)]" />
-      <Icon
-        name="svg-spinners:180-ring"
-        class="size-8"
-      />
-      <span class="text-sm font-medium">{{ $t('identify.analyzing') }}</span>
-    </div>
-
-    <!-- کنترل‌ها: قبل از عکس -->
-    <div
-      v-if="!previewUrl"
-      class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/75 via-black/40 to-transparent px-6 pb-5 pt-16"
-    >
-      <button
-        type="button"
-        class="flex w-16 flex-col items-center gap-1 text-xs text-white/90"
-        @click="fileInput?.click()"
-      >
-        <span class="flex size-11 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-          <Icon
-            name="lucide:image"
-            class="size-5"
-          />
-        </span>
-        {{ $t('identify.gallery') }}
-      </button>
-
-      <button
-        type="button"
-        class="flex size-[72px] items-center justify-center rounded-full border-4 border-white bg-white/90 text-primary-800 ring-4 ring-white/25 transition-transform active:scale-95"
-        :aria-label="cameraOn ? $t('components.cameraCapture.capture') : $t('identify.cameraCta')"
-        @click="onShutter"
+      <!-- حالت اولیه (دوربین خاموش) -->
+      <div
+        v-if="!cameraOn && !previewUrl"
+        class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-primary-800 to-primary-900 px-10 text-center text-white/80"
       >
         <Icon
-          v-if="!cameraOn"
-          name="lucide:camera"
-          class="size-7"
+          name="lucide:scan-line"
+          class="size-12 text-primary-300"
         />
-      </button>
+        <p
+          class="max-w-xs text-sm leading-7"
+          :class="error ? 'text-red-200' : ''"
+        >
+          {{ error || $t('identify.viewfinderHint') }}
+        </p>
+      </div>
 
-      <button
-        type="button"
-        class="flex w-16 flex-col items-center gap-1 text-xs text-white/90"
-        :aria-label="$t('identify.switchCamera')"
-        @click="switchCamera"
+      <!-- کادر نشانه‌گیری -->
+      <div class="pointer-events-none absolute inset-8 sm:inset-12">
+        <span class="absolute left-0 top-0 size-12 rounded-tl-3xl border-l-4 border-t-4 border-white" />
+        <span class="absolute right-0 top-0 size-12 rounded-tr-3xl border-r-4 border-t-4 border-white" />
+        <span class="absolute bottom-0 left-0 size-12 rounded-bl-3xl border-b-4 border-l-4 border-white" />
+        <span class="absolute bottom-0 right-0 size-12 rounded-br-3xl border-b-4 border-r-4 border-white" />
+      </div>
+
+      <!-- راهنمای زیر کادر -->
+      <p
+        v-if="!previewUrl"
+        class="pointer-events-none absolute inset-x-8 bottom-4 text-center text-sm leading-6 text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] sm:bottom-6"
       >
-        <span class="flex size-11 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-          <Icon
-            name="lucide:switch-camera"
-            class="size-5"
-          />
-        </span>
-        {{ $t('identify.switchCamera') }}
-      </button>
+        {{ $t('identify.pointHint') }}
+      </p>
+
+      <!-- در حال تحلیل -->
+      <div
+        v-if="analyzing"
+        class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-primary-900/55 text-white"
+      >
+        <span class="scan-line absolute inset-x-8 h-0.5 rounded-full bg-primary-300 shadow-[0_0_16px_4px_rgba(138,197,163,0.8)]" />
+        <Icon
+          name="svg-spinners:180-ring"
+          class="size-8"
+        />
+        <span class="text-sm font-medium">{{ $t('identify.analyzing') }}</span>
+      </div>
     </div>
 
-    <!-- کنترل: بعد از عکس -->
-    <div
-      v-else-if="!analyzing"
-      class="absolute inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-black/70 to-transparent px-6 pb-5 pt-14"
-    >
+    <!-- نوار کنترل: توی همون کارت، زیر ناحیه‌ی اسکن (min-h برای اینکه موقع تحلیل ارتفاع نپره) -->
+    <div class="flex min-h-[112px] items-center justify-center border-t border-white/10 px-6 py-4">
+      <div
+        v-if="!previewUrl"
+        class="flex w-full items-center justify-between"
+      >
+        <button
+          type="button"
+          class="flex w-16 flex-col items-center gap-1 text-xs text-white/90"
+          @click="fileInput?.click()"
+        >
+          <span class="flex size-11 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
+            <Icon
+              name="lucide:image"
+              class="size-5"
+            />
+          </span>
+          {{ $t('identify.gallery') }}
+        </button>
+
+        <button
+          type="button"
+          class="flex size-[72px] items-center justify-center rounded-full border-4 border-white bg-white/90 text-primary-800 ring-4 ring-white/25 transition-transform active:scale-95"
+          :aria-label="cameraOn ? $t('components.cameraCapture.capture') : $t('identify.cameraCta')"
+          @click="onShutter"
+        >
+          <Icon
+            v-if="!cameraOn"
+            name="lucide:camera"
+            class="size-7"
+          />
+        </button>
+
+        <button
+          type="button"
+          class="flex w-16 flex-col items-center gap-1 text-xs text-white/90"
+          :aria-label="$t('identify.switchCamera')"
+          @click="switchCamera"
+        >
+          <span class="flex size-11 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
+            <Icon
+              name="lucide:switch-camera"
+              class="size-5"
+            />
+          </span>
+          {{ $t('identify.switchCamera') }}
+        </button>
+      </div>
+
+      <!-- بعد از عکس -->
       <button
+        v-else-if="!analyzing"
         type="button"
         class="inline-flex items-center gap-2 rounded-xl bg-white/90 px-5 py-2.5 text-sm font-bold text-primary-800 transition-colors hover:bg-white"
         @click="emit('reset')"

@@ -17,7 +17,7 @@ const featuredPending = computed(() => featuredStatus.value === 'pending' && !fe
 const quickActions = [
   { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
   { to: '/plants', icon: 'lucide:compass', label: 'nav.catalog', hint: 'home.quickHints.catalog' },
-  { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar', hint: 'home.quickHints.care' },
+  { to: '/climate', icon: 'lucide:map-pin', label: 'nav.climate', hint: 'home.quickHints.city' },
 ]
 
 const recentScans = computed(() => historyStore.sorted.slice(0, 4))
@@ -41,7 +41,7 @@ function onImageError(e: Event) {
       <img
         src="/images/plants/header.png"
         :alt="t('home.greenLeavesAlt')"
-        class="absolute inset-0 size-full object-cover object-center"
+        class="absolute inset-0 size-full object-cover object-center ltr:-scale-x-100"
       >
        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
 
@@ -205,6 +205,8 @@ function onImageError(e: Event) {
 
     <!-- بلاگ -->
     <BlogSection />
+
+    <IdentifySteps />
 
     <!-- راهنماها -->
     <section>

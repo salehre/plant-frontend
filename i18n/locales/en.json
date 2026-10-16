@@ -42,7 +42,25 @@
     "quickHints": {
       "myPlants": "Manage your plants",
       "catalog": "Explore the plant catalog",
-      "care": "Keep track of plant care"
+      "care": "Keep track of plant care",
+      "city": "Find plants that suit your city"
+    },
+      "steps": {
+      "badge": "In {count} steps",
+      "title": "Simple by design",
+      "description": "Just take a photo of your plant or pick one from your gallery. We'll handle the rest.",
+      "upload": {
+        "title": "Take or upload a photo",
+        "description": "Pick a photo of your plant from the camera or gallery"
+      },
+      "analyze": {
+        "title": "AI-powered analysis",
+        "description": "Your plant is identified in seconds and the best matches are shown"
+      },
+      "result": {
+        "title": "See the full details",
+        "description": "Name, characteristics, care guide and plenty of other useful info"
+      }
     },
     "guidesTitle": "Get started with these guides",
     "wateringTitle": "Water the right way",
