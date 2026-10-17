@@ -2,11 +2,15 @@
 import { Toaster } from 'vue-sonner'
 import 'vue-sonner/style.css'
 
-
-const i18nHead = useLocaleHead()
 const { locale } = useI18n()
+
+// lang و dir مستقیم از locale ست می‌شن تا html[lang^='en'] / html[lang^='fa'] توی main.css
+// (که فونت Inter/Peyda رو عوض می‌کنه) همیشه با زبان فعلی هماهنگ باشن.
 useHead(() => ({
-  htmlAttrs: i18nHead.value.htmlAttrs,
+  htmlAttrs: {
+    lang: locale.value === 'fa' ? 'fa-IR' : 'en-US',
+    dir: locale.value === 'fa' ? 'rtl' : 'ltr',
+  },
 }))
 </script>
 

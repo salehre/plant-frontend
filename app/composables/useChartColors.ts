@@ -1,6 +1,7 @@
 /**
  * رنگ‌های چارت از همون CSS variableهای تم (main.css) خونده می‌شن، پس با عوض شدن
  * تم رنگی یا دارک‌مود چارت هم خودکار هم‌رنگ بقیه‌ی اپ می‌شه.
+ * فونت چارت هم با عوض شدن زبان (Peyda <-> Inter) دوباره خونده می‌شه.
  */
 export interface ChartColors {
   primary: string
@@ -50,6 +51,7 @@ function readColors(): ChartColors {
 
 export function useChartColors() {
   const uiStore = useUiStore()
+  const { locale } = useI18n()
   const colors = ref<ChartColors>(readColors())
 
   const refresh = async () => {
@@ -58,8 +60,19 @@ export function useChartColors() {
     colors.value = readColors()
   }
 
+  // lang روی <html> با useHead (توی app.vue) async عوض می‌شه، پس بعد از یه فریم هم دوباره می‌خونیم
+  const refreshAfterLocaleChange = async () => {
+    await refresh()
+    if (import.meta.client) {
+      requestAnimationFrame(() => {
+        colors.value = readColors()
+      })
+    }
+  }
+
   onMounted(refresh)
   watch(() => [uiStore.theme, uiStore.mode], refresh)
+  watch(locale, refreshAfterLocaleChange)
 
   return colors
 }

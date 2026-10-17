@@ -624,7 +624,7 @@ const growthIcons: Record<string, string> = {
               {{ t('plantDetail.story') }}
             </h2>
             <div class="mb-4" />
-            <p class="text-justify text-sm leading-8 text-ink">
+            <p class="text-justify text-sm leading-6 text-ink">
               {{ detail.plantStory }}
             </p>
           </section>
