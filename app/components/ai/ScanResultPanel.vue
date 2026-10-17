@@ -200,7 +200,7 @@ function addToGarden() {
     <!-- تب نمای کلی -->
     <div
       v-if="tab === 'overview'"
-      class="flex flex-col gap-4"
+      class="flex flex-col gap-4 rounded-xl border border-ink/10 bg-surface p-3 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0"
     >
       <div>
         <span class="mb-1 block text-xs text-ink-muted">{{ $t('components.common.confidence') }}</span>
@@ -294,7 +294,7 @@ function addToGarden() {
     <!-- تب گونه‌های مشابه -->
     <ol
       v-else
-      class="flex flex-col gap-2"
+      class="flex flex-col gap-2 rounded-xl border border-ink/10 bg-surface p-3 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0"
     >
       <li
         v-for="(c, index) in candidates"
@@ -375,13 +375,14 @@ function addToGarden() {
         {{ $t('identify.viewDetails') }}
       </span>
       <AppButton
+        class="!rounded-full"
         variant="primary"
         :disabled="added"
         @click="addToGarden"
       >
         <Icon
           :name="added ? 'lucide:check' : 'lucide:plus'"
-          class="size-4"
+          class="size-4 hidden sm:flex"
         />
         {{ $t('identify.addToGarden') }}
       </AppButton>
