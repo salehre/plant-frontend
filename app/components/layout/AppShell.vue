@@ -6,11 +6,12 @@ import TheSidebar from "~/components/layout/TheSidebar.vue";
 
 const route = useRoute();
 const isHome = computed(() => route.path === "/");
+const isPlantDetail = computed(() => route.path.startsWith('/plants/'))
 </script>
 
 <template>
   <div class="min-h-screen bg-bg">
-    <TheSidebar />
+    <TheHeader :class="isPlantDetail ? 'max-md:hidden' : ''" />
 
     <!-- md:ps-64 = عرض سایدبار (در RTL سایدبار سمت راسته و در LTR سمت چپ) -->
     <div class="flex min-h-screen min-w-0 flex-col overflow-x-clip md:ps-64">
@@ -24,6 +25,6 @@ const isHome = computed(() => route.path === "/");
       <TheFooter v-if="isHome" class="mt-12" />
     </div>
 
-    <MobileBottomNav />
+    <MobileBottomNav :class="isPlantDetail ? 'max-md:hidden' : ''" />
   </div>
 </template>

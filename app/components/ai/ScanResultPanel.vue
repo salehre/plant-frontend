@@ -363,7 +363,7 @@ function addToGarden() {
     <div class="grid grid-cols-2 gap-3">
       <NuxtLink
         v-if="selected.slug"
-        :to="`/plants/${selected.slug}`"
+        :to="{ path: `/plants/${selected.slug}`, query: { confidence: selected.confidence } }"
         class="inline-flex items-center justify-center gap-2 rounded-full border border-primary-600 px-4 py-2.5 text-sm font-bold text-primary-700 transition-colors hover:bg-primary-50"
       >
         {{ $t('identify.viewDetails') }}

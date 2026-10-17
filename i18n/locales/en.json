@@ -521,6 +521,14 @@
     "scientificSynonyms": "Scientific synonyms",
     "fossilPeriod": "Fossil record",
     "gallery": "Image gallery",
+    "noIssues": "No common problems recorded for this plant.",
+    "tabs": {
+      "overview": "Overview",
+      "care": "Care Guide",
+      "health": "Health",
+      "toxicity": "Toxicity",
+      "scientific": "Scientific"
+    },
     "notFound": "We couldn't find this plant.",
     "taxonomy": {
       "kingdom": "Kingdom",

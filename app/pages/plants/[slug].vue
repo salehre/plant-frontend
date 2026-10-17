@@ -22,6 +22,29 @@ const plant = computed(() => plantStore.current)
 const detail = computed(() => findPlantDetailBySlug(slug, activeLocale.value))
 const chemicalCompoundsExpanded = ref(false)
 
+// ============ حالت موبایل: تب‌ها ============
+const router = useRouter()
+type MobileTab = 'overview' | 'care' | 'health' | 'toxicity' | 'scientific'
+const mobileTabs: MobileTab[] = ['overview', 'care', 'health', 'toxicity', 'scientific']
+const mobileTab = ref<MobileTab>('overview')
+// توی دسکتاپ همه‌ی سکشن‌ها دیده می‌شن؛ توی موبایل فقط سکشن‌های تب فعال
+function tabShow(tab: MobileTab) {
+  return mobileTab.value === tab ? '' : 'max-md:hidden'
+}
+const statIcons = ['lucide:globe', 'lucide:trees', 'lucide:map-pin', 'lucide:earth']
+// بج درصد اطمینان فقط وقتی از نتیجه‌ی اسکن اومده باشیم (?confidence=0.98)
+const confidenceLabel = computed(() => {
+  const value = Number(route.query.confidence)
+  if (!Number.isFinite(value) || value <= 0) return ''
+  return t('components.confidenceScore.percentage', {
+    value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(Math.round(value * 100)),
+  })
+})
+function goBack() {
+  if (window.history.length > 1) router.back()
+  else navigateTo('/plants')
+}
+
 function findDisease(id: string) {
   return getMockDiseases(activeLocale.value).find(d => d.id === id)
 }
@@ -165,8 +188,53 @@ const growthIcons: Record<string, string> = {
       v-else-if="plant && detail"
       class="plant-detail-page text-readable pb-10"
   >
-    <!-- ========== هدر ========== -->
-    <div class="glass-card flex flex-col gap-5 p-4 sm:flex-row sm:p-6">
+    <!-- ========== هیرو موبایل (تمام‌عرض) ========== -->
+    <div class="relative -mx-4 -mt-4 h-[320px] sm:-mx-6 md:hidden">
+      <img
+          :src="detail.image"
+          :alt="plant.name"
+          class="size-full object-cover"
+      >
+      <div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/40 to-transparent" />
+      <button
+          type="button"
+          class="absolute start-4 top-4 flex size-10 items-center justify-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur"
+          :aria-label="t('common.back')"
+          @click="goBack"
+      >
+        <Icon name="lucide:arrow-left" class="size-5 rtl:-scale-x-100" />
+      </button>
+      <div class="absolute end-4 top-4 flex items-center gap-2">
+        <button
+            type="button"
+            class="flex size-10 items-center justify-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur"
+            :aria-label="t('plantDetail.compare')"
+            @click="navigateTo(`/compare/${slug}`)"
+        >
+          <Icon name="lucide:git-compare" class="size-5" />
+        </button>
+        <button
+            type="button"
+            class="flex size-10 items-center justify-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur"
+            :aria-label="t('plantDetail.share')"
+            @click="sharePlant"
+        >
+          <Icon name="lucide:share-2" class="size-5" />
+        </button>
+        <button
+            type="button"
+            class="flex size-10 items-center justify-center rounded-full bg-surface/90 text-primary-700 shadow-card backdrop-blur"
+            :aria-pressed="isBookmarked"
+            :aria-label="isBookmarked ? t('plantDetail.removeFromWishlist') : t('plantDetail.addToWishlist')"
+            @click="toggleBookmark"
+        >
+          <Icon name="lucide:heart" class="size-5" :class="isBookmarked ? 'fill-current' : ''" />
+        </button>
+      </div>
+    </div>
+
+    <!-- ========== هدر دسکتاپ ========== -->
+    <div class="glass-card flex flex-col gap-5 p-4 max-md:hidden sm:flex-row sm:p-6">
       <img
           :src="detail.image"
           :alt="plant.name"
@@ -260,9 +328,97 @@ const growthIcons: Record<string, string> = {
       </div>
     </div>
 
-    <div class="pt-6">
-      <!-- ========== آمار سریع ========== -->
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+    <div class="detail-sheet pt-6 max-md:relative max-md:-mx-4 max-md:-mt-7 max-md:rounded-t-[28px] max-md:bg-surface max-md:px-4 max-md:pt-5 sm:max-md:-mx-6 sm:max-md:px-6">
+      <!-- ========== هدر موبایل: نام، چیپ‌ها، تب‌ها ========== -->
+      <div class="md:hidden">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h1 class="text-2xl font-extrabold text-ink">
+              {{ plant.name }}
+            </h1>
+            <p class="mt-0.5 text-sm italic text-ink-muted">
+              {{ plant.scientificName }}
+            </p>
+          </div>
+          <span
+              v-if="confidenceLabel"
+              class="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-bold text-primary-700"
+          >
+            <Icon name="lucide:badge-check" class="size-3.5" />
+            {{ confidenceLabel }}
+          </span>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+          <NuxtLink
+              :to="{ path: '/plants', query: { family: plant.family } }"
+              class="rounded-full border border-ink/10 px-3 py-1 text-xs text-ink-muted"
+          >
+            {{ plant.family }}
+          </NuxtLink>
+          <NuxtLink
+              :to="{ path: '/plants', query: { genus: plant.genus } }"
+              class="rounded-full border border-ink/10 px-3 py-1 text-xs text-ink-muted"
+          >
+            {{ plant.genus }}
+          </NuxtLink>
+          <span class="rounded-full border border-ink/10 px-3 py-1 text-xs text-ink-muted">
+            {{ plant.category }}
+          </span>
+        </div>
+
+        <!-- تب‌ها -->
+        <div
+            role="tablist"
+            class="-mx-4 mt-4 flex gap-6 overflow-x-auto border-b border-ink/10 px-4 sm:-mx-6 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <button
+              v-for="tab in mobileTabs"
+              :key="tab"
+              type="button"
+              role="tab"
+              :aria-selected="mobileTab === tab"
+              class="relative shrink-0 pb-3 text-sm transition-colors"
+              :class="mobileTab === tab ? 'font-bold text-primary-700' : 'font-medium text-ink-muted'"
+              @click="mobileTab = tab"
+          >
+            {{ t(`plantDetail.tabs.${tab}`) }}
+            <span
+                v-if="mobileTab === tab"
+                class="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-primary-700"
+            />
+          </button>
+        </div>
+
+        <!-- تب نمای کلی: توضیح + ردیف‌های اطلاعات -->
+        <div v-show="mobileTab === 'overview'" class="pt-4">
+          <p class="text-sm leading-7 text-ink">
+            {{ plant.description }}
+          </p>
+          <ul class="mt-2 divide-y divide-ink/10">
+            <li
+                v-for="(stat, index) in detail.quickStats"
+                :key="stat.label"
+                class="flex items-center gap-3 py-3"
+            >
+              <Icon :name="statIcons[index] ?? 'lucide:info'" class="size-5 shrink-0 text-primary-600" />
+              <span class="shrink-0 text-sm text-ink-muted">{{ stat.label }}</span>
+              <span class="ms-auto min-w-0 text-end text-sm font-semibold text-ink">{{ stat.value }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <p
+            v-if="!plant.commonIssues.length"
+            v-show="mobileTab === 'health'"
+            class="pt-4 text-sm text-ink-muted"
+        >
+          {{ t('plantDetail.noIssues') }}
+        </p>
+      </div>
+
+      <!-- ========== آمار سریع (فقط دسکتاپ) ========== -->
+      <div class="grid grid-cols-2 gap-3 max-md:hidden sm:grid-cols-4 sm:gap-4">
         <div
             v-for="stat in detail.quickStats"
             :key="stat.label"
@@ -274,9 +430,9 @@ const growthIcons: Record<string, string> = {
       </div>
 
       <!-- ========== محتوای اصلی ========== -->
-      <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-12">
+      <div class="mt-6 grid grid-cols-1 gap-6 md:mt-8 lg:grid-cols-12">
         <!-- ستون اول -->
-        <div class="flex flex-col gap-6 lg:col-span-7">
+        <div class="flex flex-col gap-6 max-md:contents lg:col-span-7">
           <!-- راهنمای نگهداری روزانه -->
 <!--          <section class="glass-card p-5 sm:p-6">-->
 <!--            <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">-->
@@ -288,7 +444,7 @@ const growthIcons: Record<string, string> = {
 <!--          </section>-->
 
           <!-- طبقه‌بندی علمی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('scientific')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.taxonomyTitle') }}
             </h2>
@@ -316,7 +472,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- ویژگی‌های زیست‌شناسی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('scientific')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.morphologyTitle') }}
             </h2>
@@ -339,7 +495,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- کاربردها -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('scientific')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.applicationsTitle') }}
             </h2>
@@ -376,7 +532,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- ترکیبات شیمیایی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('toxicity')">
             <div class="flex items-center justify-between gap-3">
               <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
                 {{ t('plantDetail.chemicalCompounds') }}
@@ -434,9 +590,9 @@ const growthIcons: Record<string, string> = {
         </div>
 
         <!-- ستون دوم -->
-        <div class="flex flex-col gap-6 lg:col-span-5">
+        <div class="flex flex-col gap-6 max-md:contents lg:col-span-5">
           <!-- نیازهای رشدی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('care')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.growthRequirements') }}
             </h2>
@@ -463,7 +619,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- داستان گیاه -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('overview')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.story') }}
             </h2>
@@ -474,7 +630,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- سمّیت -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('toxicity')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.toxicity') }}
             </h2>
@@ -488,7 +644,7 @@ const growthIcons: Record<string, string> = {
           <!-- مشکلات رایج -->
           <section
               v-if="plant.commonIssues.length"
-              class="glass-card p-5 sm:p-6"
+              class="glass-card p-5 sm:p-6" :class="tabShow('health')"
           >
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.commonProblems') }}
@@ -521,7 +677,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- حفاظت -->
-          <section ref="targetSection" class="glass-card p-5 sm:p-6">
+          <section ref="targetSection" class="glass-card p-5 sm:p-6" :class="tabShow('scientific')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.conservation') }}
             </h2>
@@ -533,7 +689,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- نام‌های محلی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('overview')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.localNames') }}
             </h2>
@@ -551,7 +707,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- مترادف‌های علمی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('scientific')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.scientificSynonyms') }}
             </h2>
@@ -569,7 +725,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- دوره فسیلی -->
-          <section class="glass-card p-5 sm:p-6">
+          <section class="glass-card p-5 sm:p-6" :class="tabShow('scientific')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.fossilPeriod') }}
             </h2>
@@ -583,7 +739,7 @@ const growthIcons: Record<string, string> = {
       </div>
 
       <!-- ========== گالری تصاویر ========== -->
-      <section class="glass-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1">
+      <section class="glass-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1" :class="tabShow('overview')">
         <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
           {{ t('plantDetail.gallery') }}
         </h2>
@@ -610,6 +766,21 @@ const growthIcons: Record<string, string> = {
           </button>
         </div>
       </section>
+    </div>
+
+    <!-- ========== دکمه‌ی ثابت پایین (موبایل) ========== -->
+    <div
+        class="fixed inset-x-0 bottom-0 z-40 border-t border-ink/5 bg-surface/90 px-4 pt-3 backdrop-blur md:hidden"
+        style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));"
+    >
+      <button
+          type="button"
+          class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-700 text-sm font-bold text-white transition-colors hover:bg-primary-600"
+          @click="addToGarden"
+      >
+        <Icon name="lucide:sprout" class="size-5" />
+        {{ $t('identify.addToGarden') }}
+      </button>
     </div>
 
     <!-- ========== لایت‌باکس گالری ========== -->
@@ -682,5 +853,15 @@ const growthIcons: Record<string, string> = {
 
 .plant-detail-page :deep(.font-serif) {
   font-family: inherit;
+}
+
+/* موبایل: سکشن‌ها داخل شیت سفید تخت می‌شن (بدون کارت جدا) */
+@media (max-width: 767px) {
+  .detail-sheet :deep(.glass-card) {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
 }
 </style>

@@ -521,6 +521,14 @@
     "scientificSynonyms": "مترادف‌های علمی",
     "fossilPeriod": "دوره فسیلی",
     "gallery": "گالری تصاویر",
+    "noIssues": "مشکل رایجی برای این گیاه ثبت نشده.",
+    "tabs": {
+      "overview": "نمای کلی",
+      "care": "نگهداری",
+      "health": "سلامت",
+      "toxicity": "سمّیت",
+      "scientific": "علمی"
+    },
     "notFound": "گیاهی با این مشخصات پیدا نشد.",
     "taxonomy": {
       "kingdom": "فرمانرو",
