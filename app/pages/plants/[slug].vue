@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { getMockDiseases } from '~/services/mock/diseases.mock'
 import { findPlantDetailBySlug } from '~/services/mock/plant-details.mock'
+import MorphologyIcon from '~/components/plant/MorphologyIcon.vue'
 
 const route = useRoute()
 const plantStore = usePlantStore()
@@ -24,8 +25,8 @@ const chemicalCompoundsExpanded = ref(false)
 
 // ============ حالت موبایل: تب‌ها ============
 const router = useRouter()
-type MobileTab = 'overview' | 'care' | 'health' | 'toxicity' | 'scientific'
-const mobileTabs: MobileTab[] = ['overview', 'care', 'health', 'toxicity', 'scientific']
+type MobileTab = 'overview' | 'care' | 'health' | 'scientific'
+const mobileTabs: MobileTab[] = ['overview', 'care', 'health', 'scientific']
 const mobileTab = ref<MobileTab>('overview')
 // توی دسکتاپ همه‌ی سکشن‌ها دیده می‌شن؛ توی موبایل فقط سکشن‌های تب فعال
 function tabShow(tab: MobileTab) {
@@ -382,7 +383,7 @@ const growthIcons: Record<string, string> = {
               :class="mobileTab === tab ? 'font-bold text-primary-700' : 'font-medium text-ink-muted'"
               @click="mobileTab = tab"
           >
-            {{ t(`plantDetail.tabs.${tab}`) }}
+            {{ t(tab === 'health' ? 'plantDetail.tabs.healthToxicity' : `plantDetail.tabs.${tab}`) }}
             <span
                 v-if="mobileTab === tab"
                 class="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-primary-700"
@@ -391,11 +392,13 @@ const growthIcons: Record<string, string> = {
         </div>
 
         <!-- تب نمای کلی: توضیح + ردیف‌های اطلاعات -->
-        <div v-show="mobileTab === 'overview'" class="pt-4">
-          <p class="text-sm leading-7 text-ink">
-            {{ plant.description }}
-          </p>
-          <ul class="mt-2 divide-y divide-ink/10">
+        <div v-show="mobileTab === 'overview'" class="flex flex-col gap-6 pt-4">
+          <section class="glass-card mobile-card p-5">
+            <p class="text-sm leading-7 text-ink">
+              {{ plant.description }}
+            </p>
+          </section>
+          <ul class="glass-card mobile-card divide-y divide-ink/10 px-5 py-2">
             <li
                 v-for="(stat, index) in detail.quickStats"
                 :key="stat.label"
@@ -483,8 +486,10 @@ const growthIcons: Record<string, string> = {
                   :key="key"
                   class="rounded-md border border-ink/10 bg-bg p-3 transition hover:-translate-x-1 hover:shadow-card"
               >
-                <div class="flex items-center gap-1.5 border-b border-dashed border-ink/15 pb-1.5 text-xs text-ink-muted">
-                  <span class="text-accent-500">●</span>
+                <div class="flex items-center gap-2 border-b border-dashed border-ink/15 pb-2 text-xs text-ink-muted">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
+                    <MorphologyIcon :name="String(key)" class="size-6" />
+                  </span>
                   <strong>{{ getMorphLabel(key) }}</strong>
                 </div>
                 <div class="mt-2 text-sm leading-relaxed text-ink">
@@ -532,7 +537,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- ترکیبات شیمیایی -->
-          <section class="glass-card p-5 sm:p-6" :class="tabShow('toxicity')">
+          <section class="glass-card p-5 sm:p-6 max-md:order-3" :class="tabShow('health')">
             <div class="flex items-center justify-between gap-3">
               <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
                 {{ t('plantDetail.chemicalCompounds') }}
@@ -552,7 +557,7 @@ const growthIcons: Record<string, string> = {
 
             <div class="mb-4" />
 
-            <div class="rounded-md border-r-4 border-accent-400 bg-bg px-4 py-3">
+            <div class="rounded-md border-s-4 border-accent-400 bg-bg px-4 py-3">
               <span class="block text-xs font-semibold text-ink-muted">{{ t('plantDetail.mainActiveCompound') }}:</span>
               <span class="text-sm font-medium text-primary-900">{{ detail.chemicalCompounds.majorCompound }}</span>
             </div>
@@ -619,7 +624,7 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- داستان گیاه -->
-          <section class="glass-card p-5 sm:p-6" :class="tabShow('overview')">
+          <section class="glass-card mobile-card p-5 sm:p-6" :class="tabShow('overview')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.story') }}
             </h2>
@@ -630,12 +635,12 @@ const growthIcons: Record<string, string> = {
           </section>
 
           <!-- سمّیت -->
-          <section class="glass-card p-5 sm:p-6" :class="tabShow('toxicity')">
+          <section class="glass-card p-5 sm:p-6 max-md:order-2" :class="tabShow('health')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.toxicity') }}
             </h2>
             <div class="mb-4" />
-            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-warning bg-status-warning/10 px-4 py-3">
+            <div class="flex items-center gap-3 rounded-md border-s-4 border-status-warning bg-status-warning/10 px-4 py-3">
               <Icon name="lucide:triangle-alert" class="size-5 shrink-0 text-status-warning" />
               <div class="text-sm text-ink"><strong>{{ t('plantDetail.toxicity') }}:</strong> {{ detail.toxicityText }}</div>
             </div>
@@ -644,7 +649,7 @@ const growthIcons: Record<string, string> = {
           <!-- مشکلات رایج -->
           <section
               v-if="plant.commonIssues.length"
-              class="glass-card p-5 sm:p-6" :class="tabShow('health')"
+              class="glass-card p-5 sm:p-6 max-md:order-1" :class="tabShow('health')"
           >
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.commonProblems') }}
@@ -682,14 +687,14 @@ const growthIcons: Record<string, string> = {
               {{ t('plantDetail.conservation') }}
             </h2>
             <div class="mb-4" />
-            <div class="flex items-center gap-3 rounded-md border-r-4 border-status-info bg-status-info/10 px-4 py-3">
+            <div class="flex items-center gap-3 rounded-md border-s-4 border-status-info bg-status-info/10 px-4 py-3">
               <Icon name="lucide:shield" class="size-5 shrink-0 text-status-info" />
               <div class="text-sm text-ink"><strong>{{ t('plantDetail.conservationStatus') }}:</strong> {{ detail.conservationStatus }}</div>
             </div>
           </section>
 
           <!-- نام‌های محلی -->
-          <section class="glass-card p-5 sm:p-6" :class="tabShow('overview')">
+          <section class="glass-card mobile-card p-5 sm:p-6" :class="tabShow('overview')">
             <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
               {{ t('plantDetail.localNames') }}
             </h2>
@@ -739,7 +744,7 @@ const growthIcons: Record<string, string> = {
       </div>
 
       <!-- ========== گالری تصاویر ========== -->
-      <section class="glass-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1" :class="tabShow('overview')">
+      <section class="glass-card mobile-card group mt-7 p-5 overflow-hidden text-right transition hover:-translate-y-1 max-md:mt-6" :class="tabShow('overview')">
         <h2 class="flex items-baseline gap-2 text-base font-bold text-primary-800">
           {{ t('plantDetail.gallery') }}
         </h2>
@@ -857,7 +862,7 @@ const growthIcons: Record<string, string> = {
 
 /* موبایل: سکشن‌ها داخل شیت سفید تخت می‌شن (بدون کارت جدا) */
 @media (max-width: 767px) {
-  .detail-sheet :deep(.glass-card) {
+  .detail-sheet :deep(.glass-card:not(.mobile-card)) {
     padding: 0;
     border: 0;
     background: transparent;
