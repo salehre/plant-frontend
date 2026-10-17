@@ -54,8 +54,16 @@ export const useIdentifyStore = defineStore('identify', {
       this.status = 'analyzing'
       this.clearConfirmation()
       try {
-        this.result = await fakeIdentify(locale)
+        const result = await fakeIdentify(locale)
+        this.result = result
         this.status = 'done'
+        useActivityStore().log({
+          type: 'scan',
+          title: result.plantName,
+          image: result.image,
+          slug: result.slug,
+          confidence: result.confidence,
+        })
         // دیگه خودکار تو History ثبت نمی‌شه؛ فقط وقتی کاربر یه نتیجه رو تأیید کنه (toggleConfirm)
       }
       catch {

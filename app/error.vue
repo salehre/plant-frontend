@@ -130,3 +130,9 @@ function refreshPage() {
     </section>
   </NuxtLayout>
 </template>
+
+<style scoped>
+.x{
+  stroke: none;
+}
+</style>

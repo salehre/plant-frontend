@@ -11,11 +11,9 @@ const isPlantDetail = computed(() => route.path.startsWith('/plants/'))
 
 <template>
   <div class="min-h-screen bg-bg">
-    <TheHeader :class="isPlantDetail ? 'max-md:hidden' : ''" />
-
-    <!-- md:ps-64 = عرض سایدبار (در RTL سایدبار سمت راسته و در LTR سمت چپ) -->
+    <TheSidebar />
     <div class="flex min-h-screen min-w-0 flex-col overflow-x-clip md:ps-64">
-      <TheHeader />
+      <TheHeader :class="isPlantDetail ? 'max-md:hidden' : ''" />
       <main
         class="mx-auto w-full max-w-6xl flex-1 px-4 pt-4 sm:px-6"
         :class="isHome ? '' : 'pb-24 md:pb-8'"

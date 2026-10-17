@@ -235,6 +235,18 @@
       "memberSince": "عضو از",
       "recentActivity": "فعالیت اخیر",
       "identified": "شناسایی‌شده",
+        "activity": {
+       "filters": {
+          "all": "همه",
+          "scan": "اسکن‌ها",
+          "plant_added": "باغچه",
+          "task_done": "تسک‌ها"
+        },
+        "plantAdded": "به باغچه‌ات اضافه شد",
+        "taskDone": "{task} انجام شد",
+        "emptyFilter": "هنوز فعالیتی از این نوع ثبت نشده.",
+        "showMore": "نمایش بیشتر"
+      },
       "myFavorites": "علاقه‌مندی‌های من",
       "quickActions": "دسترسی سریع",
       "library": "علاقه‌مندی‌ها و تاریخچه",

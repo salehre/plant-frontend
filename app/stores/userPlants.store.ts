@@ -66,6 +66,12 @@ export const useUserPlantsStore = defineStore('userPlants', {
   actions: {
     addPlant(plant: Omit<UserPlant, 'id'>) {
       this.plants.push({ ...plant, id: `up${Date.now()}` })
+        useActivityStore().log({
+        type: 'plant_added',
+        title: plant.nickname,
+        image: plant.photo,
+        slug: plant.plantSlug || undefined,
+      })
     },
     removePlant(id: string) {
       this.plants = this.plants.filter(p => p.id !== id)
@@ -73,7 +79,16 @@ export const useUserPlantsStore = defineStore('userPlants', {
     },
     completeTask(id: string) {
       const task = this.tasks.find(t => t.id === id)
-      if (task) task.done = true
+      if (!task || task.done) return
+      task.done = true
+      const plant = this.plants.find(p => p.id === task.userPlantId)
+      useActivityStore().log({
+        type: 'task_done',
+        title: plant?.nickname ?? '',
+        image: plant?.photo,
+        slug: plant?.plantSlug || undefined,
+        taskType: task.type,
+      })
     },
   },
 })

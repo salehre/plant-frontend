@@ -235,6 +235,18 @@
       "memberSince": "Member since",
       "recentActivity": "Recent activity",
       "identified": "Identified",
+        "activity": {
+        "filters": {
+          "all": "All",
+          "scan": "Scans",
+          "plant_added": "My garden",
+          "task_done": "Tasks"
+        },
+        "plantAdded": "Added to your garden",
+        "taskDone": "{task} completed",
+        "emptyFilter": "No activity of this type yet.",
+        "showMore": "Show more"
+      },
       "myFavorites": "My favorites",
       "quickActions": "Quick actions",
       "library": "Favorites & history",

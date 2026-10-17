@@ -79,7 +79,7 @@ function onImageError(e: Event) {
       <div class="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end">
         <AvatarUploader
           avatar-class="size-24 ring-4 ring-surface"
-          class="-mt-12 z-50"
+          class="-mt-12 z-10"
         />
 
         <div class="min-w-0 flex-1 pt-2 sm:pb-1">
@@ -152,57 +152,8 @@ function onImageError(e: Event) {
 
     <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
       <div class="flex min-w-0 flex-col gap-5">
-        <!-- فعالیت اخیر -->
-        <section
-          v-if="recent.length"
-          class="glass-card p-4 sm:p-5"
-        >
-          <div class="mb-3 flex items-center justify-between">
-            <h2 class="font-bold text-ink">
-              {{ $t('pages.profile.recentActivity') }}
-            </h2>
-            <NuxtLink
-              to="/history"
-              class="text-xs font-medium text-primary-600 hover:text-primary-700"
-            >
-              {{ $t('common.seeAll') }}
-            </NuxtLink>
-          </div>
-          <ul class="divide-y divide-ink/5">
-            <li
-              v-for="entry in recent"
-              :key="entry.id"
-            >
-              <NuxtLink
-                :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
-                class="flex items-center gap-3 py-3"
-              >
-                <span class="relative size-11 shrink-0 overflow-hidden rounded-lg bg-primary-50">
-                  <Icon
-                    name="lucide:leaf"
-                    class="absolute inset-0 m-auto size-4 text-primary-400"
-                  />
-                  <img
-                    :src="entry.image"
-                    :alt="entry.plantName"
-                    class="relative size-full object-cover"
-                    loading="lazy"
-                    @error="onImageError"
-                  >
-                </span>
-                <span class="min-w-0 flex-1">
-                  <span class="block truncate text-sm font-bold text-ink">{{ entry.plantName }}</span>
-                  <span class="block truncate text-xs text-ink-muted">
-                    {{ $t('pages.profile.identified') }} · {{ formatDate(entry.timestamp) }}
-                  </span>
-                </span>
-                <span class="shrink-0 rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-bold text-primary-700">
-                  {{ formatPercent(entry.confidence) }}
-                </span>
-              </NuxtLink>
-            </li>
-          </ul>
-        </section>
+
+        <ActivityFeed />
 
         <!-- علاقه‌مندی‌ها -->
         <section
