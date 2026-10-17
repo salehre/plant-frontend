@@ -612,7 +612,7 @@ const growthIcons: Record<string, string> = {
                   <Icon :name="growthIcons[key]" class="size-4" />
                 </span>
                 <div>
-                  <div class="text-[0.7rem] font-semibold uppercase tracking-wide text-primary-900">
+                  <div class="text-[0.7rem] mb-2 font-semibold uppercase tracking-wide text-primary-900">
                     {{ getNeedLabel(key) }}
                   </div>
                   <div class="text-sm text-ink-muted">

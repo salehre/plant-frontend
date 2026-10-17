@@ -13,6 +13,9 @@ const { status: featuredStatus } = useAsyncData(
   { watch: [activeLocale] },
 )
 const featuredPending = computed(() => featuredStatus.value === 'pending' && !featured.value.length)
+const featuredShown = computed(() => featured.value.slice(0, 4))
+// بک‌گراند کارت تبلیغی بخش گیاهان شاخص؛ بعداً فقط مسیر همین عکس رو عوض کن
+const featuredPromoImage = '/images/plants/header.png'
 
 const quickActions = [
   { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
@@ -20,12 +23,28 @@ const quickActions = [
   { to: '/climate', icon: 'lucide:map-pin', label: 'nav.climate', hint: 'home.quickHints.city' },
 ]
 
-const recentScans = computed(() => historyStore.sorted.slice(0, 4))
+const recentScans = computed(() => historyStore.sorted.slice(0, 5))
 
 function formatConfidence(value: number) {
-  return t('components.confidenceScore.percentage', {
-    value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(Math.round(value * 100)),
+  return t('home.scanConfidence', {
+    value: t('components.confidenceScore.percentage', {
+      value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(Math.round(value * 100)),
+    }),
   })
+}
+
+// زمان نسبی و محلی‌شده: «۲ ساعت پیش» / «دیروز» / "2 hours ago" / "Yesterday"
+function scanTime(timestamp: number) {
+  const rtf = new Intl.RelativeTimeFormat(locale.value === 'fa' ? 'fa' : 'en', { numeric: 'auto' })
+  const minutes = Math.max(1, Math.round((Date.now() - timestamp) / 60_000))
+  if (minutes < 60) return rtf.format(-minutes, 'minute')
+  const hours = Math.round(minutes / 60)
+  if (hours < 24) return rtf.format(-hours, 'hour')
+  const days = Math.round(hours / 24)
+  if (days < 30) return rtf.format(-days, 'day')
+  const months = Math.round(days / 30)
+  if (months < 12) return rtf.format(-months, 'month')
+  return rtf.format(-Math.round(months / 12), 'year')
 }
 
 // عکس اسکن (blob) بعد از رفرش از بین می‌ره؛ فقط مخفیش می‌کنیم تا آیکن پشتش دیده بشه
@@ -97,30 +116,33 @@ function onImageError(e: Event) {
     </section>
 
     <!-- آخرین اسکن‌ها -->
-    <section v-if="recentScans.length">
+    <section v-if="recentScans.length" class="glass-card p-4 sm:p-5">
       <div class="mb-4 flex items-center justify-between">
         <h2 class="text-lg font-bold text-ink">
           {{ t('pages.profile.history') }}
         </h2>
         <NuxtLink
           to="/history"
-          class="text-sm font-medium text-primary-600 hover:text-primary-700"
+          class="text-sm font-semibold text-primary-700 hover:text-primary-600"
         >
           {{ t('common.seeAll') }}
         </NuxtLink>
       </div>
-      <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4">
+
+      <!-- موبایل: اسکرول افقی | دسکتاپ: ۵ ستون -->
+      <div
+        class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         <NuxtLink
-          v-for="(entry, index) in recentScans"
+          v-for="entry in recentScans"
           :key="entry.id"
           :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
-          class="glass-card group flex-col p-2"
-          :class="index === 3 ? 'hidden sm:flex' : 'flex'"
+          class="group flex w-[68%] shrink-0 snap-start flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover sm:w-[42%] lg:w-auto lg:[&:nth-child(5)]:hidden"
         >
-          <div class="relative aspect-square overflow-hidden rounded-xl bg-primary-50">
+          <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50">
             <Icon
               name="lucide:leaf"
-              class="absolute inset-0 m-auto size-8 text-primary-400"
+              class="absolute inset-0 m-auto size-10 text-primary-400"
             />
             <img
               :src="entry.image"
@@ -130,10 +152,23 @@ function onImageError(e: Event) {
               @error="onImageError"
             >
           </div>
-          <div class="flex items-center justify-between gap-2 px-1.5 pb-1 pt-3">
-            <span class="truncate text-sm font-bold text-ink">{{ entry.plantName }}</span>
-            <span class="shrink-0 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-bold text-primary-700">
-              {{ formatConfidence(entry.confidence) }}
+          <div class="flex items-end justify-between gap-2 px-1.5 pb-1.5 pt-3.5">
+            <div class="min-w-0">
+              <p class="truncate text-base font-bold text-ink">
+                {{ entry.plantName }}
+              </p>
+              <p class="mt-1.5 truncate text-sm font-semibold text-primary-700">
+                {{ formatConfidence(entry.confidence) }}
+              </p>
+              <p class="mt-0.5 truncate text-sm text-ink-muted">
+                {{ scanTime(entry.timestamp) }}
+              </p>
+            </div>
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 text-ink-muted transition-colors group-hover:border-primary-300 group-hover:text-primary-700">
+              <Icon
+                name="lucide:chevron-right"
+                class="size-5 rtl:-scale-x-100"
+              />
             </span>
           </div>
         </NuxtLink>
@@ -149,34 +184,100 @@ function onImageError(e: Event) {
     <FaqSection />
 
     <!-- گیاهان شاخص -->
-    <section>
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-lg font-bold text-ink">
-          {{ t('home.featuredPlants') }}
-        </h2>
-        <NuxtLink
-          to="/plants"
-          class="text-sm font-medium text-primary-600 hover:text-primary-700"
-        >
-          {{ t('common.seeAll') }}
-        </NuxtLink>
-      </div>
-      <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6">
-        <template v-if="featuredPending">
-          <PlantCardSkeleton
-            v-for="i in 6"
-            :key="i"
-            variant="mini"
-          />
-        </template>
-        <template v-else>
-          <PlantCard
-            v-for="plant in featured"
-            :key="plant.id"
-            :plant="plant"
-            variant="mini"
-          />
-        </template>
+    <section class="glass-card p-4 sm:p-5">
+      <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        <div class="min-w-0">
+          <div class="mb-4 flex items-start justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-bold text-ink">
+                {{ t('home.featuredPlants') }}
+              </h2>
+              <p class="mt-1.5 text-base text-ink-muted">
+                {{ t('home.featuredSubtitle') }}
+              </p>
+            </div>
+            <NuxtLink
+              to="/plants"
+              class="shrink-0 text-sm font-semibold text-primary-700 hover:text-primary-600"
+            >
+              {{ t('common.seeAll') }}
+            </NuxtLink>
+          </div>
+
+          <div
+            class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            <template v-if="featuredPending">
+              <div
+                v-for="i in 4"
+                :key="i"
+                class="w-[68%] shrink-0 snap-start sm:w-[42%] lg:w-auto"
+              >
+                <PlantCardSkeleton variant="mini" />
+              </div>
+            </template>
+            <template v-else>
+              <NuxtLink
+                v-for="plant in featuredShown"
+                :key="plant.id"
+                :to="`/plants/${plant.slug}`"
+                class="group flex w-[68%] shrink-0 snap-start flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card lg:rounded-3xl lg:p-3.5 transition hover:-translate-y-0.5 hover:shadow-card-hover sm:w-[42%] lg:w-auto lg:[&:nth-child(4)]:hidden"
+              >
+                <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50 lg:aspect-[4/3.4] lg:rounded-2xl">
+                  <img
+                    :src="plant.images[0]"
+                    :alt="plant.name"
+                    class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  >
+                  <div class="absolute end-2 top-2">
+                    <WishlistButton
+                      :slug="plant.slug"
+                      compact
+                    />
+                  </div>
+                </div>
+                <div class="flex items-end justify-between gap-2 px-1.5 pb-1.5 pt-3.5 lg:px-2 lg:pb-2 lg:pt-4">
+                  <div class="min-w-0">
+                    <p class="truncate text-base font-bold text-ink lg:text-lg">
+                      {{ plant.name }}
+                    </p>
+                    <p class="mt-1 truncate text-sm italic text-ink-muted lg:text-base">
+                      {{ plant.scientificName }}
+                    </p>
+                  </div>
+                </div>
+              </NuxtLink>
+            </template>
+          </div>
+        </div>
+
+        <!-- کارت تبلیغی با عکس پس‌زمینه -->
+        <div class="relative isolate flex min-h-[260px] max-md:hidden flex-col justify-center overflow-hidden rounded-3xl p-8">
+          <img
+            :src="featuredPromoImage"
+            alt=""
+            class="absolute inset-0 -z-20 size-full object-cover object-center"
+            loading="lazy"
+          >
+          <div class="absolute inset-0 -z-10 bg-gradient-to-r from-surface/95 via-surface/75 to-surface/10 rtl:bg-gradient-to-l" />
+          <h3 class="max-w-[15rem] text-3xl font-extrabold leading-snug text-ink">
+            {{ t('home.promoTitle') }}
+          </h3>
+          <p class="mt-4 max-w-[14rem] text-base leading-7 text-ink-muted">
+            {{ t('home.promoText') }}
+          </p>
+          <NuxtLink
+            to="/care-calendar"
+            class="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-primary-900 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-800"
+          >
+            {{ t('home.promoCta') }}
+            <Icon
+              name="lucide:arrow-right"
+              class="size-4 rtl:-scale-x-100"
+            />
+          </NuxtLink>
+        </div>
       </div>
     </section>
 

@@ -31,6 +31,11 @@
   },
   "home": {
     "heroTitle": "Every leaf is a clue",
+    "scanConfidence": "{value} confidence",
+    "featuredSubtitle": "Hand-picked plants that thrive in everyday homes.",
+    "promoTitle": "Better Care, Healthier Plants",
+    "promoText": "Get personalized care plans and reminders for your plants.",
+    "promoCta": "Create care plan",
     "heroSubtitle": "Snap a photo, identify your plant, and take charge of its care.",
     "identifyCta": "Identify a plant from a photo",
     "featuredPlants": "Featured plants",
