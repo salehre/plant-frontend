@@ -45,7 +45,7 @@ function select(value: string) {
     <Transition name="dropdown-fade">
       <ul
         v-if="open"
-        class="absolute z-20 mt-1 w-full overflow-hidden rounded-md border border-ink/10 bg-surface py-1 shadow-card-hover"
+        class="absolute z-20 mt-1 max-h-64 w-full overflow-y-auto rounded-md border border-ink/10 bg-surface py-1 shadow-card-hover"
       >
         <li
           v-for="opt in options"

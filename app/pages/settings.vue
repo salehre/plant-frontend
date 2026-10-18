@@ -15,13 +15,17 @@ const memberSince = computed(() => user.value?.joinedAt
   ? new Intl.DateTimeFormat(intlLocale.value, { month: 'long', year: 'numeric' }).format(new Date(user.value.joinedAt))
   : '')
 
-type SectionKey = 'account' | 'appearance' | 'about'
+type SectionKey = 'account' | 'appearance' | 'locations' | 'about'
 
 // روی دسکتاپ فقط بخش انتخاب‌شده دیده می‌شه؛ روی موبایل همه‌ی بخش‌ها زیر هم‌ان
-const active = ref<SectionKey>('account')
+const route = useRoute()
+const sectionKeys: SectionKey[] = ['account', 'appearance', 'locations', 'about']
+const querySection = String(route.query.section ?? '') as SectionKey
+const active = ref<SectionKey>(sectionKeys.includes(querySection) ? querySection : 'account')
 const sections = computed<{ key: SectionKey, icon: string, label: string }[]>(() => [
   { key: 'account', icon: 'lucide:user', label: t('pages.profile.account') },
   { key: 'appearance', icon: 'lucide:palette', label: `${t('pages.profile.appearance')} / ${t('pages.profile.language')}` },
+  { key: 'locations', icon: 'lucide:map-pin', label: t('pages.profile.addresses') },
   { key: 'about', icon: 'lucide:info', label: t('components.theFooter.about') },
 ])
 
@@ -243,6 +247,11 @@ const aboutRows = computed(() => [
               </button>
             </div>
           </div>
+        </section>
+
+        <!-- آدرس‌ها -->
+        <section :class="panelClass('locations')">
+          <AddressManager />
         </section>
 
         <!-- درباره / پشتیبانی -->

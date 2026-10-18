@@ -1,12 +1,25 @@
 <script setup lang="ts">
-import { getMockCities, findCityById } from '~/services/mock/climate.mock'
+import { findCityById } from '~/services/mock/climate.mock'
 import { getMockPlants } from '~/services/mock/plants.mock'
 
-const selectedCityId = ref('tehran')
 const { t, locale } = useI18n()
+const addressStore = useAddressStore()
+
+// وقتی آدرسی ذخیره نشده، مثل قبل از لیست همه‌ی شهرها انتخاب می‌شه
+const fallbackCityId = ref('tehran')
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
-const cityOptions = computed(() => getMockCities(activeLocale.value).map(c => ({ label: `${c.name} (${c.province})`, value: c.id })))
+
+const addressChips = computed(() =>
+  addressStore.items.map((address) => {
+    const city = findCityById(address.cityId, activeLocale.value)
+    return { id: address.id, label: address.label, cityName: city?.name ?? address.cityId }
+  }),
+)
+const selectedCityId = computed({
+  get: () => addressStore.active?.cityId ?? fallbackCityId.value,
+  set: (value: string) => { fallbackCityId.value = value },
+})
 
 const selectedCity = computed(() => findCityById(selectedCityId.value, activeLocale.value))
 const localizedPlants = computed(() => getMockPlants(activeLocale.value))
@@ -36,11 +49,70 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
       </p>
     </div>
 
-    <div class="max-w-xs">
-      <AppDropdown
-        v-model="selectedCityId"
-        :options="cityOptions"
-      />
+    <!-- آدرس‌های ذخیره‌شده‌ی کاربر -->
+    <div
+      v-if="addressChips.length"
+      class="flex flex-col gap-2.5"
+    >
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-sm font-medium text-ink">
+          {{ t('pages.climate.myAddresses') }}
+        </p>
+        <NuxtLink
+          to="/settings?section=locations"
+          class="text-xs font-medium text-primary-600 hover:text-primary-700"
+        >
+          {{ t('pages.climate.manageAddresses') }}
+        </NuxtLink>
+      </div>
+      <div
+        class="flex flex-wrap gap-2"
+        role="radiogroup"
+        :aria-label="t('pages.climate.myAddresses')"
+      >
+        <button
+          v-for="chip in addressChips"
+          :key="chip.id"
+          type="button"
+          role="radio"
+          :aria-checked="addressStore.active?.id === chip.id"
+          class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors"
+          :class="addressStore.active?.id === chip.id
+            ? 'border-primary-600 bg-primary-600 text-white'
+            : 'border-ink/10 bg-surface text-ink hover:border-primary-300 hover:bg-primary-50'"
+          @click="addressStore.setActive(chip.id)"
+        >
+          <AddressIcon
+            :label="chip.label"
+            class="size-4 shrink-0"
+          />
+          <span class="font-bold">{{ chip.label || chip.cityName }}</span>
+          <span
+            v-if="chip.label"
+            class="text-xs opacity-80"
+          >{{ chip.cityName }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- بدون آدرس: انتخاب مستقیم شهر + دعوت به افزودن آدرس -->
+    <div
+      v-else
+      class="flex flex-col gap-3"
+    >
+      <div class="grid max-w-lg gap-3 sm:grid-cols-2">
+        <ProvinceCitySelect v-model="selectedCityId" />
+      </div>
+      <NuxtLink
+        to="/settings?section=locations"
+        class="inline-flex w-fit items-center gap-2 rounded-xl bg-primary-50 px-4 py-2.5 text-sm text-primary-700 transition-colors hover:bg-primary-100"
+      >
+        <Icon
+          name="lucide:map-pin-plus"
+          class="size-4"
+        />
+        {{ t('pages.climate.addAddressHint') }}
+      </NuxtLink>
     </div>
 
     <template v-if="selectedCity">

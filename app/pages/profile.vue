@@ -5,7 +5,6 @@ const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const userPlantsStore = useUserPlantsStore()
 const historyStore = useHistoryStore()
-const wishlistStore = useWishlistStore()
 const { plants: favoritePlants, load: loadFavorites } = useWishlistPlants()
 
 onMounted(() => { void loadFavorites() })
@@ -40,13 +39,8 @@ const stats = computed(() => [
   { icon: 'lucide:heart-pulse', value: `${toPersianDigits(healthRate.value)}٪`, label: 'pages.dashboard.healthRate' },
 ])
 
-const recent = computed(() => historyStore.sorted.slice(0, 5))
-const favorites = computed(() => favoritePlants.value.slice(0, 4))
-
-const libraryRows = computed(() => [
-  { to: '/wishlist', icon: 'lucide:heart', label: t('pages.profile.wishlist'), hint: t('pages.profile.wishlistDescription'), value: toPersianDigits(wishlistStore.count) },
-  { to: '/history', icon: 'lucide:history', label: t('pages.profile.history'), hint: t('pages.profile.historyDescription'), value: toPersianDigits(historyStore.count) },
-])
+const recent = computed(() => historyStore.sorted.slice(0, 3))
+const favorites = computed(() => favoritePlants.value.slice(0, 3))
 
 const quickActions = [
   { to: '/climate', icon: 'lucide:cloud-sun', label: 'nav.climate' },
@@ -177,80 +171,114 @@ function onImageError(e: Event) {
               {{ $t('common.seeAll') }}
             </NuxtLink>
           </div>
-          <div class="grid grid-cols-4 gap-3">
-            <PlantCard
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            <NuxtLink
               v-for="plant in favorites"
               :key="plant.id"
-              :plant="plant"
-              variant="mini"
-            />
+              :to="`/plants/${plant.slug}`"
+              class="group flex min-w-0 flex-col gap-2.5 rounded-2xl border border-ink/5 bg-surface p-1.5 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover sm:p-2.5"
+            >
+              <div class="aspect-square overflow-hidden rounded-xl bg-primary-50">
+                <img
+                  :src="plant.images[0]"
+                  :alt="plant.name"
+                  class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                >
+              </div>
+              <div class="min-w-0 px-0.5 pb-0.5">
+                <p class="truncate text-xs font-bold text-ink sm:text-sm">
+                  {{ plant.name }}
+                </p>
+                <p class="truncate text-[11px] italic text-ink-muted">
+                  {{ plant.scientificName }}
+                </p>
+              </div>
+            </NuxtLink>
+          </div>
+        </section>
+
+        <!-- آخرین اسکن‌ها -->
+        <section
+          v-if="recent.length"
+          class="glass-card p-4 sm:p-5"
+        >
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="font-bold text-ink">
+              {{ $t('pages.profile.history') }}
+            </h2>
+            <NuxtLink
+              to="/history"
+              class="text-xs font-medium text-primary-600 hover:text-primary-700"
+            >
+              {{ $t('common.seeAll') }}
+            </NuxtLink>
+          </div>
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            <NuxtLink
+              v-for="entry in recent"
+              :key="entry.id"
+              :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
+              class="group flex min-w-0 flex-col gap-2.5 rounded-2xl border border-ink/5 bg-surface p-1.5 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover sm:p-2.5"
+            >
+              <div class="relative aspect-square overflow-hidden rounded-xl bg-primary-50">
+                <Icon
+                  name="lucide:leaf"
+                  class="absolute inset-0 m-auto size-6 text-primary-400"
+                />
+                <img
+                  :src="entry.image"
+                  :alt="entry.plantName"
+                  class="relative size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                  @error="onImageError"
+                >
+              </div>
+              <div class="min-w-0 px-0.5 pb-0.5">
+                <p class="truncate text-xs font-bold text-ink sm:text-sm">
+                  {{ entry.plantName }}
+                </p>
+                <p class="truncate text-[11px] italic text-ink-muted">
+                  {{ entry.scientificName }}
+                </p>
+                <p class="truncate text-[11px] font-medium text-primary-700">
+                  {{ formatPercent(entry.confidence) }}
+                </p>
+              </div>
+            </NuxtLink>
           </div>
         </section>
       </div>
 
-      <div class="flex min-w-0 flex-col gap-5">
-        <!-- علاقه‌مندی‌ها و تاریخچه -->
-        <section class="glass-card p-4 sm:p-5">
-          <h2 class="mb-2 font-bold text-ink">
-            {{ $t('pages.profile.library') }}
-          </h2>
-          <ul class="divide-y divide-ink/5">
-            <li
-              v-for="row in libraryRows"
-              :key="row.to"
+      <!-- دسترسی سریع -->
+      <section class="glass-card p-4 sm:p-5">
+        <h2 class="mb-2 font-bold text-ink">
+          {{ $t('pages.profile.quickActions') }}
+        </h2>
+        <ul class="divide-y divide-ink/5">
+          <li
+            v-for="action in quickActions"
+            :key="action.to"
+          >
+            <NuxtLink
+              :to="action.to"
+              class="flex items-center gap-3 py-3"
             >
-              <NuxtLink
-                :to="row.to"
-                class="flex items-center gap-3 py-4"
-              >
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
                 <Icon
-                  :name="row.icon"
-                  class="size-5 shrink-0 text-primary-700"
+                  :name="action.icon"
+                  class="size-5"
                 />
-                <span class="min-w-0 flex-1">
-                  <span class="block text-sm font-medium text-ink">{{ row.label }}</span>
-                  <span class="block truncate text-xs text-ink-muted">{{ row.hint }}</span>
-                </span>
-                <span class="text-sm text-ink-muted">{{ row.value }}</span>
-                <Icon
-                  name="lucide:chevron-left"
-                  class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
-                />
-              </NuxtLink>
-            </li>
-          </ul>
-        </section>
-
-        <!-- دسترسی سریع -->
-        <section class="glass-card p-4 sm:p-5">
-          <h2 class="mb-2 font-bold text-ink">
-            {{ $t('pages.profile.quickActions') }}
-          </h2>
-          <ul class="divide-y divide-ink/5">
-            <li
-              v-for="action in quickActions"
-              :key="action.to"
-            >
-              <NuxtLink
-                :to="action.to"
-                class="flex items-center gap-3 py-3"
-              >
-                <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-                  <Icon
-                    :name="action.icon"
-                    class="size-5"
-                  />
-                </span>
-                <span class="flex-1 text-sm font-medium text-ink">{{ $t(action.label) }}</span>
-                <Icon
-                  name="lucide:chevron-left"
-                  class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
-                />
-              </NuxtLink>
-            </li>
-          </ul>
-        </section>
-      </div>
+              </span>
+              <span class="flex-1 text-sm font-medium text-ink">{{ $t(action.label) }}</span>
+              <Icon
+                name="lucide:chevron-left"
+                class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
+              />
+            </NuxtLink>
+          </li>
+        </ul>
+      </section>
     </div>
   </div>
 </template>
