@@ -111,10 +111,6 @@ function confirmRemove() {
         class="ms-auto"
         @click="add"
       >
-        <Icon
-          name="lucide:plus"
-          class="size-4"
-        />
         {{ t('pages.profile.addAddress') }}
       </AppButton>
     </div>
@@ -159,7 +155,7 @@ function confirmRemove() {
             <!-- ستاره‌ی پیش‌فرض -->
             <svg
               viewBox="0 0 24 24"
-              class="size-6 shrink-0 transition-colors"
+              class="size-5 shrink-0 transition-colors"
               :class="row.isActive ? 'text-primary-700' : 'text-ink-muted/50'"
               :fill="row.isActive ? 'currentColor' : 'none'"
               stroke="currentColor"

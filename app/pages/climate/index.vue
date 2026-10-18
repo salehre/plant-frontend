@@ -60,8 +60,12 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
         </p>
         <NuxtLink
           to="/settings?section=locations"
-          class="text-xs font-medium text-primary-600 hover:text-primary-700"
+          class="inline-flex items-center gap-1.5 rounded-xl border border-ink/10 bg-surface px-3.5 py-2 text-xs font-bold text-ink transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700"
         >
+          <Icon
+            name="lucide:settings-2"
+            class="size-4"
+          />
           {{ t('pages.climate.manageAddresses') }}
         </NuxtLink>
       </div>
