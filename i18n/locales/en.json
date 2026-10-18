@@ -51,21 +51,28 @@
       "city": "Find plants that suit your city"
     },
       "steps": {
-      "badge": "In {count} steps",
-      "title": "Simple by design",
-      "description": "Just take a photo of your plant or pick one from your gallery. We'll handle the rest.",
+      "title": "How does it work?",
+      "description": "Just a few steps between you and knowing your plant",
+      "note": "You're just one photo away from the world of plants…",
       "upload": {
         "title": "Take or upload a photo",
-        "description": "Pick a photo of your plant from the camera or gallery"
+        "description": "Snap or upload a clear photo of a leaf, a flower or the whole plant."
       },
       "analyze": {
-        "title": "AI-powered analysis",
-        "description": "Your plant is identified in seconds and the best matches are shown"
+        "title": "Sit tight",
+        "description": "AI analyzes the photo and finds the best matches."
       },
       "result": {
-        "title": "See the full details",
-        "description": "Name, characteristics, care guide and plenty of other useful info"
-      }
+        "title": "See the results",
+        "description": "Browse likely species, confidence scores and similar photos."
+      },
+      "details": {
+        "title": "Read the full details",
+        "description": "Everything about the plant, from characteristics to care guides and toxicity warnings."
+      },
+      "loading": "Identifying plant...",
+      "viewDetails": "View details",
+      "addToGarden": "Add to my garden"
     },
     "guidesTitle": "Get started with these guides",
     "wateringTitle": "Water the right way",
@@ -898,6 +905,7 @@
     "stillNeedHelpText": "Send us a message and we'll get back to you as soon as possible.",
     "cards": {
       "faqHint": "Answers to common questions",
+      "termsHint": "Terms of using our service",
       "guideHint": "Plant care guides and articles",
       "contactHint": "Get in touch with our team",
       "reportHint": "Report a problem with a ticket"

@@ -79,11 +79,5 @@ export function useAvatarUpload() {
     }
   }
 
-  function remove() {
-    if (authStore.setAvatar(null)) {
-      uiStore.showToast(t('pages.profile.avatarRemoved'))
-    }
-  }
-
-  return { processing, pick, remove }
+  return { processing, pick }
 }

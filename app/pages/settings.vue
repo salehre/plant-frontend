@@ -25,7 +25,6 @@ const sections = computed<{ key: SectionKey, icon: string, label: string }[]>(()
   { key: 'account', icon: 'lucide:user', label: t('pages.profile.account') },
   { key: 'appearance', icon: 'lucide:palette', label: `${t('pages.profile.appearance')} / ${t('pages.profile.language')}` },
   { key: 'library', icon: 'lucide:heart', label: t('pages.profile.library') },
-  { key: 'about', icon: 'lucide:info', label: t('components.theFooter.about') },
 ])
 
 function panelClass(key: SectionKey) {

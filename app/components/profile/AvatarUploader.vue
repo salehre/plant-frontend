@@ -4,7 +4,7 @@ withDefaults(defineProps<{ avatarClass?: string }>(), { avatarClass: 'size-20' }
 
 const authStore = useAuthStore()
 const { t } = useI18n()
-const { processing, pick, remove } = useAvatarUpload()
+const { processing, pick } = useAvatarUpload()
 
 const input = ref<HTMLInputElement | null>(null)
 </script>
@@ -30,30 +30,15 @@ const input = ref<HTMLInputElement | null>(null)
     <template v-if="authStore.isLoggedIn">
       <button
         type="button"
-        class="absolute -bottom-1 -end-1 flex size-7 items-center justify-center rounded-full bg-primary-600 text-white shadow ring-2 ring-surface transition-colors hover:bg-primary-700 disabled:opacity-60"
+        class="absolute -bottom-0 -end-1 flex size-6 items-center justify-center rounded-full bg-primary-600 text-white shadow ring-2 ring-surface transition-colors hover:bg-primary-700 disabled:opacity-60"
         :aria-label="t('pages.profile.changeAvatar')"
         :title="t('pages.profile.changeAvatar')"
         :disabled="processing"
         @click="input?.click()"
       >
         <Icon
-          name="lucide:camera"
-          class="size-3.5"
-        />
-      </button>
-
-      <button
-        v-if="authStore.user?.avatar"
-        type="button"
-        class="absolute -end-1 -top-1 flex size-6 items-center justify-center rounded-full bg-surface text-status-danger shadow ring-2 ring-surface transition-colors hover:bg-status-danger hover:text-white disabled:opacity-60"
-        :aria-label="t('pages.profile.removeAvatar')"
-        :title="t('pages.profile.removeAvatar')"
-        :disabled="processing"
-        @click="remove"
-      >
-        <Icon
-          name="lucide:x"
-          class="size-3.5"
+          name="lucide:edit-2"
+          class="size-3"
         />
       </button>
 

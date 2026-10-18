@@ -25,7 +25,7 @@ function toggle(i: number) {
 }
 
 const cards = [
-  { to: '#topics', icon: 'lucide:circle-help', title: 'home.faq.title', hint: 'support.cards.faqHint' },
+  { to: '/terms', icon: 'lucide:scroll-text', title: 'components.theFooter.terms', hint: 'support.cards.termsHint' },
   { to: '/blog', icon: 'lucide:book-open', title: 'pages.blog.title', hint: 'support.cards.guideHint' },
   { to: '/contact', icon: 'lucide:messages-square', title: 'contact.title', hint: 'support.cards.contactHint' },
   { to: '/tickets/new', icon: 'lucide:triangle-alert', title: 'tickets.newTicket', hint: 'support.cards.reportHint' },
@@ -109,6 +109,7 @@ const cards = [
             type="button"
             class="flex w-full items-center gap-3 px-4 py-4 text-start transition-colors hover:bg-primary-50/40"
             :aria-expanded="openIndex === i"
+            :aria-controls="`topic-panel-${i}`"
             @click="toggle(i)"
           >
             <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
@@ -120,16 +121,23 @@ const cards = [
             <span class="flex-1 text-sm font-bold text-ink">{{ item.q }}</span>
             <Icon
               name="lucide:chevron-down"
-              class="size-4 shrink-0 text-ink-muted transition-transform"
+              class="size-4 shrink-0 text-ink-muted transition-transform duration-300"
               :class="{ 'rotate-180': openIndex === i }"
             />
           </button>
-          <p
-            v-if="openIndex === i"
-            class="px-4 pb-4 ps-[4.25rem] text-sm leading-7 text-ink-muted"
+          <!-- باز و بسته شدن نرم -->
+          <div
+            :id="`topic-panel-${i}`"
+            class="topic-panel"
+            :class="{ 'topic-panel--open': openIndex === i }"
+            role="region"
           >
-            {{ item.a }}
-          </p>
+            <div class="overflow-hidden">
+              <p class="px-4 pb-4 ps-[4.25rem] text-sm leading-7 text-ink-muted">
+                {{ item.a }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <p
@@ -171,3 +179,22 @@ const cards = [
     </section>
   </div>
 </template>
+
+<style scoped>
+/* باز و بسته شدن نرم بدون محاسبه‌ی ارتفاع با JS */
+.topic-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.3s ease, opacity 0.3s ease;
+}
+.topic-panel--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .topic-panel {
+    transition: none;
+  }
+}
+</style>

@@ -163,6 +163,203 @@
   font-style: italic;
 }
 
+/* ==========================================================================
+   فونت‌های «فقط یک خط»: هر کدوم فقط برای حروف همون خط استفاده می‌شن (unicode-range)
+   - InterScript : فقط حروف لاتین   → توی زبان فارسی متن انگلیسی با Inter نمایش داده می‌شه
+   - PeydaScript : فقط حروف فارسی/عربی → توی زبان انگلیسی متن فارسی با Peyda نمایش داده می‌شه
+   فایل‌ها همون فایل‌های بالان؛ مرورگر فقط وقتی حرفی از اون خط ببینه دانلودشون می‌کنه.
+   ========================================================================== */
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-Thin.woff2') format('woff2');
+  font-weight: 100;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-Light.woff2') format('woff2');
+  font-weight: 300;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-Regular.woff2') format('woff2');
+  font-weight: 400;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-Medium.woff2') format('woff2');
+  font-weight: 500;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-Bold.woff2') format('woff2');
+  font-weight: 700;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'PeydaScript';
+  src: url('/fonts/fa/PeydaWeb-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+200C-200D, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Thin.ttf') format('truetype');
+  font-weight: 100;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Light.ttf') format('truetype');
+  font-weight: 300;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Regular.ttf') format('truetype');
+  font-weight: 400;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Medium.ttf') format('truetype');
+  font-weight: 500;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Bold.ttf') format('truetype');
+  font-weight: 700;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Black.ttf') format('truetype');
+  font-weight: 900;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-ExtraLightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
+@font-face {
+  font-family: 'InterScript';
+  src: url('/fonts/en/Inter_24pt-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  unicode-range: U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-024F, U+1E00-1EFF;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -355,17 +552,19 @@
   }
 
   html {
-    --app-font-family: 'Peyda';
+    /* حروف لاتین → Inter ، بقیه (فارسی، اعداد، علائم) → Peyda */
+    --app-font-family: 'InterScript', 'Peyda';
     font-family: var(--app-font-family), sans-serif;
     color-scheme: light;
   }
 
   html[lang^='en'] {
-    --app-font-family: 'Inter';
+    /* حروف فارسی → Peyda ، بقیه (لاتین، اعداد، علائم) → Inter */
+    --app-font-family: 'PeydaScript', 'Inter';
   }
 
   html[lang^='fa'] {
-    --app-font-family: 'Peyda';
+    --app-font-family: 'InterScript', 'Peyda';
   }
 
   html.dark {
