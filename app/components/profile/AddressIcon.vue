@@ -37,10 +37,12 @@ const kind = computed(() => addressKindOf(props.label ?? ''))
     stroke-linejoin="round"
     aria-hidden="true"
   >
-    <rect x="3" y="8" width="18" height="12" rx="2.5" fill="currentColor" fill-opacity=".15" />
-    <path d="M9 8V6.5A1.5 1.5 0 0 1 10.5 5h3A1.5 1.5 0 0 1 15 6.5V8" />
-    <path d="M3 13.2c3 1.3 6 1.9 9 1.9s6-.6 9-1.9" />
-    <rect x="10.5" y="12.2" width="3" height="3.6" rx=".8" fill="currentColor" fill-opacity=".35" />
+    <g transform="translate(12 12) scale(.85) translate(-12 -12)" stroke-width="2.05">
+      <rect x="3" y="7" width="18" height="13.5" rx="2.5" fill="currentColor" fill-opacity=".15" />
+      <path d="M9 7V5.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2V7" />
+      <path d="M3 12.6c3 1.5 6 2.2 9 2.2s6-.7 9-2.2" />
+      <rect x="10.5" y="11.6" width="3" height="3.8" rx=".8" fill="currentColor" fill-opacity=".35" />
+    </g>
   </svg>
 
   <!-- ویلا -->
@@ -54,12 +56,15 @@ const kind = computed(() => addressKindOf(props.label ?? ''))
     stroke-linejoin="round"
     aria-hidden="true"
   >
-    <path d="M2.5 20.5 9.5 6.5l7 14Z" fill="currentColor" fill-opacity=".15" />
-    <path d="M9.5 3.5v3" />
-    <path d="M8 20.5v-4a1.5 1.5 0 0 1 3 0v4" />
-    <path d="M6.3 14.5h6.4" />
-    <path d="M19.5 20.5v-2.2M19.5 8.5l-2.7 4.5h1.8L16 17.3h7l-2.6-4.3h1.8L19.5 8.5Z" fill="currentColor" fill-opacity=".15" />
-    <path d="M1.5 20.5h21" />
+    <g transform="translate(12 12) scale(.85) translate(-12 -12)" stroke-width="2.05">
+      <path d="M3 20.5 8.8 6l5.8 14.5Z" fill="currentColor" fill-opacity=".15" />
+      <path d="M8.8 3.5V6" />
+      <path d="M7.2 20.5v-3.6a1.6 1.6 0 0 1 3.2 0v3.6" />
+      <path d="M5.9 13.8h5.8" />
+      <path d="M17.8 8 15.3 12.4h1.5l-2.2 4.4H21l-2.2-4.4h1.5L17.8 8Z" fill="currentColor" fill-opacity=".15" />
+      <path d="M17.8 16.8v3.7" />
+      <path d="M3 20.5h18" />
+    </g>
   </svg>
 
   <!-- هر عنوان دیگه -->
