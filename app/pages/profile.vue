@@ -5,6 +5,8 @@ const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const userPlantsStore = useUserPlantsStore()
 const historyStore = useHistoryStore()
+const { processing: coverProcessing, pick: pickCover, remove: removeCover } = useCoverUpload()
+const coverInput = ref<HTMLInputElement | null>(null)
 const { plants: favoritePlants, load: loadFavorites } = useWishlistPlants()
 
 onMounted(() => { void loadFavorites() })
@@ -60,20 +62,60 @@ function onImageError(e: Event) {
     <section class="glass-card overflow-hidden">
       <div class="relative h-36 sm:h-44">
         <img
-          src="/images/plants/header.png"
+          :src="user?.cover || '/images/plants/header.png'"
           :alt="$t('home.greenLeavesAlt')"
           class="size-full object-cover"
         >
-        <NuxtLink
-          to="/settings"
-          class="absolute end-3 top-3 flex size-9 items-center justify-center rounded-xl bg-surface/90 text-primary-700 shadow-card backdrop-blur transition-colors hover:bg-surface"
-          :aria-label="$t('pages.profile.settings')"
+
+        <div
+          v-if="coverProcessing"
+          class="absolute inset-0 flex items-center justify-center bg-black/40 text-white"
         >
           <Icon
-            name="lucide:settings"
-            class="size-[18px]"
+            name="svg-spinners:ring-resize"
+            class="size-7"
           />
-        </NuxtLink>
+        </div>
+
+        <div
+          v-if="authStore.isLoggedIn"
+          class="absolute end-3 top-3 flex items-center gap-2"
+        >
+          <button
+            v-if="user?.cover"
+            type="button"
+            class="flex size-9 items-center justify-center rounded-xl bg-surface/90 text-primary-700 shadow-card backdrop-blur transition-colors hover:bg-surface disabled:opacity-60"
+            :aria-label="$t('pages.profile.removeCover')"
+            :title="$t('pages.profile.removeCover')"
+            :disabled="coverProcessing"
+            @click="removeCover"
+          >
+            <Icon
+              name="lucide:trash-2"
+              class="size-[18px]"
+            />
+          </button>
+          <button
+            type="button"
+            class="flex size-9 items-center justify-center rounded-xl bg-surface/90 text-primary-700 shadow-card backdrop-blur transition-colors hover:bg-surface disabled:opacity-60"
+            :aria-label="$t('pages.profile.changeCover')"
+            :title="$t('pages.profile.changeCover')"
+            :disabled="coverProcessing"
+            @click="coverInput?.click()"
+          >
+            <Icon
+              name="lucide:camera"
+              class="size-[18px]"
+            />
+          </button>
+          <input
+            ref="coverInput"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            @change="pickCover"
+          >
+        </div>
       </div>
 
       <div class="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end">

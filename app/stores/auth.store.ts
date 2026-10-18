@@ -43,6 +43,8 @@ export const useAuthStore = defineStore('auth', {
     profiles: useLocalStorage<Record<string, UserProfileData>>('bargyar-user-profiles', {}),
     // عکس پروفایل هر ایمیل (دیتا‌یو‌آر‌ال فشرده)؛ جدا از profiles تا ذخیره‌ی فرم پروفایل پاکش نکنه
     avatars: useLocalStorage<Record<string, string>>('bargyar-user-avatars', {}),
+    // عکس کاور هر ایمیل (دیتا‌یو‌آر‌ال فشرده)
+    covers: useLocalStorage<Record<string, string>>('bargyar-user-covers', {}),
     loading: false,
     error: '',
   }),
@@ -75,6 +77,7 @@ export const useAuthStore = defineStore('auth', {
           joinedAt: new Date().toISOString().slice(0, 10),
           ...this.profiles[key],
           avatar: this.avatars[key],
+          cover: this.covers[key],
         }
         return true
       }
@@ -155,6 +158,7 @@ export const useAuthStore = defineStore('auth', {
           joinedAt: new Date().toISOString().slice(0, 10),
           ...this.profiles[key],
           avatar: this.avatars[key],
+          cover: this.covers[key],
         }
         this.pendingRegistration = null
         return true
@@ -232,6 +236,26 @@ export const useAuthStore = defineStore('auth', {
       else {
         delete this.avatars[key]
         const { avatar: _removed, ...rest } = this.user
+        this.user = rest
+      }
+      return true
+    },
+
+    /** عکس کاور پروفایل رو ذخیره می‌کنه (یا با null حذف می‌کنه). */
+    setCover(cover: string | null) {
+      this.error = ''
+      if (!this.user) {
+        this.error = 'pages.profile.errors.notLoggedIn'
+        return false
+      }
+      const key = emailKey(this.user.email)
+      if (cover) {
+        this.covers[key] = cover
+        this.user = { ...this.user, cover }
+      }
+      else {
+        delete this.covers[key]
+        const { cover: _removed, ...rest } = this.user
         this.user = rest
       }
       return true
