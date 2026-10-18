@@ -7,8 +7,6 @@ const { locale, setLocale, t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
 const uiStore = useUiStore()
-const historyStore = useHistoryStore()
-const wishlistStore = useWishlistStore()
 
 const isDark = computed(() => uiStore.mode === 'dark')
 const user = computed(() => authStore.user)
@@ -17,14 +15,14 @@ const memberSince = computed(() => user.value?.joinedAt
   ? new Intl.DateTimeFormat(intlLocale.value, { month: 'long', year: 'numeric' }).format(new Date(user.value.joinedAt))
   : '')
 
-type SectionKey = 'account' | 'appearance' | 'library' | 'about'
+type SectionKey = 'account' | 'appearance' | 'about'
 
 // روی دسکتاپ فقط بخش انتخاب‌شده دیده می‌شه؛ روی موبایل همه‌ی بخش‌ها زیر هم‌ان
 const active = ref<SectionKey>('account')
 const sections = computed<{ key: SectionKey, icon: string, label: string }[]>(() => [
   { key: 'account', icon: 'lucide:user', label: t('pages.profile.account') },
   { key: 'appearance', icon: 'lucide:palette', label: `${t('pages.profile.appearance')} / ${t('pages.profile.language')}` },
-  { key: 'library', icon: 'lucide:heart', label: t('pages.profile.library') },
+  { key: 'about', icon: 'lucide:info', label: t('components.theFooter.about') },
 ])
 
 function panelClass(key: SectionKey) {
@@ -36,10 +34,6 @@ const languages = [
   { code: 'en', label: 'English' },
 ] as const
 
-const libraryRows = computed(() => [
-  { to: '/wishlist', icon: 'lucide:heart', label: t('pages.profile.wishlist'), hint: t('pages.profile.wishlistDescription'), value: toPersianDigits(wishlistStore.count) },
-  { to: '/history', icon: 'lucide:history', label: t('pages.profile.history'), hint: t('pages.profile.historyDescription'), value: toPersianDigits(historyStore.count) },
-])
 const aboutRows = computed(() => [
   { to: '/about', icon: 'lucide:info', label: t('components.theFooter.about') },
   { to: '/support', icon: 'lucide:life-buoy', label: t('support.nav') },
@@ -249,41 +243,6 @@ const aboutRows = computed(() => [
               </button>
             </div>
           </div>
-        </section>
-
-        <!-- علاقه‌مندی‌ها و تاریخچه -->
-        <section
-          class="glass-card p-4 sm:p-5"
-          :class="panelClass('library')"
-        >
-          <h2 class="mb-2 font-bold text-ink">
-            {{ t('pages.profile.library') }}
-          </h2>
-          <ul class="divide-y divide-ink/5">
-            <li
-              v-for="row in libraryRows"
-              :key="row.to"
-            >
-              <NuxtLink
-                :to="row.to"
-                class="flex items-center gap-3 py-4"
-              >
-                <Icon
-                  :name="row.icon"
-                  class="size-5 shrink-0 text-primary-700"
-                />
-                <span class="min-w-0 flex-1">
-                  <span class="block text-sm font-medium text-ink">{{ row.label }}</span>
-                  <span class="block truncate text-xs text-ink-muted">{{ row.hint }}</span>
-                </span>
-                <span class="text-sm text-ink-muted">{{ row.value }}</span>
-                <Icon
-                  name="lucide:chevron-left"
-                  class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
-                />
-              </NuxtLink>
-            </li>
-          </ul>
         </section>
 
         <!-- درباره / پشتیبانی -->

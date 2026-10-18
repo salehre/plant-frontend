@@ -5,6 +5,7 @@ const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const userPlantsStore = useUserPlantsStore()
 const historyStore = useHistoryStore()
+const wishlistStore = useWishlistStore()
 const { plants: favoritePlants, load: loadFavorites } = useWishlistPlants()
 
 onMounted(() => { void loadFavorites() })
@@ -41,6 +42,11 @@ const stats = computed(() => [
 
 const recent = computed(() => historyStore.sorted.slice(0, 5))
 const favorites = computed(() => favoritePlants.value.slice(0, 4))
+
+const libraryRows = computed(() => [
+  { to: '/wishlist', icon: 'lucide:heart', label: t('pages.profile.wishlist'), hint: t('pages.profile.wishlistDescription'), value: toPersianDigits(wishlistStore.count) },
+  { to: '/history', icon: 'lucide:history', label: t('pages.profile.history'), hint: t('pages.profile.historyDescription'), value: toPersianDigits(historyStore.count) },
+])
 
 const quickActions = [
   { to: '/climate', icon: 'lucide:cloud-sun', label: 'nav.climate' },
@@ -182,35 +188,69 @@ function onImageError(e: Event) {
         </section>
       </div>
 
-      <!-- دسترسی سریع -->
-      <section class="glass-card p-4 sm:p-5">
-        <h2 class="mb-2 font-bold text-ink">
-          {{ $t('pages.profile.quickActions') }}
-        </h2>
-        <ul class="divide-y divide-ink/5">
-          <li
-            v-for="action in quickActions"
-            :key="action.to"
-          >
-            <NuxtLink
-              :to="action.to"
-              class="flex items-center gap-3 py-3"
+      <div class="flex min-w-0 flex-col gap-5">
+        <!-- علاقه‌مندی‌ها و تاریخچه -->
+        <section class="glass-card p-4 sm:p-5">
+          <h2 class="mb-2 font-bold text-ink">
+            {{ $t('pages.profile.library') }}
+          </h2>
+          <ul class="divide-y divide-ink/5">
+            <li
+              v-for="row in libraryRows"
+              :key="row.to"
             >
-              <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+              <NuxtLink
+                :to="row.to"
+                class="flex items-center gap-3 py-4"
+              >
                 <Icon
-                  :name="action.icon"
-                  class="size-5"
+                  :name="row.icon"
+                  class="size-5 shrink-0 text-primary-700"
                 />
-              </span>
-              <span class="flex-1 text-sm font-medium text-ink">{{ $t(action.label) }}</span>
-              <Icon
-                name="lucide:chevron-left"
-                class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
-              />
-            </NuxtLink>
-          </li>
-        </ul>
-      </section>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-sm font-medium text-ink">{{ row.label }}</span>
+                  <span class="block truncate text-xs text-ink-muted">{{ row.hint }}</span>
+                </span>
+                <span class="text-sm text-ink-muted">{{ row.value }}</span>
+                <Icon
+                  name="lucide:chevron-left"
+                  class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
+                />
+              </NuxtLink>
+            </li>
+          </ul>
+        </section>
+
+        <!-- دسترسی سریع -->
+        <section class="glass-card p-4 sm:p-5">
+          <h2 class="mb-2 font-bold text-ink">
+            {{ $t('pages.profile.quickActions') }}
+          </h2>
+          <ul class="divide-y divide-ink/5">
+            <li
+              v-for="action in quickActions"
+              :key="action.to"
+            >
+              <NuxtLink
+                :to="action.to"
+                class="flex items-center gap-3 py-3"
+              >
+                <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+                  <Icon
+                    :name="action.icon"
+                    class="size-5"
+                  />
+                </span>
+                <span class="flex-1 text-sm font-medium text-ink">{{ $t(action.label) }}</span>
+                <Icon
+                  name="lucide:chevron-left"
+                  class="size-4 shrink-0 text-ink-muted ltr:rotate-180"
+                />
+              </NuxtLink>
+            </li>
+          </ul>
+        </section>
+      </div>
     </div>
   </div>
 </template>
