@@ -173,7 +173,7 @@ function subscribeToNewsletter() {
       <div class="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/10 pt-5 text-xs text-white/60">
         <p>
           {{ t('components.theFooter.poweredBy') }}
-          <span class="text-white">Saleh Rezaei</span>
+          <span class="text-white">صالح رضایی</span>
         </p>
         <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <button

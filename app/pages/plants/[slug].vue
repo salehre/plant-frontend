@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { getMockDiseases } from '~/services/mock/diseases.mock'
 import { findPlantDetailBySlug } from '~/services/mock/plant-details.mock'
 import MorphologyIcon from '~/components/plant/MorphologyIcon.vue'
+import ApplicationIcon from '~/components/plant/ApplicationIcon.vue'
 
 const route = useRoute()
 const plantStore = usePlantStore()
@@ -174,6 +175,17 @@ const needLabels = computed<Record<string, string>>(() => ({
 }))
 const getNeedLabel = (key: string) => needLabels.value[key] || key
 
+// گروه‌های بخش «کاربردها»: آیکن + رنگ نرم مخصوص هر دسته (توی حالت تیره هم ملایم می‌مونن)
+const applicationGroups = computed(() => {
+  const apps = detail.value?.applications
+  if (!apps) return []
+  return [
+    { key: 'food' as const, label: t('plantDetail.edible'), items: apps.food, tone: 'bg-status-success/15 text-status-success' },
+    { key: 'industrial' as const, label: t('plantDetail.industrial'), items: apps.industrial, tone: 'bg-status-info/15 text-status-info' },
+    { key: 'therapeutic' as const, label: t('plantDetail.therapeutic'), items: apps.therapeutic, tone: 'bg-accent-500/15 text-accent-600 dark:text-accent-400' },
+  ]
+})
+
 const growthIcons: Record<string, string> = {
   light: 'lucide:sun',
   water: 'lucide:droplets',
@@ -329,7 +341,7 @@ const growthIcons: Record<string, string> = {
       </div>
     </div>
 
-    <div class="detail-sheet pt-6 max-md:relative max-md:-mx-4 max-md:-mt-7 max-md:rounded-t-[28px] max-md:bg-surface max-md:px-4 max-md:pt-5 sm:max-md:-mx-6 sm:max-md:px-6">
+    <div class="detail-sheet pt-6 pb-6  max-md:relative max-md:-mx-4 max-md:-mt-7 max-md:rounded-t-[28px] max-md:bg-surface max-md:px-4 max-md:pt-5 sm:max-md:-mx-6 sm:max-md:px-6">
       <!-- ========== هدر موبایل: نام، چیپ‌ها، تب‌ها ========== -->
       <div class="md:hidden">
         <div class="flex items-start justify-between gap-3">
@@ -486,9 +498,9 @@ const growthIcons: Record<string, string> = {
                   :key="key"
                   class="rounded-md border border-ink/10 bg-bg p-3 transition hover:-translate-x-1 hover:shadow-card"
               >
-                <div class="flex items-center gap-2 border-b border-dashed border-ink/15 pb-2 text-xs text-ink-muted">
-                  <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-                    <MorphologyIcon :name="String(key)" class="size-6" />
+                <div class="flex items-center gap-1.5 border-b border-dashed border-ink/15 pb-2 text-xs text-ink-muted">
+                  <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-primary-300/10 dark:text-primary-300">
+                    <MorphologyIcon :name="String(key)" class="size-5" />
                   </span>
                   <strong>{{ getMorphLabel(key) }}</strong>
                 </div>
@@ -505,30 +517,22 @@ const growthIcons: Record<string, string> = {
               {{ t('plantDetail.applicationsTitle') }}
             </h2>
             <div class="mb-4" />
-            <div class="space-y-3">
-              <div>
-                <span class="text-status-success">● </span>
-                <strong class="text-sm">{{ t('plantDetail.edible') }} :</strong>
-                <ul class="mr-5 mt-1.5 list-none space-y-1.5">
-                  <li v-for="item in detail.applications.food" :key="item" class="text-sm text-ink">
-                    {{ item }}
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <span class="text-status-info">● </span>
-                <strong class="text-sm">{{ t('plantDetail.industrial') }} :</strong>
-                <ul class="mr-5 mt-1.5 list-none space-y-1.5">
-                  <li v-for="item in detail.applications.industrial" :key="item" class="text-sm text-ink">
-                    {{ item }}
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <span class="text-accent-600">● </span>
-                <strong class="text-sm">{{ t('plantDetail.therapeutic') }} :</strong>
-                <ul class="mr-5 mt-1.5 list-none space-y-1.5">
-                  <li v-for="item in detail.applications.therapeutic" :key="item" class="text-sm text-ink">
+            <div class="space-y-4">
+              <div
+                  v-for="group in applicationGroups"
+                  :key="group.key"
+              >
+                <div class="flex items-center gap-2.5">
+                  <span
+                      class="flex size-9 shrink-0 items-center justify-center rounded-full"
+                      :class="group.tone"
+                  >
+                    <ApplicationIcon :name="group.key" class="size-6" />
+                  </span>
+                  <strong class="text-sm">{{ group.label }}</strong>
+                </div>
+                <ul class="ms-[2.875rem] mt-2 list-none space-y-1.5">
+                  <li v-for="item in group.items" :key="item" class="text-sm text-ink">
                     {{ item }}
                   </li>
                 </ul>
@@ -858,15 +862,5 @@ const growthIcons: Record<string, string> = {
 
 .plant-detail-page :deep(.font-serif) {
   font-family: inherit;
-}
-
-/* موبایل: سکشن‌ها داخل شیت سفید تخت می‌شن (بدون کارت جدا) */
-@media (max-width: 767px) {
-  .detail-sheet :deep(.glass-card:not(.mobile-card)) {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-  }
 }
 </style>

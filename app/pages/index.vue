@@ -208,13 +208,10 @@ function onImageError(e: Event) {
             class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             <template v-if="featuredPending">
-              <div
+              <FeaturedPlantCardSkeleton
                 v-for="i in 4"
                 :key="i"
-                class="w-[68%] shrink-0 snap-start sm:w-[42%] lg:w-auto"
-              >
-                <PlantCardSkeleton variant="mini" />
-              </div>
+              />
             </template>
             <template v-else>
               <NuxtLink
