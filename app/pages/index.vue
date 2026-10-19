@@ -129,50 +129,53 @@ function onImageError(e: Event) {
         </NuxtLink>
       </div>
 
-      <!-- موبایل: اسکرول افقی | دسکتاپ: ۵ ستون -->
-      <div
-        class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      <!-- اسلایدر Swiper: موبایل ~۱.۵ کارت | تبلت ۲.۴ | دسکتاپ ۴ کارت با فلش -->
+      <AppSlider
+        :items="recentScans"
+        :item-key="entry => entry.id"
+        :breakpoints="{ 640: { slidesPerView: 2.4 }, 1024: { slidesPerView: 4 } }"
+        class="-mx-4 px-4 sm:-mx-5 sm:px-5 lg:mx-0 lg:px-0"
       >
-        <NuxtLink
-          v-for="entry in recentScans"
-          :key="entry.id"
-          :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
-          class="group flex w-[68%] shrink-0 snap-start flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover sm:w-[42%] lg:w-auto lg:[&:nth-child(5)]:hidden"
-        >
-          <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50">
-            <Icon
-              name="lucide:leaf"
-              class="absolute inset-0 m-auto size-10 text-primary-400"
-            />
-            <img
-              :src="entry.image"
-              :alt="entry.plantName"
-              class="relative size-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-              @error="onImageError"
-            >
-          </div>
-          <div class="flex items-end justify-between gap-2 px-1.5 pb-1.5 pt-3.5">
-            <div class="min-w-0">
-              <p class="truncate text-base font-bold text-ink">
-                {{ entry.plantName }}
-              </p>
-              <p class="mt-1.5 truncate text-sm font-semibold text-primary-700">
-                {{ formatConfidence(entry.confidence) }}
-              </p>
-              <p class="mt-0.5 truncate text-sm text-ink-muted">
-                {{ scanTime(entry.timestamp) }}
-              </p>
-            </div>
-            <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 text-ink-muted transition-colors group-hover:border-primary-300 group-hover:text-primary-700">
+        <template #default="{ item: entry }">
+          <NuxtLink
+            :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
+            class="group flex h-full flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover"
+          >
+            <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50">
               <Icon
-                name="lucide:chevron-right"
-                class="size-5 rtl:-scale-x-100"
+                name="lucide:leaf"
+                class="absolute inset-0 m-auto size-10 text-primary-400"
               />
-            </span>
-          </div>
-        </NuxtLink>
-      </div>
+              <img
+                :src="entry.image"
+                :alt="entry.plantName"
+                class="relative size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+                @error="onImageError"
+              >
+            </div>
+            <div class="flex items-end justify-between gap-2 px-1.5 pb-1.5 pt-3.5">
+              <div class="min-w-0">
+                <p class="truncate text-base font-bold text-ink">
+                  {{ entry.plantName }}
+                </p>
+                <p class="mt-1.5 truncate text-sm font-semibold text-primary-700">
+                  {{ formatConfidence(entry.confidence) }}
+                </p>
+                <p class="mt-0.5 truncate text-sm text-ink-muted">
+                  {{ scanTime(entry.timestamp) }}
+                </p>
+              </div>
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 text-ink-muted transition-colors group-hover:border-primary-300 group-hover:text-primary-700">
+                <Icon
+                  name="lucide:chevron-right"
+                  class="size-5 rtl:-scale-x-100"
+                />
+              </span>
+            </div>
+          </NuxtLink>
+        </template>
+      </AppSlider>
     </section>
 
     <!-- Plant Finder -->
@@ -204,21 +207,29 @@ function onImageError(e: Event) {
             </NuxtLink>
           </div>
 
+          <!-- اسکلتون: همون چیدمان قبلی (اسکرول افقی موبایل / ۳ ستون دسکتاپ) -->
           <div
-            class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            v-if="featuredPending"
+            class="-mx-4 flex gap-4 overflow-hidden px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0"
           >
-            <template v-if="featuredPending">
-              <FeaturedPlantCardSkeleton
-                v-for="i in 4"
-                :key="i"
-              />
-            </template>
-            <template v-else>
+            <FeaturedPlantCardSkeleton
+              v-for="i in 4"
+              :key="i"
+            />
+          </div>
+
+          <!-- اسلایدر Swiper: موبایل ~۱.۵ کارت | تبلت ۲.۴ | دسکتاپ ۳ کارت با فلش -->
+          <AppSlider
+            v-else
+            :items="featuredShown"
+            :item-key="plant => plant.id"
+            :breakpoints="{ 640: { slidesPerView: 2.4 }, 1024: { slidesPerView: 3 } }"
+            class="-mx-4 px-4 sm:-mx-5 sm:px-5 lg:mx-0 lg:px-0"
+          >
+            <template #default="{ item: plant }">
               <NuxtLink
-                v-for="plant in featuredShown"
-                :key="plant.id"
                 :to="`/plants/${plant.slug}`"
-                class="group flex w-[68%] shrink-0 snap-start flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card lg:rounded-3xl lg:p-3.5 transition hover:-translate-y-0.5 hover:shadow-card-hover sm:w-[42%] lg:w-auto lg:[&:nth-child(4)]:hidden"
+                class="group flex h-full flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover lg:rounded-3xl lg:p-3.5"
               >
                 <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50 lg:aspect-[4/3.4] lg:rounded-2xl">
                   <img
@@ -246,7 +257,7 @@ function onImageError(e: Event) {
                 </div>
               </NuxtLink>
             </template>
-          </div>
+          </AppSlider>
         </div>
 
         <!-- کارت تبلیغی با عکس پس‌زمینه -->

@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import { sidebarIcons } from './sidebarIcons'
+import type { SettingsSectionKey } from '~/composables/useSettingsSections'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const { sections: settingsSections, active: activeSettingsSection } = useSettingsSections()
 
 // منوی اصلی (مثل دیزاین) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
 const links = [
@@ -22,6 +25,14 @@ const secondaryLinks = [
   { to: '/support', label: 'support.nav', icon: sidebarIcons.lifeBuoy },
 ]
 
+// آیکن (انیمیشن‌دار) هر بخش تنظیمات
+const settingsIcons: Record<SettingsSectionKey, Component> = {
+  account: sidebarIcons.user,
+  appearance: sidebarIcons.palette,
+  locations: sidebarIcons.mapPin,
+  about: sidebarIcons.info,
+}
+
 // با هر کلیک آیکن لینک دوباره ساخته می‌شه (تغییر key) تا انیمیشنش از اول اجرا بشه،
 // حتی وقتی روی لینکی که همین الان اکتیوه کلیک می‌کنیم.
 const replay = reactive<Record<string, number>>({})
@@ -34,6 +45,9 @@ const iconKey = (to: string) => `${to}-${replay[to] ?? 0}`
 function isActive(to: string) {
   return to === '/' ? route.path === '/' : (route.path === to || route.path.startsWith(`${to}/`))
 }
+
+// زیرمنوی تنظیمات فقط وقتی توی صفحه‌ی تنظیمات هستیم باز می‌شه
+const settingsOpen = computed(() => isActive('/settings'))
 </script>
 
 <template>
@@ -54,30 +68,58 @@ function isActive(to: string) {
 
     <!-- منو -->
     <nav class="custom-scrollbar flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
-      <NuxtLink
+      <template
         v-for="link in links"
         :key="link.to"
-        :to="link.to"
-        class="sidebar-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors"
-        :class="isActive(link.to)
-          ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
-          : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
-        @click="onLinkClick(link.to)"
       >
-        <UserAvatar
-          v-if="link.to === '/profile' && authStore.user?.avatar"
-          :src="authStore.user.avatar"
-          :name="authStore.user.name"
-          class="size-5"
-        />
-        <component
-          :is="link.icon"
-          v-else
-          :key="iconKey(link.to)"
-          class="size-5"
-        />
-        {{ $t(link.label) }}
-      </NuxtLink>
+        <NuxtLink
+          :to="link.to"
+          class="sidebar-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors"
+          :class="isActive(link.to)
+            ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
+            : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
+          @click="onLinkClick(link.to)"
+        >
+          <UserAvatar
+            v-if="link.to === '/profile' && authStore.user?.avatar"
+            :src="authStore.user.avatar"
+            :name="authStore.user.name"
+            class="size-5"
+          />
+          <component
+            :is="link.icon"
+            v-else
+            :key="iconKey(link.to)"
+            class="size-5"
+          />
+          {{ $t(link.label) }}
+        </NuxtLink>
+
+        <!-- بخش‌های تنظیمات زیر لینک تنظیمات -->
+        <div
+          v-if="link.to === '/settings' && settingsOpen"
+          class="ms-5 mt-0.5 mb-1 flex flex-col gap-0.5 border-s border-ink/10 ps-2"
+        >
+          <NuxtLink
+            v-for="section in settingsSections"
+            :key="section.key"
+            :to="{ path: '/settings', query: { section: section.key } }"
+            class="sidebar-link flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors"
+            :class="activeSettingsSection === section.key
+              ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
+              : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
+            :aria-current="activeSettingsSection === section.key ? 'page' : undefined"
+            @click="onLinkClick(`settings:${section.key}`)"
+          >
+            <component
+              :is="settingsIcons[section.key]"
+              :key="iconKey(`settings:${section.key}`)"
+              class="size-4 shrink-0"
+            />
+            <span class="truncate">{{ section.label }}</span>
+          </NuxtLink>
+        </div>
+      </template>
       <div class="my-2 border-t border-ink/5" />
 
       <NuxtLink

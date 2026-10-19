@@ -180,9 +180,9 @@ const applicationGroups = computed(() => {
   const apps = detail.value?.applications
   if (!apps) return []
   return [
-    { key: 'food' as const, label: t('plantDetail.edible'), items: apps.food, tone: 'bg-status-success/15 text-status-success' },
-    { key: 'industrial' as const, label: t('plantDetail.industrial'), items: apps.industrial, tone: 'bg-status-info/15 text-status-info' },
-    { key: 'therapeutic' as const, label: t('plantDetail.therapeutic'), items: apps.therapeutic, tone: 'bg-accent-500/15 text-accent-600 dark:text-accent-400' },
+    { key: 'food' as const, label: t('plantDetail.edible'), items: apps.food, tone: 'bg-[#4a7c3c]/15 text-[#4a7c3c]' },
+    { key: 'industrial' as const, label: t('plantDetail.industrial'), items: apps.industrial, tone: 'bg-[#3178c6]/15 text-[#3178c6]' },
+    { key: 'therapeutic' as const, label: t('plantDetail.therapeutic'), items: apps.therapeutic, tone: 'bg-[#a5692c]/15 text-[#a5692c] dark:text-[#cd8742]' },
   ]
 })
 
@@ -341,7 +341,7 @@ const growthIcons: Record<string, string> = {
       </div>
     </div>
 
-    <div class="detail-sheet pt-6 pb-6  max-md:relative max-md:-mx-4 max-md:-mt-7 max-md:rounded-t-[28px] max-md:bg-surface max-md:px-4 max-md:pt-5 sm:max-md:-mx-6 sm:max-md:px-6">
+    <div class="detail-sheet pt-6 max-md:relative max-md:-mx-4 max-md:-mt-7 max-md:rounded-t-[28px] max-md:bg-surface max-md:px-4 max-md:pt-5 sm:max-md:-mx-6 sm:max-md:px-6">
       <!-- ========== هدر موبایل: نام، چیپ‌ها، تب‌ها ========== -->
       <div class="md:hidden">
         <div class="flex items-start justify-between gap-3">
@@ -517,12 +517,13 @@ const growthIcons: Record<string, string> = {
               {{ t('plantDetail.applicationsTitle') }}
             </h2>
             <div class="mb-4" />
-            <div class="space-y-4">
+            <div class="space-y-3">
               <div
                   v-for="group in applicationGroups"
                   :key="group.key"
+                  class="rounded-md border border-ink/10 bg-bg p-3"
               >
-                <div class="flex items-center gap-2.5">
+                <div class="flex items-center gap-2.5 border-b border-dashed border-ink/15 pb-2.5">
                   <span
                       class="flex size-9 shrink-0 items-center justify-center rounded-full"
                       :class="group.tone"
@@ -531,7 +532,7 @@ const growthIcons: Record<string, string> = {
                   </span>
                   <strong class="text-sm">{{ group.label }}</strong>
                 </div>
-                <ul class="ms-[2.875rem] mt-2 list-none space-y-1.5">
+                <ul class="mt-2.5 list-none space-y-1.5">
                   <li v-for="item in group.items" :key="item" class="text-sm text-ink">
                     {{ item }}
                   </li>

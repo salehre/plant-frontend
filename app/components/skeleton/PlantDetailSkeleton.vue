@@ -272,10 +272,10 @@ const growthRows = 5
                 :key="i"
                 class="rounded-md border border-ink/10 bg-bg p-3"
               >
-                <div class="flex items-center gap-2 border-b border-dashed border-ink/15 pb-2">
+                <div class="flex items-center gap-1.5 border-b border-dashed border-ink/15 pb-2">
                   <AppSkeleton
-                    height="2.25rem"
-                    width="2.25rem"
+                    height="1.75rem"
+                    width="1.75rem"
                     rounded="rounded-full"
                   />
                   <AppSkeleton
@@ -302,7 +302,7 @@ const growthRows = 5
             </div>
           </PlantDetailSectionSkeleton>
 
-          <!-- کاربردها: ۳ گروه، هر کدوم عنوان + لیست (space-y-1.5) -->
+          <!-- کاربردها: ۳ کارت جدا، هر کدوم آیکن گرد (size-9) + عنوان، خط‌چین و لیست (space-y-1.5) -->
           <PlantDetailSectionSkeleton
             class="max-md:hidden"
             title-width="6rem"
@@ -311,14 +311,20 @@ const growthRows = 5
               <div
                 v-for="i in 3"
                 :key="i"
+                class="rounded-md border border-ink/10 bg-bg p-3"
               >
-                <div class="flex h-5 items-center">
+                <div class="flex items-center gap-2.5 border-b border-dashed border-ink/15 pb-2.5">
+                  <AppSkeleton
+                    height="2.25rem"
+                    width="2.25rem"
+                    rounded="rounded-full"
+                  />
                   <AppSkeleton
                     height="0.75rem"
                     width="5rem"
                   />
                 </div>
-                <div class="mt-1.5 space-y-1.5">
+                <div class="mt-2.5 space-y-1.5">
                   <div
                     v-for="(w, j) in ['80%', '65%']"
                     :key="j"

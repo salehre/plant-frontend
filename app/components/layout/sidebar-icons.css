@@ -144,6 +144,52 @@
   to { transform: rotate(360deg); }
 }
 
+/* ───────── ظاهر و زبان: پالت کمی تاب می‌خوره و رنگ‌ها یکی‌یکی بالا میان ───────── */
+.sidebar-link--active .si--palette .si-part--body {
+  animation: si-palette-body 1.6s ease-in-out var(--si-repeat);
+}
+.sidebar-link--active .si--palette .si-part--dot-1,
+.sidebar-link--active .si--palette .si-part--dot-2,
+.sidebar-link--active .si--palette .si-part--dot-3,
+.sidebar-link--active .si--palette .si-part--dot-4 {
+  animation: si-palette-dot 1.6s ease-in-out var(--si-repeat);
+}
+.sidebar-link--active .si--palette .si-part--dot-2 { animation-delay: 0.15s; }
+.sidebar-link--active .si--palette .si-part--dot-3 { animation-delay: 0.3s; }
+.sidebar-link--active .si--palette .si-part--dot-4 { animation-delay: 0.45s; }
+@keyframes si-palette-body {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-9deg); }
+  60% { transform: rotate(6deg); }
+}
+@keyframes si-palette-dot {
+  0%, 55%, 100% { transform: scale(1); }
+  28% { transform: scale(2.2); }
+}
+
+/* ───────── آدرس‌ها: سنجاق می‌پره و نقطه‌ی وسطش ضربان می‌زنه ───────── */
+.sidebar-link--active .si--map-pin .si-part--pin {
+  transform-origin: 50% 100%;
+  animation: si-pin-hop 1.4s ease-in-out var(--si-repeat);
+}
+.sidebar-link--active .si--map-pin .si-part--dot {
+  animation: si-pin-dot 1.4s ease-in-out var(--si-repeat);
+}
+@keyframes si-pin-hop {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  25% { transform: translateY(-3px) scale(0.95, 1.06); }
+  45% { transform: translateY(0) scale(1.06, 0.92); }
+  62% { transform: translateY(-1.2px) scale(1, 1); }
+  80% { transform: translateY(0) scale(1, 1); }
+}
+@keyframes si-pin-dot {
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-3px) scale(1.25); }
+  45% { transform: translateY(0) scale(0.9); }
+  62% { transform: translateY(-1.2px) scale(1.1); }
+  80% { transform: translateY(0) scale(1); }
+}
+
 /* ───────── داشبورد: کاشی‌ها پشت سر هم ضربان می‌زنن ───────── */
 .sidebar-link--active .si--layout-dashboard .si-part {
   animation: si-tile 1.6s ease-in-out var(--si-repeat);
