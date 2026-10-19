@@ -5,7 +5,7 @@ export const mockUsers: CommunityUser[] = [
   {
     id: 'u1',
     name: 'سارا احمدی',
-    avatar: '/images/plants/botanical-2.webp',
+    avatar: '/images/plants/botanical-2.jpg',
     bio: 'عاشق گیاهان آپارتمانی، صاحب ۲۰ گلدون در ۳۰ متر 🌿',
     plantsCount: 20,
     followersCount: 340,
@@ -14,7 +14,7 @@ export const mockUsers: CommunityUser[] = [
   {
     id: 'u2',
     name: 'رضا کریمی',
-    avatar: '/images/plants/botanical-3.webp',
+    avatar: '/images/plants/botanical-3.jpg',
     bio: 'باغبان آماتور، یادگیری گیاهان دارویی',
     plantsCount: 12,
     followersCount: 98,
@@ -23,7 +23,7 @@ export const mockUsers: CommunityUser[] = [
   {
     id: 'u3',
     name: 'نیلوفر رستمی',
-    avatar: '/images/plants/botanical-4.webp',
+    avatar: '/images/plants/botanical-4.jpg',
     bio: 'دیزاینر داخلی، متخصص چیدمان گیاه در خانه',
     plantsCount: 35,
     followersCount: 890,
@@ -35,7 +35,7 @@ export const mockPosts: Post[] = [
   {
     id: 'post1',
     author: mockUsers[0]!,
-    image: '/images/plants/botanical-3.webp',
+    image: '/images/plants/botanical-3.jpg',
     caption: 'مونسترای من بالاخره بعد از ۶ ماه اولین شکاف برگش رو زد! خیلی خوشحالم 🥹',
     plantTag: 'monstera-deliciosa',
     createdAt: '2026-07-27T10:00:00',
@@ -46,7 +46,7 @@ export const mockPosts: Post[] = [
   {
     id: 'post2',
     author: mockUsers[1]!,
-    image: '/images/plants/botanical-4.webp',
+    image: '/images/plants/botanical-4.jpg',
     caption: 'گوشه‌ی جدید گیاهان دارویی خونه. صبر زرد و نعناع کنار هم عالی شدن.',
     plantTag: 'aloe-vera',
     createdAt: '2026-07-26T18:30:00',

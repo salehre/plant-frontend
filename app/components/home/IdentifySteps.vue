@@ -18,8 +18,8 @@ const main = computed(() => ({
   image: '/images/plants/botanical-1.webp',
 }))
 const similar = computed(() => [
-  { name: isFa.value ? 'زبان مادرشوهر' : 'Snake plant', scientific: 'Sansevieria trifasciata', image: '/images/plants/botanical-3.webp', confidence: 0.74 },
-  { name: isFa.value ? 'فیکوس لیراتا' : 'Fiddle-leaf fig', scientific: 'Ficus lyrata', image: '/images/plants/botanical-4.webp', confidence: 0.61 },
+  { name: isFa.value ? 'زبان مادرشوهر' : 'Snake plant', scientific: 'Sansevieria trifasciata', image: '/images/plants/botanical-3.jpg', confidence: 0.74 },
+  { name: isFa.value ? 'فیکوس لیراتا' : 'Fiddle-leaf fig', scientific: 'Ficus lyrata', image: '/images/plants/botanical-4.jpg', confidence: 0.61 },
 ])
 
 const detailTabs = ['overview', 'care', 'healthToxicity', 'scientific'] as const
@@ -34,189 +34,251 @@ const careItems = computed(() => [
 <template>
   <section class="relative overflow-hidden rounded-[19px] bg-primary-50/50 px-4 py-10 sm:px-8 sm:py-12">
     <!-- بک‌گراند اس‌وی‌جی گیاهی با جزئیات بیشتر -->
-    <svg
-      class="pointer-events-none absolute inset-0 h-full w-full"
-      viewBox="0 0 1200 800"
-      preserveAspectRatio="xMidYMid slice"
-      aria-hidden="true"
-      focusable="false"
-      dir="ltr"
-    >
-      <defs>
-        <filter id="steps-soft" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="35" />
-        </filter>
-        <pattern id="steps-dots" width="30" height="30" patternUnits="userSpaceOnUse">
-          <circle cx="2.5" cy="2.5" r="1.8" fill="currentColor" />
-        </pattern>
-        <linearGradient id="steps-fade" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="currentColor" stop-opacity="0.92" />
-          <stop offset="40%" stop-color="currentColor" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
-        </linearGradient>
+<svg
+  class="pointer-events-none absolute inset-0 h-full w-full"
+  viewBox="0 0 1200 800"
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+  focusable="false"
+  dir="ltr"
+>
+  <defs>
+    <filter id="steps-soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="40" />
+    </filter>
+    <filter id="steps-blur-back" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="2.2" />
+    </filter>
 
-        <!-- برگ ساده -->
-        <symbol id="steps-leaf-simple" viewBox="0 0 64 64">
-          <path
-            d="M32 2C17 10 6 25 6 40c0 11 9 20 26 22 17-2 26-11 26-22C58 25 47 10 32 2z"
-            fill="currentColor"
-          />
-          <path d="M32 8v46" fill="none" stroke="currentColor" stroke-width="1.6" stroke-opacity="0.55" stroke-linecap="round" />
-          <path d="M32 20c-5 3-9 8-11 13M32 32c-6 3-11 8-13 14M32 44c-5 3-9 8-10 12" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round" />
-          <path d="M32 20c5 3 9 8 11 13M32 32c6 3 11 8 13 14M32 44c5 3 9 8 10 12" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round" />
-        </symbol>
+    <!-- رنگ روی خود pattern ست می‌شود تا به دایره‌ها ارث برسد -->
+    <pattern id="steps-dots" width="28" height="28" patternUnits="userSpaceOnUse" class="text-primary-900">
+      <circle cx="2" cy="2" r="1.4" fill="currentColor" />
+    </pattern>
 
-        <!-- برگ مونسترا (بریدگی‌دار) -->
-        <symbol id="steps-monstera" viewBox="0 0 100 120">
-          <path
-            d="M50 4C30 10 14 26 10 46c-2 10 2 20 8 28c4-10 10-16 18-18c-6 6-10 14-11 23c5 2 10 1 14-2c-3 7-2 14 3 20c4 3 9 4 14 3c5 1 10 0 14-3c5-6 6-13 3-20c4 3 9 4 14 2c-1-9-5-17-11-23c8 2 14 8 18 18c6-8 10-18 8-28C86 26 70 10 50 4Z"
-            fill="currentColor"
-          />
-          <path d="M50 12v100" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" />
-          <path d="M50 32c-8 2-15 7-19 15M50 52c-9 2-17 8-21 17M50 72c-7 2-13 8-16 15" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" stroke-linecap="round" />
-          <path d="M50 32c8 2 15 7 19 15M50 52c9 2 17 8 21 17M50 72c7 2 13 8 16 15" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" stroke-linecap="round" />
-          <g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" class="text-primary-50" stroke-opacity="0.85">
-            <path d="M24 50c8-2 14-8 16-16" />
-            <path d="M18 68c9-2 16-8 19-17" />
-            <path d="M24 86c8-1 15-7 18-15" />
-            <path d="M76 50c-8-2-14-8-16-16" />
-            <path d="M82 68c-9-2-16-8-19-17" />
-            <path d="M76 86c-8-1-15-7-18-15" />
-          </g>
-        </symbol>
+    <!-- فید به سمت بالا (با mask، نه گرادیانت currentColor) -->
+    <linearGradient id="steps-fade-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.2" />
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.75" />
+      <stop offset="1" stop-color="#fff" />
+    </linearGradient>
+    <mask id="steps-fade" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="800">
+      <rect width="1200" height="800" fill="url(#steps-fade-g)" />
+    </mask>
 
-        <!-- فروند (برگ سرخس‌مانند) -->
-        <symbol id="steps-frond" viewBox="0 0 100 200">
-          <path d="M50 196C48 150 48 100 50 4" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.6" />
-          <g fill="currentColor" opacity="0.85">
-            <ellipse cx="38" cy="170" rx="12" ry="4" transform="rotate(-30 38 170)" />
-            <ellipse cx="62" cy="170" rx="12" ry="4" transform="rotate(30 62 170)" />
-            <ellipse cx="36" cy="150" rx="13" ry="4" transform="rotate(-35 36 150)" />
-            <ellipse cx="64" cy="150" rx="13" ry="4" transform="rotate(35 64 150)" />
-            <ellipse cx="34" cy="130" rx="12" ry="4" transform="rotate(-40 34 130)" />
-            <ellipse cx="66" cy="130" rx="12" ry="4" transform="rotate(40 66 130)" />
-            <ellipse cx="34" cy="110" rx="11" ry="3.5" transform="rotate(-45 34 110)" />
-            <ellipse cx="66" cy="110" rx="11" ry="3.5" transform="rotate(45 66 110)" />
-            <ellipse cx="35" cy="90" rx="9" ry="3" transform="rotate(-50 35 90)" />
-            <ellipse cx="65" cy="90" rx="9" ry="3" transform="rotate(50 65 90)" />
-            <ellipse cx="37" cy="72" rx="7" ry="2.5" transform="rotate(-55 37 72)" />
-            <ellipse cx="63" cy="72" rx="7" ry="2.5" transform="rotate(55 63 72)" />
-            <ellipse cx="40" cy="56" rx="5" ry="2" transform="rotate(-60 40 56)" />
-            <ellipse cx="60" cy="56" rx="5" ry="2" transform="rotate(60 60 56)" />
-            <ellipse cx="43" cy="42" rx="4" ry="1.5" transform="rotate(-65 43 42)" />
-            <ellipse cx="57" cy="42" rx="4" ry="1.5" transform="rotate(65 57 42)" />
-            <ellipse cx="46" cy="30" rx="3" ry="1.2" transform="rotate(-70 46 30)" />
-            <ellipse cx="54" cy="30" rx="3" ry="1.2" transform="rotate(70 54 30)" />
-            <ellipse cx="48" cy="20" rx="2" ry="1" transform="rotate(-75 48 20)" />
-            <ellipse cx="52" cy="20" rx="2" ry="1" transform="rotate(75 52 20)" />
-          </g>
-        </symbol>
-
-        <!-- جوانه -->
-        <symbol id="steps-sprout" viewBox="0 0 64 64">
-          <path d="M32 60V30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-          <path d="M32 34c-9-13 -24-11 -28-1 6 2 11 8 13 13 5-2 11-8 15-12z" fill="currentColor" />
-          <path d="M32 34c9-13 24-11 28-1 -6 2 -11 8 -13 13 -5-2 -11-8 -15-12z" fill="currentColor" />
-          <ellipse cx="32" cy="54" rx="4" ry="3" fill="currentColor" opacity="0.6" />
-        </symbol>
-      </defs>
-
-      <!-- لکه‌های رنگی محو -->
-      <g filter="url(#steps-soft)" class="text-primary-500 opacity-20">
-        <circle cx="140" cy="720" r="240" />
-        <circle cx="1060" cy="740" r="250" />
+    <!-- ماسک برگ ساده: رگبرگ‌ها حک می‌شوند -->
+    <mask id="steps-leaf-m" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff" />
+      <g fill="none" stroke="#000" stroke-linecap="round">
+        <path d="M32 10V56" stroke-opacity="0.5" stroke-width="1.5" />
+        <path d="M32 22c-5 2-9 6-11 11M32 33c-6 2-10 7-12 12M32 44c-4 2-8 5-9 9" stroke-opacity="0.35" stroke-width="1" />
+        <path d="M32 22c5 2 9 6 11 11M32 33c6 2 10 7 12 12M32 44c4 2 8 5 9 9" stroke-opacity="0.35" stroke-width="1" />
       </g>
-      <g filter="url(#steps-soft)" class="text-primary-300 opacity-15">
-        <circle cx="600" cy="90" r="190" />
+    </mask>
+    <symbol id="steps-leaf" viewBox="0 0 64 64">
+      <path
+        mask="url(#steps-leaf-m)"
+        d="M32 2C18 9 7 24 7 40c0 10 8 18 25 20 17-2 25-10 25-20C57 24 46 9 32 2z"
+        fill="currentColor"
+      />
+      <path d="M32 58c0 3-1 5-3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+
+    <!-- برگ مونسترا: بریدگی‌ها و سوراخ‌ها با mask واقعی -->
+    <mask id="steps-monstera-m" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="140">
+      <rect x="-10" y="-10" width="120" height="140" fill="#fff" />
+      <!-- بریدگی‌ها -->
+      <g fill="none" stroke="#000" stroke-width="5" stroke-linecap="round">
+        <path d="M-6 34L30 47" />
+        <path d="M-6 58L27 64" />
+        <path d="M-3 80L30 80" />
+        <path d="M106 34L70 47" />
+        <path d="M106 58L73 64" />
+        <path d="M103 80L70 80" />
       </g>
-
-      <!-- الگوی نقطه‌ای ملایم -->
-      <rect width="1200" height="800" fill="url(#steps-dots)" class="text-primary-900 opacity-5" />
-
-      <!-- خطوط منحنی پایین -->
-      <g class="text-primary-600 opacity-10" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M0 700 C 200 660, 320 740, 520 700 S 900 660, 1200 720" />
-        <path d="M0 732 C 200 692, 320 772, 520 732 S 900 692, 1200 752" />
-        <path d="M0 764 C 200 724, 320 804, 520 764 S 900 724, 1200 784" />
+      <!-- سوراخ‌ها -->
+      <ellipse cx="39" cy="28" rx="2.6" ry="4.2" transform="rotate(-20 39 28)" fill="#000" />
+      <ellipse cx="61" cy="28" rx="2.6" ry="4.2" transform="rotate(20 61 28)" fill="#000" />
+      <ellipse cx="40" cy="92" rx="2.2" ry="3.4" transform="rotate(-25 40 92)" fill="#000" />
+      <ellipse cx="60" cy="92" rx="2.2" ry="3.4" transform="rotate(25 60 92)" fill="#000" />
+      <!-- رگبرگ‌ها -->
+      <g fill="none" stroke="#000" stroke-linecap="round">
+        <path d="M50 8V102" stroke-opacity="0.55" stroke-width="1.6" />
+        <path d="M50 30c-7 2-13 6-17 12M50 52c-8 2-14 6-18 12M50 74c-6 2-11 5-14 10" stroke-opacity="0.35" stroke-width="1" />
+        <path d="M50 30c7 2 13 6 17 12M50 52c8 2 14 6 18 12M50 74c6 2 11 5 14 10" stroke-opacity="0.35" stroke-width="1" />
       </g>
+    </mask>
+    <symbol id="steps-monstera" viewBox="0 0 100 120">
+      <path
+        mask="url(#steps-monstera-m)"
+        d="M50 4C78 12 98 38 94 68C91 92 70 108 52 104L50 98L48 104C30 108 9 92 6 68C2 38 22 12 50 4Z"
+        fill="currentColor"
+      />
+      <path d="M50 100C50 110 49 116 47 120" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+    </symbol>
 
-      <!-- واین سمت چپ -->
-      <g class="text-primary-700 opacity-10">
-        <path d="M70 800 C 50 620, 130 500, 100 340" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-        <g transform="translate(78,640) rotate(-28) scale(0.5)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-        <g transform="translate(104,540) rotate(22) scale(0.45)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-        <g transform="translate(78,430) rotate(-38) scale(0.55)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-        <g transform="translate(106,340) rotate(16) scale(0.4)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
+    <!-- برگچه‌ی سرخس -->
+    <path id="steps-leaflet" d="M0 0C8-5 20-5 30 0C20 5 8 5 0 0Z" fill="currentColor" />
+
+    <!-- فروند سرخسی -->
+    <symbol id="steps-frond" viewBox="0 0 100 200">
+      <path d="M50 198C47 150 47 90 50 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.7" />
+      <g>
+        <use href="#steps-leaflet" transform="translate(50 178) rotate(-30) scale(1)" />
+        <use href="#steps-leaflet" transform="translate(50 178) scale(-1 1) rotate(-30) scale(1)" />
+        <use href="#steps-leaflet" transform="translate(49 158) rotate(-34) scale(0.95)" />
+        <use href="#steps-leaflet" transform="translate(49 158) scale(-1 1) rotate(-34) scale(0.95)" />
+        <use href="#steps-leaflet" transform="translate(48.5 138) rotate(-38) scale(0.88)" />
+        <use href="#steps-leaflet" transform="translate(48.5 138) scale(-1 1) rotate(-38) scale(0.88)" />
+        <use href="#steps-leaflet" transform="translate(48 118) rotate(-42) scale(0.78)" />
+        <use href="#steps-leaflet" transform="translate(48 118) scale(-1 1) rotate(-42) scale(0.78)" />
+        <use href="#steps-leaflet" transform="translate(48 98) rotate(-46) scale(0.68)" />
+        <use href="#steps-leaflet" transform="translate(48 98) scale(-1 1) rotate(-46) scale(0.68)" />
+        <use href="#steps-leaflet" transform="translate(48.5 78) rotate(-50) scale(0.56)" />
+        <use href="#steps-leaflet" transform="translate(48.5 78) scale(-1 1) rotate(-50) scale(0.56)" />
+        <use href="#steps-leaflet" transform="translate(49 58) rotate(-55) scale(0.44)" />
+        <use href="#steps-leaflet" transform="translate(49 58) scale(-1 1) rotate(-55) scale(0.44)" />
+        <use href="#steps-leaflet" transform="translate(49.5 40) rotate(-60) scale(0.32)" />
+        <use href="#steps-leaflet" transform="translate(49.5 40) scale(-1 1) rotate(-60) scale(0.32)" />
+        <use href="#steps-leaflet" transform="translate(50 24) rotate(-70) scale(0.22)" />
+        <use href="#steps-leaflet" transform="translate(50 24) scale(-1 1) rotate(-70) scale(0.22)" />
       </g>
+    </symbol>
 
-      <!-- واین سمت راست -->
-      <g class="text-primary-700 opacity-10">
-        <path d="M1130 800 C 1150 620, 1070 500, 1100 340" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-        <g transform="translate(1122,640) rotate(28) scale(0.5)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-        <g transform="translate(1096,540) rotate(-22) scale(0.45)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-        <g transform="translate(1122,430) rotate(38) scale(0.55)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-        <g transform="translate(1094,340) rotate(-16) scale(0.4)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-      </g>
+    <!-- جوانه -->
+    <symbol id="steps-sprout" viewBox="0 0 64 64">
+      <path d="M32 60V32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
+      <path d="M32 36C24 22 10 22 4 30c8 1 14 6 17 13 4-1 8-4 11-7z" fill="currentColor" />
+      <path d="M32 36C40 22 54 22 60 30c-8 1-14 6-17 13-4-1-8-4-11-7z" fill="currentColor" opacity="0.8" />
+      <ellipse cx="32" cy="57" rx="7" ry="2.4" fill="currentColor" opacity="0.35" />
+    </symbol>
+  </defs>
 
-      <!-- برگ مونسترای بزرگ پایین چپ -->
-      <g transform="translate(170, 650) rotate(-16) scale(2.6)" class="text-primary-800 opacity-10">
+  <!-- ۱) لکه‌های رنگی محو -->
+  <g filter="url(#steps-soft)">
+    <circle cx="140" cy="720" r="240" class="text-primary-500 opacity-20" fill="currentColor" />
+    <circle cx="1060" cy="740" r="250" class="text-primary-500 opacity-20" fill="currentColor" />
+    <circle cx="600" cy="110" r="200" class="text-primary-300 opacity-20" fill="currentColor" />
+    <circle cx="600" cy="420" r="260" class="text-primary-100 opacity-30" fill="currentColor" />
+  </g>
+
+  <!-- ۲) الگوی نقطه‌ای -->
+  <rect width="1200" height="800" fill="url(#steps-dots)" class="opacity-[0.07]" />
+
+  <!-- ۳) گیاهان (با فید به سمت بالا) -->
+  <g mask="url(#steps-fade)">
+    <!-- خطوط موجی پایین -->
+    <g class="text-primary-600 opacity-10" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M0 700C200 660 320 740 520 700S900 660 1200 720" />
+      <path d="M0 732C200 692 320 772 520 732S900 692 1200 752" />
+      <path d="M0 764C200 724 320 804 520 764S900 724 1200 784" />
+    </g>
+
+    <!-- لایه‌ی پشت: بزرگ، محو و کم‌رنگ -->
+    <g filter="url(#steps-blur-back)">
+      <g transform="translate(300 600) rotate(-30) scale(3.4)" class="text-primary-300 opacity-20">
         <use href="#steps-monstera" width="120" height="144" x="-60" y="-72" />
       </g>
-
-      <!-- برگ مونسترای بزرگ پایین راست (قرینه) -->
-      <g transform="translate(1030, 665) rotate(14) scale(2.4)" class="text-primary-700 opacity-10">
-        <g transform="scale(-1,1)">
+      <g transform="translate(910 590) rotate(26) scale(3.2)" class="text-primary-300 opacity-20">
+        <g transform="scale(-1 1)">
           <use href="#steps-monstera" width="120" height="144" x="-60" y="-72" />
         </g>
       </g>
+    </g>
 
-      <!-- جوانه‌ها -->
-      <g transform="translate(330, 745) scale(1.15)" class="text-primary-600 opacity-15">
-        <use href="#steps-sprout" width="80" height="80" x="-40" y="-40" />
+    <!-- واین سمت چپ -->
+    <g class="text-primary-700 opacity-10">
+      <path d="M70 800C40 640 140 520 96 330" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+      <g class="steps-sway" style="animation-delay: -1s">
+        <g transform="translate(70 700) rotate(-70) scale(0.5)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(88 620) rotate(58) scale(0.55)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(78 540) rotate(-62) scale(0.5)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(100 450) rotate(52) scale(0.6)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(92 385) rotate(-48) scale(0.45)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(96 330) rotate(4) scale(0.5)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
       </g>
-      <g transform="translate(870, 735) scale(1.05)" class="text-primary-600 opacity-15">
-        <use href="#steps-sprout" width="80" height="80" x="-40" y="-40" />
-      </g>
+    </g>
 
-      <!-- فروند بالا چپ و راست -->
-      <g transform="translate(95, 130) rotate(-24) scale(1.05)" class="text-primary-500 opacity-10">
+    <!-- واین سمت راست -->
+    <g class="text-primary-700 opacity-10">
+      <path d="M1130 800C1160 640 1060 520 1104 330" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+      <g class="steps-sway" style="animation-delay: -3s">
+        <g transform="translate(1130 700) rotate(70) scale(0.5)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(1112 620) rotate(-58) scale(0.55)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(1122 540) rotate(62) scale(0.5)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(1100 450) rotate(-52) scale(0.6)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(1108 385) rotate(48) scale(0.45)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+        <g transform="translate(1104 330) rotate(-4) scale(0.5)"><use href="#steps-leaf" width="64" height="64" x="-32" y="-60" /></g>
+      </g>
+    </g>
+
+    <!-- مونسترای بزرگ پایین چپ -->
+    <g transform="translate(170 660) rotate(-16) scale(2.6)" class="text-primary-800 opacity-10">
+      <g class="steps-sway-slow">
+        <use href="#steps-monstera" width="120" height="144" x="-60" y="-72" />
+      </g>
+    </g>
+
+    <!-- مونسترای بزرگ پایین راست (قرینه) -->
+    <g transform="translate(1030 672) rotate(14) scale(2.4)" class="text-primary-700 opacity-10">
+      <g class="steps-sway-slow" style="animation-delay: -2.5s">
+        <g transform="scale(-1 1)">
+          <use href="#steps-monstera" width="120" height="144" x="-60" y="-72" />
+        </g>
+      </g>
+    </g>
+
+    <!-- جوانه‌ها -->
+    <g transform="translate(330 748) scale(1.15)" class="text-primary-600 opacity-20">
+      <use href="#steps-sprout" width="80" height="80" x="-40" y="-52" />
+    </g>
+    <g transform="translate(870 740) scale(1.05)" class="text-primary-600 opacity-20">
+      <use href="#steps-sprout" width="80" height="80" x="-40" y="-52" />
+    </g>
+    <g transform="translate(600 770) scale(0.8)" class="text-primary-500 opacity-15">
+      <use href="#steps-sprout" width="80" height="80" x="-40" y="-52" />
+    </g>
+
+    <!-- فروند بالا -->
+    <g transform="translate(100 150) rotate(-24) scale(1.1)" class="text-primary-500 opacity-15">
+      <g class="steps-sway-slow">
         <use href="#steps-frond" width="120" height="240" x="-60" y="-120" />
       </g>
-      <g transform="translate(1105, 145) rotate(24) scale(1.05)" class="text-primary-500 opacity-10">
-        <g transform="scale(-1,1)">
+    </g>
+    <g transform="translate(1100 160) rotate(24) scale(1.1)" class="text-primary-500 opacity-15">
+      <g class="steps-sway-slow" style="animation-delay: -3.5s">
+        <g transform="scale(-1 1)">
           <use href="#steps-frond" width="120" height="240" x="-60" y="-120" />
         </g>
       </g>
+    </g>
 
-      <!-- برگ‌های پراکنده کناره‌ها -->
-      <g transform="translate(150, 510) rotate(-62) scale(0.9)" class="text-primary-600 opacity-10">
-        <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-      </g>
-      <g transform="translate(1050, 545) rotate(68) scale(0.85)" class="text-primary-600 opacity-10">
-        <g transform="scale(-1,1)">
-          <use href="#steps-leaf-simple" width="80" height="80" x="-40" y="-40" />
-        </g>
-      </g>
+    <!-- برگ‌های پراکنده -->
+    <g transform="translate(190 500) rotate(-62) scale(0.9)" class="text-primary-600 opacity-15">
+      <use href="#steps-leaf" width="64" height="64" x="-32" y="-32" />
+    </g>
+    <g transform="translate(1010 530) rotate(68) scale(0.85)" class="text-primary-600 opacity-15">
+      <use href="#steps-leaf" width="64" height="64" x="-32" y="-32" />
+    </g>
+    <g transform="translate(410 690) rotate(24) scale(0.55)" class="text-primary-500 opacity-15">
+      <use href="#steps-leaf" width="64" height="64" x="-32" y="-32" />
+    </g>
+    <g transform="translate(780 700) rotate(-30) scale(0.5)" class="text-primary-500 opacity-15">
+      <use href="#steps-leaf" width="64" height="64" x="-32" y="-32" />
+    </g>
 
-      <!-- محو شدن تدریجی به سمت بالا برای ترکیب بهتر با بک‌گراند -->
-      <rect width="1200" height="800" fill="url(#steps-fade)" class="text-primary-50" />
-    </svg>
+    <!-- ذرات ریز شناور -->
+    <g class="text-primary-400 opacity-30" fill="currentColor">
+      <circle cx="260" cy="420" r="3" />
+      <circle cx="330" cy="330" r="2" />
+      <circle cx="930" cy="400" r="3" />
+      <circle cx="860" cy="310" r="2" />
+      <circle cx="480" cy="610" r="2.5" />
+      <circle cx="720" cy="630" r="2" />
+      <circle cx="140" cy="260" r="2" />
+      <circle cx="1060" cy="280" r="2.5" />
+    </g>
+  </g>
+</svg>
 
     <!-- یادداشت دست‌نویس -->
     <div
@@ -547,5 +609,20 @@ const careItems = computed(() => [
 @media (prefers-reduced-motion: reduce) {
   .steps-scan-line, .steps-progress { animation: none; }
   .steps-progress { width: 66%; }
+}
+
+.steps-sway,
+.steps-sway-slow {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: steps-sway 7s ease-in-out infinite alternate;
+animation: none;
+}
+.steps-sway-slow {
+  animation-duration: 11s;
+}
+@keyframes steps-sway {
+  from { transform: rotate(-1.8deg); }
+  to { transform: rotate(1.8deg); }
 }
 </style>
