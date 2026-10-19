@@ -312,10 +312,10 @@
       "avatarRemoved": "Profile photo removed.",
       "avatarFailed": "Could not upload the photo. Try another one.",
       "themes": {
-        "wine": "Burgundy",
-        "forest": "Forest green",
-        "brown": "Brown",
-        "navy": "Navy"
+        "wine": "Autumn",
+        "forest": "Summer",
+        "brown": "Fall",
+        "navy": "Winter"
       },
       "account": "Account information",
       "birthDate": "Date of birth",

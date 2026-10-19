@@ -2,7 +2,6 @@
 import { getMockDiseases } from '~/services/mock/diseases.mock'
 
 const plantStore = usePlantStore()
-const historyStore = useHistoryStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const diseases = computed(() => getMockDiseases(activeLocale.value))
@@ -23,34 +22,6 @@ const quickActions = [
   { to: '/climate', icon: 'lucide:map-pin', label: 'nav.climate', hint: 'home.quickHints.city' },
 ]
 
-const recentScans = computed(() => historyStore.sorted.slice(0, 5))
-
-function formatConfidence(value: number) {
-  return t('home.scanConfidence', {
-    value: t('components.confidenceScore.percentage', {
-      value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(Math.round(value * 100)),
-    }),
-  })
-}
-
-// زمان نسبی و محلی‌شده: «۲ ساعت پیش» / «دیروز» / "2 hours ago" / "Yesterday"
-function scanTime(timestamp: number) {
-  const rtf = new Intl.RelativeTimeFormat(locale.value === 'fa' ? 'fa' : 'en', { numeric: 'auto' })
-  const minutes = Math.max(1, Math.round((Date.now() - timestamp) / 60_000))
-  if (minutes < 60) return rtf.format(-minutes, 'minute')
-  const hours = Math.round(minutes / 60)
-  if (hours < 24) return rtf.format(-hours, 'hour')
-  const days = Math.round(hours / 24)
-  if (days < 30) return rtf.format(-days, 'day')
-  const months = Math.round(days / 30)
-  if (months < 12) return rtf.format(-months, 'month')
-  return rtf.format(-Math.round(months / 12), 'year')
-}
-
-// عکس اسکن (blob) بعد از رفرش از بین می‌ره؛ فقط مخفیش می‌کنیم تا آیکن پشتش دیده بشه
-function onImageError(e: Event) {
-  (e.target as HTMLImageElement).style.visibility = 'hidden'
-}
 </script>
 
 <template>
@@ -115,78 +86,7 @@ function onImageError(e: Event) {
       </NuxtLink>
     </section>
 
-    <!-- آخرین اسکن‌ها -->
-    <section v-if="recentScans.length" class="glass-card p-4 sm:p-5">
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-lg font-bold text-ink">
-          {{ t('pages.profile.history') }}
-        </h2>
-        <NuxtLink
-          to="/history"
-          class="text-sm font-semibold text-primary-700 hover:text-primary-600"
-        >
-          {{ t('common.seeAll') }}
-        </NuxtLink>
-      </div>
-
-      <!-- اسلایدر Swiper: موبایل ~۱.۵ کارت | تبلت ۲.۴ | دسکتاپ ۴ کارت با فلش -->
-      <AppSlider
-        :items="recentScans"
-        :item-key="entry => entry.id"
-        :breakpoints="{ 640: { slidesPerView: 2.4 }, 1024: { slidesPerView: 4 } }"
-        class="-mx-4 px-4 sm:-mx-5 sm:px-5 lg:mx-0 lg:px-0"
-      >
-        <template #default="{ item: entry }">
-          <NuxtLink
-            :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
-            class="group flex h-full flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover"
-          >
-            <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50">
-              <Icon
-                name="lucide:leaf"
-                class="absolute inset-0 m-auto size-10 text-primary-400"
-              />
-              <img
-                :src="entry.image"
-                :alt="entry.plantName"
-                class="relative size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-                @error="onImageError"
-              >
-            </div>
-            <div class="flex items-end justify-between gap-2 px-1.5 pb-1.5 pt-3.5">
-              <div class="min-w-0">
-                <p class="truncate text-base font-bold text-ink">
-                  {{ entry.plantName }}
-                </p>
-                <p class="mt-1.5 truncate text-sm font-semibold text-primary-700">
-                  {{ formatConfidence(entry.confidence) }}
-                </p>
-                <p class="mt-0.5 truncate text-sm text-ink-muted">
-                  {{ scanTime(entry.timestamp) }}
-                </p>
-              </div>
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 text-ink-muted transition-colors group-hover:border-primary-300 group-hover:text-primary-700">
-                <Icon
-                  name="lucide:chevron-right"
-                  class="size-5 rtl:-scale-x-100"
-                />
-              </span>
-            </div>
-          </NuxtLink>
-        </template>
-      </AppSlider>
-    </section>
-
-    <!-- Plant Finder -->
-    <section>
-      <PlantFinder />
-    </section>
-
-    <!-- سوالات متداول -->
-    <FaqSection />
-
-    <!-- گیاهان شاخص -->
+        <!-- گیاهان شاخص -->
     <section class="glass-card p-4 sm:p-5">
       <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div class="min-w-0">
@@ -289,6 +189,14 @@ function onImageError(e: Event) {
       </div>
     </section>
 
+    <!-- Plant Finder -->
+    <section>
+      <PlantFinder />
+    </section>
+
+    <!-- سوالات متداول -->
+    <FaqSection />
+
     <!-- مشکلات رایج -->
     <section>
       <h2 class="mb-4 text-lg font-bold text-ink">
@@ -316,58 +224,7 @@ function onImageError(e: Event) {
     <BlogSection />
 
     <IdentifySteps />
-
-    <!-- راهنماها -->
-    <section>
-      <h2 class="mb-4 text-lg font-bold text-ink">
-        {{ t('home.guidesTitle') }}
-      </h2>
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div class="glass-card p-5">
-          <span class="mb-3 flex size-11 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-            <Icon
-              name="lucide:droplets"
-              class="size-5"
-            />
-          </span>
-          <h3 class="mb-1 font-bold text-ink">
-            {{ t('home.wateringTitle') }}
-          </h3>
-          <p class="text-sm leading-6 text-ink-muted">
-            {{ t('home.wateringDescription') }}
-          </p>
-        </div>
-        <div class="glass-card p-5">
-          <span class="mb-3 flex size-11 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-            <Icon
-              name="lucide:sun"
-              class="size-5"
-            />
-          </span>
-          <h3 class="mb-1 font-bold text-ink">
-            {{ t('home.lightTitle') }}
-          </h3>
-          <p class="text-sm leading-6 text-ink-muted">
-            {{ t('home.lightDescription') }}
-          </p>
-        </div>
-        <div class="glass-card p-5">
-          <span class="mb-3 flex size-11 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-            <Icon
-              name="lucide:bug"
-              class="size-5"
-            />
-          </span>
-          <h3 class="mb-1 font-bold text-ink">
-            {{ t('home.pestTitle') }}
-          </h3>
-          <p class="text-sm leading-6 text-ink-muted">
-            {{ t('home.pestDescription') }}
-          </p>
-        </div>
-      </div>
-    </section>
-  </div>
+ </div>
 </template>
 
 <style scoped>
