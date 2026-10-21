@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ChatSuggestion } from '~/components/ai-doctor/ChatSuggestions.vue'
 
+definePageMeta({ layout: 'ai-doctor' })
+
 const aiDoctorStore = useAiDoctorStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
@@ -62,17 +64,32 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mx-auto flex h-[calc(100dvh-12rem)] min-h-[26rem] w-full max-w-5xl gap-4 md:h-[calc(100dvh-8.5rem)]">
-    <!-- سایدبار تاریخچه (دسکتاپ) -->
-    <aside class="hidden w-64 shrink-0 rounded-2xl border border-ink/10 bg-surface p-3 lg:block">
-      <ChatHistorySidebar
-        :conversations="aiDoctorStore.sorted"
-        :active-id="aiDoctorStore.activeId"
-        @new="newChat"
-        @select="selectChat"
-        @rename="aiDoctorStore.rename"
-        @remove="aiDoctorStore.remove"
-      />
+  <div class="flex h-dvh w-full">
+    <!-- سایدبار AI (دسکتاپ): جای سایدبار اصلی رو می‌گیره -->
+    <aside class="hidden w-72 shrink-0 flex-col gap-3 border-e border-ink/5 bg-surface p-3 lg:flex">
+      <NuxtLink
+        to="/"
+        class="flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50"
+        :title="t('common.back')"
+      >
+        <span class="flex size-9 items-center justify-center rounded-xl bg-primary-700 text-white">
+          <Icon
+            name="lucide:leaf"
+            class="size-5"
+          />
+        </span>
+        <span class="min-w-0 flex-1 truncate text-base font-extrabold text-primary-800">{{ t('brand.name') }}</span>
+      </NuxtLink>
+      <div class="min-h-0 flex-1">
+        <ChatHistorySidebar
+          :conversations="aiDoctorStore.sorted"
+          :active-id="aiDoctorStore.activeId"
+          @new="newChat"
+          @select="selectChat"
+          @rename="aiDoctorStore.rename"
+          @remove="aiDoctorStore.remove"
+        />
+      </div>
     </aside>
 
     <!-- سایدبار تاریخچه (کشو برای موبایل و تبلت) -->
@@ -126,9 +143,20 @@ onMounted(() => {
     </Teleport>
 
     <!-- ستون چت -->
-    <div class="mx-auto flex min-w-0 max-w-3xl flex-1 flex-col">
+    <div class="flex min-w-0 flex-1 flex-col">
       <!-- هدر -->
-      <header class="flex items-center gap-2 pb-3">
+      <header class="flex items-center gap-2 px-3 py-2.5 sm:px-4">
+        <NuxtLink
+          to="/"
+          class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 bg-surface text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700 lg:hidden"
+          :aria-label="t('common.back')"
+          :title="t('common.back')"
+        >
+          <Icon
+            name="lucide:arrow-right"
+            class="size-5 ltr:rotate-180"
+          />
+        </NuxtLink>
         <button
           type="button"
           class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 bg-surface text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700 lg:hidden"
@@ -222,7 +250,7 @@ onMounted(() => {
       </ChatConversation>
 
       <!-- ورودی -->
-      <footer class="flex flex-col gap-2 pt-2">
+      <footer class="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 pb-3 pt-2">
         <ChatPromptInput
           ref="promptInput"
           :streaming="aiDoctorStore.busy"

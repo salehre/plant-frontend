@@ -1,11 +1,5 @@
 <script setup lang="ts">
-/**
- * معادل Conversation + ConversationScrollAnchor + ConversationScrollButton + ConversationEmptyState
- * در localmode.ai. تا وقتی کاربر پایین گفتگوئه، با هر محتوای جدید (استریم) خودکار پایین می‌ره؛
- * اگه بالا اسکرول کنه آزاد می‌شه و دکمه‌ی «رفتن به آخرین پیام» ظاهر می‌شه.
- */
 defineProps<{
-  /** هنوز پیامی نیست: اسلات empty نشون داده می‌شه */
   empty?: boolean
   label?: string
 }>()
@@ -43,14 +37,14 @@ defineExpose({ pin })
   <div class="relative min-h-0 flex-1">
     <div
       ref="scrollEl"
-      class="h-full overflow-y-auto px-1 pb-6 pt-2"
+      class="h-full overflow-y-auto px-4 pb-6 pt-2"
       :aria-label="label"
       aria-live="polite"
       @scroll.passive="onScroll"
     >
       <div
         ref="contentEl"
-        class="flex min-h-full flex-col gap-6"
+        class="mx-auto flex min-h-full w-full max-w-3xl flex-col gap-6"
       >
         <slot
           v-if="empty"
