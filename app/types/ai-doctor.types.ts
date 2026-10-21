@@ -13,6 +13,18 @@ export interface ChatMessage {
   failed?: boolean
   /** 👍 / 👎 که کاربر زیر جواب AI زده */
   feedback?: ChatFeedback
+  /** عکسی داشته که بعد از رفرش دیگه نگه داشته نمی‌شه (فقط یه نشانگر «عکس» نشون داده می‌شه) */
+  imageOmitted?: boolean
+}
+
+/** یک گفتگوی ذخیره‌شده توی تاریخچه‌ی سایدبار */
+export interface ChatConversation {
+  id: string
+  /** خالی = هنوز عنوانی نداره (مثلاً اولین پیام فقط عکس بوده) */
+  title: string
+  createdAt: number
+  updatedAt: number
+  messages: ChatMessage[]
 }
 
 /** بدنه‌ای که برای POST /ai-doctor/chat به بک‌اند فرستاده می‌شه */
