@@ -19,8 +19,8 @@ function makeId() {
 
 export const useAddressStore = defineStore('addresses', {
   state: () => ({
-    items: useLocalStorage<SavedAddress[]>('bargyar-addresses', []),
-    activeId: useLocalStorage<string>('bargyar-active-address', ''),
+    items: useLocalStorage<SavedAddress[]>('Golban-addresses', []),
+    activeId: useLocalStorage<string>('Golban-active-address', ''),
   }),
   getters: {
     count: state => state.items.length,

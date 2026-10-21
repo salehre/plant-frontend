@@ -36,15 +36,15 @@ function mockHash(value: string): string {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: useLocalStorage<User | null>('bargyar-auth-user', null, jsonStorage<User | null>()),
-    pendingRegistration: useLocalStorage<PendingRegistration | null>('bargyar-pending-registration', null, jsonStorage<PendingRegistration | null>()),
-    otps: useLocalStorage<Record<string, OtpEntry>>('bargyar-otp-codes', {}),
-    credentials: useLocalStorage<Record<string, string>>('bargyar-credentials', {}),
-    profiles: useLocalStorage<Record<string, UserProfileData>>('bargyar-user-profiles', {}),
+    user: useLocalStorage<User | null>('Golban-auth-user', null, jsonStorage<User | null>()),
+    pendingRegistration: useLocalStorage<PendingRegistration | null>('Golban-pending-registration', null, jsonStorage<PendingRegistration | null>()),
+    otps: useLocalStorage<Record<string, OtpEntry>>('Golban-otp-codes', {}),
+    credentials: useLocalStorage<Record<string, string>>('Golban-credentials', {}),
+    profiles: useLocalStorage<Record<string, UserProfileData>>('Golban-user-profiles', {}),
     // عکس پروفایل هر ایمیل (دیتا‌یو‌آر‌ال فشرده)؛ جدا از profiles تا ذخیره‌ی فرم پروفایل پاکش نکنه
-    avatars: useLocalStorage<Record<string, string>>('bargyar-user-avatars', {}),
+    avatars: useLocalStorage<Record<string, string>>('Golban-user-avatars', {}),
     // عکس کاور هر ایمیل (دیتا‌یو‌آر‌ال فشرده)
-    covers: useLocalStorage<Record<string, string>>('bargyar-user-covers', {}),
+    covers: useLocalStorage<Record<string, string>>('Golban-user-covers', {}),
     loading: false,
     error: '',
   }),

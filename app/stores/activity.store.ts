@@ -27,7 +27,7 @@ const MAX_ENTRIES = 100
  */
 export const useActivityStore = defineStore('activity', {
   state: () => ({
-    entries: useLocalStorage<ActivityEntry[]>('bargyar-activity-log', []),
+    entries: useLocalStorage<ActivityEntry[]>('Golban-activity-log', []),
   }),
   getters: {
     count: state => state.entries.length,

@@ -50,8 +50,8 @@ export const useUserPlantsStore = defineStore('userPlants', {
     // useLocalStorage: تا وصل‌شدن Backend، گیاه‌ها/تسک‌هایی که کاربر اضافه می‌کنه
     // باید بعد از رفرش هم بمونن. seed فقط برای اولین بار (وقتی هنوز چیزی در
     // localStorage نیست) استفاده می‌شه.
-    plants: useLocalStorage<UserPlant[]>('bargyar-user-plants', [...seedUserPlants]),
-    tasks: useLocalStorage<CareTask[]>('bargyar-user-plant-tasks', [...seedTasks]),
+    plants: useLocalStorage<UserPlant[]>('Golban-user-plants', [...seedUserPlants]),
+    tasks: useLocalStorage<CareTask[]>('Golban-user-plant-tasks', [...seedTasks]),
   }),
   getters: {
     todayTasks(state) {

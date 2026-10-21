@@ -25,8 +25,8 @@ export const seasonByTheme: Record<ThemeKey, string> = {
 export const useUiStore = defineStore('ui', {
   state: () => ({
     mobileNavOpen: false,
-    theme: useLocalStorage<ThemeKey>('bargyar-theme', 'forest'),
-    mode: useLocalStorage<ThemeMode>('bargyar-mode', 'light'),
+    theme: useLocalStorage<ThemeKey>('Golban-theme', 'forest'),
+    mode: useLocalStorage<ThemeMode>('Golban-mode', 'light'),
   }),
   actions: {
     showToast(message: string, type: 'success' | 'error' | 'info' = 'success') {

@@ -22,7 +22,7 @@ const MAX_ENTRIES = 50
  */
 export const useHistoryStore = defineStore('history', {
   state: () => ({
-    entries: useLocalStorage<HistoryEntry[]>('bargyar-scan-history', []),
+    entries: useLocalStorage<HistoryEntry[]>('Golban-scan-history', []),
   }),
   getters: {
     count: state => state.entries.length,

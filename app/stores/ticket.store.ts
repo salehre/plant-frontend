@@ -18,8 +18,8 @@ function daysAgo(days: number, hours = 0) {
  */
 export const useTicketStore = defineStore('tickets', {
   state: () => ({
-    byUser: useLocalStorage<Record<string, Ticket[]>>('bargyar-tickets', {}),
-    seeded: useLocalStorage<Record<string, boolean>>('bargyar-tickets-seeded', {}),
+    byUser: useLocalStorage<Record<string, Ticket[]>>('Golban-tickets', {}),
+    seeded: useLocalStorage<Record<string, boolean>>('Golban-tickets-seeded', {}),
     submitting: false,
   }),
   getters: {

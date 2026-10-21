@@ -56,12 +56,12 @@ const settingsOpen = computed(() => isActive('/settings'))
     <!-- لوگو -->
     <NuxtLink
       to="/"
-      class="flex items-center px-2"
+      class="flex items-center gap-2.5 px-2"
     >
       <img
         src="/images/logo.png"
         :alt="$t('brand.name')"
-        class="h-10 w-auto"
+        class="h-10 w-auto object-contain"
       >
       <span class="text-lg font-extrabold text-primary-800">{{ $t('brand.name') }}</span>
     </NuxtLink>

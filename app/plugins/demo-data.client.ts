@@ -24,7 +24,7 @@ import { getMockPosts } from '~/services/mock/community.mock'
  *
  * وقتی Backend واقعی وصل شد این فایل و services/mock/demo-data.mock.ts رو حذف کن.
  */
-const FLAG_KEY = 'bargyar-demo-seed'
+const FLAG_KEY = 'Golban-demo-seed'
 
 export default defineNuxtPlugin(async () => {
   const { public: pub } = useRuntimeConfig()

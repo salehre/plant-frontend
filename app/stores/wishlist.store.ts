@@ -11,7 +11,7 @@ import { defineStore } from 'pinia'
  */
 export const useWishlistStore = defineStore('wishlist', {
   state: () => ({
-    slugs: useLocalStorage<string[]>('bargyar-wishlist', []),
+    slugs: useLocalStorage<string[]>('Golban-wishlist', []),
   }),
   getters: {
     count: state => state.slugs.length,

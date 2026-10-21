@@ -19,9 +19,9 @@ export const useCommunityStore = defineStore('community', {
   state: () => ({
     // useLocalStorage: لایک/کامنت/فالویی که کاربر اضافه می‌کنه باید بعد از رفرش بمونه.
     // posts هم با seed مقداردهی اولیه می‌شه (مثل postsهای مقاله‌ای که likesCount تغییر می‌کنه).
-    posts: useLocalStorage<Post[]>('bargyar-community-posts', getMockPosts()),
-    comments: useLocalStorage<Record<string, Comment[]>>('bargyar-community-comments', {}),
-    followingIds: useLocalStorage<Set<string>>('bargyar-community-following', new Set<string>(), {
+    posts: useLocalStorage<Post[]>('Golban-community-posts', getMockPosts()),
+    comments: useLocalStorage<Record<string, Comment[]>>('Golban-community-comments', {}),
+    followingIds: useLocalStorage<Set<string>>('Golban-community-following', new Set<string>(), {
       serializer: StorageSerializers.set,
     }),
   }),

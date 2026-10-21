@@ -282,7 +282,7 @@
     "blogPost": "Failed to load the article."
   },
   "brand": {
-    "name": "BargYar"
+    "name": "Golban"
   },
   "pages": {
     "common": {
@@ -704,10 +704,10 @@
   },
   "about": {
     "pageTitle": "About us",
-    "title": "About PlantPal",
-    "intro": "PlantPal is a platform for identifying and caring for plants, for anyone from someone who just bought their first pot to people who have lived with plants for years.",
+    "title": "About Golban",
+    "intro": "Golban is a platform for identifying and caring for plants, for anyone from someone who just bought their first pot to people who have lived with plants for years.",
     "storyTitle": "Our story",
-    "storyBody": "PlantPal started with a simple question: why is it so hard to find reliable answers about a plant? We wanted a place where one photo tells you what you have, how much water and light it needs, and how to plan its care.",
+    "storyBody": "Golban started with a simple question: why is it so hard to find reliable answers about a plant? We wanted a place where one photo tells you what you have, how much water and light it needs, and how to plan its care.",
     "missionTitle": "Our mission",
     "missionBody": "Our mission is to make plant care simple and enjoyable for everyone, with clear information, practical tools and a community of plant lovers who share what they learn.",
     "featuresTitle": "What we offer",
@@ -757,15 +757,15 @@
     "contactUs": "Get in touch",
     "terms": {
       "title": "Terms and conditions",
-      "intro": "By using PlantPal you agree to these terms. Please read them carefully before creating an account or using our services.",
+      "intro": "By using Golban you agree to these terms. Please read them carefully before creating an account or using our services.",
       "sections": [
         {
           "title": "Acceptance of terms",
-          "body": "Using the PlantPal website and services means you agree to these terms and to our privacy policy.\nIf you do not agree with any part of these terms, please do not use the services."
+          "body": "Using the Golban website and services means you agree to these terms and to our privacy policy.\nIf you do not agree with any part of these terms, please do not use the services."
         },
         {
           "title": "Our services",
-          "body": "PlantPal provides tools for identifying and caring for plants, including photo identification, a plant finder, a plant encyclopedia, plant comparison, a care calendar and a plant lovers community.\nWe may change, add or discontinue parts of the services at any time."
+          "body": "Golban provides tools for identifying and caring for plants, including photo identification, a plant finder, a plant encyclopedia, plant comparison, a care calendar and a plant lovers community.\nWe may change, add or discontinue parts of the services at any time."
         },
         {
           "title": "Your account",
@@ -785,11 +785,11 @@
         },
         {
           "title": "Intellectual property",
-          "body": "The design, text, logo and components of the site belong to PlantPal or their respective owners and must not be copied or republished without written permission.\nContent you publish remains yours."
+          "body": "The design, text, logo and components of the site belong to Golban or their respective owners and must not be copied or republished without written permission.\nContent you publish remains yours."
         },
         {
           "title": "Limitation of liability",
-          "body": "The services are provided as they are, and we do not guarantee they will work without interruption or errors.\nTo the extent permitted by law, PlantPal is not liable for damages resulting from the use of information on the site, including harm to plants."
+          "body": "The services are provided as they are, and we do not guarantee they will work without interruption or errors.\nTo the extent permitted by law, Golban is not liable for damages resulting from the use of information on the site, including harm to plants."
         },
         {
           "title": "Changes and contact",
@@ -1045,7 +1045,7 @@
       "capture": "Take photo"
     },
     "theHeader": {
-      "brand": "PlantPal",
+      "brand": "Golban",
       "home": "Home",
       "identify": "Identify",
       "catalog": "Plants",
@@ -1053,7 +1053,7 @@
       "menu": "Menu"
     },
     "theFooter": {
-      "brand": "PlantPal",
+      "brand": "Golban",
       "tagline": "An intelligent platform for identifying and caring for plants",
       "poweredBy": "Designed and built by",
       "platform": "Platform",
