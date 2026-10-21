@@ -260,7 +260,14 @@
     "groupYesterday": "Yesterday",
     "groupWeek": "Previous 7 days",
     "groupOlder": "Older",
-    "imageOmitted": "Photo"
+    "imageOmitted": "Photo",
+    "myPlants": "My Plants",
+    "myPlantsSubtitle": "The plants in your My Plants list. Pick one to chat about it with the Plant Doctor.",
+    "attachPlants": "Add plant",
+    "detachPlant": "Remove {name} from chat",
+    "noPlants": "You don't have any plants in My Plants yet.",
+    "chatAboutPlant": "Chat about this plant",
+    "plantChatsCount": "{count} chats"
   },
   "errors": {
     "unknown": "An unknown error occurred",

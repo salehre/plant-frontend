@@ -1,3 +1,5 @@
+import type { UserPlant } from '~/types/user.types'
+
 export type ChatRole = 'user' | 'assistant'
 
 /** نظر کاربر درباره‌ی جواب AI (👍 / 👎) */
@@ -25,12 +27,22 @@ export interface ChatConversation {
   createdAt: number
   updatedAt: number
   messages: ChatMessage[]
+  plantIds?: string[]
+ }
+
+export interface AiDoctorPlantContext {
+  nickname: string
+  plantSlug: string
+  location: string
+  healthStatus: UserPlant['healthStatus']
+  lastWateredAt: string | null
 }
 
 /** بدنه‌ای که برای POST /ai-doctor/chat به بک‌اند فرستاده می‌شه */
 export interface AiDoctorRequest {
   messages: { role: ChatRole, content: string, image?: string }[]
   locale: 'fa' | 'en'
+  plants?: AiDoctorPlantContext[]
 }
 
 /** جواب بک‌اند: متن جواب دکتر گیاه (Markdown ساده: **بولد** و لیست‌های «- » و «۱. ») */

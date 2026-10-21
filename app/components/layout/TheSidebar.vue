@@ -14,15 +14,14 @@ const links = [
   { to: '/plants', label: 'nav.catalog', icon: sidebarIcons.compass },
   { to: '/identify', label: 'nav.identify', icon: sidebarIcons.scanLine },
   { to: '/ai-doctor', label: 'nav.aiDoctor', icon: sidebarIcons.stethoscope },
-  // { to: '/care-calendar', label: 'nav.careCalendar', icon: sidebarIcons.calendarCheck },
   { to: '/profile', label: 'nav.profile', icon: sidebarIcons.user },
-  { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
   { to: '/settings', label: 'pages.profile.settings', icon: sidebarIcons.settings },
 ]
 const secondaryLinks = [
   { to: '/dashboard', label: 'nav.dashboard', icon: sidebarIcons.layoutDashboard },
   { to: '/climate', label: 'nav.climate', icon: sidebarIcons.cloudSun },
-  { to: '/community', label: 'nav.community', icon: sidebarIcons.users },
+  // { to: '/community', label: 'nav.community', icon: sidebarIcons.users },
+  { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
   { to: '/support', label: 'support.nav', icon: sidebarIcons.lifeBuoy },
 ]
 
@@ -98,7 +97,7 @@ const settingsOpen = computed(() => isActive('/settings'))
         <!-- بخش‌های تنظیمات زیر لینک تنظیمات -->
         <div
           v-if="link.to === '/settings' && settingsOpen"
-          class="ms-5 mt-0.5 mb-1 flex flex-col gap-0.5 border-s border-ink/10 ps-2"
+          class="ms-5 mt-0.5 mb-1 flex flex-col gap-0.5 border-ink/10 ps-2"
         >
           <NuxtLink
             v-for="section in settingsSections"

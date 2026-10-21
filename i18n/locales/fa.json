@@ -260,7 +260,14 @@
     "groupYesterday": "دیروز",
     "groupWeek": "۷ روز گذشته",
     "groupOlder": "قدیمی‌تر",
-    "imageOmitted": "عکس"
+    "imageOmitted": "عکس",
+    "myPlants": "گیاهان من",
+    "myPlantsSubtitle": "گیاه‌هایی که توی «گیاهان من» داری؛ یکی رو انتخاب کن و درباره‌اش با دکتر گیاه حرف بزن.",
+    "attachPlants": "افزودن گیاه",
+    "detachPlant": "برداشتن {name} از گفتگو",
+    "noPlants": "هنوز گیاهی توی «گیاهان من» نداری.",
+    "chatAboutPlant": "گفتگو درباره‌ی این گیاه",
+    "plantChatsCount": "{count} گفتگو"
   },
   "errors": {
     "unknown": "خطای ناشناخته",

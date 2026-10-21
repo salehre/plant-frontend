@@ -4,6 +4,7 @@ import type { ChatSuggestion } from '~/components/ai-doctor/ChatSuggestions.vue'
 definePageMeta({ layout: 'ai-doctor' })
 
 const aiDoctorStore = useAiDoctorStore()
+const plantOptions = useUserPlantOptions()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
@@ -72,12 +73,11 @@ onMounted(() => {
         class="flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50"
         :title="t('common.back')"
       >
-        <span class="flex size-9 items-center justify-center rounded-xl bg-primary-700 text-white">
-          <Icon
-            name="lucide:leaf"
-            class="size-5"
-          />
-        </span>
+      <img
+        src="/images/logo.png"
+        :alt="$t('brand.name')"
+        class="h-10 w-auto object-contain"
+      >
         <span class="min-w-0 flex-1 truncate text-base font-extrabold text-primary-800">{{ t('brand.name') }}</span>
       </NuxtLink>
       <div class="min-h-0 flex-1">
@@ -251,6 +251,11 @@ onMounted(() => {
 
       <!-- ورودی -->
       <footer class="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 pb-3 pt-2">
+      <ChatPlantPicker
+          :plants="plantOptions"
+          :selected="aiDoctorStore.attachedPlantIds"
+          @toggle="aiDoctorStore.togglePlant"
+      />
         <ChatPromptInput
           ref="promptInput"
           :streaming="aiDoctorStore.busy"

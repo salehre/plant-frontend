@@ -87,6 +87,17 @@ function confirmDelete(id: string) {
       {{ t('aiDoctor.newChat') }}
     </button>
 
+    <NuxtLink
+      to="/ai-doctor-plants"
+      class="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-primary-50 hover:text-primary-700"
+    >
+      <Icon
+        name="lucide:sprout"
+        class="size-4"
+      />
+      {{ t('aiDoctor.myPlants') }}
+    </NuxtLink>
+
     <label class="relative block">
       <Icon
         name="lucide:search"

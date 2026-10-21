@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { ChatConversation, ChatFeedback, ChatMessage } from '~/types/ai-doctor.types'
+import type { UserPlant } from '~/types/user.types'
 import type { MockLocale } from '~/services/mock/mock-locale'
 import { askAiDoctor } from '~/services/ai-doctor.service'
 
@@ -34,6 +35,7 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
       serializer: { read: raw => JSON.parse(raw) as ChatConversation[], write: serialize },
     }),
     activeId: null as string | null,
+    pendingPlantIds: [] as string[],
     /** منتظر رسیدن جواب از AI هستیم (برای نشانگر «در حال نوشتن») */
     waiting: false,
     /** جواب رسیده و داره کلمه‌به‌کلمه نمایش داده می‌شه */
@@ -50,15 +52,19 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
     isEmpty(): boolean {
       return this.messages.length === 0
     },
+      attachedPlantIds(state): string[] {
+      return this.active ? (this.active.plantIds ?? []) : state.pendingPlantIds
+    },
     busy: state => state.waiting || state.revealing,
     /** جدیدترین اول */
     sorted: state => [...state.conversations].sort((a, b) => b.updatedAt - a.updatedAt),
   },
   actions: {
     /** گفتگوی جدید: خالیه و با اولین پیام توی تاریخچه ثبت می‌شه */
-    newChat() {
+      newChat(plantIds: string[] = []) {
       this.stop()
       this.activeId = null
+      this.pendingPlantIds = [...plantIds]
     },
     select(id: string) {
       if (id === this.activeId || !this.conversations.some(c => c.id === id)) return
@@ -77,6 +83,13 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
       }
       this.conversations = this.conversations.filter(c => c.id !== id)
     },
+    togglePlant(id: string) {
+      const conv = this.active
+      const list = conv ? (conv.plantIds ??= []) : this.pendingPlantIds
+      const index = list.indexOf(id)
+      if (index === -1) list.push(id)
+      else list.splice(index, 1)
+    },
     async send(text: string, image?: string, locale: MockLocale = 'fa') {
       const content = text.trim()
       if ((!content && !image) || this.busy) return
@@ -90,9 +103,11 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
           createdAt: now,
           updatedAt: now,
           messages: [],
+          plantIds: [...this.pendingPlantIds],
         }
         this.conversations = [created, ...this.conversations].slice(0, MAX_CONVERSATIONS)
         this.activeId = created.id
+        this.pendingPlantIds = []
         conv = this.active
       }
       if (!conv) return
@@ -122,9 +137,20 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
       if (!conv) return
       const convId = conv.id
       const current = epoch
+      const userPlants = useUserPlantsStore().plants
+      const plants = (conv.plantIds ?? [])
+        .map(id => userPlants.find(p => p.id === id))
+        .filter((p): p is UserPlant => !!p)
+        .map(p => ({
+          nickname: p.nickname,
+          plantSlug: p.plantSlug,
+          location: p.location,
+          healthStatus: p.healthStatus,
+          lastWateredAt: p.lastWateredAt,
+        }))
       this.waiting = true
       try {
-        const reply = await askAiDoctor(conv.messages, locale)
+        const reply = await askAiDoctor(conv.messages, locale, plants)
         if (current !== epoch) return
         const id = uid()
         conv.messages.push({ id, role: 'assistant', content: '' })
