@@ -41,6 +41,16 @@ const showActions = computed(() => !isUser.value && !props.message.failed && !pr
         class="max-h-56 w-full object-cover"
       >
     </button>
+    <span
+      v-else-if="message.imageOmitted"
+      class="flex w-fit items-center gap-1.5 rounded-xl bg-ink/[0.06] px-2.5 py-1.5 text-xs text-ink-muted"
+    >
+      <Icon
+        name="lucide:image"
+        class="size-4"
+      />
+      {{ $t('aiDoctor.imageOmitted') }}
+    </span>
     <p
       v-if="message.content"
       class="whitespace-pre-wrap break-words text-[15px] leading-7"
