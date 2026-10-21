@@ -76,6 +76,14 @@ export const sidebarIcons = {
     path('line', 'M7 12h10'),
   ]),
 
+  // دکتر گیاه
+  stethoscope: createIcon('stethoscope', [
+    path('ears', 'M11 2v2M5 2v2'),
+    path('tube', 'M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1'),
+    path('cord', 'M8 15a6 6 0 0 0 12 0v-3'),
+    circle('chest', 20, 10, 2),
+  ]),
+
   // تقویم مراقبت
   calendarCheck: createIcon('calendar-check', [
     rect('body', 4, 5, 16, 15, 2),

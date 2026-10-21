@@ -9,7 +9,9 @@
     "profile": "Profile",
     "compare": "Compare Plants",
     "climate": "Plants for Your City",
-    "community": "Plant Lovers Community"
+    "community": "Plant Lovers Community",
+    "aiDoctor": "AI Doctor",
+    "explore": "Explore"
   },
   "common": {
     "search": "Search",
@@ -48,7 +50,9 @@
       "myPlants": "Manage your plants",
       "catalog": "Explore the plant catalog",
       "care": "Keep track of plant care",
-      "city": "Find plants that suit your city"
+      "city": "Find plants that suit your city",
+      "identify": "Scan or upload",
+      "aiDoctor": "Chat with the Plant Doctor"
     },
       "steps": {
       "title": "How does it work?",
@@ -212,6 +216,29 @@
     "errors": {
       "analysisFailed": "We couldn't analyze the image. Please try again."
     }
+  },
+  "aiDoctor": {
+    "title": "AI Doctor",
+    "subtitle": "Ask about your plant or send a photo",
+    "newChat": "New chat",
+    "welcomeTitle": "Hi! I'm the Plant Doctor 🌿",
+    "welcomeText": "Tell me whatever is wrong with your plant, from yellowing leaves to pests and watering. You can send a photo too.",
+    "suggestions": {
+      "yellow": "Why are my plant's leaves turning yellow?",
+      "spots": "There are brown spots on the leaves",
+      "pests": "I see fine webbing under the leaves",
+      "watering": "How often should I water my plant?"
+    },
+    "inputPlaceholder": "Describe your plant's problem...",
+    "send": "Send",
+    "attachImage": "Add a photo",
+    "removeImage": "Remove photo",
+    "imageTooLarge": "The photo must be {max} MB or smaller",
+    "userImageAlt": "Sent photo",
+    "thinking": "The Plant Doctor is typing",
+    "error": "The Plant Doctor's reply didn't arrive. Please try again.",
+    "retry": "Try again",
+    "disclaimer": "The Plant Doctor is an AI assistant and is no substitute for expert advice."
   },
   "errors": {
     "unknown": "An unknown error occurred",

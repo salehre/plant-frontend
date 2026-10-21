@@ -17,9 +17,11 @@ const featuredShown = computed(() => featured.value.slice(0, 4))
 const featuredPromoImage = '/images/plants/header.png'
 
 const quickActions = [
+  { to: '/identify', icon: 'lucide:scan-line', label: 'nav.identify', hint: 'home.quickHints.identify' },
   { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
-  { to: '/plants', icon: 'lucide:compass', label: 'nav.catalog', hint: 'home.quickHints.catalog' },
-  { to: '/climate', icon: 'lucide:map-pin', label: 'nav.climate', hint: 'home.quickHints.city' },
+  { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar', hint: 'home.quickHints.care' },
+  { to: '/ai-doctor', icon: 'lucide:stethoscope', label: 'nav.aiDoctor', hint: 'home.quickHints.aiDoctor' },
+  { to: '/plants', icon: 'lucide:compass', label: 'nav.explore', hint: 'home.quickHints.catalog' },
 ]
 
 </script>
@@ -66,12 +68,12 @@ const quickActions = [
     </section>
 
     <!-- دسترسی سریع -->
-    <section class="grid grid-cols-3 gap-3 sm:gap-4">
+    <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
       <NuxtLink
         v-for="action in quickActions"
         :key="action.to"
         :to="action.to"
-        class="glass-card flex flex-col items-center gap-3 p-4 text-center"
+        class="glass-card flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
       >
         <span class="flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary-700">
           <Icon

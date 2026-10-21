@@ -13,6 +13,7 @@ const links = [
   { to: '/my-plants', label: 'nav.myPlants', icon: sidebarIcons.sprout },
   { to: '/plants', label: 'nav.catalog', icon: sidebarIcons.compass },
   { to: '/identify', label: 'nav.identify', icon: sidebarIcons.scanLine },
+  { to: '/ai-doctor', label: 'nav.aiDoctor', icon: sidebarIcons.stethoscope },
   // { to: '/care-calendar', label: 'nav.careCalendar', icon: sidebarIcons.calendarCheck },
   { to: '/profile', label: 'nav.profile', icon: sidebarIcons.user },
   { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
