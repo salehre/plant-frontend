@@ -1,5 +1,8 @@
 export type ChatRole = 'user' | 'assistant'
 
+/** نظر کاربر درباره‌ی جواب AI (👍 / 👎) */
+export type ChatFeedback = 'up' | 'down'
+
 export interface ChatMessage {
   id: string
   role: ChatRole
@@ -8,6 +11,8 @@ export interface ChatMessage {
   image?: string
   /** دریافت جواب AI شکست خورده (برای نمایش دکمه‌ی تلاش دوباره) */
   failed?: boolean
+  /** 👍 / 👎 که کاربر زیر جواب AI زده */
+  feedback?: ChatFeedback
 }
 
 /** بدنه‌ای که برای POST /ai-doctor/chat به بک‌اند فرستاده می‌شه */

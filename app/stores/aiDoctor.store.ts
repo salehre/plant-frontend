@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import type { ChatMessage } from '~/types/ai-doctor.types'
+import type { ChatFeedback, ChatMessage } from '~/types/ai-doctor.types'
 import type { MockLocale } from '~/services/mock/mock-locale'
 import { askAiDoctor } from '~/services/ai-doctor.service'
 
 let counter = 0
-// با هر clear() زیاد می‌شه تا جواب‌های دیررسیده‌ی گفتگوی قبلی نادیده گرفته بشن
+// با هر clear() یا stop() زیاد می‌شه تا جواب‌های دیررسیده‌ی گفتگوی قبلی نادیده گرفته بشن
 let epoch = 0
 const uid = () => `m${Date.now().toString(36)}${(counter++).toString(36)}`
 
@@ -38,6 +38,13 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
       if (this.messages.at(-1)?.role !== 'user') return
       await this.requestReply(locale)
     },
+    /** تولید دوباره‌ی آخرین جواب: جواب(های) آخر حذف می‌شن و برای همون سؤال جواب تازه گرفته می‌شه */
+    async regenerate(locale: MockLocale = 'fa') {
+      if (this.busy) return
+      while (this.messages.at(-1)?.role === 'assistant') this.messages.pop()
+      if (this.messages.at(-1)?.role !== 'user') return
+      await this.requestReply(locale)
+    },
     async requestReply(locale: MockLocale) {
       const current = epoch
       this.waiting = true
@@ -60,7 +67,7 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
         }
       }
     },
-    /** متن رو تکه‌تکه نشون می‌ده تا حس تایپ‌شدن بده؛ اگه گفتگو وسطش پاک شد، متوقف می‌شه */
+    /** متن رو تکه‌تکه نشون می‌ده تا حس تایپ‌شدن بده؛ اگه گفتگو وسطش پاک یا متوقف شد، متوقف می‌شه */
     async revealReply(id: string, full: string, current: number) {
       this.revealing = true
       const tokens = full.split(/(\s+)/)
@@ -73,6 +80,21 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
         message.content = shown
         await new Promise(resolve => setTimeout(resolve, 28))
       }
+    },
+    /** دکمه‌ی «توقف»: جواب نیمه‌کاره همون‌طور که هست می‌مونه، جواب دیررسیده نادیده گرفته می‌شه */
+    stop() {
+      if (!this.busy) return
+      epoch++
+      this.waiting = false
+      this.revealing = false
+      // اگه هنوز هیچ متنی نیومده بود، حباب خالی نمونه
+      const last = this.messages.at(-1)
+      if (last?.role === 'assistant' && !last.content && !last.failed) this.messages.pop()
+    },
+    /** 👍 / 👎 زیر جواب؛ زدن دوباره‌ی همون دکمه نظر رو برمی‌داره */
+    setFeedback(id: string, value: ChatFeedback) {
+      const message = this.messages.find(m => m.id === id)
+      if (message) message.feedback = message.feedback === value ? undefined : value
     },
     clear() {
       epoch++

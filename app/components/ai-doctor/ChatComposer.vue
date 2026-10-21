@@ -1,6 +1,12 @@
 <script setup lang="ts">
-const props = defineProps<{ disabled?: boolean }>()
-const emit = defineEmits<{ send: [payload: { text: string, image?: string }] }>()
+const props = defineProps<{
+  /** AI داره جواب می‌ده: دکمه‌ی ارسال به «توقف» تبدیل می‌شه و ارسال جدید قفله */
+  busy?: boolean
+}>()
+const emit = defineEmits<{
+  send: [payload: { text: string, image?: string }]
+  stop: []
+}>()
 
 const { t } = useI18n()
 const uiStore = useUiStore()
@@ -10,16 +16,17 @@ const MAX_LENGTH = 1000
 
 const text = ref('')
 const image = ref('')
+const dragging = ref(false)
 const inputEl = ref<HTMLTextAreaElement | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 
-const canSend = computed(() => !props.disabled && (!!text.value.trim() || !!image.value))
+const canSend = computed(() => !props.busy && (!!text.value.trim() || !!image.value))
 
 function autoGrow() {
   const el = inputEl.value
   if (!el) return
   el.style.height = 'auto'
-  el.style.height = `${Math.min(el.scrollHeight, 128)}px`
+  el.style.height = `${Math.min(el.scrollHeight, 192)}px`
 }
 watch(text, () => nextTick(autoGrow))
 
@@ -32,16 +39,35 @@ function readAsDataUrl(blob: Blob): Promise<string> {
   })
 }
 
-async function onFilePicked(e: Event) {
-  const input = e.target as HTMLInputElement
-  const file = input.files?.[0]
-  input.value = ''
+async function setImageFile(file?: File | null) {
   if (!file || !file.type.startsWith('image/')) return
   if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
     uiStore.showToast(t('aiDoctor.imageTooLarge', { max: MAX_IMAGE_MB }), 'error')
     return
   }
   image.value = await readAsDataUrl(file)
+  inputEl.value?.focus()
+}
+
+function onFilePicked(e: Event) {
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+  setImageFile(file)
+}
+
+// چسباندن عکس (Ctrl+V) توی کادر
+function onPaste(e: ClipboardEvent) {
+  const file = Array.from(e.clipboardData?.files ?? []).find(f => f.type.startsWith('image/'))
+  if (!file) return
+  e.preventDefault()
+  setImageFile(file)
+}
+
+// کشیدن و رها کردن عکس روی کادر
+function onDrop(e: DragEvent) {
+  dragging.value = false
+  setImageFile(e.dataTransfer?.files?.[0])
 }
 
 function submit() {
@@ -63,67 +89,89 @@ defineExpose({ focus: () => inputEl.value?.focus() })
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div
+    class="flex flex-col gap-2 rounded-[28px] border bg-surface p-2.5 shadow-sm transition-colors focus-within:border-primary-500/60"
+    :class="dragging ? 'border-primary-500 bg-primary-50' : 'border-ink/10'"
+    @dragover.prevent="dragging = true"
+    @dragleave.prevent="dragging = false"
+    @drop.prevent="onDrop"
+  >
     <!-- عکس آماده‌ی ارسال -->
     <div
       v-if="image"
-      class="flex w-fit items-center gap-2 rounded-xl border border-ink/10 bg-ink/[0.04] p-1.5"
+      class="relative w-fit"
     >
       <img
         :src="image"
         :alt="$t('aiDoctor.userImageAlt')"
-        class="size-12 rounded-lg object-cover"
+        class="size-16 rounded-2xl object-cover"
       >
       <button
         type="button"
-        class="flex size-7 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-ink/10 hover:text-status-danger"
+        class="absolute -end-1.5 -top-1.5 flex size-6 items-center justify-center rounded-full bg-ink text-surface shadow transition-opacity hover:opacity-80"
         :aria-label="$t('aiDoctor.removeImage')"
         @click="image = ''"
       >
         <Icon
           name="lucide:x"
-          class="size-4"
+          class="size-3.5"
         />
       </button>
     </div>
 
-    <div class="flex items-end gap-2">
+    <textarea
+      ref="inputEl"
+      v-model="text"
+      rows="1"
+      dir="auto"
+      :maxlength="MAX_LENGTH"
+      :placeholder="$t('aiDoctor.inputPlaceholder')"
+      :aria-label="$t('aiDoctor.inputPlaceholder')"
+      class="max-h-48 min-h-11 w-full resize-none bg-transparent px-3 py-2.5 text-[15px] leading-6 text-ink outline-none placeholder:text-ink-muted"
+      @keydown.enter="onEnter"
+      @paste="onPaste"
+    />
+
+    <div class="flex items-center justify-between gap-2">
       <button
         type="button"
-        class="flex size-11 shrink-0 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700 disabled:opacity-50"
-        :disabled="disabled"
+        class="flex size-10 shrink-0 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-ink/[0.06] hover:text-ink"
         :aria-label="$t('aiDoctor.attachImage')"
         :title="$t('aiDoctor.attachImage')"
         @click="fileInput?.click()"
       >
         <Icon
-          name="lucide:image-plus"
+          name="lucide:plus"
           class="size-5"
         />
       </button>
 
-      <textarea
-        ref="inputEl"
-        v-model="text"
-        rows="1"
-        dir="auto"
-        :maxlength="MAX_LENGTH"
-        :placeholder="$t('aiDoctor.inputPlaceholder')"
-        :aria-label="$t('aiDoctor.inputPlaceholder')"
-        class="max-h-32 min-h-11 flex-1 resize-none rounded-3xl border border-ink/10 bg-surface px-4 py-2.5 text-sm leading-6 text-ink outline-none transition-colors placeholder:text-ink-muted focus:border-primary-500"
-        @keydown.enter="onEnter"
-      />
-
+      <!-- وقتی AI در حال جواب دادنه: توقف؛ وگرنه ارسال -->
       <button
+        v-if="busy"
         type="button"
-        class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white transition-colors hover:bg-primary-700 disabled:bg-primary-200"
+        class="flex size-10 shrink-0 items-center justify-center rounded-full bg-ink text-surface transition-opacity hover:opacity-80"
+        :aria-label="$t('aiDoctor.stop')"
+        :title="$t('aiDoctor.stop')"
+        @click="emit('stop')"
+      >
+        <Icon
+          name="lucide:square"
+          class="size-4 fill-current"
+        />
+      </button>
+      <button
+        v-else
+        type="button"
+        class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white transition-colors hover:bg-primary-700 disabled:bg-ink/15 disabled:text-ink-muted"
         :disabled="!canSend"
         :aria-label="$t('aiDoctor.send')"
+        :title="$t('aiDoctor.send')"
         @click="submit"
       >
         <Icon
-          name="lucide:send"
-          class="size-5 rtl:-scale-x-100"
+          name="lucide:arrow-up"
+          class="size-5"
         />
       </button>
     </div>

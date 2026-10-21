@@ -50,8 +50,8 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      { code: 'fa', iso: 'fa-IR', dir: 'rtl', name: 'فارسی', file: 'fa.json' },
-      { code: 'en', iso: 'en-US', dir: 'ltr', name: 'English', file: 'en.json' },
+      { code: 'fa', iso: 'fa-IR', dir: 'rtl', name: 'فارسی', files: ['fa.json', 'ai-doctor.fa.json'] },
+      { code: 'en', iso: 'en-US', dir: 'ltr', name: 'English', files: ['en.json', 'ai-doctor.en.json'] },
     ],
     // نسبت به i18n/ (restructureDir پیش‌فرض ماژول) => فایل‌ها از i18n/locales/*.json خونده می‌شن
     langDir: 'locales',

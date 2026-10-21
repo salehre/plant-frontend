@@ -10,23 +10,29 @@ const previewUrl = ref<string | null>(null)
 const stickToBottom = ref(true)
 
 const suggestions = [
-  'aiDoctor.suggestions.yellow',
-  'aiDoctor.suggestions.spots',
-  'aiDoctor.suggestions.pests',
-  'aiDoctor.suggestions.watering',
+  { key: 'aiDoctor.suggestions.yellow', icon: 'lucide:leaf' },
+  { key: 'aiDoctor.suggestions.spots', icon: 'lucide:circle-dot' },
+  { key: 'aiDoctor.suggestions.pests', icon: 'lucide:bug' },
+  { key: 'aiDoctor.suggestions.watering', icon: 'lucide:droplets' },
 ]
 
 const lastLength = computed(() => aiDoctorStore.messages.at(-1)?.content.length ?? 0)
+const lastIndex = computed(() => aiDoctorStore.messages.length - 1)
 
 function onScroll() {
   const el = threadEl.value
   if (el) stickToBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight < 80
 }
 
-async function scrollToEnd() {
+async function scrollToEnd(smooth = false) {
   await nextTick()
   const el = threadEl.value
-  if (el) el.scrollTop = el.scrollHeight
+  if (el) el.scrollTo({ top: el.scrollHeight, behavior: smooth ? 'smooth' : 'auto' })
+}
+
+function jumpToEnd() {
+  stickToBottom.value = true
+  scrollToEnd(true)
 }
 
 watch(
@@ -50,24 +56,27 @@ function onSuggestion(key: string) {
   aiDoctorStore.send(t(key), undefined, activeLocale.value)
 }
 
+function onRegenerate() {
+  stickToBottom.value = true
+  aiDoctorStore.regenerate(activeLocale.value)
+}
+
 function newChat() {
   aiDoctorStore.clear()
   nextTick(() => composer.value?.focus())
 }
 
-onMounted(scrollToEnd)
+onMounted(() => {
+  scrollToEnd()
+  // روی موبایل خودکار فوکوس نمی‌کنیم تا کیبورد یهو باز نشه
+  if (window.matchMedia('(pointer: fine)').matches) composer.value?.focus()
+})
 </script>
 
 <template>
-  <div class="glass-card mx-auto flex h-[calc(100dvh-12rem)] min-h-[26rem] w-full max-w-3xl flex-col overflow-hidden md:h-[calc(100dvh-8.5rem)]">
+  <div class="mx-auto flex h-[calc(100dvh-12rem)] min-h-[26rem] w-full max-w-3xl flex-col md:h-[calc(100dvh-8.5rem)]">
     <!-- هدر -->
-    <header class="flex items-center gap-3 border-b border-ink/10 p-3 sm:p-4">
-      <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-        <Icon
-          name="lucide:stethoscope"
-          class="size-6"
-        />
-      </span>
+    <header class="flex items-center gap-3 pb-3">
       <div class="min-w-0 flex-1">
         <h1 class="truncate text-base font-bold text-ink sm:text-lg">
           {{ t('aiDoctor.title') }}
@@ -79,7 +88,7 @@ onMounted(scrollToEnd)
       <button
         v-if="!aiDoctorStore.isEmpty"
         type="button"
-        class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ink/10 px-3 py-1.5 text-xs font-medium text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+        class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ink/10 bg-surface px-3.5 py-2 text-xs font-medium text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
         @click="newChat"
       >
         <Icon
@@ -91,77 +100,120 @@ onMounted(scrollToEnd)
     </header>
 
     <!-- گفتگو -->
-    <section
-      ref="threadEl"
-      class="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto bg-ink/[0.03] p-4 sm:p-5"
-      :aria-label="t('aiDoctor.title')"
-      aria-live="polite"
-      @scroll.passive="onScroll"
-    >
-      <!-- حالت اولیه -->
-      <div
-        v-if="aiDoctorStore.isEmpty"
-        class="m-auto flex w-full max-w-md flex-col items-center gap-5 py-4 text-center"
+    <div class="relative min-h-0 flex-1">
+      <section
+        ref="threadEl"
+        class="flex h-full flex-col gap-6 overflow-y-auto px-1 pb-6 pt-2"
+        :aria-label="t('aiDoctor.title')"
+        aria-live="polite"
+        @scroll.passive="onScroll"
       >
-        <span class="flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-          <Icon
-            name="lucide:leaf"
-            class="size-8"
-          />
-        </span>
-        <div>
-          <h2 class="text-lg font-bold text-ink">
-            {{ t('aiDoctor.welcomeTitle') }}
-          </h2>
-          <p class="mt-2 text-sm leading-7 text-ink-muted">
-            {{ t('aiDoctor.welcomeText') }}
-          </p>
-        </div>
-        <div class="flex flex-wrap justify-center gap-2">
-          <button
-            v-for="key in suggestions"
-            :key="key"
-            type="button"
-            class="chip"
-            @click="onSuggestion(key)"
-          >
-            {{ t(key) }}
-          </button>
-        </div>
-      </div>
-
-      <template v-else>
-        <ChatBubble
-          v-for="message in aiDoctorStore.messages"
-          :key="message.id"
-          :message="message"
-          @retry="aiDoctorStore.retry(activeLocale)"
-          @preview="previewUrl = $event"
-        />
-
-        <!-- در حال نوشتن -->
+        <!-- حالت اولیه -->
         <div
-          v-if="aiDoctorStore.waiting"
-          class="flex w-fit items-center gap-1.5 self-end rounded-2xl rounded-se-sm border border-ink/10 bg-white/60 px-4 py-3.5 dark:bg-white/10"
-          role="status"
-          :aria-label="t('aiDoctor.thinking')"
+          v-if="aiDoctorStore.isEmpty"
+          class="m-auto flex w-full max-w-xl flex-col items-center gap-8 py-4 text-center"
         >
-          <span
-            v-for="i in 3"
-            :key="i"
-            class="size-2 rounded-full bg-primary-500 motion-safe:animate-bounce"
-            :style="{ animationDelay: `${(i - 1) * 150}ms` }"
-          />
+          <div class="flex flex-col items-center gap-4">
+            <span class="flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10">
+              <Icon
+                name="lucide:leaf"
+                class="size-8"
+              />
+            </span>
+            <div>
+              <h2 class="text-xl font-bold text-ink sm:text-2xl">
+                {{ t('aiDoctor.welcomeTitle') }}
+              </h2>
+              <p class="mx-auto mt-2 max-w-md text-sm leading-7 text-ink-muted">
+                {{ t('aiDoctor.welcomeText') }}
+              </p>
+            </div>
+          </div>
+          <div class="grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2">
+            <button
+              v-for="item in suggestions"
+              :key="item.key"
+              type="button"
+              class="flex items-center gap-3 rounded-2xl border border-ink/10 bg-surface p-3.5 text-start text-sm leading-6 text-ink transition-colors hover:border-primary-500/40 hover:bg-primary-50"
+              @click="onSuggestion(item.key)"
+            >
+              <Icon
+                :name="item.icon"
+                class="size-5 shrink-0 text-primary-600"
+              />
+              <span>{{ t(item.key) }}</span>
+            </button>
+          </div>
         </div>
-      </template>
-    </section>
+
+        <template v-else>
+          <ChatBubble
+            v-for="(message, index) in aiDoctorStore.messages"
+            :key="message.id"
+            :message="message"
+            :is-last="index === lastIndex"
+            :streaming="aiDoctorStore.revealing && index === lastIndex && message.role === 'assistant'"
+            @retry="aiDoctorStore.retry(activeLocale)"
+            @regenerate="onRegenerate"
+            @feedback="aiDoctorStore.setFeedback(message.id, $event)"
+            @preview="previewUrl = $event"
+          />
+
+          <!-- در حال فکر کردن -->
+          <div
+            v-if="aiDoctorStore.waiting"
+            class="flex w-full gap-3"
+            role="status"
+            :aria-label="t('aiDoctor.thinking')"
+          >
+            <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10">
+              <Icon
+                name="lucide:stethoscope"
+                class="size-4"
+              />
+            </span>
+            <div class="flex items-center gap-1.5 py-3">
+              <span
+                v-for="i in 3"
+                :key="i"
+                class="size-2 rounded-full bg-ink-muted motion-safe:animate-bounce"
+                :style="{ animationDelay: `${(i - 1) * 150}ms` }"
+              />
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- رفتن به آخرین پیام -->
+      <Transition
+        enter-active-class="transition duration-150"
+        enter-from-class="translate-y-2 opacity-0"
+        leave-active-class="transition duration-150"
+        leave-to-class="translate-y-2 opacity-0"
+      >
+        <button
+          v-if="!stickToBottom && !aiDoctorStore.isEmpty"
+          type="button"
+          class="absolute bottom-3 start-1/2 flex size-9 -translate-x-1/2 items-center justify-center rounded-full border border-ink/10 bg-surface text-ink shadow-md transition-colors hover:bg-primary-50 rtl:translate-x-1/2"
+          :aria-label="t('aiDoctor.scrollDown')"
+          :title="t('aiDoctor.scrollDown')"
+          @click="jumpToEnd"
+        >
+          <Icon
+            name="lucide:arrow-down"
+            class="size-4"
+          />
+        </button>
+      </Transition>
+    </div>
 
     <!-- ورودی -->
-    <footer class="flex flex-col gap-2 border-t border-ink/10 p-3 sm:p-4">
+    <footer class="flex flex-col gap-2 pt-2">
       <ChatComposer
         ref="composer"
-        :disabled="aiDoctorStore.busy"
+        :busy="aiDoctorStore.busy"
         @send="onSend"
+        @stop="aiDoctorStore.stop()"
       />
       <p class="text-center text-[11px] leading-5 text-ink-muted">
         {{ t('aiDoctor.disclaimer') }}
