@@ -107,11 +107,11 @@ function onImageError(e: Event) {
         <div class="pointer-events-none absolute -top-24 -end-10 size-64 rounded-full bg-primary-400/20 blur-3xl" />
         <div class="pointer-events-none absolute -bottom-32 -start-10 size-64 rounded-full bg-primary-500/10 blur-3xl" />
 
-        <div class="relative h-44 sm:h-60 group/cover">
+        <div class="relative h-44 sm:h-60">
           <img
             :src="user?.cover || '/images/plants/header.png'"
             :alt="$t('home.greenLeavesAlt')"
-            class="size-full object-cover transition-transform duration-700 group-hover/cover:scale-105"
+            class="size-full object-cover"
           >
 
           <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
@@ -175,11 +175,9 @@ function onImageError(e: Event) {
           <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-5">
               <div class="relative z-10 -mt-14 shrink-0 sm:-mt-16">
-                <div class="rounded-full bg-surface p-1 shadow-card-hover ring-1 ring-ink/5">
-                  <AvatarUploader
-                    avatar-class="size-24 sm:size-32 shadow-card ring-2 ring-primary-100"
-                  />
-                </div>
+                <AvatarUploader
+                  avatar-class="size-24 sm:size-32 shadow-card ring-4 ring-surface"
+                />
               </div>
 
               <div class="min-w-0 flex-1 sm:pb-2">
@@ -251,13 +249,9 @@ function onImageError(e: Event) {
         <div
           v-for="stat in stats"
           :key="stat.label"
-          class="group glass-card relative overflow-hidden p-5 transition duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+          class="stat-card group glass-card relative overflow-hidden p-5 transition-shadow duration-300 hover:shadow-card-hover"
         >
-          <!-- تاکید رنگی بالا -->
-          <div class="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-primary-400 to-primary-600 transition-transform duration-300 group-hover:scale-x-100" />
 
-          <!-- دایره‌ی تزئینی پس‌زمینه -->
-          <div class="absolute -end-6 -top-6 size-20 rounded-full bg-primary-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
           <div class="relative z-10 flex items-start justify-between gap-3">
             <div class="min-w-0">
@@ -268,13 +262,10 @@ function onImageError(e: Event) {
                 {{ $t(stat.label) }}
               </p>
             </div>
-
-            <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-600 group-hover:text-white group-hover:shadow-card">
               <Icon
                 :name="stat.icon"
                 class="size-5"
               />
-            </span>
           </div>
         </div>
       </section>
@@ -326,13 +317,13 @@ function onImageError(e: Event) {
           <template #default="{ item: plant }">
             <NuxtLink
               :to="`/plants/${plant.slug}`"
-              class="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-surface shadow-card ring-1 ring-ink/5 transition duration-500 hover:-translate-y-2 hover:shadow-card-hover"
+              class="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-surface shadow-card ring-1 ring-ink/5 transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-card-hover"
             >
-              <div class="relative aspect-[4/5] overflow-hidden bg-primary-50">
+              <div class="relative aspect-[4/3] overflow-hidden bg-primary-50">
                 <img
                   :src="plant.images[0]"
                   :alt="plant.name"
-                  class="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  class="absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   loading="lazy"
                   @error="onImageError"
                 >
@@ -347,7 +338,7 @@ function onImageError(e: Event) {
                 </span>
               </div>
 
-              <div class="flex flex-1 flex-col justify-center gap-0.5 p-3.5">
+              <div class="flex flex-1 flex-col justify-center gap-0.5 p-3">
                 <p class="truncate text-sm font-bold text-ink transition-colors group-hover:text-primary-700">
                   {{ plant.name }}
                 </p>
@@ -407,13 +398,13 @@ function onImageError(e: Event) {
           <template #default="{ item: entry }">
             <NuxtLink
               :to="entry.slug ? `/plants/${entry.slug}` : '/history'"
-              class="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-surface shadow-card ring-1 ring-ink/5 transition duration-500 hover:-translate-y-2 hover:shadow-card-hover"
+              class="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-surface shadow-card ring-1 ring-ink/5 transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-card-hover"
             >
-              <div class="relative aspect-[4/5] overflow-hidden bg-primary-50">
+              <div class="relative aspect-[4/3] overflow-hidden bg-primary-50">
                 <img
                   :src="entry.image"
                   :alt="entry.plantName"
-                  class="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  class="absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   loading="lazy"
                   @error="onImageError"
                 >
@@ -437,7 +428,7 @@ function onImageError(e: Event) {
                 </span>
               </div>
 
-              <div class="flex flex-1 flex-col justify-center gap-0.5 p-3.5">
+              <div class="flex flex-1 flex-col justify-center gap-0.5 p-3">
                 <p class="truncate text-sm font-bold text-ink transition-colors group-hover:text-primary-700">
                   {{ entry.plantName }}
                 </p>
@@ -455,3 +446,44 @@ function onImageError(e: Event) {
     </div>
   </div>
 </template>
+
+<style scoped>
+@property --stat-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--stat-angle),
+    transparent 0%,
+    transparent 65%,
+    rgb(var(--color-primary-500)) 90%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: stat-border-spin 2.5s linear infinite;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes stat-border-spin {
+  to {
+    --stat-angle: 360deg;
+  }
+}
+</style>

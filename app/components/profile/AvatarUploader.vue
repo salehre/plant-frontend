@@ -10,7 +10,7 @@ const input = ref<HTMLInputElement | null>(null)
 </script>
 
 <template>
-  <div class="relative shrink-0">
+  <div class="relative flex shrink-0">
     <UserAvatar
       :src="authStore.user?.avatar"
       :name="authStore.user?.name"
