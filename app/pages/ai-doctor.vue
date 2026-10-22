@@ -15,6 +15,11 @@ const attachedPlants = computed(() =>
   ),
 );
 
+const attachedNames = computed(() =>
+  new Intl.ListFormat(locale.value, { style: 'long', type: 'conjunction' })
+    .format(attachedPlants.value.map(p => p.nickname)),
+)
+
 const firstName = computed(() => authStore.user?.name?.trim().split(/\s+/)[0] ?? '')
 const greeting = computed(() => firstName.value
   ? t('aiDoctor.greeting', { name: firstName.value })
@@ -383,6 +388,9 @@ onMounted(() => {
                 <h2 class="text-xl font-bold text-ink sm:text-2xl">
                   {{ greeting }}
                 </h2>
+                 <p class="mx-auto mt-2 max-w-md text-sm leading-7 text-ink-muted">
+                  {{ attachedPlants.length ? t('aiDoctor.welcomeTextPlant', { name: attachedNames }) : t('aiDoctor.welcomeText') }}
+                </p>
               </div>
             </div>
           </div>

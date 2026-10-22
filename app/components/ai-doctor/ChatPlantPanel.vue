@@ -202,14 +202,10 @@ function connect(id: string) {
 
         <button
           type="button"
-          class="flex items-center justify-center gap-2 rounded-2xl border border-ink/10 px-4 py-3 text-sm font-medium text-ink transition-colors hover:bg-primary-50 hover:text-primary-700"
+          class="flex items-center justify-center gap-2 rounded-2xl border border-ink/10 px-4 py-3 text-sm font-medium transition-colors text-primary-50 bg-primary-700 hover:bg-primary-600"
           :aria-expanded="listOpen"
           @click="listOpen = !listOpen"
         >
-          <Icon
-            :name="listOpen ? 'lucide:chevron-down' : 'lucide:plus'"
-            class="size-4"
-          />
           {{ connected.length ? t('aiDoctor.panel.connectAnother') : t('aiDoctor.panel.connect') }}
         </button>
       </template>
