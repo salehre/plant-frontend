@@ -380,10 +380,6 @@ function addToGarden() {
         :disabled="added"
         @click="addToGarden"
       >
-        <Icon
-          :name="added ? 'lucide:check' : 'lucide:plus'"
-          class="size-4 hidden sm:flex"
-        />
         {{ $t('identify.addToGarden') }}
       </AppButton>
     </div>

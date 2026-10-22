@@ -61,7 +61,7 @@ function connect(id: string) {
 <template>
   <!-- display (hidden / xl:flex) از بیرون داده می‌شه -->
   <aside
-    class="w-80 shrink-0 flex-col gap-4 overflow-y-auto rounded-3xl border border-ink/5 bg-surface p-4"
+    class="w-80 shrink-0 flex-col gap-4 overflow-y-auto rounded-s-3xl border-s border-ink/5 bg-surface p-4"
     :aria-label="t('aiDoctor.panel.connectedPlant')"
   >
     <h2 class="text-base font-bold text-ink">

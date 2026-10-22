@@ -1,0 +1,80 @@
+/* ---------- ۱) تینت‌های تیره ---------- */
+:root.dark {
+  --color-primary-50: 32 57 44;
+  --color-primary-100: 38 68 52;
+  --color-accent-50: 48 52 37;
+}
+
+:root[data-theme='forest'].dark {
+  --color-primary-50: 32 57 44;
+  --color-primary-100: 38 68 52;
+  --color-accent-50: 48 52 37;
+}
+
+:root[data-theme='wine'].dark {
+  --color-primary-50: 67 42 46;
+  --color-primary-100: 82 50 55;
+  --color-accent-50: 54 50 40;
+}
+
+:root[data-theme='brown'].dark {
+  --color-primary-50: 66 45 33;
+  --color-primary-100: 80 53 39;
+  --color-accent-50: 67 41 30;
+}
+
+:root[data-theme='navy'].dark {
+  --color-primary-50: 42 50 70;
+  --color-primary-100: 49 60 85;
+  --color-accent-50: 40 53 68;
+}
+
+/* ---------- ۲) رنگ متن و آیکن ---------- */
+:where(.dark) .text-primary-500:where(:not([class*='bg-white'])),
+:where(.dark) .text-primary-600:where(:not([class*='bg-white'])),
+:where(.dark) .text-primary-700:where(:not([class*='bg-white'])),
+:where(.dark) .text-primary-800:where(:not([class*='bg-white'])),
+:where(.dark) .text-primary-900:where(:not([class*='bg-white'])),
+:where(.dark) .hover\:text-primary-600:hover:where(:not([class*='bg-white'])),
+:where(.dark) .hover\:text-primary-700:hover:where(:not([class*='bg-white'])),
+:where(.dark) .hover\:text-primary-900:hover:where(:not([class*='bg-white'])) {
+  color: rgb(var(--color-primary-300));
+}
+
+:where(.dark) .text-accent-600:where(:not([class*='bg-white'])),
+:where(.dark) .text-accent-700:where(:not([class*='bg-white'])),
+:where(.dark) .text-accent-800:where(:not([class*='bg-white'])),
+:where(.dark) .text-accent-900:where(:not([class*='bg-white'])) {
+  color: rgb(var(--color-accent-300));
+}
+
+/* متنی که روی دکمه‌ی توپر (bg-primary-600/700) میاد باید سفید بمونه */
+:where(.dark) .text-primary-50 {
+  color: #fff;
+}
+
+/* ---------- ۳) حذف هاور بک‌گراند روشن ---------- */
+:where(.dark) :is(
+  .hover\:bg-primary-50:hover,
+  .hover\:bg-primary-50\/40:hover,
+  .hover\:bg-primary-50\/60:hover,
+  .hover\:bg-primary-50\/70:hover,
+  .hover\:bg-primary-100:hover,
+  .hover\:bg-accent-100:hover
+) {
+  background-color: transparent;
+}
+
+/* المنت‌هایی که خودشون بک‌گراند دارن، موقع هاور همون رنگ رو نگه می‌دارن */
+:where(.dark) .bg-surface:is(.hover\:bg-primary-50, .hover\:bg-primary-100, .hover\:bg-accent-100):hover {
+  background-color: rgb(var(--color-surface));
+}
+:where(.dark) .bg-bg:is(.hover\:bg-primary-50, .hover\:bg-primary-100, .hover\:bg-accent-100):hover {
+  background-color: rgb(var(--color-bg));
+}
+:where(.dark) .bg-primary-50:is(.hover\:bg-primary-50, .hover\:bg-primary-100):hover {
+  background-color: rgb(var(--color-primary-50));
+}
+:where(.dark) .bg-primary-100:is(.hover\:bg-primary-100):hover {
+  background-color: rgb(var(--color-primary-100));
+}

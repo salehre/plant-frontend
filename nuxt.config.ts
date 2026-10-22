@@ -26,11 +26,12 @@ export default defineNuxtConfig({
       title: 'Golban',
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
     },
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/dark-mode.css'],
 
   runtimeConfig: {
     public: {
@@ -74,8 +75,9 @@ export default defineNuxtConfig({
       dir: 'rtl',
       theme_color: '#ffffff',
       icons: [
-          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-        { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+        { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: 'pwa-maskable-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
       ],
     },
     devOptions: {

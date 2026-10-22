@@ -334,7 +334,6 @@ const growthIcons: Record<string, string> = {
 
         <div class="mt-auto pt-1">
           <AppButton variant="primary" @click="addToGarden">
-            <Icon name="lucide:plus" class="size-4" />
             {{ $t('identify.addToGarden') }}
           </AppButton>
         </div>

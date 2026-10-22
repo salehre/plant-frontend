@@ -575,10 +575,6 @@ const careItems = computed(() => [
               </div>
 
               <div class="mt-auto flex items-center justify-center gap-1.5 rounded-xl bg-primary-800 py-2.5 text-xs font-bold text-white">
-                <Icon
-                  name="lucide:plus"
-                  class="size-4"
-                />
                 {{ t('identify.addToGarden') }}
               </div>
             </div>

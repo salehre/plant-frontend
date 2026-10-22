@@ -6,7 +6,7 @@ const authStore = useAuthStore()
 const route = useRoute()
 const uiStore = useUiStore();
 const plantOptions = useUserPlantOptions();
-const { t, locale } = useI18n();
+const { t, locale, setLocale } = useI18n();
 const activeLocale = computed(() => (locale.value === "fa" ? "fa" : "en"));
 
 const attachedPlants = computed(() =>
@@ -19,6 +19,11 @@ const attachedNames = computed(() =>
   new Intl.ListFormat(locale.value, { style: 'long', type: 'conjunction' })
     .format(attachedPlants.value.map(p => p.nickname)),
 )
+
+const isDark = computed(() => uiStore.mode === 'dark')
+function toggleLocale() {
+  setLocale(locale.value === 'fa' ? 'en' : 'fa')
+}
 
 const firstName = computed(() => authStore.user?.name?.trim().split(/\s+/)[0] ?? '')
 const greeting = computed(() => firstName.value
@@ -110,10 +115,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-dvh w-full gap-3 sm:p-3 lg:p-4">
+  <div class="flex h-dvh w-full bg-bg">
     <!-- سایدبار AI (دسکتاپ): جای سایدبار اصلی رو می‌گیره؛ جمع‌شده = ریل آیکن‌ها -->
     <aside
-      class="relative hidden shrink-0 overflow-hidden rounded-3xl border border-ink/5 bg-surface transition-[width] duration-300 ease-in-out motion-reduce:transition-none lg:flex"
+      class="relative hidden shrink-0 overflow-hidden rounded-e-3xl border-e border-ink/5 bg-surface transition-[width] duration-300 ease-in-out motion-reduce:transition-none lg:flex"
       :class="sidebarCollapsed ? 'w-16' : 'w-72'"
     >
       <!-- لایه‌ی باز: عرض ثابت تا موقع انیمیشن محتوا reflow نشه -->
@@ -314,11 +319,11 @@ onMounted(() => {
 
     <!-- ستون چت -->
     <div
-      class="flex min-w-0 flex-1 flex-col overflow-hidden border-ink/5 bg-surface sm:rounded-3xl sm:border"
+      class="flex min-w-0 flex-1 flex-col overflow-hidden bg-bg"
     >
       <!-- هدر -->
       <header
-        class="flex items-center gap-3 border-b border-ink/5 px-3 py-3 sm:px-5"
+        class="flex items-center gap-3 px-3 py-3 sm:px-5"
       >
         <NuxtLink
           to="/"
@@ -359,6 +364,31 @@ onMounted(() => {
           <Icon name="lucide:square-pen" class="size-4" />
           <span class="max-sm:sr-only">{{ t("aiDoctor.newChat") }}</span>
         </button>
+
+        <!-- تغییر زبان و تم (مثل هدر بقیه‌ی اپ) -->
+        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            class="flex size-9 items-center justify-center rounded-xl border border-ink/5 bg-surface sm:size-10 text-xs font-bold text-primary-700 transition-colors hover:bg-primary-50"
+            :aria-label="locale === 'fa' ? t('common.switchToEnglish') : t('common.switchToPersian')"
+            :title="locale === 'fa' ? t('common.switchToEnglish') : t('common.switchToPersian')"
+            @click="toggleLocale"
+          >
+            {{ locale === 'fa' ? 'EN' : 'فا' }}
+          </button>
+          <button
+            type="button"
+            class="flex size-9 items-center justify-center rounded-xl border border-ink/5 bg-surface sm:size-10 text-primary-700 transition-colors hover:bg-primary-50"
+            :aria-label="isDark ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
+            :title="isDark ? t('pages.profile.switchToLight') : t('pages.profile.switchToDark')"
+            @click="uiStore.toggleMode()"
+          >
+            <ThemeModeIcon
+              :dark="!isDark"
+              class="size-[18px]"
+            />
+          </button>
+        </div>
       </header>
 
       <!-- گفتگو -->
