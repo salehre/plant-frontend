@@ -76,6 +76,10 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
       const clean = title.trim().slice(0, 80)
       if (conv && clean) conv.title = clean
     },
+    togglePin(id: string) {
+      const conv = this.conversations.find(c => c.id === id)
+      if (conv) conv.pinned = !conv.pinned
+    },
     remove(id: string) {
       if (id === this.activeId) {
         this.stop()
@@ -105,7 +109,8 @@ export const useAiDoctorStore = defineStore('aiDoctor', {
           messages: [],
           plantIds: [...this.pendingPlantIds],
         }
-        this.conversations = [created, ...this.conversations].slice(0, MAX_CONVERSATIONS)
+        const all = [created, ...this.conversations]
+        this.conversations = [...all.filter(c => c.pinned), ...all.filter(c => !c.pinned)].slice(0, MAX_CONVERSATIONS)
         this.activeId = created.id
         this.pendingPlantIds = []
         conv = this.active

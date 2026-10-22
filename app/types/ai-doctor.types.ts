@@ -28,6 +28,7 @@ export interface ChatConversation {
   updatedAt: number
   messages: ChatMessage[]
   plantIds?: string[]
+  pinned?: boolean
  }
 
 export interface AiDoctorPlantContext {

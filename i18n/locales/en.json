@@ -260,6 +260,18 @@
     "groupYesterday": "Yesterday",
     "groupWeek": "Previous 7 days",
     "groupOlder": "Older",
+    "groupPinned": "Pinned",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "moreActions": "More actions",
+    "share": "Share",
+    "shareYou": "You",
+    "shareCopied": "Chat text copied",
+    "shareFailed": "Couldn't share the chat",
+    "search": "Search",
+    "recentChats": "Recent chats",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
     "imageOmitted": "Photo",
     "myPlants": "My Plants",
     "myPlantsSubtitle": "The plants in your My Plants list. Pick one to chat about it with the Plant Doctor.",
@@ -267,7 +279,27 @@
     "detachPlant": "Remove {name} from chat",
     "noPlants": "You don't have any plants in My Plants yet.",
     "chatAboutPlant": "Chat about this plant",
-    "plantChatsCount": "{count} chats"
+    "plantChatsCount": "{count} chats",
+    "welcomeTextPlant": "I'll help using what I know about {name}. Ask anything about its health, watering or growth.",
+    "plantSuggestions": {
+      "symptoms": "The leaves of {name} are turning yellow. Why?",
+      "watering": "How often should I water {name}?",
+      "light": "How much light does {name} need?",
+      "growth": "How can I help {name} grow better?"
+    },
+    "panel": {
+      "connectedPlant": "Connected plant",
+      "connectedPlants": "Connected plants",
+      "emptyText": "No plant connected yet. Connect one so the answers are about that plant.",
+      "connect": "Connect a plant",
+      "connectAnother": "Connect another plant",
+      "lastWatered": "Last watered",
+      "nextWatering": "Next watering",
+      "location": "Location",
+      "careHistory": "Care history",
+      "tasksDone": "{count} tasks completed",
+      "viewPlant": "View plant"
+    }
   },
   "errors": {
     "unknown": "An unknown error occurred",

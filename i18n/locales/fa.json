@@ -260,6 +260,18 @@
     "groupYesterday": "دیروز",
     "groupWeek": "۷ روز گذشته",
     "groupOlder": "قدیمی‌تر",
+    "groupPinned": "پین‌شده",
+    "pin": "پین کردن",
+    "unpin": "برداشتن پین",
+    "moreActions": "گزینه‌های بیشتر",
+    "share": "اشتراک‌گذاری",
+    "shareYou": "شما",
+    "shareCopied": "متن گفتگو کپی شد",
+    "shareFailed": "اشتراک‌گذاری انجام نشد",
+    "search": "جستجو",
+    "recentChats": "گفتگوهای اخیر",
+    "expandSidebar": "باز کردن سایدبار",
+    "collapseSidebar": "جمع کردن سایدبار",
     "imageOmitted": "عکس",
     "myPlants": "گیاهان من",
     "myPlantsSubtitle": "گیاه‌هایی که توی «گیاهان من» داری؛ یکی رو انتخاب کن و درباره‌اش با دکتر گیاه حرف بزن.",
@@ -267,7 +279,27 @@
     "detachPlant": "برداشتن {name} از گفتگو",
     "noPlants": "هنوز گیاهی توی «گیاهان من» نداری.",
     "chatAboutPlant": "گفتگو درباره‌ی این گیاه",
-    "plantChatsCount": "{count} گفتگو"
+    "plantChatsCount": "{count} گفتگو",
+    "welcomeTextPlant": "با اطلاعات {name} کمکت می‌کنم. هر چی درباره‌ی سلامت، آبیاری یا رشدش می‌خوای بپرس.",
+    "plantSuggestions": {
+      "symptoms": "برگ‌های {name} زرد شده، علتش چیه؟",
+      "watering": "{name} رو هر چند وقت آبیاری کنم؟",
+      "light": "نور مناسب {name} چقدره؟",
+      "growth": "چطور رشد {name} رو بهتر کنم؟"
+    },
+    "panel": {
+      "connectedPlant": "گیاه متصل",
+      "connectedPlants": "گیاهان متصل",
+      "emptyText": "هنوز گیاهی وصل نیست. یه گیاه وصل کن تا جواب‌ها مخصوص همون باشه.",
+      "connect": "اتصال گیاه",
+      "connectAnother": "اتصال گیاه دیگر",
+      "lastWatered": "آخرین آبیاری",
+      "nextWatering": "آبیاری بعدی",
+      "location": "محل نگهداری",
+      "careHistory": "سابقه مراقبت",
+      "tasksDone": "{count} تسک تکمیل‌شده",
+      "viewPlant": "مشاهده‌ی گیاه"
+    }
   },
   "errors": {
     "unknown": "خطای ناشناخته",

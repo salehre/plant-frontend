@@ -58,7 +58,7 @@ const quickActions = [
           </NuxtLink>
           <NuxtLink
             to="/plants"
-            class="inline-flex items-center gap-2 rounded-xl border border-white/40 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            class="sm:inline-flex hidden items-center gap-2 rounded-xl border border-white/40 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
           >
             {{ t('nav.catalog') }}
           </NuxtLink>

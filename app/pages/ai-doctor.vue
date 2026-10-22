@@ -4,9 +4,18 @@ import type { ChatSuggestion } from '~/components/ai-doctor/ChatSuggestions.vue'
 definePageMeta({ layout: 'ai-doctor' })
 
 const aiDoctorStore = useAiDoctorStore()
+const uiStore = useUiStore()
 const plantOptions = useUserPlantOptions()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
+
+const attachedPlants = computed(() =>
+  plantOptions.value.filter(p => aiDoctorStore.attachedPlantIds.includes(p.id)),
+)
+const attachedNames = computed(() =>
+  new Intl.ListFormat(locale.value, { style: 'long', type: 'conjunction' })
+    .format(attachedPlants.value.map(p => p.nickname)),
+)
 
 const conversation = ref<{ pin: (smooth?: boolean) => void } | null>(null)
 const promptInput = ref<{ focus: () => void } | null>(null)
@@ -14,12 +23,33 @@ const previewUrl = ref<string | null>(null)
 // سایدبار تاریخچه روی موبایل/تبلت به‌صورت کشو باز می‌شه (روی دسکتاپ همیشه کناره)
 const historyOpen = ref(false)
 
-const suggestions = computed<ChatSuggestion[]>(() => [
-  { id: 'yellow', icon: 'lucide:leaf', label: t('aiDoctor.suggestions.yellow') },
-  { id: 'spots', icon: 'lucide:circle-dot', label: t('aiDoctor.suggestions.spots') },
-  { id: 'pests', icon: 'lucide:bug', label: t('aiDoctor.suggestions.pests') },
-  { id: 'watering', icon: 'lucide:droplets', label: t('aiDoctor.suggestions.watering') },
-])
+const sidebarCollapsed = useLocalStorage('golban-ai-doctor-sidebar-collapsed', false)
+const searchOpen = ref(false)
+
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if ((e.ctrlKey || e.metaKey) && e.code === 'KeyK') {
+    e.preventDefault()
+    searchOpen.value = !searchOpen.value
+  }
+})
+
+const suggestions = computed<ChatSuggestion[]>(() => {
+  if (attachedPlants.value.length) {
+    const name = attachedNames.value
+    return [
+      { id: 'p-symptoms', icon: 'lucide:leaf', label: t('aiDoctor.plantSuggestions.symptoms', { name }) },
+      { id: 'p-watering', icon: 'lucide:droplets', label: t('aiDoctor.plantSuggestions.watering', { name }) },
+      { id: 'p-light', icon: 'lucide:sun', label: t('aiDoctor.plantSuggestions.light', { name }) },
+      { id: 'p-growth', icon: 'lucide:sprout', label: t('aiDoctor.plantSuggestions.growth', { name }) },
+    ]
+  }
+  return [
+    { id: 'yellow', icon: 'lucide:leaf', label: t('aiDoctor.suggestions.yellow') },
+    { id: 'spots', icon: 'lucide:circle-dot', label: t('aiDoctor.suggestions.spots') },
+    { id: 'pests', icon: 'lucide:bug', label: t('aiDoctor.suggestions.pests') },
+    { id: 'watering', icon: 'lucide:droplets', label: t('aiDoctor.suggestions.watering') },
+  ]
+})
 
 const lastIndex = computed(() => aiDoctorStore.messages.length - 1)
 
@@ -58,6 +88,28 @@ function selectChat(id: string) {
   historyOpen.value = false
 }
 
+async function shareChat(id: string) {
+  const conv = aiDoctorStore.conversations.find(c => c.id === id)
+  if (!conv) return
+  const title = conv.title || t('aiDoctor.untitled')
+  const body = conv.messages
+    .filter(m => !m.failed && m.content)
+    .map(m => `${m.role === 'user' ? t('aiDoctor.shareYou') : t('aiDoctor.title')}: ${m.content}`)
+    .join('\n\n')
+  try {
+    if (navigator.share) {
+      await navigator.share({ title, text: body })
+    }
+    else {
+      await navigator.clipboard.writeText(`${title}\n\n${body}`)
+      uiStore.showToast(t('aiDoctor.shareCopied'))
+    }
+  }
+  catch (e) {
+    if ((e as DOMException).name !== 'AbortError') uiStore.showToast(t('aiDoctor.shareFailed'), 'error')
+  }
+}
+
 onMounted(() => {
   // روی موبایل خودکار فوکوس نمی‌کنیم تا کیبورد یهو باز نشه
   if (window.matchMedia('(pointer: fine)').matches) promptInput.value?.focus()
@@ -65,22 +117,59 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-dvh w-full">
-    <!-- سایدبار AI (دسکتاپ): جای سایدبار اصلی رو می‌گیره -->
-    <aside class="hidden w-72 shrink-0 flex-col gap-3 border-e border-ink/5 bg-surface p-3 lg:flex">
-      <NuxtLink
-        to="/"
-        class="flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50"
-        :title="t('common.back')"
+  <div class="flex h-dvh w-full gap-3 sm:p-3 lg:p-4">
+    <!-- سایدبار AI (دسکتاپ): جای سایدبار اصلی رو می‌گیره؛ جمع‌شده = ریل آیکن‌ها -->
+    <aside
+      class="hidden shrink-0 flex-col gap-3 rounded-3xl border border-ink/5 bg-surface p-3 lg:flex"
+      :class="sidebarCollapsed ? 'w-16 items-center' : 'w-72'"
+    >
+      <!-- باز: لوگو + اسم + جستجو + جمع کردن -->
+      <div
+        v-if="!sidebarCollapsed"
+        class="flex items-center gap-1"
       >
-      <img
-        src="/images/logo.png"
-        :alt="$t('brand.name')"
-        class="h-10 w-auto object-contain"
+        <NuxtLink
+          to="/"
+          class="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50"
+          :title="t('common.back')"
+        >
+          <img
+            src="/images/logo.png"
+            :alt="$t('brand.name')"
+            class="h-10 w-auto object-contain"
+          >
+          <span class="min-w-0 flex-1 truncate text-base font-extrabold text-primary-800">{{ t('brand.name') }}</span>
+        </NuxtLink>
+        <button
+          type="button"
+          class="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.search')"
+          :title="t('aiDoctor.search')"
+          @click="searchOpen = true"
+        >
+          <Icon
+            name="lucide:search"
+            class="size-4"
+          />
+        </button>
+        <button
+          type="button"
+          class="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.collapseSidebar')"
+          :title="t('aiDoctor.collapseSidebar')"
+          @click="sidebarCollapsed = true"
+        >
+          <Icon
+            name="lucide:panel-right-close"
+            class="size-5 ltr:-scale-x-100"
+          />
+        </button>
+      </div>
+
+      <div
+        v-if="!sidebarCollapsed"
+        class="min-h-0 flex-1"
       >
-        <span class="min-w-0 flex-1 truncate text-base font-extrabold text-primary-800">{{ t('brand.name') }}</span>
-      </NuxtLink>
-      <div class="min-h-0 flex-1">
         <ChatHistorySidebar
           :conversations="aiDoctorStore.sorted"
           :active-id="aiDoctorStore.activeId"
@@ -88,8 +177,68 @@ onMounted(() => {
           @select="selectChat"
           @rename="aiDoctorStore.rename"
           @remove="aiDoctorStore.remove"
+          @pin="aiDoctorStore.togglePin"
+          @share="shareChat"
         />
       </div>
+
+      <!-- جمع‌شده: ریل آیکن‌ها -->
+      <template v-else>
+      <div
+        class="absolute flex w-16 flex-col items-center gap-3 p-3 transition-opacity duration-200 motion-reduce:transition-none"
+        :class="sidebarCollapsed ? 'opacity-100 delay-150' : 'pointer-events-none opacity-0'"
+        :inert="!sidebarCollapsed || undefined"
+      >
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.expandSidebar')"
+          :title="t('aiDoctor.expandSidebar')"
+          @click="sidebarCollapsed = false"
+        >
+          <Icon
+            name="lucide:panel-right-open"
+            class="size-5 ltr:-scale-x-100"
+          />
+        </button>
+        <div class="my-1 w-8 border-t border-ink/5" />
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.newChat')"
+          :title="t('aiDoctor.newChat')"
+          @click="newChat"
+        >
+          <Icon
+            name="lucide:square-pen"
+            class="size-5"
+          />
+        </button>
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.search')"
+          :title="t('aiDoctor.search')"
+          @click="searchOpen = true"
+        >
+          <Icon
+            name="lucide:search"
+            class="size-5"
+          />
+        </button>
+        <NuxtLink
+          to="/ai-doctor-plants"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.myPlants')"
+          :title="t('aiDoctor.myPlants')"
+        >
+          <Icon
+            name="lucide:sprout"
+            class="size-5"
+          />
+        </NuxtLink>
+      </div>
+      </template>
     </aside>
 
     <!-- سایدبار تاریخچه (کشو برای موبایل و تبلت) -->
@@ -115,17 +264,32 @@ onMounted(() => {
               <h2 class="text-sm font-bold text-ink">
                 {{ t('aiDoctor.history') }}
               </h2>
-              <button
-                type="button"
-                class="flex size-8 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-ink/[0.06] hover:text-ink"
-                :aria-label="t('aiDoctor.closeHistory')"
-                @click="historyOpen = false"
-              >
-                <Icon
-                  name="lucide:x"
-                  class="size-5"
-                />
-              </button>
+              <div class="flex items-center gap-1">
+                <button
+                  type="button"
+                  class="flex size-8 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-ink/[0.06] hover:text-ink"
+                  :aria-label="t('aiDoctor.search')"
+                  :title="t('aiDoctor.search')"
+                  @click="searchOpen = true"
+                >
+                  <Icon
+                    name="lucide:search"
+                    class="size-5"
+                  />
+                </button>
+                <button
+                  type="button"
+                  class="flex size-8 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-ink/[0.06] hover:text-ink"
+                  :aria-label="t('aiDoctor.closeHistory')"
+                  :title="t('aiDoctor.closeHistory')"
+                  @click="historyOpen = false"
+                >
+                  <Icon
+                    name="lucide:x"
+                    class="size-5"
+                  />
+                </button>
+              </div>
             </div>
             <div class="min-h-0 flex-1">
               <ChatHistorySidebar
@@ -143,9 +307,9 @@ onMounted(() => {
     </Teleport>
 
     <!-- ستون چت -->
-    <div class="flex min-w-0 flex-1 flex-col">
+    <div class="flex min-w-0 flex-1 flex-col overflow-hidden border-ink/5 bg-surface sm:rounded-3xl sm:border">
       <!-- هدر -->
-      <header class="flex items-center gap-2 px-3 py-2.5 sm:px-4">
+      <header class="flex items-center gap-3 border-b border-ink/5 px-3 py-3 sm:px-5">
         <NuxtLink
           to="/"
           class="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/10 bg-surface text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700 lg:hidden"
@@ -169,6 +333,12 @@ onMounted(() => {
             class="size-5"
           />
         </button>
+          <span class="hidden size-10 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10 sm:flex">
+          <Icon
+            name="lucide:stethoscope"
+            class="size-5"
+          />
+        </span>
         <div class="min-w-0 flex-1">
           <h1 class="truncate text-base font-bold text-ink sm:text-lg">
             {{ t('aiDoctor.title') }}
@@ -200,7 +370,16 @@ onMounted(() => {
         <template #empty>
           <div class="m-auto flex w-full max-w-xl flex-col items-center gap-8 py-4 text-center">
             <div class="flex flex-col items-center gap-4">
-              <span class="flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10">
+              <img
+                v-if="attachedPlants[0]"
+                :src="attachedPlants[0].photo"
+                :alt="attachedPlants[0].nickname"
+                class="size-28 rounded-3xl object-cover shadow-sm sm:size-32"
+              >
+              <span
+                v-else
+                class="flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10"
+              >
                 <Icon
                   name="lucide:leaf"
                   class="size-8"
@@ -211,7 +390,7 @@ onMounted(() => {
                   {{ t('aiDoctor.welcomeTitle') }}
                 </h2>
                 <p class="mx-auto mt-2 max-w-md text-sm leading-7 text-ink-muted">
-                  {{ t('aiDoctor.welcomeText') }}
+                  {{ attachedPlants.length ? t('aiDoctor.welcomeTextPlant', { name: attachedNames }) : t('aiDoctor.welcomeText') }}
                 </p>
               </div>
             </div>
@@ -252,6 +431,7 @@ onMounted(() => {
       <!-- ورودی -->
       <footer class="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 pb-3 pt-2">
       <ChatPlantPicker
+          class="xl:hidden"
           :plants="plantOptions"
           :selected="aiDoctorStore.attachedPlantIds"
           @toggle="aiDoctorStore.togglePlant"
@@ -267,6 +447,13 @@ onMounted(() => {
         </p>
       </footer>
     </div>
+
+    <ChatPlantPanel
+      class="hidden xl:flex"
+      :options="plantOptions"
+      :selected="aiDoctorStore.attachedPlantIds"
+      @toggle="aiDoctorStore.togglePlant"
+    />
 
     <!-- پیش‌نمایش عکس -->
     <Teleport to="body">
@@ -295,5 +482,11 @@ onMounted(() => {
         </button>
       </div>
     </Teleport>
+
+    <ChatSearchDialog
+      v-model="searchOpen"
+      :conversations="aiDoctorStore.sorted"
+      @select="selectChat"
+    />
   </div>
 </template>

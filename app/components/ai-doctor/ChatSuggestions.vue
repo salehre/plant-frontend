@@ -5,25 +5,29 @@ export interface ChatSuggestion {
   icon?: string
 }
 
-/** معادل Suggestions در localmode.ai: کارت‌های پیشنهاد سؤال */
+/** کارت‌های پیشنهاد سؤال: آیکن بالا، متن پایین */
 defineProps<{ items: ChatSuggestion[] }>()
 const emit = defineEmits<{ select: [ChatSuggestion] }>()
 </script>
 
 <template>
-  <div class="grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2">
+  <div class="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
     <button
       v-for="item in items"
       :key="item.id"
       type="button"
-      class="flex items-center gap-3 rounded-2xl border border-ink/10 bg-surface p-3.5 text-start text-sm leading-6 text-ink transition-colors hover:border-primary-500/40 hover:bg-primary-50"
+      class="flex flex-col items-start gap-3 rounded-2xl border border-ink/10 bg-bg/60 p-4 text-start text-sm font-medium leading-6 text-ink transition-all hover:-translate-y-0.5 hover:border-primary-500/40 hover:bg-primary-50"
       @click="emit('select', item)"
     >
-      <Icon
+      <span
         v-if="item.icon"
-        :name="item.icon"
-        class="size-5 shrink-0 text-primary-600"
-      />
+        class="flex size-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-white/10"
+      >
+        <Icon
+          :name="item.icon"
+          class="size-5"
+        />
+      </span>
       <span>{{ item.label }}</span>
     </button>
   </div>
