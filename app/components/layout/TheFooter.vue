@@ -57,12 +57,11 @@ function subscribeToNewsletter() {
             to="/"
             class="inline-flex items-center gap-2.5"
           >
-            <span class="flex size-10 items-center justify-center rounded-xl bg-white/10">
-              <Icon
-                name="lucide:leaf"
-                class="size-5"
-              />
-            </span>
+          <img
+            src="/images/logo.png"
+            :alt="$t('brand.name')"
+            class="h-10 w-auto object-contain"
+          >
             <span class="text-xl font-extrabold">{{ t('components.theFooter.brand') }}</span>
           </NuxtLink>
           <p class="mt-3 max-w-xs text-sm leading-7 text-white/70">

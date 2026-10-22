@@ -232,6 +232,7 @@
     "inputPlaceholder": "مشکل گیاهت رو بنویس...",
     "send": "ارسال",
     "attachImage": "افزودن عکس",
+    "attachMenu": "افزودن عکس یا گیاه",
     "removeImage": "حذف عکس",
     "imageTooLarge": "حجم عکس نباید بیشتر از {max} مگابایت باشه",
     "userImageAlt": "عکس ارسال‌شده",
@@ -272,6 +273,11 @@
     "recentChats": "گفتگوهای اخیر",
     "expandSidebar": "باز کردن سایدبار",
     "collapseSidebar": "جمع کردن سایدبار",
+    "account": {
+      "freePlan": "رایگان",
+      "upgrade": "خرید پلن پریمیوم",
+      "premiumSoon": "خرید پلن پریمیوم به‌زودی فعال می‌شه"
+    },
     "imageOmitted": "عکس",
     "myPlants": "گیاهان من",
     "myPlantsSubtitle": "گیاه‌هایی که توی «گیاهان من» داری؛ یکی رو انتخاب کن و درباره‌اش با دکتر گیاه حرف بزن.",

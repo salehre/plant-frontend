@@ -232,6 +232,7 @@
     "inputPlaceholder": "Describe your plant's problem...",
     "send": "Send",
     "attachImage": "Add a photo",
+    "attachMenu": "Add photo or plant",
     "removeImage": "Remove photo",
     "imageTooLarge": "The photo must be {max} MB or smaller",
     "userImageAlt": "Sent photo",
@@ -272,6 +273,11 @@
     "recentChats": "Recent chats",
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
+    "account": {
+      "freePlan": "Free",
+      "upgrade": "Get Premium",
+      "premiumSoon": "Premium plans are coming soon"
+    },
     "imageOmitted": "Photo",
     "myPlants": "My Plants",
     "myPlantsSubtitle": "The plants in your My Plants list. Pick one to chat about it with the Plant Doctor.",

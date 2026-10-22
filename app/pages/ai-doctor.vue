@@ -4,6 +4,8 @@ import type { ChatSuggestion } from "~/components/ai-doctor/ChatSuggestions.vue"
 definePageMeta({ layout: "ai-doctor" });
 
 const aiDoctorStore = useAiDoctorStore();
+const authStore = useAuthStore()
+const route = useRoute()
 const uiStore = useUiStore();
 const plantOptions = useUserPlantOptions();
 const { t, locale } = useI18n();
@@ -160,114 +162,144 @@ onMounted(() => {
   <div class="flex h-dvh w-full gap-3 sm:p-3 lg:p-4">
     <!-- سایدبار AI (دسکتاپ): جای سایدبار اصلی رو می‌گیره؛ جمع‌شده = ریل آیکن‌ها -->
     <aside
-      class="hidden shrink-0 flex-col gap-3 rounded-3xl border border-ink/5 bg-surface p-3 lg:flex"
-      :class="sidebarCollapsed ? 'w-16 items-center' : 'w-72'"
+      class="relative hidden shrink-0 overflow-hidden rounded-3xl border border-ink/5 bg-surface transition-[width] duration-300 ease-in-out motion-reduce:transition-none lg:flex"
+      :class="sidebarCollapsed ? 'w-16' : 'w-72'"
     >
-      <!-- باز: لوگو + اسم + جستجو + جمع کردن -->
-      <div v-if="!sidebarCollapsed" class="flex items-center gap-1">
-        <NuxtLink
-          to="/"
-          class="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50"
-          :title="t('common.back')"
-        >
+      <!-- لایه‌ی باز: عرض ثابت تا موقع انیمیشن محتوا reflow نشه -->
+      <div
+        class="flex h-full w-72 shrink-0 flex-col gap-3 p-3 transition-opacity duration-200 motion-reduce:transition-none"
+        :class="
+          sidebarCollapsed
+            ? 'pointer-events-none opacity-0'
+            : 'opacity-100 delay-100'
+        "
+        :inert="sidebarCollapsed || undefined"
+      >
+        <div class="flex items-center gap-1">
+          <NuxtLink
+            to="/"
+            class="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50"
+            :title="t('common.back')"
+          >
           <img
             src="/images/logo.png"
             :alt="$t('brand.name')"
             class="h-10 w-auto object-contain"
           >
-          <span
-            class="min-w-0 flex-1 truncate text-base font-extrabold text-primary-800"
-            >{{ t("brand.name") }}</span
-          >
-        </NuxtLink>
-        <button
-          type="button"
-          class="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
-          :aria-label="t('aiDoctor.search')"
-          :title="t('aiDoctor.search')"
-          @click="searchOpen = true"
-        >
-          <Icon name="lucide:search" class="size-4" />
-        </button>
-        <button
-          type="button"
-          class="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
-          :aria-label="t('aiDoctor.collapseSidebar')"
-          :title="t('aiDoctor.collapseSidebar')"
-          @click="sidebarCollapsed = true"
-        >
-          <Icon
-            name="lucide:panel-right-close"
-            class="size-5 ltr:-scale-x-100"
-          />
-        </button>
-      </div>
-
-      <div v-if="!sidebarCollapsed" class="min-h-0 flex-1">
-        <ChatHistorySidebar
-          :conversations="aiDoctorStore.sorted"
-          :active-id="aiDoctorStore.activeId"
-          @new="newChat"
-          @select="selectChat"
-          @rename="aiDoctorStore.rename"
-          @remove="aiDoctorStore.remove"
-          @pin="aiDoctorStore.togglePin"
-          @share="shareChat"
-        />
-      </div>
-
-      <!-- جمع‌شده: ریل آیکن‌ها -->
-      <template v-else>
-        <div
-          class="absolute flex w-16 flex-col items-center gap-3 p-3 transition-opacity duration-200 motion-reduce:transition-none"
-          :class="
-            sidebarCollapsed
-              ? 'opacity-100 delay-150'
-              : 'pointer-events-none opacity-0'
-          "
-          :inert="!sidebarCollapsed || undefined"
-        >
+            <span
+              class="min-w-0 flex-1 truncate text-base font-extrabold text-primary-800"
+              >{{ t("brand.name") }}</span
+            >
+          </NuxtLink>
           <button
             type="button"
-            class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
-            :aria-label="t('aiDoctor.expandSidebar')"
-            :title="t('aiDoctor.expandSidebar')"
-            @click="sidebarCollapsed = false"
-          >
-            <Icon
-              name="lucide:panel-right-open"
-              class="size-5 ltr:-scale-x-100"
-            />
-          </button>
-          <div class="my-1 w-8 border-t border-ink/5" />
-          <button
-            type="button"
-            class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
-            :aria-label="t('aiDoctor.newChat')"
-            :title="t('aiDoctor.newChat')"
-            @click="newChat"
-          >
-            <Icon name="lucide:square-pen" class="size-5" />
-          </button>
-          <button
-            type="button"
-            class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+            class="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
             :aria-label="t('aiDoctor.search')"
             :title="t('aiDoctor.search')"
             @click="searchOpen = true"
           >
-            <Icon name="lucide:search" class="size-5" />
+            <Icon name="lucide:search" class="size-4" />
           </button>
-          <NuxtLink
-            to="/ai-doctor-plants"
-            class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
-            :aria-label="t('aiDoctor.myPlants')"
-            :title="t('aiDoctor.myPlants')"
+          <button
+            type="button"
+            class="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+            :aria-label="t('aiDoctor.collapseSidebar')"
+            :title="t('aiDoctor.collapseSidebar')"
+            @click="sidebarCollapsed = true"
           >
-            <Icon name="lucide:sprout" class="size-5" />
+            <Icon
+              name="lucide:panel-right-close"
+              class="size-5 ltr:-scale-x-100"
+            />
+          </button>
+        </div>
+
+        <div class="min-h-0 flex-1">
+          <ChatHistorySidebar
+            :conversations="aiDoctorStore.sorted"
+            :active-id="aiDoctorStore.activeId"
+            @new="newChat"
+            @select="selectChat"
+            @rename="aiDoctorStore.rename"
+            @remove="aiDoctorStore.remove"
+            @pin="aiDoctorStore.togglePin"
+            @share="shareChat"
+          />
+        </div>
+        <ChatAccountCard />
+      </div>
+
+      <!-- لایه‌ی جمع‌شده: ریل آیکن‌ها؛ دکمه‌ی باز کردن به‌جای لوگو بالای ریله -->
+      <div
+        class="absolute inset-y-0 start-0 flex w-16 flex-col items-center gap-3 p-3 transition-opacity duration-200 motion-reduce:transition-none"
+        :class="
+          sidebarCollapsed
+            ? 'opacity-100 delay-150'
+            : 'pointer-events-none opacity-0'
+        "
+        :inert="!sidebarCollapsed || undefined"
+      >
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.expandSidebar')"
+          :title="t('aiDoctor.expandSidebar')"
+          @click="sidebarCollapsed = false"
+        >
+          <Icon
+            name="lucide:panel-right-open"
+            class="size-5 ltr:-scale-x-100"
+          />
+        </button>
+        <div class="my-1 w-8 border-t border-ink/5" />
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.newChat')"
+          :title="t('aiDoctor.newChat')"
+          @click="newChat"
+        >
+          <Icon name="lucide:square-pen" class="size-5" />
+        </button>
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.search')"
+          :title="t('aiDoctor.search')"
+          @click="searchOpen = true"
+        >
+          <Icon name="lucide:search" class="size-5" />
+        </button>
+        <NuxtLink
+          to="/ai-doctor-plants"
+          class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+          :aria-label="t('aiDoctor.myPlants')"
+          :title="t('aiDoctor.myPlants')"
+        >
+          <Icon name="lucide:sprout" class="size-5" />
+        </NuxtLink>
+        <div class="mt-auto">
+          <NuxtLink
+            :to="authStore.isLoggedIn ? '/profile' : { path: '/auth/login', query: { redirect: route.fullPath } }"
+            class="flex size-10 items-center justify-center rounded-xl text-ink-muted transition-colors hover:bg-primary-50 hover:text-primary-700"
+            :aria-label="authStore.isLoggedIn ? t('nav.profile') : t('auth.login')"
+            :title="authStore.isLoggedIn ? t('nav.profile') : t('auth.login')"
+          >
+            <UserAvatar
+              v-if="authStore.isLoggedIn"
+              :src="authStore.user?.avatar"
+              :name="authStore.user?.name"
+              class="size-8"
+            />
+            <Icon
+              v-else
+              name="lucide:log-in"
+              class="size-5 rtl:-scale-x-100"
+            />
           </NuxtLink>
         </div>
-      </template>
+
+      </div>
     </aside>
 
     <!-- سایدبار تاریخچه (کشو برای موبایل و تبلت) -->
@@ -352,7 +384,7 @@ onMounted(() => {
           :title="t('aiDoctor.openHistory')"
           @click="historyOpen = true"
         >
-          <Icon name="lucide:history" class="size-5" />
+          <Icon name="lucide:panel-right-close" class="size-5" />
         </button>
         <span
           class="hidden size-10 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10 sm:flex"
@@ -394,7 +426,7 @@ onMounted(() => {
                 :src="attachedPlants[0].photo"
                 :alt="attachedPlants[0].nickname"
                 class="size-28 rounded-3xl object-cover shadow-sm sm:size-32"
-              />
+              >
               <span
                 v-else
                 class="flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10"
@@ -451,17 +483,14 @@ onMounted(() => {
       <footer
         class="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 pb-3 pt-2"
       >
-        <ChatPlantPicker
-          class="xl:hidden"
-          :plants="plantOptions"
-          :selected="aiDoctorStore.attachedPlantIds"
-          @toggle="aiDoctorStore.togglePlant"
-        />
         <ChatPromptInput
           ref="promptInput"
           :streaming="aiDoctorStore.busy"
+          :plants="plantOptions"
+          :selected-plants="aiDoctorStore.attachedPlantIds"
           @submit="onSubmit"
           @stop="aiDoctorStore.stop()"
+          @toggle-plant="aiDoctorStore.togglePlant"
         />
         <p class="text-center text-[11px] leading-5 text-ink-muted">
           {{ t("aiDoctor.disclaimer") }}
@@ -489,7 +518,7 @@ onMounted(() => {
           :src="previewUrl"
           :alt="t('aiDoctor.userImageAlt')"
           class="max-h-full max-w-full rounded-xl object-contain"
-        />
+        >
         <button
           type="button"
           class="absolute end-4 top-4 flex size-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur"

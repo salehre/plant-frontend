@@ -92,7 +92,7 @@ function onEnter(e: KeyboardEvent) {
     >
       <div
         v-if="open"
-        class="fixed inset-0 z-[70] flex items-start justify-center bg-ink/40 p-4 pt-[12vh]"
+        class="fixed inset-0 z-[70] flex items-start justify-center bg-ink/40 p-4 pt-[32vh]"
         @click.self="close"
         @keydown.esc.stop="close"
       >

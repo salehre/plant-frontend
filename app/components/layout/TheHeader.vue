@@ -26,12 +26,11 @@ function onSearch() {
         class="flex items-center gap-2 text-primary-800 md:hidden"
         :aria-label="$t('brand.name')"
       >
-        <span class="flex size-9 items-center justify-center rounded-xl bg-primary-700 text-white">
-          <Icon
-            name="lucide:leaf"
-            class="size-5"
-          />
-        </span>
+          <img
+            src="/images/logo.png"
+            :alt="$t('brand.name')"
+            class="h-10 w-auto object-contain"
+          >
       </NuxtLink>
 
       <!-- جستجو -->
