@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ChatSuggestion } from "~/components/ai-doctor/ChatSuggestions.vue";
-
 definePageMeta({ layout: "ai-doctor" });
 
 const aiDoctorStore = useAiDoctorStore();
@@ -16,12 +14,11 @@ const attachedPlants = computed(() =>
     aiDoctorStore.attachedPlantIds.includes(p.id),
   ),
 );
-const attachedNames = computed(() =>
-  new Intl.ListFormat(locale.value, {
-    style: "long",
-    type: "conjunction",
-  }).format(attachedPlants.value.map((p) => p.nickname)),
-);
+
+const firstName = computed(() => authStore.user?.name?.trim().split(/\s+/)[0] ?? '')
+const greeting = computed(() => firstName.value
+  ? t('aiDoctor.greeting', { name: firstName.value })
+  : t('aiDoctor.greetingAnon'))
 
 const conversation = ref<{ pin: (smooth?: boolean) => void } | null>(null);
 const promptInput = ref<{ focus: () => void } | null>(null);
@@ -42,52 +39,6 @@ useEventListener("keydown", (e: KeyboardEvent) => {
   }
 });
 
-const suggestions = computed<ChatSuggestion[]>(() => {
-  if (attachedPlants.value.length) {
-    const name = attachedNames.value;
-    return [
-      {
-        id: "p-symptoms",
-        icon: "lucide:leaf",
-        label: t("aiDoctor.plantSuggestions.symptoms", { name }),
-      },
-      {
-        id: "p-watering",
-        icon: "lucide:droplets",
-        label: t("aiDoctor.plantSuggestions.watering", { name }),
-      },
-      {
-        id: "p-light",
-        icon: "lucide:sun",
-        label: t("aiDoctor.plantSuggestions.light", { name }),
-      },
-      {
-        id: "p-growth",
-        icon: "lucide:sprout",
-        label: t("aiDoctor.plantSuggestions.growth", { name }),
-      },
-    ];
-  }
-  return [
-    {
-      id: "yellow",
-      icon: "lucide:leaf",
-      label: t("aiDoctor.suggestions.yellow"),
-    },
-    {
-      id: "spots",
-      icon: "lucide:circle-dot",
-      label: t("aiDoctor.suggestions.spots"),
-    },
-    { id: "pests", icon: "lucide:bug", label: t("aiDoctor.suggestions.pests") },
-    {
-      id: "watering",
-      icon: "lucide:droplets",
-      label: t("aiDoctor.suggestions.watering"),
-    },
-  ];
-});
-
 const lastIndex = computed(() => aiDoctorStore.messages.length - 1);
 
 useEventListener("keydown", (e: KeyboardEvent) => {
@@ -105,11 +56,6 @@ watch(
 function onSubmit(payload: { text: string; image?: string }) {
   conversation.value?.pin();
   aiDoctorStore.send(payload.text, payload.image, activeLocale.value);
-}
-
-function onSuggestion(item: ChatSuggestion) {
-  conversation.value?.pin();
-  aiDoctorStore.send(item.label, undefined, activeLocale.value);
 }
 
 function onRegenerate() {
@@ -418,7 +364,7 @@ onMounted(() => {
       >
         <template #empty>
           <div
-            class="m-auto flex w-full max-w-xl flex-col items-center gap-8 py-4 text-center"
+            class="m-auto flex w-full max-w-xl flex-col items-center py-4 text-center"
           >
             <div class="flex flex-col items-center gap-4">
               <img
@@ -435,20 +381,10 @@ onMounted(() => {
               </span>
               <div>
                 <h2 class="text-xl font-bold text-ink sm:text-2xl">
-                  {{ t("aiDoctor.welcomeTitle") }}
+                  {{ greeting }}
                 </h2>
-                <p
-                  class="mx-auto mt-2 max-w-md text-sm leading-7 text-ink-muted"
-                >
-                  {{
-                    attachedPlants.length
-                      ? t("aiDoctor.welcomeTextPlant", { name: attachedNames })
-                      : t("aiDoctor.welcomeText")
-                  }}
-                </p>
               </div>
             </div>
-            <ChatSuggestions :items="suggestions" @select="onSuggestion" />
           </div>
         </template>
 

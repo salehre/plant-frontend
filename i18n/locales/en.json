@@ -221,14 +221,8 @@
     "title": "AI Doctor",
     "subtitle": "Ask about your plant or send a photo",
     "newChat": "New chat",
-    "welcomeTitle": "Hi! I'm the Plant Doctor 🌿",
-    "welcomeText": "Tell me whatever is wrong with your plant, from yellowing leaves to pests and watering. You can send a photo too.",
-    "suggestions": {
-      "yellow": "Why are my plant's leaves turning yellow?",
-      "spots": "There are brown spots on the leaves",
-      "pests": "I see fine webbing under the leaves",
-      "watering": "How often should I water my plant?"
-    },
+    "greeting": "Hi {name}! 🌿",
+    "greetingAnon": "Hi! 🌿",
     "inputPlaceholder": "Describe your plant's problem...",
     "send": "Send",
     "attachImage": "Add a photo",
@@ -286,13 +280,6 @@
     "noPlants": "You don't have any plants in My Plants yet.",
     "chatAboutPlant": "Chat about this plant",
     "plantChatsCount": "{count} chats",
-    "welcomeTextPlant": "I'll help using what I know about {name}. Ask anything about its health, watering or growth.",
-    "plantSuggestions": {
-      "symptoms": "The leaves of {name} are turning yellow. Why?",
-      "watering": "How often should I water {name}?",
-      "light": "How much light does {name} need?",
-      "growth": "How can I help {name} grow better?"
-    },
     "panel": {
       "connectedPlant": "Connected plant",
       "connectedPlants": "Connected plants",

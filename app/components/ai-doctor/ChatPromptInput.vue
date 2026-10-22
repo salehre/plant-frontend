@@ -12,7 +12,7 @@ const emit = defineEmits<{
   stop: []
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const uiStore = useUiStore()
 
 const MAX_IMAGE_MB = 5
@@ -25,6 +25,7 @@ const inputEl = ref<HTMLTextAreaElement | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 
 const canSend = computed(() => !props.streaming && (!!text.value.trim() || !!image.value))
+const inputDir = computed(() => text.value ? 'auto' : (locale.value === 'fa' ? 'rtl' : 'ltr'))
 
 const menuOpen = ref(false)
 const plantsOpen = ref(false)
@@ -172,7 +173,7 @@ defineExpose({ focus: () => inputEl.value?.focus() })
       ref="inputEl"
       v-model="text"
       rows="1"
-      dir="auto"
+      :dir="inputDir"
       :maxlength="MAX_LENGTH"
       :placeholder="$t('aiDoctor.inputPlaceholder')"
       :aria-label="$t('aiDoctor.inputPlaceholder')"
