@@ -24,10 +24,11 @@ function panelClass(key: SettingsSectionKey) {
   return active.value === key ? '' : 'md:hidden'
 }
 
-const languages = [
-  { code: 'fa', label: 'فارسی' },
-  { code: 'en', label: 'English' },
-] as const
+// اسم زبان‌ها به زبان خودشون نوشته می‌شه (استاندارد انتخاب زبان)؛ توضیح زیرشون ترجمه می‌شه
+const languages = computed(() => [
+  { code: 'fa', label: 'فارسی', desc: t('pages.profile.languageFaDesc') },
+  { code: 'en', label: 'English', desc: t('pages.profile.languageEnDesc') },
+] as const)
 
 const aboutRows = computed(() => [
   { to: '/about', icon: 'lucide:info', label: t('components.theFooter.about') },
@@ -134,7 +135,7 @@ const aboutRows = computed(() => [
                   {{ t('pages.profile.appearance') }}
                 </h2>
                 <p class="text-xs text-ink-muted">
-                  {{ t('pages.profile.appearanceSubtitle', 'شخصی‌سازی حالت شب/روز و پالت رنگی سامانه') }}
+                  {{ t('pages.profile.appearanceSubtitle') }}
                 </p>
               </div>
             </div>
@@ -144,7 +145,7 @@ const aboutRows = computed(() => [
             <!-- ۱. انتخاب حالت دارک / لایت -->
             <div>
               <label class="mb-3 block text-xs font-bold uppercase tracking-wider text-ink-muted">
-                {{ t('pages.profile.themeMode', 'حالت نمایش') }}
+                {{ t('pages.profile.themeMode') }}
               </label>
               <div class="grid grid-cols-2 gap-3 sm:gap-4">
                 <!-- دکمه تم روشن -->
@@ -164,7 +165,7 @@ const aboutRows = computed(() => [
                   </div>
                   <div>
                     <span class="block text-sm font-bold text-ink">{{ t('pages.profile.light') }}</span>
-                    <span class="text-xs text-ink-muted">{{ t('pages.profile.lightDesc', 'تم روز و روشن') }}</span>
+                    <span class="text-xs text-ink-muted">{{ t('pages.profile.lightDesc') }}</span>
                   </div>
                   <span
                     v-if="!isDark"
@@ -191,7 +192,7 @@ const aboutRows = computed(() => [
                   </div>
                   <div>
                     <span class="block text-sm font-bold text-ink">{{ t('pages.profile.dark') }}</span>
-                    <span class="text-xs text-ink-muted">{{ t('pages.profile.darkDesc', 'تم شب و تاریک') }}</span>
+                    <span class="text-xs text-ink-muted">{{ t('pages.profile.darkDesc') }}</span>
                   </div>
                   <span
                     v-if="isDark"
@@ -208,10 +209,10 @@ const aboutRows = computed(() => [
               <div class="mb-3 flex items-center justify-between">
                 <div>
                   <label class="block text-xs font-bold uppercase tracking-wider text-ink-muted">
-                    {{ t('pages.profile.colorTheme', 'رنگ سازمانی و پالت') }}
+                    {{ t('pages.profile.colorTheme') }}
                   </label>
                   <p class="text-xs text-ink-muted mt-0.5">
-                    {{ t('pages.profile.colorThemeSubtitle', 'رنگ دکمه‌ها، آیکون‌ها و المان‌های تعاملی') }}
+                    {{ t('pages.profile.colorThemeSubtitle') }}
                   </p>
                 </div>
               </div>
@@ -259,7 +260,7 @@ const aboutRows = computed(() => [
                           class="flex h-5 items-center justify-center rounded-md px-2 text-[9px] font-bold text-white shadow-xs"
                           :style="{ backgroundColor: theme.swatch }"
                         >
-                          Action
+                          {{ t('pages.profile.themePreviewAction') }}
                         </div>
                         <!-- خط فرضی متن -->
                         <div class="h-2 flex-1 rounded-full bg-ink/10" />
@@ -314,7 +315,7 @@ const aboutRows = computed(() => [
                 {{ t('pages.profile.language') }}
               </h2>
               <p class="text-xs text-ink-muted">
-                {{ t('pages.profile.languageSubtitle', 'زبان رابط کاربری سامانه را انتخاب کنید') }}
+                {{ t('pages.profile.languageSubtitle') }}
               </p>
             </div>
           </div>
@@ -350,7 +351,7 @@ const aboutRows = computed(() => [
                   {{ lang.label }}
                 </span>
                 <span class="block truncate text-xs text-ink-muted">
-                  {{ lang.code === 'fa' ? 'Persian (RTL)' : 'English (LTR)' }}
+                  {{ lang.desc }}
                 </span>
               </div>
 

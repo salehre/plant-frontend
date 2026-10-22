@@ -30,21 +30,22 @@
 }
 
 /* ---------- ۲) رنگ متن و آیکن ---------- */
-:where(.dark) .text-primary-500:where(:not([class*='bg-white'])),
-:where(.dark) .text-primary-600:where(:not([class*='bg-white'])),
-:where(.dark) .text-primary-700:where(:not([class*='bg-white'])),
-:where(.dark) .text-primary-800:where(:not([class*='bg-white'])),
-:where(.dark) .text-primary-900:where(:not([class*='bg-white'])),
-:where(.dark) .hover\:text-primary-600:hover:where(:not([class*='bg-white'])),
-:where(.dark) .hover\:text-primary-700:hover:where(:not([class*='bg-white'])),
-:where(.dark) .hover\:text-primary-900:hover:where(:not([class*='bg-white'])) {
+:where(.dark) .text-primary-500:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-primary-600:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-primary-700:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-primary-800:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-primary-900:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .hover\:text-primary-600:hover:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .hover\:text-primary-700:hover:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .hover\:text-primary-900:hover:where(:not(.bg-white, [class~='bg-white/90'])) {
   color: rgb(var(--color-primary-300));
 }
 
-:where(.dark) .text-accent-600:where(:not([class*='bg-white'])),
-:where(.dark) .text-accent-700:where(:not([class*='bg-white'])),
-:where(.dark) .text-accent-800:where(:not([class*='bg-white'])),
-:where(.dark) .text-accent-900:where(:not([class*='bg-white'])) {
+:where(.dark) .text-accent-500:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-accent-600:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-accent-700:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-accent-800:where(:not(.bg-white, [class~='bg-white/90'])),
+:where(.dark) .text-accent-900:where(:not(.bg-white, [class~='bg-white/90'])) {
   color: rgb(var(--color-accent-300));
 }
 
