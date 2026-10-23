@@ -10,7 +10,7 @@ const input = ref<HTMLInputElement | null>(null)
 </script>
 
 <template>
-  <div class="relative flex shrink-0">
+  <div class="relative inline-flex w-fit shrink-0">
     <UserAvatar
       :src="authStore.user?.avatar"
       :name="authStore.user?.name"
@@ -30,7 +30,7 @@ const input = ref<HTMLInputElement | null>(null)
     <template v-if="authStore.isLoggedIn">
       <button
         type="button"
-        class="absolute bottom-2 -end-1 flex size-6 items-center justify-center rounded-full bg-primary-600 text-white shadow ring-2 ring-surface transition-colors hover:bg-primary-700 disabled:opacity-60"
+        class="absolute bottom-1 end-0 flex size-7 items-center justify-center rounded-full bg-primary-600 text-white shadow ring-2 ring-surface transition-colors hover:bg-primary-700 disabled:opacity-60"
         :aria-label="t('pages.profile.changeAvatar')"
         :title="t('pages.profile.changeAvatar')"
         :disabled="processing"

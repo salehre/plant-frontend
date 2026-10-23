@@ -2,6 +2,7 @@
 const props = defineProps<{
   modelValue: boolean
   title?: string
+  maxWidth?: string
 }>()
 
 const { t } = useI18n()
@@ -20,7 +21,10 @@ function close() {
         class="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4"
         @click.self="close"
       >
-        <div class="w-full max-w-md rounded-lg bg-surface p-6 shadow-card-hover">
+        <div
+          class="max-h-[90vh] w-full overflow-y-auto rounded-lg bg-surface p-6 shadow-card-hover"
+          :class="props.maxWidth ?? 'max-w-md'"
+        >
           <div class="mb-4 flex items-center justify-between">
             <h3
               v-if="props.title"

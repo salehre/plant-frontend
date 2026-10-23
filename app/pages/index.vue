@@ -13,6 +13,11 @@ const { status: featuredStatus } = useAsyncData(
 )
 const featuredPending = computed(() => featuredStatus.value === 'pending' && !featured.value.length)
 const featuredShown = computed(() => featured.value.slice(0, 4))
+
+// state مشترک لودینگ برای هیرو و کارت‌های دسترسی سریع
+const homeSkeletonPending = computed(() => featuredPending.value)
+const quickActionSkeletons = Array.from({ length: 5 }, (_, index) => index)
+
 // بک‌گراند کارت تبلیغی بخش گیاهان شاخص؛ بعداً فقط مسیر همین عکس رو عوض کن
 const featuredPromoImage = '/images/plants/header.png'
 
@@ -23,52 +28,116 @@ const quickActions = [
   { to: '/ai-doctor', icon: 'lucide:stethoscope', label: 'nav.aiDoctor', hint: 'home.quickHints.aiDoctor' },
   { to: '/plants', icon: 'lucide:compass', label: 'nav.explore', hint: 'home.quickHints.catalog' },
 ]
-
 </script>
 
 <template>
   <div class="flex flex-col gap-10">
-    <!-- هیرو -->
-    <section class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white">
+    <!-- ======= هیرو: اسکلتون ======= -->
+    <section
+      v-if="homeSkeletonPending"
+      class="relative overflow-hidden rounded-[19px] bg-primary-900"
+      aria-busy="true"
+      aria-label="Loading"
+    >
+      <!-- جای عکس هدر -->
+      <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-primary-950 via-primary-800 to-primary-700" />
+      <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
+
+      <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div class="flex min-h-[240px] max-w-xl flex-col justify-center gap-5 py-8 sm:min-h-[340px] sm:py-12">
+          <!-- جای h1: text-2xl / sm:text-5xl با leading-tight -->
+          <div class="space-y-1.5 sm:space-y-3">
+            <div class="h-6 w-11/12 animate-pulse rounded-md bg-white/30 sm:h-12 sm:w-full" />
+            <div class="h-6 w-2/3 animate-pulse rounded-md bg-white/30 sm:h-12 sm:w-3/5" />
+          </div>
+
+          <!-- جای p: text-sm / sm:text-base با leading-7 -->
+          <div class="max-w-md space-y-3.5 sm:space-y-3">
+            <div class="h-3.5 w-full animate-pulse rounded bg-white/20 sm:h-4" />
+            <div class="h-3.5 w-11/12 animate-pulse rounded bg-white/20 sm:h-4" />
+            <div class="h-3.5 w-7/12 animate-pulse rounded bg-white/20 sm:h-4" />
+          </div>
+
+          <!-- جای دکمه‌ها: py-2.5 + text-sm => h-10 -->
+          <div class="flex flex-wrap gap-3">
+            <div class="h-10 w-36 animate-pulse rounded-xl bg-white/30 sm:w-40" />
+            <div class="hidden h-10 w-28 animate-pulse rounded-xl border border-white/25 bg-white/10 sm:block" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= هیرو ======= -->
+    <section
+      v-else
+      class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white"
+    >
       <img
         src="/images/plants/header.png"
         :alt="t('home.greenLeavesAlt')"
         class="absolute inset-0 size-full object-cover object-center ltr:-scale-x-100"
       >
-       <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
+      <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
 
       <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div class="flex min-h-[240px] max-w-xl flex-col justify-center gap-5 py-8 sm:min-h-[340px] sm:py-12">
-        <h1 class="text-2xl font-extrabold leading-tight sm:text-5xl">
-          {{ t('home.heroTitle') }}
-        </h1>
-        <p class="max-w-md text-sm leading-7 text-white/80 sm:text-base">
-          {{ t('home.heroSubtitle') }}
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <NuxtLink
-            to="/identify"
-            class="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-400"
-          >
-            <Icon
-              name="lucide:scan-line"
-              class="size-4"
-            />
-            {{ t('home.identifyCta') }}
-          </NuxtLink>
-          <NuxtLink
-            to="/plants"
-            class="sm:inline-flex hidden items-center gap-2 rounded-xl border border-white/40 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
-          >
-            {{ t('nav.catalog') }}
-          </NuxtLink>
+          <h1 class="text-2xl font-extrabold leading-tight sm:text-5xl">
+            {{ t('home.heroTitle') }}
+          </h1>
+          <p class="max-w-md text-sm leading-7 text-white/80 sm:text-base">
+            {{ t('home.heroSubtitle') }}
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <NuxtLink
+              to="/identify"
+              class="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-400"
+            >
+              <Icon
+                name="lucide:scan-line"
+                class="size-4"
+              />
+              {{ t('home.identifyCta') }}
+            </NuxtLink>
+            <NuxtLink
+              to="/plants"
+              class="sm:inline-flex hidden items-center gap-2 rounded-xl border border-white/40 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            >
+              {{ t('nav.catalog') }}
+            </NuxtLink>
+          </div>
         </div>
-      </div>
       </div>
     </section>
 
-    <!-- دسترسی سریع -->
-    <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
+    <!-- ======= دسترسی سریع: اسکلتون ======= -->
+    <section
+      v-if="homeSkeletonPending"
+      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5"
+      aria-hidden="true"
+    >
+      <div
+        v-for="item in quickActionSkeletons"
+        :key="item"
+        class="glass-card flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
+      >
+        <!-- جای دایره آیکون size-12 + آیکون size-6 -->
+        <span class="flex size-12 animate-pulse items-center justify-center rounded-full bg-primary-50">
+          <span class="size-6 rounded-md bg-primary-100" />
+        </span>
+
+        <!-- جای لیبل (text-sm) و هینت (text-[11px]) با gap-0.5 -->
+        <span class="flex w-full flex-col items-center gap-0.5">
+          <span class="my-[3px] h-3.5 w-20 animate-pulse rounded bg-ink/10" />
+          <span class="my-[2px] h-2.5 w-24 animate-pulse rounded bg-ink/5" />
+        </span>
+      </div>
+    </section>
+
+    <!-- ======= دسترسی سریع ======= -->
+    <section
+      v-else
+      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5"
+    >
       <NuxtLink
         v-for="action in quickActions"
         :key="action.to"
@@ -88,7 +157,7 @@ const quickActions = [
       </NuxtLink>
     </section>
 
-        <!-- گیاهان شاخص -->
+    <!-- ======= گیاهان شاخص ======= -->
     <section class="glass-card p-4 sm:p-5">
       <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div class="min-w-0">
@@ -226,7 +295,7 @@ const quickActions = [
     <BlogSection />
 
     <IdentifySteps />
- </div>
+  </div>
 </template>
 
 <style scoped>

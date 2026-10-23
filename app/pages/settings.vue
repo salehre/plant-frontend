@@ -6,15 +6,9 @@ definePageMeta({ layout: 'default' })
 
 const { locale, setLocale, t } = useI18n()
 const router = useRouter()
-const authStore = useAuthStore()
 const uiStore = useUiStore()
 
 const isDark = computed(() => uiStore.mode === 'dark')
-const user = computed(() => authStore.user)
-const intlLocale = computed(() => locale.value === 'fa' ? 'fa-IR' : 'en-US')
-const memberSince = computed(() => user.value?.joinedAt
-  ? new Intl.DateTimeFormat(intlLocale.value, { month: 'long', year: 'numeric' }).format(new Date(user.value.joinedAt))
-  : '')
 
 // بخش فعال از ?section= میاد و انتخابش توی ساید بار (زیر «تنظیمات») انجام می‌شه.
 // روی دسکتاپ فقط بخش انتخاب‌شده دیده می‌شه؛ روی موبایل (بدون ساید بار) همه‌ی بخش‌ها زیر هم‌ان
@@ -71,50 +65,6 @@ const aboutRows = computed(() => [
         class="flex flex-col gap-5"
         :class="panelClass('account')"
       >
-        <div class="glass-card p-4 sm:p-5">
-          <h2 class="mb-4 font-bold text-ink">
-            {{ t('pages.profile.account') }}
-          </h2>
-          <div class="mb-4 flex items-center gap-4">
-            <AvatarUploader avatar-class="size-16" />
-            <div class="min-w-0">
-              <p class="truncate text-lg font-bold text-ink">
-                {{ user?.name || t('pages.profile.account') }}
-              </p>
-              <p
-                v-if="user?.email"
-                class="truncate text-sm text-ink-muted"
-              >
-                {{ user.email }}
-              </p>
-            </div>
-          </div>
-          <dl
-            v-if="user"
-            class="divide-y divide-ink/5 text-sm"
-          >
-            <div class="flex items-center justify-between gap-3 py-3">
-              <dt class="text-ink-muted">
-                {{ t('auth.email') }}
-              </dt>
-              <dd class="truncate font-medium text-ink">
-                {{ user.email }}
-              </dd>
-            </div>
-            <div
-              v-if="memberSince"
-              class="flex items-center justify-between gap-3 py-3"
-            >
-              <dt class="text-ink-muted">
-                {{ t('pages.profile.memberSince') }}
-              </dt>
-              <dd class="font-medium text-ink">
-                {{ memberSince }}
-              </dd>
-            </div>
-          </dl>
-        </div>
-
         <ProfileInfoForm />
       </section>
 

@@ -10,7 +10,9 @@ const { t, locale } = useI18n()
 
 const today = new Date().toISOString().slice(0, 10)
 const minBirthDate = '1900-01-01'
+const bioMaxLength = 200
 const showPasswordModal = ref(false)
+const editing = ref(false)
 
 // پکیج تقویم به window وابسته‌ست؛ فقط سمت کلاینت و به‌صورت lazy لود می‌شه.
 const PersianDatePicker = defineAsyncComponent(async () => {
@@ -37,18 +39,24 @@ const schema = toTypedSchema(
       .string()
       .min(1, 'pages.profile.errors.nationalIdRequired')
       .refine(isValidNationalId, 'pages.profile.errors.nationalIdInvalid'),
+    bio: z.string().max(bioMaxLength, 'pages.profile.errors.bioMax').optional(),
   }),
 )
 
-const { handleSubmit, defineField, errors, meta, resetForm } = useForm({
-  validationSchema: schema,
-  initialValues: {
+function userValues() {
+  return {
     name: authStore.user?.name ?? '',
     birthDate: authStore.user?.birthDate ?? '',
     gender: authStore.user?.gender,
     phone: authStore.user?.phone ?? '',
     nationalId: authStore.user?.nationalId ?? '',
-  },
+    bio: authStore.user?.bio ?? '',
+  }
+}
+
+const { handleSubmit, defineField, errors, meta, resetForm } = useForm({
+  validationSchema: schema,
+  initialValues: userValues(),
 })
 
 const [name, nameAttrs] = defineField('name')
@@ -56,6 +64,11 @@ const [birthDate] = defineField('birthDate')
 const [gender] = defineField('gender')
 const [phone, phoneAttrs] = defineField('phone')
 const [nationalId, nationalIdAttrs] = defineField('nationalId')
+const [bio, bioAttrs] = defineField('bio')
+
+const user = computed(() => authStore.user)
+const isFa = computed(() => locale.value === 'fa')
+const intlLocale = computed(() => isFa.value ? 'fa-IR' : 'en-US')
 
 const genderOptions = computed<{ value: Gender, label: string }[]>(() => [
   { value: 'female', label: t('pages.profile.genderFemale') },
@@ -74,10 +87,10 @@ function onDigitsInput(event: Event, set: (value: string) => void) {
   set(clean)
 }
 
-// مقدار فرم/ذخیره همیشه میلادی (YYYY-MM-DD) می‌مونه؛ فقط نمایشش شمسیه (YYYY/MM/DD).
-const birthDateDisplay = computed(() => {
-  if (!birthDate.value) return ''
-  const [y, m, d] = birthDate.value.slice(0, 10).split('-').map(Number)
+// تاریخ میلادی (YYYY-MM-DD) رو به متن شمسی (YYYY/MM/DD) تبدیل می‌کنه.
+function toJalaliText(value?: string) {
+  if (!value) return ''
+  const [y, m, d] = value.slice(0, 10).split('-').map(Number)
   if (!y || !m || !d) return ''
   const parts = new Intl.DateTimeFormat('fa-IR-u-ca-persian-nu-latn', {
     year: 'numeric',
@@ -87,9 +100,45 @@ const birthDateDisplay = computed(() => {
   }).formatToParts(new Date(Date.UTC(y, m - 1, d)))
   const get = (type: string) => parts.find(p => p.type === type)?.value ?? ''
   return `${get('relatedYear') || get('year')}/${get('month')}/${get('day')}`
-})
+}
+
+// مقدار فرم/ذخیره همیشه میلادی می‌مونه؛ فقط نمایشش شمسیه.
+const birthDateDisplay = computed(() => toJalaliText(birthDate.value))
 
 const inputClass = 'field'
+
+// ردیف‌های حالت نمایش (مثل کارت «اطلاعات کاربر»)
+const rows = computed(() => {
+  const u = user.value
+  const digits = (v: string) => isFa.value ? toPersianDigits(v) : v
+  const genderLabel = u?.gender
+    ? t(u.gender === 'male' ? 'pages.profile.genderMale' : 'pages.profile.genderFemale')
+    : ''
+  const joined = u?.joinedAt
+    ? new Intl.DateTimeFormat(intlLocale.value, { month: 'long', year: 'numeric' }).format(new Date(u.joinedAt))
+    : ''
+
+  return [
+    { key: 'name', icon: 'lucide:user', label: t('auth.name'), value: u?.name ?? '' },
+    { key: 'email', icon: 'lucide:mail', label: t('auth.email'), value: u?.email ?? '', ltr: true },
+    { key: 'phone', icon: 'lucide:phone', label: t('pages.profile.phone'), value: digits(u?.phone ?? ''), ltr: !isFa.value },
+    { key: 'gender', icon: 'lucide:venus-and-mars', label: t('pages.profile.gender'), value: genderLabel },
+    { key: 'nationalId', icon: 'lucide:id-card', label: t('pages.profile.nationalId'), value: digits(u?.nationalId ?? ''), ltr: !isFa.value },
+    { key: 'birthDate', icon: 'lucide:cake', label: t('pages.profile.birthDate'), value: digits(toJalaliText(u?.birthDate)), ltr: !isFa.value },
+    { key: 'bio', icon: 'lucide:text-quote', label: t('pages.profile.bio'), value: u?.bio ?? '', multiline: true },
+    { key: 'joined', icon: 'lucide:calendar', label: t('pages.profile.memberSince'), value: joined },
+  ]
+})
+
+function startEdit() {
+  resetForm({ values: userValues() })
+  editing.value = true
+}
+
+function cancelEdit() {
+  resetForm({ values: userValues() })
+  editing.value = false
+}
 
 function onLogout() {
   authStore.logout()
@@ -103,18 +152,11 @@ const onSubmit = handleSubmit(async (values) => {
     gender: values.gender,
     phone: normalizeDigits(values.phone.trim()),
     nationalId: normalizeDigits(values.nationalId.trim()),
+    bio: (values.bio ?? '').trim(),
   })
   if (ok) {
-    // فرم رو با مقادیر ذخیره‌شده (اعداد نرمال‌شده) دوباره مقداردهی می‌کنیم تا دکمه‌ی ذخیره غیرفعال بشه.
-    resetForm({
-      values: {
-        name: authStore.user?.name ?? '',
-        birthDate: authStore.user?.birthDate ?? '',
-        gender: authStore.user?.gender,
-        phone: authStore.user?.phone ?? '',
-        nationalId: authStore.user?.nationalId ?? '',
-      },
-    })
+    resetForm({ values: userValues() })
+    editing.value = false
     uiStore.showToast(t('pages.profile.saved'))
   }
   else if (authStore.error) {
@@ -126,8 +168,126 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div
     v-if="authStore.isLoggedIn"
-    class="glass-card p-4"
+    class="glass-card w-full p-4 sm:p-6"
   >
+    <!-- سربرگ -->
+    <header class="mb-5 flex items-center justify-between gap-3">
+      <h2 class="text-lg font-bold text-ink">
+        {{ t('pages.profile.account') }}
+      </h2>
+
+      <button
+        v-if="!editing"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-surface px-3.5 py-1.5 text-xs font-bold text-ink transition-colors hover:border-primary-500/40 hover:bg-primary-50 hover:text-primary-700"
+        @click="startEdit"
+      >
+        <Icon
+          name="lucide:pencil"
+          class="size-3.5"
+        />
+        {{ t('pages.profile.edit') }}
+      </button>
+    </header>
+
+    <!-- آواتار، اسم و ایمیل -->
+    <div class="flex items-center gap-4">
+      <AvatarUploader avatar-class="size-16 sm:size-20" />
+
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-lg font-bold text-ink sm:text-xl">
+          {{ user?.name || t('pages.profile.account') }}
+        </p>
+        <p
+          v-if="user?.email"
+          class="truncate text-sm text-ink-muted"
+          dir="ltr"
+          :class="isFa ? 'text-end' : 'text-start'"
+        >
+          {{ user.email }}
+        </p>
+        <span class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-[11px] font-bold text-primary-700">
+          <Icon
+            name="lucide:badge-check"
+            class="size-3.5"
+          />
+          {{ t('pages.profile.verified') }}
+        </span>
+      </div>
+    </div>
+
+    <!-- حالت نمایش -->
+    <div>
+      <dl class="mt-5 divide-y divide-ink/5 border-t border-ink/5 text-sm">
+        <div
+          v-for="row in rows"
+          :key="row.key"
+          class="flex gap-3 py-3.5"
+          :class="row.multiline ? 'items-start' : 'items-center'"
+        >
+          <div class="flex w-32 shrink-0 items-center gap-2.5 text-ink-muted sm:w-44">
+            <Icon
+              :name="row.icon"
+              class="size-4 shrink-0"
+            />
+            <dt class="truncate">
+              {{ row.label }}
+            </dt>
+          </div>
+          <dd
+            class="min-w-0 flex-1 font-medium text-ink"
+            :class="row.multiline ? 'whitespace-pre-line break-words leading-relaxed' : 'truncate'"
+          >
+            <span
+              v-if="row.value"
+              :dir="row.ltr ? 'ltr' : undefined"
+              :class="row.ltr && isFa ? 'inline-block' : ''"
+            >{{ row.value }}</span>
+            <span
+              v-else
+              class="font-normal text-ink-muted"
+            >—</span>
+          </dd>
+        </div>
+
+        <!-- رمز عبور -->
+        <div class="flex items-center gap-3 py-3.5">
+          <div class="flex w-32 shrink-0 items-center gap-2.5 text-ink-muted sm:w-44">
+            <Icon
+              name="lucide:shield"
+              class="size-4 shrink-0"
+            />
+            <dt class="truncate">
+              {{ t('auth.password') }}
+            </dt>
+          </div>
+          <dd class="flex min-w-0 flex-1 items-center justify-between gap-3">
+            <span
+              class="tracking-widest text-ink-muted"
+              dir="ltr"
+            >••••••••</span>
+            <button
+              type="button"
+              class="flex shrink-0 items-center gap-1 text-xs font-bold text-primary-700 hover:underline"
+              @click="showPasswordModal = true"
+            >
+              <Icon
+                name="lucide:key-round"
+                class="size-4"
+              />
+              {{ t('pages.profile.password.change') }}
+            </button>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- حالت ویرایش: توی دایلوگ -->
+    <AppModal
+      v-model="editing"
+      :title="t('pages.profile.editProfile')"
+      max-width="max-w-xl"
+    >
     <form
       class="flex flex-col gap-4"
       novalidate
@@ -165,7 +325,6 @@ const onSubmit = handleSubmit(async (values) => {
               dir="ltr"
               class="field pe-10 text-start"
             >
-            <!-- ایمیل با کد تایید وریفای شده -->
             <Icon
               name="lucide:badge-check"
               dir="ltr"
@@ -281,51 +440,63 @@ const onSubmit = handleSubmit(async (values) => {
             {{ t(errors.birthDate) }}
           </p>
         </div>
+
+        <!-- بیو -->
+        <div class="sm:col-span-2">
+          <div class="mb-1 flex items-center justify-between gap-2">
+            <label class="block text-sm font-medium text-ink">{{ t('pages.profile.bio') }}</label>
+            <span class="text-xs text-ink-muted">
+              {{ isFa ? toPersianDigits((bio ?? '').length) : (bio ?? '').length }}/{{ isFa ? toPersianDigits(bioMaxLength) : bioMaxLength }}
+            </span>
+          </div>
+          <textarea
+            v-model="bio"
+            v-bind="bioAttrs"
+            rows="3"
+            :maxlength="bioMaxLength"
+            :class="[inputClass, 'resize-none leading-relaxed', errors.bio ? 'border-status-danger' : '']"
+            :placeholder="t('pages.profile.bioPlaceholder')"
+          />
+          <p
+            v-if="errors.bio"
+            class="mt-1 text-xs text-status-danger"
+          >
+            {{ t(errors.bio) }}
+          </p>
+        </div>
       </div>
 
-      <!-- رمز عبور: با کلیک، اول رمز فعلی پرسیده می‌شه و بعد رمز جدید -->
-      <div>
-        <label class="mb-1 block text-sm font-medium text-ink">{{ t('auth.password') }}</label>
-        <button
+      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <AppButton
           type="button"
-          class="field flex items-center justify-between"
-          @click="showPasswordModal = true"
+          variant="ghost"
+          :disabled="authStore.loading"
+          @click="cancelEdit"
         >
-          <span
-            class="tracking-widest text-ink-muted"
-            dir="ltr"
-          >••••••••</span>
-          <span class="flex items-center gap-1 text-xs font-bold text-primary-700">
-            <Icon
-              name="lucide:key-round"
-              class="size-4"
-            />
-            {{ t('pages.profile.password.change') }}
-          </span>
-        </button>
+          {{ t('common.cancel') }}
+        </AppButton>
+        <AppButton
+          type="submit"
+          :loading="authStore.loading"
+          :disabled="!meta.dirty"
+        >
+          {{ t('pages.profile.saveChanges') }}
+        </AppButton>
       </div>
-
-      <AppButton
-        type="submit"
-        block
-        :loading="authStore.loading"
-        :disabled="!meta.dirty"
-      >
-        {{ t('pages.profile.saveChanges') }}
-      </AppButton>
-
-      <button
-        type="button"
-        class="flex w-full items-center justify-center gap-2 rounded-[var(--radius-control)] border border-status-danger/30 px-4 py-2.5 text-sm font-medium text-status-danger transition-colors hover:bg-status-danger/10"
-        @click="onLogout"
-      >
-        <Icon
-          name="lucide:log-out"
-          class="size-4"
-        />
-        {{ t('pages.profile.logout') }}
-      </button>
     </form>
+    </AppModal>
+
+    <button
+      type="button"
+      class="mt-5 flex w-full items-center justify-center gap-2 rounded-[var(--radius-control)] border border-status-danger/30 px-4 py-2.5 text-sm font-medium text-status-danger transition-colors hover:bg-status-danger/10"
+      @click="onLogout"
+    >
+      <Icon
+        name="lucide:log-out"
+        class="size-4"
+      />
+      {{ t('pages.profile.logout') }}
+    </button>
 
     <ChangePasswordModal v-model="showPasswordModal" />
   </div>

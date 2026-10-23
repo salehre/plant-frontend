@@ -101,7 +101,7 @@ function onImageError(e: Event) {
       <div class="absolute bottom-0 start-1/2 size-80 rounded-full bg-teal-100/20 blur-3xl" />
     </div>
 
-    <div class="flex flex-col gap-8 pb-6">
+    <div class="flex flex-col gap-5 pb-6 sm:gap-8">
       <!-- کاور و مشخصات کاربر -->
       <section class="glass-card relative overflow-hidden">
         <div class="pointer-events-none absolute -top-24 -end-10 size-64 rounded-full bg-primary-400/20 blur-3xl" />
@@ -126,9 +126,20 @@ function onImageError(e: Event) {
             />
           </div>
 
+          <span
+            v-if="joinedLabel"
+            class="absolute bottom-3 end-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-md sm:bottom-4 sm:end-4 sm:px-3 sm:py-1.5 sm:text-[11px]"
+          >
+            <Icon
+              name="lucide:calendar"
+              class="size-3.5"
+            />
+            {{ joinedLabel }}
+          </span>
+
           <div
             v-if="authStore.isLoggedIn"
-            class="absolute top-4 end-4 flex items-center gap-2"
+            class="absolute end-3 top-3 flex items-center gap-2 sm:end-4 sm:top-4"
           >
             <div class="flex items-center gap-1 rounded-full border border-white/10 bg-black/30 p-1 backdrop-blur-md">
               <button
@@ -171,23 +182,23 @@ function onImageError(e: Event) {
           >
         </div>
 
-        <div class="relative px-5 pb-7 sm:px-8 sm:pb-8">
+        <div class="relative px-4 pb-6 sm:px-8 sm:pb-8">
           <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-5">
-              <div class="relative z-10 -mt-14 shrink-0 sm:-mt-16">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+              <div class="relative z-10 -mt-12 w-fit shrink-0 sm:-mt-14">
                 <AvatarUploader
                   avatar-class="size-24 sm:size-32 shadow-card ring-4 ring-surface"
                 />
               </div>
 
-              <div class="min-w-0 flex-1 sm:pb-2">
-                <h1 class="truncate text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+              <div class="min-w-0 max-w-full flex-1 sm:pt-4">
+                <h1 class="truncate text-xl font-extrabold tracking-tight text-ink sm:text-3xl">
                   {{ displayName }}
                 </h1>
 
                 <p
                   v-if="user?.email"
-                  class="mt-1.5 flex items-center gap-2 truncate text-sm text-ink-muted"
+                  class="mt-1.5 flex min-w-0 items-center gap-2 text-sm text-ink-muted"
                 >
                   <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-600">
                     <Icon
@@ -195,44 +206,17 @@ function onImageError(e: Event) {
                       class="size-3"
                     />
                   </span>
-                  {{ user.email }}
-                </p>
-
-                <div class="mt-4 flex flex-wrap items-center gap-2">
                   <span
-                    v-if="joinedLabel"
-                    class="inline-flex items-center gap-1.5 rounded-full border border-primary-100 bg-primary-50/80 px-3 py-1.5 text-[11px] font-semibold text-primary-700"
-                  >
-                    <Icon
-                      name="lucide:calendar"
-                      class="size-3.5"
-                    />
-                    {{ joinedLabel }}
-                  </span>
-
-                  <span class="inline-flex items-center gap-1.5 rounded-full border border-primary-100 bg-primary-50/80 px-3 py-1.5 text-[11px] font-semibold text-primary-700">
-                    <Icon
-                      name="lucide:sprout"
-                      class="size-3.5"
-                    />
-                    {{ $t('pages.dashboard.plant') }}:
-                    {{ toPersianDigits(plantCount) }}
-                  </span>
-
-                  <span class="inline-flex items-center gap-1.5 rounded-full border border-primary-100 bg-primary-50/80 px-3 py-1.5 text-[11px] font-semibold text-primary-700">
-                    <Icon
-                      name="lucide:heart-pulse"
-                      class="size-3.5"
-                    />
-                    {{ toPersianDigits(healthRate) }}٪
-                  </span>
-                </div>
+                    class="min-w-0 truncate"
+                    dir="ltr"
+                  >{{ user.email }}</span>
+                </p>
               </div>
             </div>
 
             <NuxtLink
               to="/settings"
-              class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-surface shadow-card transition-all hover:bg-ink/90 hover:shadow-card-hover active:scale-[0.98] sm:mb-2"
+              class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-ink px-5 py-3 text-sm font-bold text-surface shadow-card transition-all hover:bg-ink/90 hover:shadow-card-hover active:scale-[0.98] sm:mb-2 sm:inline-flex sm:w-auto"
             >
               <Icon
                 name="lucide:pencil"

@@ -7,6 +7,7 @@ export interface UserProfileData {
   gender: Gender
   phone: string
   nationalId: string
+  bio?: string
 }
 
 export interface User {
@@ -20,6 +21,7 @@ export interface User {
   gender?: Gender
   phone?: string
   nationalId?: string
+  bio?: string
 }
 
 export interface UserPlant {
