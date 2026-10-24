@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
 import { sidebarIcons } from './sidebarIcons'
-import type { SettingsSectionKey } from '~/composables/useSettingsSections'
 
 const route = useRoute()
 const authStore = useAuthStore()
-const { sections: settingsSections, active: activeSettingsSection } = useSettingsSections()
 
 // منوی اصلی (مثل دیزاین) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
 const links = [
@@ -15,7 +12,6 @@ const links = [
   { to: '/identify', label: 'nav.identify', icon: sidebarIcons.scanLine },
   { to: '/ai-doctor', label: 'nav.aiDoctor', icon: sidebarIcons.stethoscope },
   { to: '/profile', label: 'nav.profile', icon: sidebarIcons.user },
-  { to: '/settings', label: 'pages.profile.settings', icon: sidebarIcons.settings },
 ]
 const secondaryLinks = [
   { to: '/dashboard', label: 'nav.dashboard', icon: sidebarIcons.layoutDashboard },
@@ -23,17 +19,10 @@ const secondaryLinks = [
   // { to: '/community', label: 'nav.community', icon: sidebarIcons.users },
   { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
   { to: '/support', label: 'support.nav', icon: sidebarIcons.lifeBuoy },
+  { to: '/contact', label: 'components.theFooter.contact', icon: sidebarIcons.mail },
 ]
 
-// آیکن (انیمیشن‌دار) هر بخش تنظیمات
-const settingsIcons: Record<SettingsSectionKey, Component> = {
-  account: sidebarIcons.user,
-  appearance: sidebarIcons.palette,
-  locations: sidebarIcons.mapPin,
-  about: sidebarIcons.info,
-}
-
-// با هر کلیک آیکن لینک دوباره ساخته می‌شه (تغییر key) تا انیمیشنش از اول اجرا بشه،
+// با هر کلیک آیکن لینک دوباره ساخته می‌شه (تغییر key) تا انیمیشنش از اول اجرا بشه，
 // حتی وقتی روی لینکی که همین الان اکتیوه کلیک می‌کنیم.
 const replay = reactive<Record<string, number>>({})
 function onLinkClick(to: string) {
@@ -46,8 +35,6 @@ function isActive(to: string) {
   return to === '/' ? route.path === '/' : (route.path === to || route.path.startsWith(`${to}/`))
 }
 
-// زیرمنوی تنظیمات فقط وقتی توی صفحه‌ی تنظیمات هستیم باز می‌شه
-const settingsOpen = computed(() => isActive('/settings'))
 </script>
 
 <template>
@@ -93,31 +80,6 @@ const settingsOpen = computed(() => isActive('/settings'))
           />
           {{ $t(link.label) }}
         </NuxtLink>
-
-        <!-- بخش‌های تنظیمات زیر لینک تنظیمات -->
-        <div
-          v-if="link.to === '/settings' && settingsOpen"
-          class="ms-5 mt-0.5 mb-1 flex flex-col gap-0.5 border-ink/10 ps-2"
-        >
-          <NuxtLink
-            v-for="section in settingsSections"
-            :key="section.key"
-            :to="{ path: '/settings', query: { section: section.key } }"
-            class="sidebar-link flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors"
-            :class="activeSettingsSection === section.key
-              ? 'sidebar-link--active bg-primary-50 font-bold text-primary-700'
-              : 'text-ink-muted hover:bg-primary-50/70 hover:text-primary-700'"
-            :aria-current="activeSettingsSection === section.key ? 'page' : undefined"
-            @click="onLinkClick(`settings:${section.key}`)"
-          >
-            <component
-              :is="settingsIcons[section.key]"
-              :key="iconKey(`settings:${section.key}`)"
-              class="size-4 shrink-0"
-            />
-            <span class="truncate">{{ section.label }}</span>
-          </NuxtLink>
-        </div>
       </template>
       <div class="my-2 border-t border-ink/5" />
 

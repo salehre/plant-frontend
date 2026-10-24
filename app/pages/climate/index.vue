@@ -59,7 +59,7 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
           {{ t('pages.climate.myAddresses') }}
         </p>
         <NuxtLink
-          to="/settings?section=locations"
+          to="/profile?tab=addresses"
           class="inline-flex items-center gap-1.5 rounded-xl border border-ink/10 bg-surface px-3.5 py-2 text-xs font-bold text-ink transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700"
         >
           <Icon
@@ -108,7 +108,7 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
         <ProvinceCitySelect v-model="selectedCityId" />
       </div>
       <NuxtLink
-        to="/settings?section=locations"
+        to="/profile?tab=addresses"
         class="inline-flex w-fit items-center gap-2 rounded-xl bg-primary-50 px-4 py-2.5 text-sm text-primary-700 transition-colors hover:bg-primary-100"
       >
         <Icon

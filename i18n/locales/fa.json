@@ -54,7 +54,7 @@
       "identify": "عکس بگیر یا آپلود کن",
       "aiDoctor": "با دکتر گیاه چت کن"
     },
-        "steps": {
+    "steps": {
       "title": "چطور کار می‌کنه؟",
       "description": "فقط چند مرحله تا شناختن گیاهت فاصله داری",
       "note": "فقط یک عکس تا دنیای گیاهان فاصله داری…",
@@ -193,10 +193,10 @@
     "viewfinderHint": "دوربین را روشن کن یا عکسی از گالری انتخاب کن",
     "tipsTitle": "نکته‌هایی برای نتیجه‌ی بهتر",
     "tips": {
-    "clear": "عکس واضح و فوکوس‌شده بگیر",
-    "light": "در نور مناسب عکس بگیر",
-    "frame": "گیاه را کامل در کادر قرار بده",
-    "blur": "از تار شدن عکس جلوگیری کن"
+      "clear": "عکس واضح و فوکوس‌شده بگیر",
+      "light": "در نور مناسب عکس بگیر",
+      "frame": "گیاه را کامل در کادر قرار بده",
+      "blur": "از تار شدن عکس جلوگیری کن"
     },
     "pointHint": "گیاه را داخل کادر قرار بده",
     "overview": "نمای کلی",
@@ -330,8 +330,8 @@
       "memberSince": "عضو از",
       "recentActivity": "فعالیت اخیر",
       "identified": "شناسایی‌شده",
-        "activity": {
-       "filters": {
+      "activity": {
+        "filters": {
           "all": "همه",
           "scan": "اسکن‌ها",
           "plant_added": "باغچه",
@@ -446,6 +446,63 @@
         "currentPasswordWrong": "رمز عبور فعلی اشتباه است.",
         "sameAsOld": "رمز جدید نباید با رمز فعلی یکی باشد",
         "notLoggedIn": "ابتدا باید وارد حسابت بشی."
+      },
+      "tabs": {
+        "overview": "نمای کلی",
+        "myPlants": "گیاه‌های من",
+        "achievements": "دستاوردها",
+        "activity": "فعالیت",
+        "account": "حساب کاربری",
+        "appearance": "ظاهر ",
+        "addresses": "آدرس‌ها",
+        "about": "درباره"
+      },
+      "level": {
+        "beginner": "تازه‌کار",
+        "lover": "عاشق گیاه"
+      },
+      "plantsMeta": "گیاه‌ها: {n}",
+      "stats": {
+        "totalPlants": "کل گیاه‌ها",
+        "scans": "اسکن‌ها",
+        "species": "گونه‌های شناسایی‌شده",
+        "health": "سلامت گیاهان",
+        "delta": "+{n} این ماه",
+        "deltaNone": "بدون تغییر این ماه",
+        "healthyOf": "{healthy} از {total} گیاه سالم"
+      },
+      "overview": {
+        "recentScans": "آخرین اسکن‌ها",
+        "noScans": "هنوز اسکنی ثبت نشده"
+      },
+      "myPlants": {
+        "title": "گیاه‌های من",
+        "empty": "هنوز گیاهی به باغچه‌ت اضافه نکردی",
+        "emptyCta": "افزودن گیاه"
+      },
+      "achievements": {
+        "title": "دستاوردها",
+        "unlockedCount": "{n} از {total} باز شده",
+        "unlocked": "باز شده",
+        "progress": "{current} از {target}",
+        "items": {
+          "firstPlant": {
+            "title": "اولین گیاه",
+            "description": "اولین گیاهت رو به باغچه اضافه کن"
+          },
+          "scanner": {
+            "title": "اسکنر فعال",
+            "description": "۱۰ گیاه رو اسکن کن"
+          },
+          "collector": {
+            "title": "کلکسیونر گونه‌ها",
+            "description": "۱۰ گونه‌ی مختلف شناسایی کن"
+          },
+          "greenThumb": {
+            "title": "دست سبز",
+            "description": "۵ گیاه سالم داشته باش"
+          }
+        }
       }
     },
     "history": {

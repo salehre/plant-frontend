@@ -156,6 +156,13 @@ export const sidebarIcons = {
     circle('hole', 12, 12, 3.5),
     path('straps', 'M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M14.5 9.5l3.9-3.9M5.6 18.4l3.9-3.9'),
   ]),
+
+  // تماس با ما
+  mail: createIcon('mail', [
+    rect('envelope', 3, 5, 18, 14, 2),
+    path('flap', 'M3.5 7l8.5 6 8.5-6'),
+  ]),
+  
 } as const
 
 export type SidebarIconName = keyof typeof sidebarIcons

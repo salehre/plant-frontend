@@ -140,6 +140,9 @@ function cancelEdit() {
   editing.value = false
 }
 
+// والد (تب حساب در پروفایل) از این می‌تونه دایلوگ ویرایش رو باز کنه
+defineExpose({ startEdit })
+
 function onLogout() {
   authStore.logout()
   navigateTo('/')
@@ -189,32 +192,6 @@ const onSubmit = handleSubmit(async (values) => {
         {{ t('pages.profile.edit') }}
       </button>
     </header>
-
-    <!-- آواتار، اسم و ایمیل -->
-    <div class="flex items-center gap-4">
-      <AvatarUploader avatar-class="size-16 sm:size-20" />
-
-      <div class="min-w-0 flex-1">
-        <p class="truncate text-lg font-bold text-ink sm:text-xl">
-          {{ user?.name || t('pages.profile.account') }}
-        </p>
-        <p
-          v-if="user?.email"
-          class="truncate text-sm text-ink-muted"
-          dir="ltr"
-          :class="isFa ? 'text-end' : 'text-start'"
-        >
-          {{ user.email }}
-        </p>
-        <span class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-[11px] font-bold text-primary-700">
-          <Icon
-            name="lucide:badge-check"
-            class="size-3.5"
-          />
-          {{ t('pages.profile.verified') }}
-        </span>
-      </div>
-    </div>
 
     <!-- حالت نمایش -->
     <div>

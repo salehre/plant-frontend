@@ -196,13 +196,13 @@ function confirmRemove() {
       :title="t('pages.profile.addressRemoveTitle')"
     >
       <div class="flex items-start gap-3">
-        <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-status-danger/10 text-status-danger">
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-status-danger/10 text-status-danger">
           <Icon
             name="lucide:trash-2"
             class="size-5"
           />
         </span>
-        <p class="text-sm leading-7 text-ink-muted">
+        <p class="text-sm leading-10 text-ink-muted">
           {{ t('pages.profile.addressRemoveConfirm', { name: pendingRemove?.label || pendingRemove?.cityName || '' }) }}
         </p>
       </div>

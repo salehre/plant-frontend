@@ -9,6 +9,11 @@
     focusable="false"
   >
     <defs>
+      <!-- Soft Shadow Filter for depth -->
+      <filter id="pc-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.08" />
+      </filter>
+
       <g id="pc-leaf">
         <path d="M0 0 C8 -17 32 -22 50 -9 C36 9 10 11 0 0 Z" class="fill-primary-500" />
         <path d="M2 0 C16 -3 32 -6 46 -9" class="stroke-primary-800/40" stroke-width="1.4" stroke-linecap="round" />
@@ -28,8 +33,11 @@
       <ellipse id="pc-petal" cx="0" cy="-11" rx="6.5" ry="11" class="fill-accent-400" />
     </defs>
 
-    <path d="M-80 320 C-40 302 60 296 150 301 C190 292 225 290 260 296 L260 320 Z" class="fill-primary-700/25" />
-    <path d="M-30 320 C20 308 100 305 170 308 C205 303 235 303 260 305 L260 320 Z" class="fill-primary-700/30" />
+    <!-- Base Soil with subtle shadow -->
+    <g filter="url(#pc-shadow)">
+      <path d="M-80 320 C-40 302 60 296 150 301 C190 292 225 290 260 296 L260 320 Z" class="fill-primary-700/25" />
+      <path d="M-30 320 C20 308 100 305 170 308 C205 303 235 303 260 305 L260 320 Z" class="fill-primary-700/30" />
+    </g>
 
     <g class="pc-sway pc-sway-slow" style="transform-origin: 236px 308px">
       <path d="M236 308 C236 280 246 258 244 232" class="stroke-primary-400" stroke-width="4" stroke-linecap="round" />
@@ -40,18 +48,18 @@
 
     <g class="pc-sway pc-sway-mid" style="transform-origin: 128px 316px">
       <g transform="translate(-22 0)">
-      <path d="M150 318 C153 285 145 255 150 218" class="stroke-primary-600" stroke-width="3.5" stroke-linecap="round" />
-      <use href="#pc-leaf" transform="translate(151 290) rotate(-20) scale(.6)" />
-      <use href="#pc-leaf" transform="translate(148 262) rotate(-160) scale(.55)" />
-      <g transform="translate(150 212)">
-        <use href="#pc-petal" />
-        <use href="#pc-petal" transform="rotate(60)" />
-        <use href="#pc-petal" transform="rotate(120)" />
-        <use href="#pc-petal" transform="rotate(180)" />
-        <use href="#pc-petal" transform="rotate(240)" />
-        <use href="#pc-petal" transform="rotate(300)" />
-        <circle r="6" class="fill-accent-700" />
-      </g>
+        <path d="M150 318 C153 285 145 255 150 218" class="stroke-primary-600" stroke-width="3.5" stroke-linecap="round" />
+        <use href="#pc-leaf" transform="translate(151 290) rotate(-20) scale(.6)" />
+        <use href="#pc-leaf" transform="translate(148 262) rotate(-160) scale(.55)" />
+        <g transform="translate(150 212)">
+          <use href="#pc-petal" />
+          <use href="#pc-petal" transform="rotate(60)" />
+          <use href="#pc-petal" transform="rotate(120)" />
+          <use href="#pc-petal" transform="rotate(180)" />
+          <use href="#pc-petal" transform="rotate(240)" />
+          <use href="#pc-petal" transform="rotate(300)" />
+          <circle r="6" class="fill-accent-700" />
+        </g>
       </g>
     </g>
 
@@ -114,19 +122,23 @@
 }
 .pc-sway {
   transform-box: view-box;
-  animation: pc-sway 7s ease-in-out infinite;
+  animation: pc-sway 7.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
 }
 .pc-sway-slow {
-  animation-duration: 9s;
+  animation-duration: 9.5s;
   animation-delay: -2s;
 }
 .pc-sway-mid {
-  animation-duration: 8s;
+  animation-duration: 8.2s;
   animation-delay: -4s;
 }
 @keyframes pc-sway {
-  0%, 100% { transform: rotate(-1.2deg); }
-  50% { transform: rotate(1.4deg); }
+  0%, 100% { 
+    transform: rotate(-1.5deg) skewX(-0.6deg); 
+  }
+  50% { 
+    transform: rotate(1.8deg) skewX(0.6deg); 
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .pc-sway { animation: none; }

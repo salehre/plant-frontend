@@ -54,7 +54,7 @@
       "identify": "Scan or upload",
       "aiDoctor": "Chat with the Plant Doctor"
     },
-      "steps": {
+    "steps": {
       "title": "How does it work?",
       "description": "Just a few steps between you and knowing your plant",
       "note": "You're just one photo away from the world of plants…",
@@ -193,10 +193,10 @@
     "viewfinderHint": "Turn on the camera or pick a photo from your gallery",
     "tipsTitle": "Tips for better results",
     "tips": {
-    "clear": "Use a clear, focused image",
-    "light": "Shoot in good lighting",
-    "frame": "Fill the frame with the plant",
-    "blur": "Avoid blurry photos"
+      "clear": "Use a clear, focused image",
+      "light": "Shoot in good lighting",
+      "frame": "Fill the frame with the plant",
+      "blur": "Avoid blurry photos"
     },
     "pointHint": "Position the plant inside the frame",
     "overview": "Overview",
@@ -330,7 +330,7 @@
       "memberSince": "Member since",
       "recentActivity": "Recent activity",
       "identified": "Identified",
-        "activity": {
+      "activity": {
         "filters": {
           "all": "All",
           "scan": "Scans",
@@ -446,6 +446,63 @@
         "currentPasswordWrong": "The current password is incorrect.",
         "sameAsOld": "The new password must be different from the current one",
         "notLoggedIn": "Please sign in first."
+      },
+      "tabs": {
+        "overview": "Overview",
+        "myPlants": "My Plants",
+        "achievements": "Achievements",
+        "activity": "Activity",
+        "account": "Account",
+        "appearance": "Appearance",
+        "addresses": "Addresses",
+        "about": "About"
+      },
+      "level": {
+        "beginner": "Beginner",
+        "lover": "Plant Lover"
+      },
+      "plantsMeta": "Plants: {n}",
+      "stats": {
+        "totalPlants": "Total plants",
+        "scans": "Scans",
+        "species": "Species identified",
+        "health": "Plant health",
+        "delta": "+{n} this month",
+        "deltaNone": "No change this month",
+        "healthyOf": "{healthy} of {total} healthy"
+      },
+      "overview": {
+        "recentScans": "Recent scans",
+        "noScans": "No scans yet"
+      },
+      "myPlants": {
+        "title": "My plants",
+        "empty": "You haven't added any plants to your garden yet",
+        "emptyCta": "Add a plant"
+      },
+      "achievements": {
+        "title": "Achievements",
+        "unlockedCount": "{n} of {total} unlocked",
+        "unlocked": "Unlocked",
+        "progress": "{current} of {target}",
+        "items": {
+          "firstPlant": {
+            "title": "First plant",
+            "description": "Add your first plant to your garden"
+          },
+          "scanner": {
+            "title": "Active scanner",
+            "description": "Scan 10 plants"
+          },
+          "collector": {
+            "title": "Species collector",
+            "description": "Identify 10 different species"
+          },
+          "greenThumb": {
+            "title": "Green thumb",
+            "description": "Keep 5 healthy plants"
+          }
+        }
       }
     },
     "history": {
