@@ -98,7 +98,7 @@ const levelKey = computed(() =>
           </div>
 
           <div class="min-w-0 max-w-full sm:pb-1">
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2 pt-4">
               <h1 class="truncate text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
                 {{ displayName }}
               </h1>

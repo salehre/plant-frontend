@@ -59,6 +59,17 @@ function formatPercent(value: number) {
     value: new Intl.NumberFormat(locale.value, { useGrouping: false }).format(Math.round(value * 100)),
   })
 }
+// متن‌های حالت خالی (وقتی کاربر هنوز هیچ فعالیتی نداره)
+const emptyText = computed(() => locale.value === 'fa'
+  ? {
+      title: 'هنوز فعالیتی نداشتی',
+      text: 'با اولین اسکن، افزودن گیاه یا انجام یه کار مراقبتی، فعالیت‌هات اینجا نمایش داده می‌شن.',
+    }
+  : {
+      title: 'No activity yet',
+      text: 'Scan a plant, add one to your garden or finish a care task and your activity will show up here.',
+    })
+
 function onImageError(e: Event) {
   (e.target as HTMLImageElement).style.visibility = 'hidden'
 }
@@ -164,5 +175,48 @@ function onImageError(e: Event) {
     >
       {{ $t('pages.profile.activity.showMore') }}
     </button>
+  </section>
+
+  <!-- حالت خالی: هنوز هیچ فعالیتی ثبت نشده -->
+  <section
+    v-else
+    class="glass-card flex flex-col items-center gap-4 px-6 py-12 text-center sm:py-16"
+  >
+    <span class="flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary-600 dark:bg-primary-950/40 dark:text-primary-300">
+      <Icon
+        name="lucide:activity"
+        class="size-8"
+      />
+    </span>
+    <div class="max-w-sm">
+      <h2 class="text-base font-bold text-ink">
+        {{ emptyText.title }}
+      </h2>
+      <p class="mt-2 text-sm leading-7 text-ink-muted">
+        {{ emptyText.text }}
+      </p>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <NuxtLink
+        to="/identify"
+        class="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-700"
+      >
+        <Icon
+          name="lucide:scan-line"
+          class="size-4"
+        />
+        {{ t('nav.identify') }}
+      </NuxtLink>
+      <NuxtLink
+        to="/my-plants"
+        class="inline-flex items-center gap-2 rounded-xl border border-ink/10 bg-surface px-5 py-2.5 text-sm font-bold text-ink transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700"
+      >
+        <Icon
+          name="lucide:sprout"
+          class="size-4"
+        />
+        {{ t('nav.myPlants') }}
+      </NuxtLink>
+    </div>
   </section>
 </template>

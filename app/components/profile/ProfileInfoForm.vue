@@ -245,14 +245,19 @@ const onSubmit = handleSubmit(async (values) => {
             >••••••••</span>
             <button
               type="button"
-              class="flex shrink-0 items-center gap-1 text-xs font-bold text-primary-700 hover:underline"
+              class="inline-flex size-9 items-center justify-center rounded-full border border-ink/10 bg-surface py-1.5 text-xs font-bold text-ink transition-colors hover:border-primary-500/40 hover:bg-primary-50 hover:text-primary-700 sm:size-auto sm:justify-start sm:gap-1.5 sm:px-3.5"
+              :aria-label="t('pages.profile.password.change')"
               @click="showPasswordModal = true"
             >
               <Icon
-                name="lucide:key-round"
-                class="size-4"
+                name="lucide:pencil"
+                class="size-4 sm:hidden"
               />
-              {{ t('pages.profile.password.change') }}
+              <Icon
+                name="lucide:key-round"
+                class="hidden size-4 sm:block"
+              />
+              <span class="hidden sm:inline">{{ t('pages.profile.password.change') }}</span>
             </button>
           </dd>
         </div>

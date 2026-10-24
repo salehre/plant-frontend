@@ -74,15 +74,15 @@ function onImageError(e: Event) {
       <div
         v-for="card in cards"
         :key="card.key"
-        class="glass-card flex flex-col gap-4 p-4 transition-shadow duration-300 hover:shadow-card-hover sm:p-5"
+        class="glass-card stat-card flex flex-col gap-4 p-4 transition-shadow duration-300 hover:shadow-card-hover sm:p-5"
       >
         <span class="flex size-10 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-950/40 dark:text-primary-300">
           <Icon
             :name="card.icon"
-            class="size-5"
+            class="size-5 justify-end"
           />
         </span>
-        <div>
+        <div class="flex gap-2">
           <p class="text-2xl font-extrabold leading-none tracking-tight text-ink sm:text-3xl">
             {{ card.value }}
           </p>
@@ -171,3 +171,50 @@ function onImageError(e: Event) {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* زاویه‌ی گرادیانت قابل انیمیت (برای چرخوندن خط دور کارت) */
+@property --stat-border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* خط ۱ پیکسلی که موقع هاور دور کارت می‌چرخه */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 1px; /* ضخامت خط */
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--stat-border-angle),
+    transparent 0%,
+    transparent 55%,
+    rgb(var(--color-primary-300)) 80%,
+    rgb(var(--color-primary-500)) 100%
+  );
+  /* فقط حاشیه دیده بشه، داخل کارت خالی بمونه */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+  animation: stat-border-spin 2.4s linear infinite;
+}
+
+@keyframes stat-border-spin {
+  to { --stat-border-angle: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card:hover::before {
+    animation: none;
+  }
+}
+</style>

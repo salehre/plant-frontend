@@ -17,6 +17,42 @@ const { plantCount, healthyCount, scanCount, speciesCount } = useProfileStats()
 const visited = reactive(new Set<ProfileTabKey>(['overview']))
 watch(activeTab, key => visited.add(key), { immediate: true })
 
+// ---- خط متحرک زیر تب‌ها: یه indicator واحد که به تب فعال می‌لغزه ----
+const tabsEl = ref<HTMLElement | null>(null)
+const tabButtons = new Map<ProfileTabKey, HTMLElement>()
+const indicator = reactive({ left: 0, width: 0, ready: false })
+
+function setTabButton(key: ProfileTabKey, el: unknown) {
+  if (el) tabButtons.set(key, el as HTMLElement)
+  else tabButtons.delete(key)
+}
+
+function updateIndicator() {
+  const el = tabButtons.get(activeTab.value)
+  if (!el) return
+  indicator.left = el.offsetLeft
+  indicator.width = el.offsetWidth
+}
+
+watch(activeTab, async (key) => {
+  await nextTick()
+  updateIndicator()
+  // توی موبایل تب فعال رو وسط نوار بیار
+  tabButtons.get(key)?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
+})
+watch(locale, async () => {
+  await nextTick()
+  updateIndicator()
+})
+
+onMounted(() => {
+  updateIndicator()
+  // اولین موقعیت‌دهی بدون انیمیشن؛ بعدش transition فعال می‌شه
+  requestAnimationFrame(() => { indicator.ready = true })
+  document.fonts?.ready.then(updateIndicator)
+})
+useResizeObserver(tabsEl, updateIndicator)
+
 const accountForm = ref<{ startEdit: () => void } | null>(null)
 
 // «ویرایش پروفایل» تب حساب رو باز می‌کنه و دایلوگ ویرایش رو بالا میاره
@@ -47,40 +83,54 @@ async function openEdit() {
           role="tablist"
           :aria-label="t('pages.profile.title')"
         >
-          <div class="flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div
+            ref="tabsEl"
+            class="relative flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
             <button
               v-for="tab in mainProfileTabs"
               :key="tab.key"
+              :ref="el => setTabButton(tab.key, el)"
               type="button"
               role="tab"
               :aria-selected="activeTab === tab.key"
-              class="relative shrink-0 px-3 py-3.5 text-sm font-semibold transition-colors"
+              class="shrink-0 px-3 py-3.5 text-sm font-semibold transition-colors"
               :class="activeTab === tab.key ? 'text-primary-700' : 'text-ink-muted hover:text-ink'"
               @click="setTab(tab.key)"
             >
               {{ t(tab.label) }}
-              <span
-                v-if="activeTab === tab.key"
-                class="absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-primary-600"
-              />
             </button>
+
+            <!-- جداکننده‌ی تب‌های اصلی از تب‌های تنظیمات -->
+            <span
+              class="mx-1 h-5 w-px shrink-0 bg-ink/10"
+              aria-hidden="true"
+            />
 
             <button
               v-for="tab in settingsProfileTabs"
               :key="tab.key"
+              :ref="el => setTabButton(tab.key, el)"
               type="button"
               role="tab"
               :aria-selected="activeTab === tab.key"
-              class="relative shrink-0 px-3 py-3.5 text-sm font-semibold transition-colors"
+              class="shrink-0 px-3 py-3.5 text-sm font-semibold transition-colors"
               :class="activeTab === tab.key ? 'text-primary-700' : 'text-ink-muted hover:text-ink'"
               @click="setTab(tab.key)"
             >
               {{ t(tab.label) }}
-              <span
-                v-if="activeTab === tab.key"
-                class="absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-primary-600"
-              />
             </button>
+
+            <span
+              class="pointer-events-none absolute bottom-0 left-0 h-0.5 rounded-full bg-primary-600 motion-reduce:transition-none"
+              :class="indicator.ready ? 'transition-[transform,width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]' : ''"
+              :style="{
+                width: `${Math.max(indicator.width - 16, 0)}px`,
+                transform: `translateX(${indicator.left + 8}px)`,
+                opacity: indicator.width ? 1 : 0,
+              }"
+              aria-hidden="true"
+            />
           </div>
         </nav>
       </section>
@@ -160,44 +210,3 @@ async function openEdit() {
     </div>
   </div>
 </template>
-
-<style scoped>
-@property --stat-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  padding: 1px;
-  border-radius: inherit;
-  pointer-events: none;
-  background: conic-gradient(
-    from var(--stat-angle),
-    transparent 0%,
-    transparent 65%,
-    rgb(var(--color-primary-500)) 90%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: stat-border-spin 2.5s linear infinite;
-}
-
-.stat-card:hover::before {
-  opacity: 1;
-}
-
-@keyframes stat-border-spin {
-  to {
-    --stat-angle: 360deg;
-  }
-}
-</style>
