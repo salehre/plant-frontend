@@ -129,9 +129,12 @@ function onLogout() {
             <p
               v-if="user?.email"
               class="mt-1 truncate text-sm text-ink-muted"
-              dir="ltr"
+              :dir="locale === 'fa' ? 'rtl' : 'ltr'"
             >
-              {{ user.email }}
+              <span
+                dir="ltr"
+                class="inline-block max-w-full"
+              >{{ user.email }}</span>
             </p>
 
             <div class="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-muted">

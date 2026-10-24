@@ -4,7 +4,6 @@ import { sidebarIcons } from './sidebarIcons'
 const route = useRoute()
 const authStore = useAuthStore()
 
-// منوی اصلی (مثل دیزاین) + منوی فرعی کوچک‌تر برای بقیه‌ی صفحه‌ها
 const links = [
   { to: '/', label: 'nav.home', icon: sidebarIcons.home },
   { to: '/my-plants', label: 'nav.myPlants', icon: sidebarIcons.sprout },
@@ -12,25 +11,22 @@ const links = [
   { to: '/identify', label: 'nav.identify', icon: sidebarIcons.scanLine },
   { to: '/ai-doctor', label: 'nav.aiDoctor', icon: sidebarIcons.stethoscope },
   { to: '/profile', label: 'nav.profile', icon: sidebarIcons.user },
+  { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
 ]
 const secondaryLinks = [
   { to: '/dashboard', label: 'nav.dashboard', icon: sidebarIcons.layoutDashboard },
   { to: '/climate', label: 'nav.climate', icon: sidebarIcons.cloudSun },
   // { to: '/community', label: 'nav.community', icon: sidebarIcons.users },
-  { to: '/about', label: 'components.theFooter.about', icon: sidebarIcons.info },
   { to: '/support', label: 'support.nav', icon: sidebarIcons.lifeBuoy },
   { to: '/contact', label: 'components.theFooter.contact', icon: sidebarIcons.mail },
 ]
 
-// با هر کلیک آیکن لینک دوباره ساخته می‌شه (تغییر key) تا انیمیشنش از اول اجرا بشه，
-// حتی وقتی روی لینکی که همین الان اکتیوه کلیک می‌کنیم.
 const replay = reactive<Record<string, number>>({})
 function onLinkClick(to: string) {
   replay[to] = (replay[to] ?? 0) + 1
 }
 const iconKey = (to: string) => `${to}-${replay[to] ?? 0}`
 
-// تطبیق با مرز سگمنت: /plants و /plants/rose فعالن ولی /plants-xyz نه
 function isActive(to: string) {
   return to === '/' ? route.path === '/' : (route.path === to || route.path.startsWith(`${to}/`))
 }
@@ -102,7 +98,6 @@ function isActive(to: string) {
       </NuxtLink>
     </nav>
 
-    <!-- کارت دعوت به اسکن -->
     <div class="relative overflow-hidden rounded-2xl bg-primary-900 p-4 text-white">
       <img
         src="/images/plants/footer.webp"

@@ -46,7 +46,7 @@ function onSearch() {
           v-model="query"
           type="search"
           :placeholder="$t('common.searchPlaceholder')"
-          class="h-11 w-full border border-ink/10 bg-surface ps-10 pe-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15"
+          class="h-11 w-full !rounded-full border border-ink/10 bg-surface ps-10 pe-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15"
         >
       </form>
 
@@ -54,7 +54,7 @@ function onSearch() {
         <!-- تغییر زبان -->
         <button
           type="button"
-          class="hidden size-10 items-center justify-center rounded-full text-xs font-bold text-primary-700 transition-colors hover:bg-primary-50 md:flex"
+          class="hidden size-10 items-center justify-center rounded-full text-xs font-bold text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none md:flex"
           :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           @click="toggleLocale"
@@ -65,7 +65,7 @@ function onSearch() {
         <!-- دارک / لایت مود (موبایل و دسکتاپ) -->
         <button
           type="button"
-          class="flex size-10 items-center justify-center rounded-full text-primary-700 transition-colors hover:bg-primary-50"
+          class="flex size-10 items-center justify-center rounded-full text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none"
           :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
@@ -79,7 +79,7 @@ function onSearch() {
         <!-- اعلان: تسک‌های امروز -->
         <NuxtLink
           to="/care-calendar"
-          class="relative flex size-10 items-center justify-center rounded-full text-primary-700 transition-colors hover:bg-primary-50"
+          class="relative flex size-10 items-center justify-center rounded-full text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none"
           :aria-label="$t('nav.careCalendar')"
         >
           <Icon
@@ -95,7 +95,7 @@ function onSearch() {
         <!-- پروفایل -->
         <NuxtLink
           to="/profile"
-          class="hidden size-10 items-center justify-center rounded-full ring-2 ring-transparent transition hover:bg-primary-50 md:flex"
+          class="hidden size-10 items-center justify-center rounded-full ring-2 ring-transparent transition-[transform,background-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none md:flex"
           :aria-label="$t('nav.profile')"
         >
           <UserAvatar
