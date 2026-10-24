@@ -21,7 +21,7 @@ const experienceToDifficulty: Record<string, Difficulty> = { beginner: 'easy', i
 const weights = { light: 30, watering: 25, experience: 25, pets: 20 } as const
 const MAX_RESULTS = 3
 
-/** ۱ = دقیقاً یکی، ۰.۵ = یک پله فاصله، ۰ = دورتر */
+/** 1 = دقیقاً یکی، 0.5 = یک پله فاصله، 0 = دورتر */
 function closeness<T>(order: T[], a: T, b: T) {
   const distance = Math.abs(order.indexOf(a) - order.indexOf(b))
   if (distance === 0) return 1

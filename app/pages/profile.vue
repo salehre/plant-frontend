@@ -72,7 +72,7 @@ const stats = computed(() => [
   },
   {
     icon: 'lucide:heart-pulse',
-    value: `${toPersianDigits(healthRate.value)}٪`,
+    value: `${toPersianDigits(healthRate.value)}%`,
     label: 'pages.dashboard.healthRate',
   },
 ])

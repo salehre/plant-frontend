@@ -36,10 +36,10 @@ const option = computed<EChartsOption>(() => {
   <div class="relative">
     <AppChart
       :option="option"
-      :aria-label="`${t('pages.dashboard.healthRate')}: ${toPersianDigits(percent)}٪`"
+      :aria-label="`${t('pages.dashboard.healthRate')}: ${toPersianDigits(percent)}%`"
     />
     <span class="absolute inset-0 flex items-center justify-center text-lg font-extrabold text-ink">
-      {{ toPersianDigits(percent) }}٪
+      {{ toPersianDigits(percent) }}%
     </span>
   </div>
 </template>

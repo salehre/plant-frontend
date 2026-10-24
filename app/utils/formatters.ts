@@ -2,9 +2,8 @@
  * Locale-aware number and date formatting shared by page and component templates.
  */
 export function toPersianDigits(value: number | string): string {
-  if (getLocale().startsWith('en')) return String(value)
-  const fa = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
-  return String(value).replace(/\d/g, d => fa[Number(d)] ?? d)
+  // همه‌ی اعداد پروژه انگلیسی (لاتین) نمایش داده می‌شن
+  return String(value)
 }
 
 /**
@@ -22,7 +21,7 @@ export function toJalaliDate(isoDate: string): string {
 
 export function formatConfidence(value: number): string {
   const percentage = new Intl.NumberFormat(getLocale(), { maximumFractionDigits: 0 }).format(Math.round(value * 100))
-  return `${percentage}${getLocale().startsWith('en') ? '%' : '٪'}`
+  return `${percentage}%`
 }
 
 const difficultyLabels: Record<string, Record<'fa' | 'en', string>> = {

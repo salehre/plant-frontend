@@ -66,7 +66,7 @@ interface PlantSpec {
   lastWateredDaysAgo: number
 }
 
-// ۷ گیاه با وضعیت‌های مختلف: ۴ سالم، ۲ نیازمند توجه، ۱ بیمار
+// 7 گیاه با وضعیت‌های مختلف: 4 سالم، 2 نیازمند توجه، 1 بیمار
 const plantSpecs: PlantSpec[] = [
   { slug: 'monstera-deliciosa', nickname: 'مونی', location: 'پذیرایی', healthStatus: 'healthy', acquiredDaysAgo: 340, waterEvery: 7, lastWateredDaysAgo: 3 },
   { slug: 'ficus-lyrata', nickname: 'فیکوسی', location: 'اتاق کار', healthStatus: 'needs_attention', acquiredDaysAgo: 240, waterEvery: 7, lastWateredDaysAgo: 8 },

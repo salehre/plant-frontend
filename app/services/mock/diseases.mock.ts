@@ -42,7 +42,7 @@ export const mockDiseases: Disease[] = [
     category: 'nutrient',
     symptoms: ['زرد شدن یکنواخت برگ‌های قدیمی', 'رشد کند', 'کوچک ماندن برگ‌های جدید'],
     causes: ['کمبود نیتروژن یا آهن در خاک', 'عدم کوددهی طولانی‌مدت'],
-    treatment: ['استفاده از کود مایع متعادل هر ۲ هفته', 'بررسی pH خاک'],
+    treatment: ['استفاده از کود مایع متعادل هر 2 هفته', 'بررسی pH خاک'],
     image: '/images/plants/issue/4.jpg',
     severity: 'low',
   },
