@@ -65,7 +65,11 @@ const aboutRows = computed(() => [
         class="flex flex-col gap-5"
         :class="panelClass('account')"
       >
-        <ProfileInfoForm />
+        <div class="w-full md:max-w-2xl">
+          <ProfileInfoForm />
+        </div>
+        <!-- گیاه از لبه‌ی انتهایی خود صفحه (نه کارت) بیرون میاد؛ فقط وقتی جا هست دیده می‌شه -->
+        <PlantCornerIllustration class="fixed bottom-0 end-[-0.75rem] z-0 hidden h-auto w-72 xl:block 2xl:w-96" />
       </section>
 
       <!-- ظاهر و زبان -->
