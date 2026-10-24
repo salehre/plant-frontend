@@ -10,15 +10,11 @@ const uiStore = useUiStore()
 
 useHead(() => ({ title: t('contact.pageTitle') }))
 
-// اطلاعات تماس - قبل از انتشار با اطلاعات واقعی خودت جایگزین کن (ایمیل، تلفن، آدرس و ساعت کاری در i18n)
 const email = 'salehrezaeipoor123@gmail.com'
 const phone = '0930 037 7838'
 
-// نقشه‌ی نشان: مختصات مکان به‌صورت [طول جغرافیایی, عرض جغرافیایی] - الان مرکز تهران (نمونه)،
-// با مختصات واقعی خودت جایگزین کن. کلید نقشه از VITE_NESHAN_MAP_KEY توی .env خونده می‌شه.
-// mapLink (اختیاری): لینک مکان توی نشان/گوگل‌مپ برای دکمه‌ی «مشاهده روی نقشه».
-const mapCenter: [number, number] = [51.389, 35.6892]
-const mapLink = ''
+const mapCenter: [number, number] = [52.349051, 36.452597]
+const mapLink = computed(() => `https://www.google.com/maps?q=${mapCenter[1]},${mapCenter[0]}`)
 
 const infoCards = computed(() => [
   {
@@ -65,8 +61,6 @@ const sending = ref(false)
 const onSubmit = handleSubmit(async (values) => {
   sending.value = true
   try {
-    // فعلاً Mock: وقتی Backend آماده شد این بخش رو با یه درخواست واقعی جایگزین کن.
-    // مثال: await $fetch('/contact', { method: 'POST', baseURL: useRuntimeConfig().public.apiBaseUrl, body: values })
     await simulateDelay(700)
     uiStore.showToast(t('contact.success'))
     resetForm()
@@ -327,10 +321,7 @@ const onSubmit = handleSubmit(async (values) => {
 
       <div class="h-64 overflow-hidden rounded-lg sm:h-72 md:col-span-3 md:h-80">
         <ClientOnly>
-          <NeshanMap
-            :center="mapCenter"
-            :popup-text="t('contact.addressValue')"
-          />
+          <GoogleMap :center="mapCenter" />
           <template #fallback>
             <div class="flex size-full items-center justify-center bg-primary-50 text-sm text-ink-muted">
               {{ t('contact.mapLoading') }}

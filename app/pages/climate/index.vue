@@ -31,6 +31,43 @@ const suitablePlants = computed(() => {
       .filter((p): p is NonNullable<typeof p> => !!p)
 })
 
+// ---- جستجو و فیلتر دسته‌بندی گیاهان پیشنهادی ----
+const searchQuery = ref('')
+const selectedCategory = ref('all')
+
+// دسته‌ها از خود گیاه‌های پیشنهادیِ شهر ساخته می‌شن تا گزینه‌ی خالی نمایش داده نشه
+const categoryOptions = computed(() => {
+  const counts = new Map<string, number>()
+  for (const plant of suitablePlants.value) {
+    counts.set(plant.category, (counts.get(plant.category) ?? 0) + 1)
+  }
+  return [
+    { value: 'all', label: t('pages.catalog.filters.allCategories'), count: suitablePlants.value.length },
+    ...Array.from(counts, ([value, count]) => ({ value, label: value, count })),
+  ]
+})
+
+const filteredPlants = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  return suitablePlants.value.filter((plant) => {
+    const matchCategory = selectedCategory.value === 'all' || plant.category === selectedCategory.value
+    const matchQuery = !q
+      || plant.name.toLowerCase().includes(q)
+      || plant.scientificName.toLowerCase().includes(q)
+    return matchCategory && matchQuery
+  })
+})
+
+const hasActiveFilter = computed(() => !!searchQuery.value.trim() || selectedCategory.value !== 'all')
+
+function resetFilters() {
+  searchQuery.value = ''
+  selectedCategory.value = 'all'
+}
+
+// با عوض شدن شهر یا زبان، دسته‌ی انتخاب‌شده‌ی قبلی ممکنه دیگه وجود نداشته باشه
+watch([selectedCityId, activeLocale], () => { selectedCategory.value = 'all' })
+
 const humidityLabelMap = computed<Record<string, string>>(() => ({
   low: t('pages.climate.low'),
   medium: t('pages.climate.medium'),
@@ -80,16 +117,12 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
           type="button"
           role="radio"
           :aria-checked="addressStore.active?.id === chip.id"
-          class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors"
+          class="inline-flex items-center gap-2 rounded-full border px-4 py-2 whitespace-nowrap text-sm transition-colors"
           :class="addressStore.active?.id === chip.id
             ? 'border-primary-600 bg-primary-600 text-white'
             : 'border-ink/10 bg-surface text-ink hover:border-primary-300 hover:bg-primary-50'"
           @click="addressStore.setActive(chip.id)"
         >
-          <AddressIcon
-            :label="chip.label"
-            class="size-4 shrink-0"
-          />
           <span class="font-bold">{{ chip.label || chip.cityName }}</span>
           <span
             v-if="chip.label"
@@ -187,15 +220,72 @@ const humidityLabelMap = computed<Record<string, string>>(() => ({
       <h2 class="mb-4 text-lg font-bold text-ink">
         {{ t('pages.climate.plantsForCity', { city: selectedCity?.name }) }}
       </h2>
+      <!-- جستجو + فیلتر دسته‌بندی -->
       <div
         v-if="suitablePlants.length"
+        class="mb-5 flex flex-col gap-3"
+      >
+        <div class="relative">
+          <Icon
+            name="lucide:search"
+            class="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
+          />
+          <input
+            v-model="searchQuery"
+            type="search"
+            :placeholder="t('common.searchPlaceholder')"
+            :aria-label="t('common.search')"
+            class="w-full rounded-xl border border-ink/10 bg-surface py-2.5 pe-4 ps-10 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted focus:border-primary-400 sm:max-w-md"
+          >
+        </div>
+
+        <div
+          class="flex flex-wrap gap-2"
+          role="radiogroup"
+          :aria-label="t('pages.catalog.filters.allCategories')"
+        >
+          <button
+            v-for="option in categoryOptions"
+            :key="option.value"
+            type="button"
+            role="radio"
+            :aria-checked="selectedCategory === option.value"
+            class="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-colors"
+            :class="selectedCategory === option.value
+              ? 'border-primary-600 bg-primary-600 text-white'
+              : 'border-ink/10 bg-surface text-ink hover:border-primary-300 hover:bg-primary-50'"
+            @click="selectedCategory = option.value"
+          >
+            <span class="font-medium">{{ option.label }}</span>
+            <span class="text-xs opacity-80">{{ toPersianDigits(option.count) }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div
+        v-if="filteredPlants.length"
         class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
       >
         <PlantCard
-          v-for="plant in suitablePlants"
+          v-for="plant in filteredPlants"
           :key="plant.id"
           :plant="plant"
         />
+      </div>
+      <div
+        v-else-if="suitablePlants.length && hasActiveFilter"
+        class="flex flex-col items-start gap-3"
+      >
+        <p class="text-ink-muted">
+          {{ t('pages.catalog.empty') }}
+        </p>
+        <button
+          type="button"
+          class="rounded-xl bg-primary-50 px-4 py-2 text-sm font-bold text-primary-700 transition-colors hover:bg-primary-100"
+          @click="resetFilters"
+        >
+          {{ t('pages.catalog.clearFilters') }}
+        </button>
       </div>
       <p
         v-else

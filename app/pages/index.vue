@@ -28,6 +28,26 @@ const quickActions = [
   { to: '/ai-doctor', icon: 'lucide:stethoscope', label: 'nav.aiDoctor', hint: 'home.quickHints.aiDoctor' },
   { to: '/plants', icon: 'lucide:compass', label: 'nav.explore', hint: 'home.quickHints.catalog' },
 ]
+
+// افکت «وزن موس» روی کارت‌های دسترسی سریع: سمتی از کارت که موس روشه، به عقب فرو میره (انگار فشار میاد)
+const TILT_MAX_DEG = 9 // حداکثر زاویه‌ی کج شدن
+const TILT_DIRECTION = 1 // 1 = سمت زیر موس به عقب میره | -1 = سمت زیر موس به جلو میاد
+
+function onCardMove(event: PointerEvent) {
+  if (event.pointerType !== 'mouse') return
+  const el = event.currentTarget as HTMLElement
+  const rect = el.getBoundingClientRect()
+  const x = (event.clientX - rect.left) / rect.width - 0.5 // -0.5 تا 0.5
+  const y = (event.clientY - rect.top) / rect.height - 0.5
+  el.style.setProperty('--tilt-x', `${(-y * 2 * TILT_MAX_DEG * TILT_DIRECTION).toFixed(2)}deg`)
+  el.style.setProperty('--tilt-y', `${(x * 2 * TILT_MAX_DEG * TILT_DIRECTION).toFixed(2)}deg`)
+}
+
+function onCardLeave(event: PointerEvent) {
+  const el = event.currentTarget as HTMLElement
+  el.style.removeProperty('--tilt-x')
+  el.style.removeProperty('--tilt-y')
+}
 </script>
 
 <template>
@@ -142,7 +162,9 @@ const quickActions = [
         v-for="action in quickActions"
         :key="action.to"
         :to="action.to"
-        class="glass-card flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
+        class="glass-card tilt-card flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
+        @pointermove="onCardMove"
+        @pointerleave="onCardLeave"
       >
         <span class="flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary-700">
           <Icon
@@ -299,7 +321,35 @@ const quickActions = [
 </template>
 
 <style scoped>
-.x{
-  stroke: none;
+/* کج شدن سه‌بعدی کارت‌های دسترسی سریع زیر موس */
+.tilt-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(1, 1, 1);
+  /* برگشت نرم و فنری وقتی موس کارت رو ترک می‌کنه */
+  transition:
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tilt-card:hover {
+    /* موقع حرکت موس سریع دنبال می‌کنه، کمی کوچیک می‌شه تا حس فشار بده */
+    transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(0.97, 0.97, 0.97);
+    transition:
+      transform 0.12s ease-out,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card,
+  .tilt-card:hover {
+    transform: none;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
 }
 </style>
