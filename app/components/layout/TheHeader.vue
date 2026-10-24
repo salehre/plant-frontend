@@ -50,11 +50,11 @@ function onSearch() {
         >
       </form>
 
-      <div class="ms-auto flex items-center gap-2">
+      <div class="ms-auto flex items-center gap-1 rounded-full border border-ink/10 bg-surface/65 p-1 shadow-sm backdrop-blur-md">
         <!-- تغییر زبان -->
         <button
           type="button"
-          class="hidden size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-xs font-bold md:flex text-primary-700 transition-colors hover:bg-primary-50"
+          class="hidden size-10 items-center justify-center rounded-full text-xs font-bold text-primary-700 transition-colors hover:bg-primary-50 md:flex"
           :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           @click="toggleLocale"
@@ -65,7 +65,7 @@ function onSearch() {
         <!-- دارک / لایت مود (موبایل و دسکتاپ) -->
         <button
           type="button"
-          class="flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50"
+          class="flex size-10 items-center justify-center rounded-full text-primary-700 transition-colors hover:bg-primary-50"
           :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
@@ -79,7 +79,7 @@ function onSearch() {
         <!-- اعلان: تسک‌های امروز -->
         <NuxtLink
           to="/care-calendar"
-          class="relative flex size-10 items-center justify-center rounded-xl border border-ink/5 bg-surface text-primary-700 transition-colors hover:bg-primary-50"
+          class="relative flex size-10 items-center justify-center rounded-full text-primary-700 transition-colors hover:bg-primary-50"
           :aria-label="$t('nav.careCalendar')"
         >
           <Icon
@@ -95,7 +95,7 @@ function onSearch() {
         <!-- پروفایل -->
         <NuxtLink
           to="/profile"
-          class="hidden size-10 items-center justify-center rounded-full ring-2 ring-transparent transition md:flex"
+          class="hidden size-10 items-center justify-center rounded-full ring-2 ring-transparent transition hover:bg-primary-50 md:flex"
           :aria-label="$t('nav.profile')"
         >
           <UserAvatar

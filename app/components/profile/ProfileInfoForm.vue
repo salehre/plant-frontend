@@ -143,11 +143,6 @@ function cancelEdit() {
 // والد (تب حساب در پروفایل) از این می‌تونه دایلوگ ویرایش رو باز کنه
 defineExpose({ startEdit })
 
-function onLogout() {
-  authStore.logout()
-  navigateTo('/')
-}
-
 const onSubmit = handleSubmit(async (values) => {
   const ok = await authStore.updateProfile({
     name: values.name,
@@ -202,7 +197,7 @@ const onSubmit = handleSubmit(async (values) => {
           class="flex gap-3 py-3.5"
           :class="row.multiline ? 'items-start' : 'items-center'"
         >
-          <div class="flex w-32 shrink-0 items-center gap-2.5 text-ink-muted sm:w-44">
+          <div class="flex w-32 shrink-0 حس items-center gap-2.5 text-ink-muted sm:w-52">
             <Icon
               :name="row.icon"
               class="size-4 shrink-0"
@@ -229,7 +224,7 @@ const onSubmit = handleSubmit(async (values) => {
 
         <!-- رمز عبور -->
         <div class="flex items-center gap-3 py-3.5">
-          <div class="flex w-32 shrink-0 items-center gap-2.5 text-ink-muted sm:w-44">
+          <div class="flex w-32 shrink-0 items-center gap-2.5 text-ink-muted sm:w-52">
             <Icon
               name="lucide:shield"
               class="size-4 shrink-0"
@@ -467,18 +462,6 @@ const onSubmit = handleSubmit(async (values) => {
       </div>
     </form>
     </AppModal>
-
-    <button
-      type="button"
-      class="mt-5 flex w-full items-center justify-center gap-2 rounded-[var(--radius-control)] border border-status-danger/30 px-4 py-2.5 text-sm font-medium text-status-danger transition-colors hover:bg-status-danger/10"
-      @click="onLogout"
-    >
-      <Icon
-        name="lucide:log-out"
-        class="size-4"
-      />
-      {{ t('pages.profile.logout') }}
-    </button>
 
     <ChangePasswordModal v-model="showPasswordModal" />
   </div>

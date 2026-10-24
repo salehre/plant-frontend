@@ -24,6 +24,11 @@ const joinedLabel = computed(() => {
 const levelKey = computed(() =>
   plantCount.value >= 10 ? 'pages.profile.level.lover' : 'pages.profile.level.beginner',
 )
+
+function onLogout() {
+  authStore.logout()
+  navigateTo('/')
+}
 </script>
 
 <template>
@@ -151,18 +156,33 @@ const levelKey = computed(() =>
           </div>
         </div>
 
-        <button
+        <div
           v-if="authStore.isLoggedIn"
-          type="button"
-          class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-ink/10 bg-surface px-4 py-2.5 text-sm font-bold text-ink shadow-xs transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 sm:w-auto"
-          @click="emit('edit')"
+          class="flex w-full gap-2 sm:w-auto"
         >
-          <Icon
-            name="lucide:pencil"
-            class="size-4"
-          />
-          {{ $t('pages.profile.editProfile') }}
-        </button>
+          <button
+            type="button"
+            class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-ink/10 bg-surface px-4 py-2.5 text-sm font-bold text-ink shadow-xs transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 sm:flex-none"
+            @click="emit('edit')"
+          >
+            <Icon
+              name="lucide:pencil"
+              class="size-4"
+            />
+            {{ $t('pages.profile.editProfile') }}
+          </button>
+          <button
+            type="button"
+            class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-status-danger/30 px-4 py-2.5 text-sm font-bold text-status-danger transition-colors hover:bg-status-danger/10 sm:flex-none"
+            @click="onLogout"
+          >
+            <Icon
+              name="lucide:log-out"
+              class="size-4"
+            />
+            {{ t('pages.profile.logout') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
