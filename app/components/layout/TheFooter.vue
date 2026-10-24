@@ -43,7 +43,7 @@ function subscribeToNewsletter() {
   <footer class="relative overflow-hidden rounded-t-lg bg-primary-900 pb-24 text-white md:pb-0">
     <!-- تزئین برگ -->
     <img
-      src="/images/plants/foot.png"
+      src="/images/plants/foot.webp"
       alt=""
       class="pointer-events-none absolute inset-0 size-full object-cover"
     >

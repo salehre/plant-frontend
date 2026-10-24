@@ -19,7 +19,7 @@ const homeSkeletonPending = computed(() => featuredPending.value)
 const quickActionSkeletons = Array.from({ length: 5 }, (_, index) => index)
 
 // بک‌گراند کارت تبلیغی بخش گیاهان شاخص؛ بعداً فقط مسیر همین عکس رو عوض کن
-const featuredPromoImage = '/images/plants/header.png'
+const featuredPromoImage = '/images/plants/header.webp'
 
 const quickActions = [
   { to: '/identify', icon: 'lucide:scan-line', label: 'nav.identify', hint: 'home.quickHints.identify' },
@@ -93,7 +93,7 @@ function onCardLeave(event: PointerEvent) {
       class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white"
     >
       <img
-        src="/images/plants/header.png"
+        src="/images/plants/header.webp"
         :alt="t('home.greenLeavesAlt')"
         class="absolute inset-0 size-full object-cover object-center ltr:-scale-x-100"
       >

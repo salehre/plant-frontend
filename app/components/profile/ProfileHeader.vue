@@ -31,7 +31,7 @@ const levelKey = computed(() =>
     <!-- کاور -->
     <div class="relative h-44 sm:h-60">
       <img
-        :src="user?.cover || '/images/plants/header.png'"
+        :src="user?.cover || '/images/plants/header.webp'"
         :alt="$t('home.greenLeavesAlt')"
         class="size-full object-cover"
       >

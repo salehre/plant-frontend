@@ -37,7 +37,7 @@ const cards = [
     <!-- هیرو + جستجو -->
     <section class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white">
       <img
-        src="/images/plants/header.png"
+        src="/images/plants/header.webp"
         alt=""
         class="absolute inset-y-0 inset-x-2 object-cover opacity-60"
       >

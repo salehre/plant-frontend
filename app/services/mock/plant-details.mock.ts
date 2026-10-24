@@ -8,7 +8,7 @@ export const plantDetails: Record<string, PlantDetail> = {
         image: '/images/plants/botanical-1.webp',
         gallery: [
             { thumb: '/images/plants/botanical-1.webp', full: '/images/plants/botanical-1.webp', title: 'برگ‌های شکاف‌دار بالغ' },
-            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.jpg', full: '/images/plants/botanical-2.jpg', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -136,9 +136,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'ficus-lyrata': {
         slug: 'ficus-lyrata',
-        image: '/images/plants/botanical-4.jpg',
+        image: '/images/plants/botanical-4.webp',
         gallery: [
-            { thumb: '/images/plants/botanical-4.jpg', full: '/images/plants/botanical-4.jpg', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-4.webp', full: '/images/plants/botanical-4.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -330,9 +330,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'spathiphyllum': {
         slug: 'spathiphyllum',
-        image: '/images/plants/botanical-2.webp',
+        image: '/images/plants/botanical-2.jpg',
         gallery: [
-            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.jpg', full: '/images/plants/botanical-2.jpg', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -459,9 +459,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'chlorophytum-comosum': {
         slug: 'chlorophytum-comosum',
-        image: '/images/plants/botanical-4.jpg',
+        image: '/images/plants/botanical-4.webp',
         gallery: [
-            { thumb: '/images/plants/botanical-4.jpg', full: '/images/plants/botanical-4.jpg', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-4.webp', full: '/images/plants/botanical-4.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -652,9 +652,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'calathea-orbifolia': {
         slug: 'calathea-orbifolia',
-        image: '/images/plants/botanical-2.webp',
+        image: '/images/plants/botanical-2.jpg',
         gallery: [
-            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.jpg', full: '/images/plants/botanical-2.jpg', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -780,9 +780,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'crassula-ovata': {
         slug: 'crassula-ovata',
-        image: '/images/plants/botanical-4.jpg',
+        image: '/images/plants/botanical-4.webp',
         gallery: [
-            { thumb: '/images/plants/botanical-4.jpg', full: '/images/plants/botanical-4.jpg', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-4.webp', full: '/images/plants/botanical-4.webp', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',
@@ -973,9 +973,9 @@ export const plantDetails: Record<string, PlantDetail> = {
 
     'lavandula-angustifolia': {
         slug: 'lavandula-angustifolia',
-        image: '/images/plants/botanical-2.webp',
+        image: '/images/plants/botanical-2.jpg',
         gallery: [
-            { thumb: '/images/plants/botanical-2.webp', full: '/images/plants/botanical-2.webp', title: 'نمای کلی گیاه' },
+            { thumb: '/images/plants/botanical-2.jpg', full: '/images/plants/botanical-2.jpg', title: 'نمای کلی گیاه' },
         ],
         taxonomy: {
             kingdom: 'Plantae',

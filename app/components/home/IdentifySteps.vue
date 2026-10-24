@@ -19,7 +19,7 @@ const main = computed(() => ({
 }))
 const similar = computed(() => [
   { name: isFa.value ? 'زبان مادرشوهر' : 'Snake plant', scientific: 'Sansevieria trifasciata', image: '/images/plants/botanical-3.webp', confidence: 0.74 },
-  { name: isFa.value ? 'فیکوس لیراتا' : 'Fiddle-leaf fig', scientific: 'Ficus lyrata', image: '/images/plants/botanical-4.jpg', confidence: 0.61 },
+  { name: isFa.value ? 'فیکوس لیراتا' : 'Fiddle-leaf fig', scientific: 'Ficus lyrata', image: '/images/plants/botanical-4.webp', confidence: 0.61 },
 ])
 
 const detailTabs = ['overview', 'care', 'healthToxicity', 'scientific'] as const

@@ -44,7 +44,7 @@ onBeforeUnmount(() => observer?.disconnect())
     <!-- نوار تصویری بالای صفحه -->
     <div class="mb-6 h-24 overflow-hidden sm:h-32 lg:h-40 [margin-inline:calc(50%_-_50vw)] md:[margin-inline:calc(50%_-_50vw_+_8rem)]">
       <img
-        src="/images/plants/header.png"
+        src="/images/plants/header.webp"
         alt=""
         class="size-full object-cover"
       >

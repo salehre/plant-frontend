@@ -105,7 +105,7 @@ function isActive(to: string) {
     <!-- کارت دعوت به اسکن -->
     <div class="relative overflow-hidden rounded-2xl bg-primary-900 p-4 text-white">
       <img
-        src="/images/plants/footer.jpg"
+        src="/images/plants/footer.webp"
         alt=""
         class="pointer-events-none absolute inset-0 size-full object-cover"
       >

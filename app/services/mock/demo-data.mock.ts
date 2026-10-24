@@ -50,7 +50,7 @@ export function dayOffset(days: number): string {
 }
 
 function plantPhoto(slug: string): string {
-  return mockPlants.find(p => p.slug === slug)?.images[0] ?? '/images/plants/header.png'
+  return mockPlants.find(p => p.slug === slug)?.images[0] ?? '/images/plants/header.webp'
 }
 
 interface PlantSpec {
@@ -150,7 +150,7 @@ export function buildDemoHistory(): HistoryEntry[] {
       id: `demo-scan-${i + 1}`,
       // ساعت‌های مختلف تا ترتیب مرتب‌سازی و تاریخ‌ها طبیعی به نظر بیاد
       timestamp: now - daysAgo * 86_400_000 - (i % 5) * 3_600_000 - 40 * 60_000,
-      image: plant.images[0] ?? '/images/plants/header.png',
+      image: plant.images[0] ?? '/images/plants/header.webp',
       plantName: plant.name,
       scientificName: plant.scientificName,
       confidence,

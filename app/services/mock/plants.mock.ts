@@ -9,7 +9,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Monstera deliciosa',
     images: [
       '/images/plants/botanical-1.webp',
-      '/images/plants/botanical-2.webp',
+      '/images/plants/botanical-2.jpg',
     ],
     description:
         'مونستِرا یکی از محبوب‌ترین گیاهان آپارتمانی است که با برگ‌های بزرگ و شکاف‌دار خود فضای هر خانه‌ای را دگرگون می‌کند. این گیاه نسبتاً کم‌توقع است و برای مبتدیان مناسب است.',
@@ -56,7 +56,7 @@ export const mockPlants: Plant[] = [
     slug: 'ficus-lyrata',
     name: 'فیکوس برگ انجیری',
     scientificName: 'Ficus lyrata',
-    images: ['/images/plants/botanical-4.jpg'],
+    images: ['/images/plants/botanical-4.webp'],
     description:
         'با برگ‌های بزرگ و براق شبیه به برگ انجیر، این گیاه به‌عنوان یک المان دکوراتیو محبوب شناخته می‌شود، اما نسبت به تغییر محیط حساس است.',
     care: {
@@ -125,7 +125,7 @@ export const mockPlants: Plant[] = [
     slug: 'spathiphyllum',
     name: 'گل صدتومانی',
     scientificName: 'Spathiphyllum wallisii',
-    images: ['/images/plants/botanical-2.webp'],
+    images: ['/images/plants/botanical-2.jpg'],
     description:
         'با گل‌های سفید ظریف، این گیاه هم زیبایی می‌آورد و هم به تصفیه هوای داخل خانه کمک می‌کند. به رطوبت نسبتاً بالا نیاز دارد.',
     care: {
@@ -171,7 +171,7 @@ export const mockPlants: Plant[] = [
     slug: 'chlorophytum-comosum',
     name: 'گیاه عنکبوتی',
     scientificName: 'Chlorophytum comosum',
-    images: ['/images/plants/botanical-4.jpg'],
+    images: ['/images/plants/botanical-4.webp'],
     description:
         'با برگ‌های نواری راه‌راه و ساقه‌های آویزی که جوانه‌های کوچک تولید می‌کنند. رشدش سریع است و برای پرورش در آب هم مناسب است.',
     care: {
@@ -240,7 +240,7 @@ export const mockPlants: Plant[] = [
     slug: 'calathea-orbifolia',
     name: 'کالاتیا اوربیفولیا',
     scientificName: 'Calathea orbifolia',
-    images: ['/images/plants/botanical-2.webp'],
+    images: ['/images/plants/botanical-2.jpg'],
     description:
         'با برگ‌های گرد و راه‌راه نقره‌ای، یکی از زیباترین ولی حساس‌ترین گیاهان آپارتمانی است. به رطوبت بالا و دوری از آفتاب مستقیم نیاز دارد.',
     care: {
@@ -286,7 +286,7 @@ export const mockPlants: Plant[] = [
     slug: 'crassula-ovata',
     name: 'درخت یادبود (جید)',
     scientificName: 'Crassula ovata',
-    images: ['/images/plants/botanical-4.jpg'],
+    images: ['/images/plants/botanical-4.webp'],
     description:
         'ساکولنتی با برگ‌های گرد و ضخیم که به‌مرور شکل درخت کوچک پیدا می‌کند. نیاز آبی بسیار کمی دارد و در نور مستقیم بهترین رشد را نشان می‌دهد.',
     care: {
@@ -355,7 +355,7 @@ export const mockPlants: Plant[] = [
     slug: 'lavandula-angustifolia',
     name: 'اسطوخودوس',
     scientificName: 'Lavandula angustifolia',
-    images: ['/images/plants/botanical-2.webp'],
+    images: ['/images/plants/botanical-2.jpg'],
     description:
         'گیاهی معطر و دارویی با گل‌های بنفش که در آفتاب کامل و خاک خشک بهترین رشد را دارد. علاوه بر خواص آرام‌بخش، برای باغچه هم زینتی است.',
     care: {

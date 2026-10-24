@@ -17,7 +17,7 @@ const seedUserPlants: UserPlant[] = [
     id: 'up2',
     plantSlug: 'ficus-lyrata',
     nickname: 'فیکوسی',
-    photo: '/images/plants/botanical-4.jpg',
+    photo: '/images/plants/botanical-4.webp',
     acquiredAt: '2026-02-14',
     location: 'اتاق کار',
     healthStatus: 'needs_attention',
