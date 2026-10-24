@@ -5,7 +5,7 @@ export const mockUsers: CommunityUser[] = [
   {
     id: 'u1',
     name: 'سارا احمدی',
-    avatar: '/images/plants/botanical-2.jpg',
+    avatar: '/images/plants/botanical-2.webp',
     bio: 'عاشق گیاهان آپارتمانی، صاحب 20 گلدون در 30 متر 🌿',
     plantsCount: 20,
     followersCount: 340,
@@ -14,7 +14,7 @@ export const mockUsers: CommunityUser[] = [
   {
     id: 'u2',
     name: 'رضا کریمی',
-    avatar: '/images/plants/botanical-3.jpg',
+    avatar: '/images/plants/botanical-3.webp',
     bio: 'باغبان آماتور، یادگیری گیاهان دارویی',
     plantsCount: 12,
     followersCount: 98,
@@ -35,7 +35,7 @@ export const mockPosts: Post[] = [
   {
     id: 'post1',
     author: mockUsers[0]!,
-    image: '/images/plants/botanical-3.jpg',
+    image: '/images/plants/botanical-3.webp',
     caption: 'مونسترای من بالاخره بعد از 6 ماه اولین شکاف برگش رو زد! خیلی خوشحالم 🥹',
     plantTag: 'monstera-deliciosa',
     createdAt: '2026-07-27T10:00:00',

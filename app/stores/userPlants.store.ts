@@ -28,7 +28,7 @@ const seedUserPlants: UserPlant[] = [
     id: 'up3',
     plantSlug: 'sansevieria-trifasciata',
     nickname: 'زبونی',
-    photo: '/images/plants/botanical-3.jpg',
+    photo: '/images/plants/botanical-3.webp',
     acquiredAt: '2025-08-01',
     location: 'راهرو',
     healthStatus: 'healthy',

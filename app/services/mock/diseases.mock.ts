@@ -10,7 +10,7 @@ export const mockDiseases: Disease[] = [
     symptoms: ['لکه‌های قهوه‌ای یا سیاه روی برگ', 'حاشیه زرد دور لکه‌ها', 'ریزش برگ‌های آلوده'],
     causes: ['رطوبت بیش‌ازحد روی برگ', 'تهویه ضعیف', 'آبیاری از بالای برگ'],
     treatment: ['حذف برگ‌های آلوده', 'کاهش رطوبت اطراف گیاه', 'استفاده از قارچ‌کش مناسب در صورت گسترش'],
-    image: '/images/plants/issue/1.jpg',
+    image: '/images/plants/issue/1.webp',
     severity: 'medium',
   },
   {
@@ -21,7 +21,7 @@ export const mockDiseases: Disease[] = [
     symptoms: ['تارهای ریز زیر برگ', 'نقاط زرد کمرنگ روی سطح برگ', 'ضعف عمومی گیاه'],
     causes: ['هوای خشک و گرم', 'عدم بازرسی دوره‌ای گیاه'],
     treatment: ['شست‌وشوی برگ‌ها با آب', 'افزایش رطوبت محیط', 'استفاده از روغن نیم یا صابون حشره‌کش'],
-    image: '/images/plants/issue/2.jpg',
+    image: '/images/plants/issue/2.webp',
     severity: 'high',
   },
   {
@@ -32,7 +32,7 @@ export const mockDiseases: Disease[] = [
     symptoms: ['زرد شدن و افتادگی برگ‌ها', 'بوی نامطبوع از خاک', 'نرم و سیاه شدن ریشه‌ها'],
     causes: ['آبیاری بیش‌ازحد', 'خاک بدون زهکش مناسب', 'گلدان بدون سوراخ زهکشی'],
     treatment: ['کاهش دفعات آبیاری', 'تعویض خاک و هرس ریشه‌های پوسیده', 'استفاده از گلدان با زهکش مناسب'],
-    image: '/images/plants/issue/3.jpg',
+    image: '/images/plants/issue/3.webp',
     severity: 'high',
   },
   {

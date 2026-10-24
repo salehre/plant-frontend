@@ -13,10 +13,10 @@ const i18nHead = useLocaleHead()
 
 // هر تم یه عکس 404 داره. اسم‌ها تستی‌ان؛ بعداً فقط همین مسیرها رو عوض کن.
 const errorImages: Record<ThemeKey, string> = {
-  wine: '/images/error/404-wine.png',
-  forest: '/images/error/404-forest.png',
-  brown: '/images/error/404-brown.png',
-  navy: '/images/error/404-navy.png',
+  wine: '/images/error/404-wine.webp',
+  forest: '/images/error/404-forest.webp',
+  brown: '/images/error/404-brown.webp',
+  navy: '/images/error/404-navy.webp',
 }
 const errorImage = computed(() => errorImages[uiStore.theme] ?? errorImages.forest)
 

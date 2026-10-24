@@ -9,7 +9,7 @@ export const mockPlants: Plant[] = [
     scientificName: 'Monstera deliciosa',
     images: [
       '/images/plants/botanical-1.webp',
-      '/images/plants/botanical-2.jpg',
+      '/images/plants/botanical-2.webp',
     ],
     description:
         'مونستِرا یکی از محبوب‌ترین گیاهان آپارتمانی است که با برگ‌های بزرگ و شکاف‌دار خود فضای هر خانه‌ای را دگرگون می‌کند. این گیاه نسبتاً کم‌توقع است و برای مبتدیان مناسب است.',
@@ -33,7 +33,7 @@ export const mockPlants: Plant[] = [
     slug: 'sansevieria-trifasciata',
     name: 'زبان مادرشوهر',
     scientificName: 'Sansevieria trifasciata',
-    images: ['/images/plants/botanical-3.jpg'],
+    images: ['/images/plants/botanical-3.webp'],
     description:
         'یکی از مقاوم‌ترین گیاهان آپارتمانی که در کم‌نوری و بی‌توجهی هم زنده می‌ماند. انتخابی عالی برای کسانی که تازه شروع به نگهداری گیاه کرده‌اند.',
     care: {
@@ -125,7 +125,7 @@ export const mockPlants: Plant[] = [
     slug: 'spathiphyllum',
     name: 'گل صدتومانی',
     scientificName: 'Spathiphyllum wallisii',
-    images: ['/images/plants/botanical-2.jpg'],
+    images: ['/images/plants/botanical-2.webp'],
     description:
         'با گل‌های سفید ظریف، این گیاه هم زیبایی می‌آورد و هم به تصفیه هوای داخل خانه کمک می‌کند. به رطوبت نسبتاً بالا نیاز دارد.',
     care: {
@@ -148,7 +148,7 @@ export const mockPlants: Plant[] = [
     slug: 'zamioculcas-zamiifolia',
     name: 'زامیفولیا',
     scientificName: 'Zamioculcas zamiifolia',
-    images: ['/images/plants/botanical-3.jpg'],
+    images: ['/images/plants/botanical-3.webp'],
     description:
         'گیاهی تقریباً نابودنشدنی با برگ‌های براق و ضخیم که هفته‌ها بدون آبیاری هم دوام می‌آورد. انتخابی عالی برای فضاهای کم‌نور اداری و خانگی.',
     care: {
@@ -240,7 +240,7 @@ export const mockPlants: Plant[] = [
     slug: 'calathea-orbifolia',
     name: 'کالاتیا اوربیفولیا',
     scientificName: 'Calathea orbifolia',
-    images: ['/images/plants/botanical-2.jpg'],
+    images: ['/images/plants/botanical-2.webp'],
     description:
         'با برگ‌های گرد و راه‌راه نقره‌ای، یکی از زیباترین ولی حساس‌ترین گیاهان آپارتمانی است. به رطوبت بالا و دوری از آفتاب مستقیم نیاز دارد.',
     care: {
@@ -263,7 +263,7 @@ export const mockPlants: Plant[] = [
     slug: 'peperomia-obtusifolia',
     name: 'پپرومیا',
     scientificName: 'Peperomia obtusifolia',
-    images: ['/images/plants/botanical-3.jpg'],
+    images: ['/images/plants/botanical-3.webp'],
     description:
         'گیاهی کوچک و فشرده با برگ‌های ضخیم و گوشتی که مثل ساکولنت‌ها آب ذخیره می‌کند. برای میز کار و فضاهای کوچک بسیار مناسب است.',
     care: {
@@ -355,7 +355,7 @@ export const mockPlants: Plant[] = [
     slug: 'lavandula-angustifolia',
     name: 'اسطوخودوس',
     scientificName: 'Lavandula angustifolia',
-    images: ['/images/plants/botanical-2.jpg'],
+    images: ['/images/plants/botanical-2.webp'],
     description:
         'گیاهی معطر و دارویی با گل‌های بنفش که در آفتاب کامل و خاک خشک بهترین رشد را دارد. علاوه بر خواص آرام‌بخش، برای باغچه هم زینتی است.',
     care: {
