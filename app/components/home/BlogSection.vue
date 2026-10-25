@@ -1,14 +1,6 @@
 <script setup lang="ts">
 const blogStore = useBlogStore()
-const { t, locale } = useI18n()
-const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
-
-// بدون await تا رندر بقیه‌ی صفحه‌ی اصلی منتظر بلاگ نمونه؛ با تغییر زبان دوباره دریافت می‌شه
-useAsyncData(
-  'home-blog-featured',
-  () => blogStore.fetchFeatured(activeLocale.value, t('blog.errorList')).then(() => true),
-  { watch: [activeLocale] },
-)
+const { t } = useI18n()
 </script>
 
 <template>

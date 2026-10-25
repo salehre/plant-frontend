@@ -3,15 +3,23 @@ import MobileBottomNav from "~/components/layout/MobileBottomNav.vue";
 import TheFooter from "~/components/layout/TheFooter.vue";
 import TheHeader from "~/components/layout/TheHeader.vue";
 import TheSidebar from "~/components/layout/TheSidebar.vue";
+import HomeSidebarSkeleton from "~/components/layout/HomeSidebarSkeleton.vue";
 
 const route = useRoute();
 const isHome = computed(() => route.path === "/");
 const isPlantDetail = computed(() => route.path.startsWith('/plants/'))
+const { localeProperties } = useI18n()
+const homePagePending = useState('home-page-pending', () => isHome.value)
+const showSidebarSkeleton = computed(() => isHome.value && homePagePending.value)
 </script>
 
 <template>
-  <div class="min-h-screen bg-bg">
-    <TheSidebar />
+  <div
+    :dir="localeProperties.dir"
+    class="min-h-screen bg-bg"
+  >
+    <HomeSidebarSkeleton v-if="showSidebarSkeleton" />
+    <TheSidebar v-else />
     <div class="flex min-h-screen min-w-0 flex-col overflow-x-clip md:ps-64">
       <TheHeader :class="isPlantDetail ? 'max-md:hidden' : ''" />
       <main

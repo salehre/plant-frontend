@@ -77,12 +77,13 @@ watch(activeLocale, () => {
     </p>
 
     <Transition name="bg-fade">
-      <img
+      <SkeletonImage
         :key="bgImage"
         :src="bgImage"
         alt=""
-        class="bg-float absolute inset-0 -z-20 size-full object-cover"
-      >
+        image-class="bg-float size-full object-cover"
+        class="absolute inset-0 -z-20"
+      />
     </Transition>
     <div class="absolute inset-0 -z-10 bg-black/45" />
 
@@ -136,12 +137,12 @@ watch(activeLocale, () => {
             class="group flex h-full flex-col overflow-hidden rounded-xl border border-ink/10 bg-surface text-ink transition-shadow hover:shadow-card-hover"
           >
             <div class="relative aspect-[16/10] overflow-hidden bg-primary-50">
-              <img
+              <SkeletonImage
                 :src="item.plant.image"
                 :alt="item.plant.name"
-                class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                decoding="async"
-              >
+                image-class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                class="absolute inset-0"
+              />
               <span class="absolute end-2 top-2 rounded-md bg-primary-600 px-2 py-0.5 text-[11px] font-medium text-white">
                 {{ t('home.plantFinder.match') }} {{ formatScore(item.matchScore) }}
               </span>

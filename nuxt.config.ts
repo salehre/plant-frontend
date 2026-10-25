@@ -18,7 +18,6 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   app: {
-    baseURL: '/plant/',
     head: {
       htmlAttrs: {
         lang: 'fa',

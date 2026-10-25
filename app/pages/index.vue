@@ -2,16 +2,27 @@
 import { getMockDiseases } from '~/services/mock/diseases.mock'
 
 const plantStore = usePlantStore()
+const blogStore = useBlogStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const diseases = computed(() => getMockDiseases(activeLocale.value))
 const featured = computed(() => plantStore.featured)
-const { status: featuredStatus } = useAsyncData(
-  'home-featured-plants',
-  () => plantStore.fetchFeatured(activeLocale.value, t('errors.featuredPlants')).then(() => true),
+const { status: homeStatus } = useAsyncData(
+  'home-page-content',
+  async () => {
+    await Promise.all([
+      plantStore.fetchFeatured(activeLocale.value, t('errors.featuredPlants')),
+      blogStore.fetchFeatured(activeLocale.value, t('blog.errorList')),
+    ])
+    return true
+  },
   { watch: [activeLocale] },
 )
-const featuredPending = computed(() => featuredStatus.value === 'pending' && !featured.value.length)
+const homePending = computed(() => homeStatus.value === 'pending')
+const homePagePending = useState('home-page-pending', () => true)
+watch(homePending, (pending) => {
+  homePagePending.value = pending
+}, { immediate: true })
 const featuredShown = computed(() => featured.value.slice(0, 4))
 
 // بک‌گراند کارت تبلیغی بخش گیاهان شاخص؛ بعداً فقط مسیر همین عکس رو عوض کن
@@ -47,18 +58,23 @@ function onCardLeave(event: PointerEvent) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-10">
+  <HomePageSkeleton v-if="homePending" />
+  <div
+    v-else
+    class="flex flex-col gap-10"
+  >
     <!-- ======= هیرو ======= -->
     <section
       class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white"
     >
-      <img
+      <SkeletonImage
         src="/images/plants/header.webp"
         :alt="t('home.greenLeavesAlt')"
+        loading="eager"
         fetchpriority="high"
-        decoding="async"
-        class="absolute inset-0 size-full object-cover object-center ltr:-scale-x-100"
-      >
+        image-class="size-full object-cover object-center ltr:-scale-x-100"
+        class="absolute inset-0"
+      />
       <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
 
       <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -135,11 +151,8 @@ function onCardLeave(event: PointerEvent) {
             </NuxtLink>
           </div>
 
-          <template v-if="featuredPending" />
-
           <!-- اسلایدر Swiper: موبایل ~۱.۵ کارت | تبلت ۲.۴ | دسکتاپ ۳ کارت با فلش -->
           <AppSlider
-            v-else
             :items="featuredShown"
             :item-key="plant => plant.id"
             :breakpoints="{ 640: { slidesPerView: 2.4 }, 1024: { slidesPerView: 3 } }"
@@ -151,12 +164,12 @@ function onCardLeave(event: PointerEvent) {
                 class="group flex h-full flex-col rounded-2xl border border-ink/5 bg-surface p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover lg:rounded-3xl lg:p-3.5"
               >
                 <div class="relative aspect-[5/4] overflow-hidden rounded-xl bg-primary-50 lg:aspect-[4/3.4] lg:rounded-2xl">
-                  <img
+                  <SkeletonImage
                     :src="plant.images[0]"
                     :alt="plant.name"
-                    class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    decoding="async"
-                  >
+                    image-class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    class="absolute inset-0"
+                  />
                   <div class="absolute end-2 top-2">
                     <WishlistButton
                       :slug="plant.slug"
@@ -181,12 +194,12 @@ function onCardLeave(event: PointerEvent) {
 
         <!-- کارت تبلیغی با عکس پس‌زمینه -->
         <div class="relative isolate flex min-h-[260px] max-md:hidden flex-col justify-center overflow-hidden rounded-3xl p-8">
-          <img
+          <SkeletonImage
             :src="featuredPromoImage"
             alt=""
-            class="absolute inset-0 -z-20 size-full object-cover object-center"
-            decoding="async"
-          >
+            image-class="size-full object-cover object-center"
+            class="absolute inset-0 -z-20"
+          />
           <div class="absolute inset-0 -z-10 bg-gradient-to-r from-surface/95 via-surface/75 to-surface/10 rtl:bg-gradient-to-l" />
           <h3 class="max-w-[15rem] text-3xl font-extrabold leading-snug text-ink">
             {{ t('home.promoTitle') }}
@@ -228,12 +241,12 @@ function onCardLeave(event: PointerEvent) {
           to="/identify"
           class="glass-card flex flex-col gap-3 p-2.5"
         >
-          <img
+          <SkeletonImage
             :src="disease.image"
             :alt="disease.name"
-            class="h-28 w-full rounded-xl object-cover"
-            decoding="async"
-          >
+            image-class="size-full object-cover"
+            class="h-28 w-full rounded-xl"
+          />
           <span class="px-1.5 pb-1 text-sm font-bold text-ink">{{ disease.name }}</span>
         </NuxtLink>
       </div>

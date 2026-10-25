@@ -10,13 +10,13 @@ const { t } = useI18n()
     :to="`/blog/${props.post.slug}`"
     class="group flex flex-col gap-4 border-b border-ink/10 py-6 first:pt-0 last:border-b-0 sm:flex-row sm:gap-8"
   >
-    <div class="aspect-[2/1] w-full shrink-0 overflow-hidden rounded-xl bg-primary-50 sm:w-72 lg:w-80">
-      <img
+    <div class="relative aspect-[2/1] w-full shrink-0 overflow-hidden rounded-xl bg-primary-50 sm:w-72 lg:w-80">
+      <SkeletonImage
         :src="props.post.image"
         :alt="props.post.title"
-        class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-        decoding="async"
-      >
+        image-class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+        class="absolute inset-0"
+      />
     </div>
 
     <div class="flex min-w-0 flex-1 flex-col gap-2.5 sm:py-1">
