@@ -58,14 +58,7 @@ async function sharePost() {
         {{ t('blog.backToBlog') }}
       </NuxtLink>
 
-      <div
-        v-if="blogStore.loading && !post"
-        class="flex flex-col gap-4"
-      >
-        <AppSkeleton height="2rem" width="70%" />
-        <AppSkeleton height="1rem" width="40%" />
-        <AppSkeleton height="18rem" rounded="rounded-lg" />
-      </div>
+      <template v-if="blogStore.loading && !post" />
 
       <article
         v-else-if="post"

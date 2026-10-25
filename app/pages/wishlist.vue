@@ -39,17 +39,7 @@ await load()
       </NuxtLink>
     </div>
 
-    <div
-        v-if="loading"
-        class="flex flex-col gap-3"
-    >
-      <AppSkeleton
-          v-for="i in 3"
-          :key="i"
-          height="88px"
-          rounded="rounded-lg"
-      />
-    </div>
+    <template v-if="loading" />
 
     <PlantResultList
         v-else-if="items.length"

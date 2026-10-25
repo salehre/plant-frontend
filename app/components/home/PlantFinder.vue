@@ -140,7 +140,7 @@ watch(activeLocale, () => {
                 :src="item.plant.image"
                 :alt="item.plant.name"
                 class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
+                decoding="async"
               >
               <span class="absolute end-2 top-2 rounded-md bg-primary-600 px-2 py-0.5 text-[11px] font-medium text-white">
                 {{ t('home.plantFinder.match') }} {{ formatScore(item.matchScore) }}
@@ -252,7 +252,7 @@ watch(activeLocale, () => {
               :key="option.value"
               type="button"
               :aria-pressed="store.currentAnswer === option.value"
-              class="flex items-center gap-3 rounded-xl border px-4 py-4 text-start text-sm backdrop-blur-sm transition-colors"
+              class="flex items-center gap-3 rounded-xl border px-4 py-4 text-start text-sm transition-colors"
               :class="store.currentAnswer === option.value
                 ? 'border-white bg-white text-primary-700'
                 : 'border-white/30 bg-white/10 text-white hover:bg-white/20'"
@@ -331,7 +331,6 @@ watch(activeLocale, () => {
 .bg-float {
   scale: 1.04;
   animation: bg-float 15s ease-in-out infinite;
-  will-change: transform;
 }
 @keyframes bg-float {
   0%,

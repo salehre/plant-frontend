@@ -232,16 +232,7 @@ function formatConfidenceLocalized(value: number) {
             </NuxtLink>
           </p>
 
-          <div
-              v-else-if="loading"
-              class="flex flex-col gap-2"
-          >
-            <AppSkeleton
-                height="1.5rem"
-                width="70%"
-            />
-            <AppSkeleton height="3rem" />
-          </div>
+          <template v-else-if="loading" />
 
           <template v-else-if="loadedPlant">
             <!-- وضعیت‌ها: سمیت، حفاظت، نور، آب -->

@@ -4,12 +4,11 @@ const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 
 // بدون await تا رندر بقیه‌ی صفحه‌ی اصلی منتظر بلاگ نمونه؛ با تغییر زبان دوباره دریافت می‌شه
-const { status } = useAsyncData(
+useAsyncData(
   'home-blog-featured',
   () => blogStore.fetchFeatured(activeLocale.value, t('blog.errorList')).then(() => true),
   { watch: [activeLocale] },
 )
-const pending = computed(() => status.value === 'pending' && !blogStore.featured.length)
 </script>
 
 <template>
@@ -32,19 +31,11 @@ const pending = computed(() => status.value === 'pending' && !blogStore.featured
     </div>
 
     <div class="flex flex-col">
-      <template v-if="pending">
-        <BlogListItemSkeleton
-          v-for="n in 3"
-          :key="n"
-        />
-      </template>
-      <template v-else>
-        <BlogListItem
-          v-for="post in blogStore.featured"
-          :key="post.id"
-          :post="post"
-        />
-      </template>
+      <BlogListItem
+        v-for="post in blogStore.featured"
+        :key="post.id"
+        :post="post"
+      />
     </div>
   </section>
 </template>

@@ -196,7 +196,7 @@ const growthIcons: Record<string, string> = {
 </script>
 
 <template>
-    <PlantDetailSkeleton v-if="plantStore.loading" />
+    <template v-if="plantStore.loading" />
   <div
       v-else-if="plant && detail"
       class="plant-detail-page text-readable pb-10"

@@ -173,15 +173,7 @@ function resetFilters() {
       </div>
     </Transition>
 
-    <div
-      v-if="plantStore.loading"
-      class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
-    >
-      <PlantCardSkeleton
-        v-for="i in 8"
-        :key="i"
-      />
-    </div>
+    <template v-if="plantStore.loading" />
 
     <div
       v-else-if="plantStore.list.length"

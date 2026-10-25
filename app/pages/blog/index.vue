@@ -55,15 +55,7 @@ const chips = computed(() => [
       </button>
     </div>
 
-    <div
-      v-if="blogStore.loading"
-      class="flex flex-col"
-    >
-      <BlogListItemSkeleton
-        v-for="n in 3"
-        :key="n"
-      />
-    </div>
+    <template v-if="blogStore.loading" />
 
     <div
       v-else-if="blogStore.list.length"

@@ -14,10 +14,6 @@ const { status: featuredStatus } = useAsyncData(
 const featuredPending = computed(() => featuredStatus.value === 'pending' && !featured.value.length)
 const featuredShown = computed(() => featured.value.slice(0, 4))
 
-// state مشترک لودینگ برای هیرو و کارت‌های دسترسی سریع
-const homeSkeletonPending = computed(() => featuredPending.value)
-const quickActionSkeletons = Array.from({ length: 5 }, (_, index) => index)
-
 // بک‌گراند کارت تبلیغی بخش گیاهان شاخص؛ بعداً فقط مسیر همین عکس رو عوض کن
 const featuredPromoImage = '/images/plants/header.webp'
 
@@ -52,49 +48,15 @@ function onCardLeave(event: PointerEvent) {
 
 <template>
   <div class="flex flex-col gap-10">
-    <!-- ======= هیرو: اسکلتون ======= -->
-    <section
-      v-if="homeSkeletonPending"
-      class="relative overflow-hidden rounded-[19px] bg-primary-900"
-      aria-busy="true"
-      aria-label="Loading"
-    >
-      <!-- جای عکس هدر -->
-      <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-primary-950 via-primary-800 to-primary-700" />
-      <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
-
-      <div class="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <div class="flex min-h-[240px] max-w-xl flex-col justify-center gap-5 py-8 sm:min-h-[340px] sm:py-12">
-          <!-- جای h1: text-2xl / sm:text-5xl با leading-tight -->
-          <div class="space-y-1.5 sm:space-y-3">
-            <div class="h-6 w-11/12 animate-pulse rounded-md bg-white/30 sm:h-12 sm:w-full" />
-            <div class="h-6 w-2/3 animate-pulse rounded-md bg-white/30 sm:h-12 sm:w-3/5" />
-          </div>
-
-          <!-- جای p: text-sm / sm:text-base با leading-7 -->
-          <div class="max-w-md space-y-3.5 sm:space-y-3">
-            <div class="h-3.5 w-full animate-pulse rounded bg-white/20 sm:h-4" />
-            <div class="h-3.5 w-11/12 animate-pulse rounded bg-white/20 sm:h-4" />
-            <div class="h-3.5 w-7/12 animate-pulse rounded bg-white/20 sm:h-4" />
-          </div>
-
-          <!-- جای دکمه‌ها: py-2.5 + text-sm => h-10 -->
-          <div class="flex flex-wrap gap-3">
-            <div class="h-10 w-36 animate-pulse rounded-xl bg-white/30 sm:w-40" />
-            <div class="hidden h-10 w-28 animate-pulse rounded-xl border border-white/25 bg-white/10 sm:block" />
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ======= هیرو ======= -->
     <section
-      v-else
       class="relative overflow-hidden rounded-[19px] bg-primary-900 text-white"
     >
       <img
         src="/images/plants/header.webp"
         :alt="t('home.greenLeavesAlt')"
+        fetchpriority="high"
+        decoding="async"
         class="absolute inset-0 size-full object-cover object-center ltr:-scale-x-100"
       >
       <div class="absolute inset-0 bg-gradient-to-r from-primary-900/70 via-primary-900/45 to-primary-900/0 rtl:bg-gradient-to-l" />
@@ -129,35 +91,8 @@ function onCardLeave(event: PointerEvent) {
       </div>
     </section>
 
-    <!-- ======= دسترسی سریع: اسکلتون ======= -->
-    <section
-      v-if="homeSkeletonPending"
-      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5"
-      aria-hidden="true"
-    >
-      <div
-        v-for="item in quickActionSkeletons"
-        :key="item"
-        class="glass-card flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
-      >
-        <!-- جای دایره آیکون size-12 + آیکون size-6 -->
-        <span class="flex size-12 animate-pulse items-center justify-center rounded-full bg-primary-50">
-          <span class="size-6 rounded-md bg-primary-100" />
-        </span>
-
-        <!-- جای لیبل (text-sm) و هینت (text-[11px]) با gap-0.5 -->
-        <span class="flex w-full flex-col items-center gap-0.5">
-          <span class="my-[3px] h-3.5 w-20 animate-pulse rounded bg-ink/10" />
-          <span class="my-[2px] h-2.5 w-24 animate-pulse rounded bg-ink/5" />
-        </span>
-      </div>
-    </section>
-
     <!-- ======= دسترسی سریع ======= -->
-    <section
-      v-else
-      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5"
-    >
+    <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
       <NuxtLink
         v-for="action in quickActions"
         :key="action.to"
@@ -200,16 +135,7 @@ function onCardLeave(event: PointerEvent) {
             </NuxtLink>
           </div>
 
-          <!-- اسکلتون: همون چیدمان قبلی (اسکرول افقی موبایل / ۳ ستون دسکتاپ) -->
-          <div
-            v-if="featuredPending"
-            class="-mx-4 flex gap-4 overflow-hidden px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0"
-          >
-            <FeaturedPlantCardSkeleton
-              v-for="i in 4"
-              :key="i"
-            />
-          </div>
+          <template v-if="featuredPending" />
 
           <!-- اسلایدر Swiper: موبایل ~۱.۵ کارت | تبلت ۲.۴ | دسکتاپ ۳ کارت با فلش -->
           <AppSlider
@@ -229,7 +155,7 @@ function onCardLeave(event: PointerEvent) {
                     :src="plant.images[0]"
                     :alt="plant.name"
                     class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
+                    decoding="async"
                   >
                   <div class="absolute end-2 top-2">
                     <WishlistButton
@@ -259,7 +185,7 @@ function onCardLeave(event: PointerEvent) {
             :src="featuredPromoImage"
             alt=""
             class="absolute inset-0 -z-20 size-full object-cover object-center"
-            loading="lazy"
+            decoding="async"
           >
           <div class="absolute inset-0 -z-10 bg-gradient-to-r from-surface/95 via-surface/75 to-surface/10 rtl:bg-gradient-to-l" />
           <h3 class="max-w-[15rem] text-3xl font-extrabold leading-snug text-ink">
@@ -306,7 +232,7 @@ function onCardLeave(event: PointerEvent) {
             :src="disease.image"
             :alt="disease.name"
             class="h-28 w-full rounded-xl object-cover"
-            loading="lazy"
+            decoding="async"
           >
           <span class="px-1.5 pb-1 text-sm font-bold text-ink">{{ disease.name }}</span>
         </NuxtLink>
@@ -331,7 +257,6 @@ function onCardLeave(event: PointerEvent) {
     transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.2s ease,
     border-color 0.2s ease;
-  will-change: transform;
 }
 
 @media (hover: hover) and (pointer: fine) {

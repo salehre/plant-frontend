@@ -40,34 +40,7 @@ function onImageSelected(url: string) {
         :result="identifyStore.result"
       />
 
-      <div
-        v-else-if="identifyStore.status === 'analyzing'"
-        class="glass-card flex flex-col gap-4 p-5"
-      >
-        <div class="flex items-center gap-3">
-          <AppSkeleton
-            height="4rem"
-            width="4rem"
-            rounded="rounded-xl"
-          />
-          <div class="flex flex-1 flex-col gap-2">
-            <AppSkeleton
-              height="1.25rem"
-              width="55%"
-            />
-            <AppSkeleton
-              height="0.875rem"
-              width="35%"
-            />
-          </div>
-        </div>
-        <AppSkeleton
-          height="2.25rem"
-          width="60%"
-          rounded="rounded-full"
-        />
-        <AppSkeleton height="4rem" />
-      </div>
+      <template v-else-if="identifyStore.status === 'analyzing'" />
 
       <div
         v-else-if="identifyStore.status === 'error'"

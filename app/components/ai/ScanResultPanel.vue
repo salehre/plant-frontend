@@ -213,16 +213,7 @@ function addToGarden() {
       >
         {{ $t('components.common.unlinkedPlant') }}
       </p>
-      <div
-        v-else-if="loading"
-        class="flex flex-col gap-2"
-      >
-        <AppSkeleton
-          height="1.5rem"
-          width="70%"
-        />
-        <AppSkeleton height="3rem" />
-      </div>
+      <template v-else-if="loading" />
       <template v-else-if="plant">
         <div class="flex flex-wrap gap-1.5">
           <span

@@ -15,7 +15,7 @@ const { t } = useI18n()
         :src="props.post.image"
         :alt="props.post.title"
         class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-        loading="lazy"
+        decoding="async"
       >
     </div>
 

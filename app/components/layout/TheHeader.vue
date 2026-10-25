@@ -18,7 +18,7 @@ function onSearch() {
 </script>
 
 <template>
-  <header class="sticky top-0 z-30 bg-bg/85 backdrop-blur">
+  <header class="sticky top-0 z-30 bg-bg">
     <div class="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
       <!-- لوگو (فقط موبایل؛ تو دسکتاپ لوگو توی سایدبار هست) -->
       <NuxtLink
@@ -50,11 +50,11 @@ function onSearch() {
         >
       </form>
 
-      <div class="ms-auto flex items-center gap-1 rounded-full border border-ink/10 bg-surface/65 p-1 shadow-sm backdrop-blur-md">
+      <div class="ms-auto flex items-center gap-2 rounded-full border border-ink/10 bg-surface p-1 shadow-sm">
         <!-- تغییر زبان -->
         <button
           type="button"
-          class="hidden size-10 items-center justify-center rounded-full text-xs font-bold text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none md:flex"
+          class="hidden size-9 items-center justify-center rounded-full text-xs font-bold text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none md:flex"
           :aria-label="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           :title="locale === 'fa' ? $t('common.switchToEnglish') : $t('common.switchToPersian')"
           @click="toggleLocale"
@@ -65,7 +65,7 @@ function onSearch() {
         <!-- دارک / لایت مود (موبایل و دسکتاپ) -->
         <button
           type="button"
-          class="flex size-10 items-center justify-center rounded-full text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none"
+          class="flex size-9 items-center justify-center rounded-full text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none"
           :aria-label="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           :title="isDark ? $t('pages.profile.switchToLight') : $t('pages.profile.switchToDark')"
           @click="uiStore.toggleMode()"
@@ -79,7 +79,7 @@ function onSearch() {
         <!-- اعلان: تسک‌های امروز -->
         <NuxtLink
           to="/care-calendar"
-          class="relative flex size-10 items-center justify-center rounded-full text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none"
+          class="relative flex size-9 items-center justify-center rounded-full text-primary-700 transition-[transform,background-color,color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none"
           :aria-label="$t('nav.careCalendar')"
         >
           <Icon
@@ -95,7 +95,7 @@ function onSearch() {
         <!-- پروفایل -->
         <NuxtLink
           to="/profile"
-          class="hidden size-10 items-center justify-center rounded-full ring-2 ring-transparent transition-[transform,background-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none md:flex"
+          class="hidden size-9 items-center justify-center rounded-full ring-2 ring-transparent transition-[transform,background-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-sm active:translate-y-0 active:scale-95 motion-reduce:transform-none motion-reduce:transition-none md:flex"
           :aria-label="$t('nav.profile')"
         >
           <UserAvatar

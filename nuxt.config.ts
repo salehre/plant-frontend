@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components', pathPrefix: false },
   ],
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   app: {
     baseURL: '/plant/',
@@ -62,6 +62,11 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
   },
 
+  // آیکون‌ها موقع build داخل باندل میان؛ تو SPA (ssr:false) دیگه هر آیکون یه request جدا به سرور نمی‌زنه
+  icon: {
+    clientBundle: { scan: true },
+  },
+
   image: {
     quality: 80,
     format: ['webp'],
@@ -82,7 +87,7 @@ export default defineNuxtConfig({
       ],
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
     },
   },
 })
