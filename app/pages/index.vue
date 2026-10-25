@@ -55,6 +55,39 @@ function onCardLeave(event: PointerEvent) {
   el.style.removeProperty('--tilt-x')
   el.style.removeProperty('--tilt-y')
 }
+
+function onHeroCtaMove(event: PointerEvent) {
+  if (event.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const button = event.currentTarget as HTMLElement
+  const rect = button.getBoundingClientRect()
+  button.style.setProperty('--cta-x', `${(event.clientX - rect.left - rect.width / 2) * 0.1}px`)
+  button.style.setProperty('--cta-y', `${(event.clientY - rect.top - rect.height / 2) * 0.14}px`)
+}
+
+function resetHeroCta(event: PointerEvent) {
+  const button = event.currentTarget as HTMLElement
+  button.style.setProperty('--cta-x', '0px')
+  button.style.setProperty('--cta-y', '0px')
+}
+
+function rippleHeroCta(event: PointerEvent) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const button = event.currentTarget as HTMLElement
+  const rect = button.getBoundingClientRect()
+  button.style.setProperty('--ripple-x', `${event.clientX - rect.left}px`)
+  button.style.setProperty('--ripple-y', `${event.clientY - rect.top}px`)
+  button.classList.remove('is-rippling')
+  void button.offsetWidth
+  button.classList.add('is-rippling')
+}
+
+function onHeroCtaAnimationEnd(event: AnimationEvent) {
+  if (event.animationName === 'hero-cta-ripple') {
+    (event.currentTarget as HTMLElement).classList.remove('is-rippling')
+  }
+}
 </script>
 
 <template>
@@ -86,22 +119,44 @@ function onCardLeave(event: PointerEvent) {
             {{ t('home.heroSubtitle') }}
           </p>
           <div class="flex flex-wrap gap-3">
-            <NuxtLink
-              to="/identify"
-              class="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-400"
-            >
-              <Icon
-                name="lucide:scan-line"
-                class="size-4"
-              />
-              {{ t('home.identifyCta') }}
-            </NuxtLink>
-            <NuxtLink
-              to="/plants"
-              class="sm:inline-flex hidden items-center gap-2 rounded-xl border border-white/40 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
-            >
-              {{ t('nav.catalog') }}
-            </NuxtLink>
+            <span class="hero-cta-shell relative inline-flex">
+              <span class="hero-cta-ping" aria-hidden="true" />
+              <NuxtLink
+                to="/identify"
+                class="hero-cta-link hero-cta-link--primary group relative isolate inline-flex items-center gap-2 overflow-hidden rounded-xl px-5 py-2.5 text-sm font-bold text-white"
+                @pointermove="onHeroCtaMove"
+                @pointerleave="resetHeroCta"
+                @pointerdown="rippleHeroCta"
+                @animationend="onHeroCtaAnimationEnd"
+              >
+                <span class="hero-cta-scan" aria-hidden="true" />
+                <span class="hero-cta-icon relative z-10 flex size-4 items-center justify-center">
+                  <span class="hero-cta-icon-orbit" aria-hidden="true" />
+                  <Icon name="lucide:scan-line" class="relative z-10 size-4" />
+                </span>
+                <span class="relative z-10">{{ t('home.identifyCta') }}</span>
+                <Icon name="lucide:arrow-right" class="hero-cta-arrow relative z-10 size-4 rtl:-scale-x-100" />
+              </NuxtLink>
+            </span>
+            <span class="hero-cta-shell relative hidden sm:inline-flex">
+              <span class="hero-cta-ping" aria-hidden="true" />
+              <NuxtLink
+                to="/plants"
+                class="hero-cta-link hero-cta-link--secondary group relative isolate inline-flex items-center gap-2 overflow-hidden rounded-xl border border-white/40 px-5 py-2.5 text-sm font-medium text-white"
+                @pointermove="onHeroCtaMove"
+                @pointerleave="resetHeroCta"
+                @pointerdown="rippleHeroCta"
+                @animationend="onHeroCtaAnimationEnd"
+              >
+                <span class="hero-cta-scan" aria-hidden="true" />
+                <span class="hero-cta-icon relative z-10 flex size-4 items-center justify-center">
+                  <span class="hero-cta-icon-orbit" aria-hidden="true" />
+                  <Icon name="lucide:compass" class="relative z-10 size-4" />
+                </span>
+                <span class="relative z-10">{{ t('nav.catalog') }}</span>
+                <Icon name="lucide:arrow-right" class="hero-cta-arrow relative z-10 size-4 rtl:-scale-x-100" />
+              </NuxtLink>
+            </span>
           </div>
         </div>
       </div>
@@ -260,6 +315,169 @@ function onCardLeave(event: PointerEvent) {
 </template>
 
 <style scoped>
+.hero-cta-link {
+  --cta-x: 0px;
+  --cta-y: 0px;
+  --ripple-x: 50%;
+  --ripple-y: 50%;
+  translate: var(--cta-x) var(--cta-y);
+  transition: translate 160ms ease-out, background-color 280ms ease, box-shadow 280ms ease, scale 180ms ease;
+}
+
+.hero-cta-link--primary {
+  background-color: rgb(var(--color-primary-500));
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+.hero-cta-link--primary:hover {
+  background-color: rgb(var(--color-primary-400));
+  box-shadow: 0 15px 32px rgb(0 0 0 / 0.24), 0 0 0 1px rgb(255 255 255 / 0.12);
+}
+
+.hero-cta-link--secondary {
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.12);
+}
+
+.hero-cta-link--secondary:hover {
+  background-color: rgb(255 255 255 / 0.1);
+}
+
+.hero-cta-link:active {
+  scale: 0.97;
+}
+
+.hero-cta-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(30 58 138), 0 0 0 5px rgb(147 197 253);
+}
+
+.hero-cta-link::after {
+  position: absolute;
+  z-index: 0;
+  top: var(--ripple-y);
+  left: var(--ripple-x);
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgb(255 255 255 / 0.75);
+  border-radius: 50%;
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.hero-cta-link.is-rippling::after {
+  animation: hero-cta-ripple 620ms ease-out;
+}
+
+@keyframes hero-cta-ripple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(18);
+  }
+}
+
+.hero-cta-scan {
+  position: absolute;
+  z-index: 0;
+  top: -20%;
+  bottom: -20%;
+  left: -25%;
+  width: 14px;
+  background: rgb(255 255 255 / 0.18);
+  filter: blur(5px);
+  opacity: 0;
+  transform: rotate(8deg);
+  animation: hero-cta-scan 3.2s 1.2s ease-in-out infinite;
+}
+
+@keyframes hero-cta-scan {
+  0% {
+    left: -25%;
+    opacity: 0;
+  }
+
+  20%,
+  65% {
+    opacity: 0.8;
+  }
+
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
+.hero-cta-ping {
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgb(147 197 253 / 0.32);
+  border-radius: 16px;
+  pointer-events: none;
+  animation: hero-cta-ping 2.8s ease-out infinite;
+}
+
+@keyframes hero-cta-ping {
+  0%,
+  45% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  55% {
+    opacity: 0.55;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+.hero-cta-icon-orbit {
+  position: absolute;
+  inset: -3px;
+  border: 1px solid rgb(255 255 255 / 0.4);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.hero-cta-link:hover .hero-cta-icon-orbit {
+  animation: hero-cta-icon-orbit 700ms ease-out;
+}
+
+.hero-cta-link:hover .hero-cta-arrow {
+  animation: hero-cta-arrow 650ms ease-in-out infinite alternate;
+}
+
+@keyframes hero-cta-icon-orbit {
+  from {
+    opacity: 0.8;
+    transform: scale(0.6) rotate(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.5) rotate(180deg);
+  }
+}
+
+@keyframes hero-cta-arrow {
+  to {
+    translate: 3px 0;
+  }
+}
+
+:global([dir='rtl']) .hero-cta-link:hover .hero-cta-arrow {
+  animation-name: hero-cta-arrow-rtl;
+}
+
+@keyframes hero-cta-arrow-rtl {
+  to {
+    translate: -3px 0;
+  }
+}
+
 /* کج شدن سه‌بعدی کارت‌های دسترسی سریع زیر موس */
 .tilt-card {
   --tilt-x: 0deg;
@@ -284,6 +502,18 @@ function onCardLeave(event: PointerEvent) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-cta-link,
+  .hero-cta-link *,
+  .hero-cta-link::after,
+  .hero-cta-ping {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-cta-link {
+    translate: none !important;
+  }
+
   .tilt-card,
   .tilt-card:hover {
     transform: none;
