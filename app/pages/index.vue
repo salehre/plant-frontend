@@ -29,32 +29,12 @@ const featuredShown = computed(() => featured.value.slice(0, 4))
 const featuredPromoImage = '/images/plants/header.webp'
 
 const quickActions = [
-  { to: '/identify', icon: 'lucide:scan-line', label: 'nav.identify', hint: 'home.quickHints.identify' },
-  { to: '/my-plants', icon: 'lucide:sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
-  { to: '/care-calendar', icon: 'lucide:calendar-check', label: 'nav.careCalendar', hint: 'home.quickHints.care' },
-  { to: '/ai-doctor', icon: 'lucide:stethoscope', label: 'nav.aiDoctor', hint: 'home.quickHints.aiDoctor' },
-  { to: '/plants', icon: 'lucide:compass', label: 'nav.explore', hint: 'home.quickHints.catalog' },
+  { to: '/identify', icon: 'lucide:scan-line', animation: 'scan', label: 'nav.identify', hint: 'home.quickHints.identify' },
+  { to: '/my-plants', icon: 'lucide:sprout', animation: 'sprout', label: 'nav.myPlants', hint: 'home.quickHints.myPlants' },
+  { to: '/care-calendar', icon: 'lucide:calendar-check', animation: 'calendar', label: 'nav.careCalendar', hint: 'home.quickHints.care' },
+  { to: '/ai-doctor', icon: 'lucide:stethoscope', animation: 'doctor', label: 'nav.aiDoctor', hint: 'home.quickHints.aiDoctor' },
+  { to: '/plants', icon: 'lucide:compass', animation: 'compass', label: 'nav.explore', hint: 'home.quickHints.catalog' },
 ]
-
-// افکت «وزن موس» روی کارت‌های دسترسی سریع: سمتی از کارت که موس روشه، به عقب فرو میره (انگار فشار میاد)
-const TILT_MAX_DEG = 9 // حداکثر زاویه‌ی کج شدن
-const TILT_DIRECTION = 1 // 1 = سمت زیر موس به عقب میره | -1 = سمت زیر موس به جلو میاد
-
-function onCardMove(event: PointerEvent) {
-  if (event.pointerType !== 'mouse') return
-  const el = event.currentTarget as HTMLElement
-  const rect = el.getBoundingClientRect()
-  const x = (event.clientX - rect.left) / rect.width - 0.5 // -0.5 تا 0.5
-  const y = (event.clientY - rect.top) / rect.height - 0.5
-  el.style.setProperty('--tilt-x', `${(-y * 2 * TILT_MAX_DEG * TILT_DIRECTION).toFixed(2)}deg`)
-  el.style.setProperty('--tilt-y', `${(x * 2 * TILT_MAX_DEG * TILT_DIRECTION).toFixed(2)}deg`)
-}
-
-function onCardLeave(event: PointerEvent) {
-  const el = event.currentTarget as HTMLElement
-  el.style.removeProperty('--tilt-x')
-  el.style.removeProperty('--tilt-y')
-}
 
 function onHeroCtaMove(event: PointerEvent) {
   if (event.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -168,14 +148,21 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
         v-for="action in quickActions"
         :key="action.to"
         :to="action.to"
-        class="glass-card tilt-card flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
-        @pointermove="onCardMove"
-        @pointerleave="onCardLeave"
+        class="quick-action-card glass-card group flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
       >
-        <span class="flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary-700">
+        <span
+          class="quick-action-icon-shell relative flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors duration-300 group-hover:bg-primary-100 group-hover:text-primary-800 group-focus-visible:bg-primary-100"
+          :class="`quick-action-icon-shell--${action.animation}`"
+        >
+          <span
+            v-if="action.animation === 'scan'"
+            class="quick-action-scan-line"
+            aria-hidden="true"
+          />
           <Icon
             :name="action.icon"
-            class="size-6"
+            class="quick-action-icon relative z-10 size-6"
+            :class="`quick-action-icon--${action.animation}`"
           />
         </span>
         <span class="flex flex-col gap-0.5">
@@ -315,6 +302,140 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 </template>
 
 <style scoped>
+.quick-action-card {
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.quick-action-card:hover,
+.quick-action-card:focus-visible {
+  transform: translateY(-3px);
+}
+
+.quick-action-icon-shell {
+  overflow: hidden;
+}
+
+.quick-action-scan-line {
+  position: absolute;
+  z-index: 1;
+  inset-inline: 20%;
+  top: 18%;
+  height: 2px;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  opacity: 0;
+}
+
+.quick-action-card:hover .quick-action-icon--scan,
+.quick-action-card:focus-visible .quick-action-icon--scan {
+  animation: quick-scan-icon 1s ease-in-out infinite;
+}
+
+.quick-action-card:hover .quick-action-scan-line,
+.quick-action-card:focus-visible .quick-action-scan-line {
+  animation: quick-scan-line 1s ease-in-out infinite;
+}
+
+@keyframes quick-scan-icon {
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes quick-scan-line {
+  0% {
+    top: 18%;
+    opacity: 0;
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 78%;
+    opacity: 0;
+  }
+}
+
+.quick-action-card:hover .quick-action-icon--sprout,
+.quick-action-card:focus-visible .quick-action-icon--sprout {
+  animation: quick-sprout-grow 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes quick-sprout-grow {
+  0% {
+    transform: scale(0.8) rotate(-8deg);
+  }
+
+  60% {
+    transform: scale(1.18) rotate(6deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.quick-action-card:hover .quick-action-icon--calendar,
+.quick-action-card:focus-visible .quick-action-icon--calendar {
+  animation: quick-calendar-check 650ms ease-out;
+}
+
+@keyframes quick-calendar-check {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  40% {
+    transform: translateY(-3px) scale(1.12);
+  }
+
+  65% {
+    transform: translateY(1px) scale(0.95);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.quick-action-card:hover .quick-action-icon--doctor,
+.quick-action-card:focus-visible .quick-action-icon--doctor {
+  animation: quick-doctor-pulse 800ms ease-in-out infinite;
+}
+
+@keyframes quick-doctor-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+.quick-action-card:hover .quick-action-icon--compass,
+.quick-action-card:focus-visible .quick-action-icon--compass {
+  animation: quick-compass-turn 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes quick-compass-turn {
+  from {
+    transform: rotate(-35deg) scale(0.9);
+  }
+
+  to {
+    transform: rotate(0) scale(1);
+  }
+}
+
 .hero-cta-link {
   --cta-x: 0px;
   --cta-y: 0px;
@@ -478,30 +599,20 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
   }
 }
 
-/* کج شدن سه‌بعدی کارت‌های دسترسی سریع زیر موس */
-.tilt-card {
-  --tilt-x: 0deg;
-  --tilt-y: 0deg;
-  transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(1, 1, 1);
-  /* برگشت نرم و فنری وقتی موس کارت رو ترک می‌کنه */
-  transition:
-    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .tilt-card:hover {
-    /* موقع حرکت موس سریع دنبال می‌کنه، کمی کوچیک می‌شه تا حس فشار بده */
-    transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(0.97, 0.97, 0.97);
-    transition:
-      transform 0.12s ease-out,
-      box-shadow 0.2s ease,
-      border-color 0.2s ease;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
+  .quick-action-card,
+  .quick-action-card:hover,
+  .quick-action-card:focus-visible {
+    transform: none;
+    transition: none;
+  }
+
+  .quick-action-card *,
+  .quick-action-card *::before,
+  .quick-action-card *::after {
+    animation: none !important;
+  }
+
   .hero-cta-link,
   .hero-cta-link *,
   .hero-cta-link::after,
@@ -512,12 +623,6 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 
   .hero-cta-link {
     translate: none !important;
-  }
-
-  .tilt-card,
-  .tilt-card:hover {
-    transform: none;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
   }
 }
 </style>

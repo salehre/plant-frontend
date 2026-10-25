@@ -14,6 +14,26 @@ const {
 
 const intlLocale = computed(() => (locale.value === 'fa' ? 'fa-IR' : 'en-US'))
 
+const TILT_MAX_DEG = 9
+
+function onStatCardMove(event: PointerEvent) {
+  if (event.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const card = event.currentTarget as HTMLElement
+  const rect = card.getBoundingClientRect()
+  const x = (event.clientX - rect.left) / rect.width - 0.5
+  const y = (event.clientY - rect.top) / rect.height - 0.5
+
+  card.style.setProperty('--tilt-x', `${(-y * 2 * TILT_MAX_DEG).toFixed(2)}deg`)
+  card.style.setProperty('--tilt-y', `${(x * 2 * TILT_MAX_DEG).toFixed(2)}deg`)
+}
+
+function onStatCardLeave(event: PointerEvent) {
+  const card = event.currentTarget as HTMLElement
+  card.style.removeProperty('--tilt-x')
+  card.style.removeProperty('--tilt-y')
+}
+
 function delta(n: number) {
   return n > 0 ? t('pages.profile.stats.delta', { n }) : t('pages.profile.stats.deltaNone')
 }
@@ -74,7 +94,9 @@ function onImageError(e: Event) {
       <div
         v-for="card in cards"
         :key="card.key"
-        class="glass-card stat-card flex flex-col gap-4 p-4 transition-shadow duration-300 hover:shadow-card-hover sm:p-5"
+        class="glass-card stat-card tilt-card flex flex-col gap-4 p-4 transition-shadow duration-300 hover:shadow-card-hover sm:p-5"
+        @pointermove="onStatCardMove"
+        @pointerleave="onStatCardLeave"
       >
         <span class="flex size-10 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-950/40 dark:text-primary-300">
           <Icon
@@ -173,6 +195,26 @@ function onImageError(e: Event) {
 </template>
 
 <style scoped>
+.tilt-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(1, 1, 1);
+  transition:
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tilt-card:hover {
+    transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(0.97, 0.97, 0.97);
+    transition:
+      transform 0.12s ease-out,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+}
+
 /* زاویه‌ی گرادیانت قابل انیمیت (برای چرخوندن خط دور کارت) */
 @property --stat-border-angle {
   syntax: '<angle>';
@@ -213,6 +255,12 @@ function onImageError(e: Event) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .tilt-card,
+  .tilt-card:hover {
+    transform: none;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
   .stat-card:hover::before {
     animation: none;
   }
