@@ -151,7 +151,7 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
       v-for="(action, idx) in quickActions"
       :key="action.to"
       :to="action.to"
-      class="quick-action-card group relative flex flex-col items-center gap-3 overflow-visible rounded-[28px] border border-white/40 bg-white/10 p-5 text-center shadow-2xl shadow-black/[0.02] backdrop-blur-3xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-4 hover:scale-[1.04] hover:bg-white/30 hover:shadow-[0_30px_60px_-15px_rgba(59,130,246,0.15),0_0_0_1px_rgba(255,255,255,0.5)_inset,_0_8px_24px_rgba(0,0,0,0.05)] active:scale-[0.96] active:duration-150 last:col-span-2 sm:last:col-span-1"
+      class="quick-action-card glass-card group relative flex flex-col items-center gap-3 overflow-visible rounded-[28px] p-5 text-center transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1 hover:border-primary-500/30 hover:scale-[1.02] active:scale-[0.98] active:duration-150 last:col-span-2 sm:last:col-span-1"
       :style="{ animationDelay: `${idx * 0.08}s` }"
     >
       <!-- نور نرم از پشت در hover -->
@@ -161,12 +161,12 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 
       <!-- درخشش سطح شیشه -->
       <div
-        class="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/20 via-transparent to-transparent opacity-60"
+        class="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-primary-500/[0.06] via-transparent to-transparent opacity-60"
       />
 
       <!-- پوسته آیکون -->
       <span
-        class="quick-action-icon-shell relative z-10 flex size-[72px] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-white/80 via-white/40 to-white/10 text-primary-600 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.06)] ring-1 ring-white/30 transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110 group-hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] group-hover:text-primary-700"
+        class="quick-action-icon-shell relative z-10 flex size-[72px] items-center justify-center overflow-hidden rounded-3xl bg-primary-50 text-primary-700 shadow-card ring-1 ring-primary-500/10 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110 group-hover:shadow-card-hover"
         :class="`shell--${action.animation}`"
       >
         <!-- ذرات مدار (Orbit) -->
@@ -189,14 +189,14 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 
         <!-- هاله درخشان (Glow) -->
         <template v-if="action.animation === 'glow'">
-          <span class="absolute inset-[-6px] rounded-[32px] bg-gradient-to-tr from-primary-300/60 via-fuchsia-300/40 to-rose-300/60 opacity-70 blur-xl" />
-          <span class="absolute inset-[-3px] rounded-[28px] bg-gradient-to-tr from-primary-200/50 to-fuchsia-200/50 opacity-90 blur-lg" />
+          <span class="absolute inset-[-6px] rounded-[32px] bg-gradient-to-tr from-primary-300/40 via-primary-200/30 to-accent-300/30 opacity-70 blur-xl" />
+          <span class="absolute inset-[-3px] rounded-[28px] bg-gradient-to-tr from-primary-200/40 to-accent-200/40 opacity-90 blur-lg" />
         </template>
 
         <!-- مرز چرخان گرادیان -->
         <span
           v-if="action.animation === 'gradient'"
-          class="absolute inset-[-2px] -z-10 rounded-[28px] bg-gradient-to-tr from-blue-400 via-violet-400 to-rose-400 opacity-80"
+          class="absolute inset-[-2px] -z-10 rounded-[28px] bg-gradient-to-tr from-primary-400 via-primary-500 to-accent-400 opacity-80"
           style="animation: rotate 3s linear infinite;"
         />
 
@@ -212,12 +212,12 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
         class="relative z-10 flex flex-col gap-1 transition-transform duration-300 group-hover:-translate-y-0.5"
       >
         <span
-          class="text-base font-black text-slate-800 transition-colors duration-300 group-hover:text-primary-700"
-          :class="{ 'bg-gradient-to-r from-blue-600 via-violet-600 to-rose-500 bg-clip-text text-transparent': action.animation === 'gradient' }"
+          class="text-base font-black text-ink transition-colors duration-300 group-hover:text-primary-700"
+          :class="{ 'bg-gradient-to-r from-primary-700 via-primary-500 to-accent-600 bg-clip-text text-transparent': action.animation === 'gradient' }"
         >
           {{ t(action.label) }}
         </span>
-        <span class="text-[11px] font-medium leading-tight text-slate-400/90 transition-colors duration-300 group-hover:text-slate-500">
+        <span class="text-[11px] font-medium leading-tight text-ink-muted transition-colors duration-300 group-hover:text-ink">
           {{ t(action.hint) }}
         </span>
       </span>
@@ -369,6 +369,20 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 .quick-action-card:hover,
 .quick-action-card:focus-visible {
   transform: translateY(-3px);
+}
+
+:global(html.dark) .quick-action-card:hover,
+:global(html.dark) .quick-action-card:focus-visible {
+  background-color: rgb(var(--color-primary-500) / 0.18);
+  border-color: rgb(var(--color-primary-300) / 0.65);
+  box-shadow: var(--card-shadow-hover), 0 0 0 1px rgb(var(--color-primary-300) / 0.2);
+}
+
+:global(html.dark) .quick-action-card:hover .quick-action-icon-shell,
+:global(html.dark) .quick-action-card:focus-visible .quick-action-icon-shell {
+  background-color: rgb(var(--color-primary-500) / 0.45);
+  color: rgb(var(--color-ink));
+  box-shadow: 0 0 0 2px rgb(var(--color-primary-300) / 0.55), 0 8px 24px rgb(var(--color-primary-500) / 0.25);
 }
 
 .quick-action-icon-shell {
@@ -721,16 +735,16 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
   background: linear-gradient(
     90deg,
     transparent,
-    #60a5fa,
-    #93c5fd,
-    #38bdf8,
-    #60a5fa,
+    rgb(var(--color-primary-300)),
+    rgb(var(--color-primary-200)),
+    rgb(var(--color-primary-400)),
+    rgb(var(--color-primary-300)),
     transparent
   );
   box-shadow:
-    0 0 10px 2px #60a5fa,
-    0 0 20px 4px rgba(96, 165, 250, 0.5),
-    0 0 30px 6px rgba(96, 165, 250, 0.2);
+    0 0 10px 2px rgb(var(--color-primary-400) / 0.8),
+    0 0 20px 4px rgb(var(--color-primary-400) / 0.5),
+    0 0 30px 6px rgb(var(--color-primary-400) / 0.2);
   z-index: 20;
   animation: laserMove 1.4s ease-in-out infinite alternate;
 }
@@ -757,8 +771,8 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
   height: 7px;
   margin: -3.5px 0 0 -3.5px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffffff, #3b82f6);
-  box-shadow: 0 0 6px 1px #60a5fa, 0 0 10px 2px rgba(59, 130, 246, 0.7);
+  background: radial-gradient(circle at 35% 35%, rgb(var(--color-surface)), rgb(var(--color-primary-500)));
+  box-shadow: 0 0 6px 1px rgb(var(--color-primary-400)), 0 0 10px 2px rgb(var(--color-primary-500) / 0.7);
   animation: orbitMove 3.5s linear infinite;
 }
 
@@ -784,18 +798,18 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 }
 
 .icon--glow {
-  filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.6))
-          drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+  filter: drop-shadow(0 0 6px rgb(var(--color-accent-400) / 0.6))
+          drop-shadow(0 0 10px rgb(var(--color-primary-400) / 0.5));
   animation: glowPulse 2.5s ease-in-out infinite;
 }
 @keyframes glowPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 5px rgba(236,72,153,0.5))
-            drop-shadow(0 0 8px rgba(59,130,246,0.4));
+    filter: drop-shadow(0 0 5px rgb(var(--color-accent-400) / 0.5))
+            drop-shadow(0 0 8px rgb(var(--color-primary-400) / 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 12px rgba(236,72,153,0.9))
-            drop-shadow(0 0 16px rgba(59,130,246,0.8));
+    filter: drop-shadow(0 0 12px rgb(var(--color-accent-400) / 0.9))
+            drop-shadow(0 0 16px rgb(var(--color-primary-400) / 0.8));
   }
 }
 
@@ -808,7 +822,7 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 }
 
 .icon--gradient {
-  background: linear-gradient(110deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  background: linear-gradient(110deg, rgb(var(--color-primary-400)) 0%, rgb(var(--color-primary-600)) 50%, rgb(var(--color-accent-500)) 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
