@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { getMockDiseases } from '~/services/mock/diseases.mock'
+
+const homeRoot = ref<HTMLElement | null>(null)
+let revealObserver: IntersectionObserver | null = null
+let revealSetupStarted = false
 
 const plantStore = usePlantStore()
 const blogStore = useBlogStore()
@@ -23,6 +28,58 @@ const homePagePending = useState('home-page-pending', () => true)
 watch(homePending, (pending) => {
   homePagePending.value = pending
 }, { immediate: true })
+
+async function setupSectionReveal() {
+  if (revealSetupStarted) return
+  revealSetupStarted = true
+
+  await nextTick()
+  const root = homeRoot.value
+  if (!root) {
+    revealSetupStarted = false
+    return
+  }
+
+  const targets = Array.from(root.children).filter(
+    (element): element is HTMLElement => element instanceof HTMLElement,
+  )
+
+  targets.forEach((element, index) => {
+    element.classList.add('home-section-reveal')
+    element.style.setProperty('--reveal-delay', `${(index % 5) * 60}ms`)
+  })
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    targets.forEach(element => element.classList.add('is-visible'))
+    return
+  }
+
+  revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-visible')
+        observer.unobserve(entry.target)
+      })
+    },
+    { threshold: 0.08, rootMargin: '0px 0px -20px 0px' },
+  )
+
+  targets.forEach(element => revealObserver?.observe(element))
+}
+
+watch(homePending, (pending) => {
+  if (!pending) setupSectionReveal()
+}, { flush: 'post' })
+
+onMounted(() => {
+  if (!homePending.value) setupSectionReveal()
+})
+
+onBeforeUnmount(() => {
+  revealObserver?.disconnect()
+})
+
 const featuredShown = computed(() => featured.value.slice(0, 4))
 
 // بک‌گراند کارت تبلیغی بخش گیاهان شاخص؛ بعداً فقط مسیر همین عکس رو عوض کن
@@ -74,7 +131,8 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
   <HomePageSkeleton v-if="homePending" />
   <div
     v-else
-    class="flex flex-col gap-10"
+    ref="homeRoot"
+    class="home-page flex flex-col gap-10"
   >
     <!-- ======= هیرو ======= -->
     <section
@@ -166,7 +224,7 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 
       <!-- پوسته آیکون -->
       <span
-        class="quick-action-icon-shell relative z-10 flex size-[72px] items-center justify-center overflow-hidden rounded-3xl bg-primary-50 text-primary-700 shadow-card ring-1 ring-primary-500/10 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110 group-hover:shadow-card-hover"
+        class="quick-action-icon-shell relative z-10 flex size-[72px] items-center justify-center overflow-hidden rounded-3xl bg-primary-50 text-primary-700 shadow-card ring-1 ring-primary-500/10 transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110 group-hover:bg-primary-100 group-hover:shadow-card-hover group-hover:text-primary-800"
         :class="`shell--${action.animation}`"
       >
         <!-- ذرات مدار (Orbit) -->
@@ -359,6 +417,29 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 </template>
 
 <style scoped>
+.home-page .home-section-reveal {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0) scale(0.985);
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.home-page .home-section-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page .home-section-reveal,
+  .home-page .home-section-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .quick-action-card {
   transition:
     transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -369,20 +450,6 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 .quick-action-card:hover,
 .quick-action-card:focus-visible {
   transform: translateY(-3px);
-}
-
-:global(html.dark) .quick-action-card:hover,
-:global(html.dark) .quick-action-card:focus-visible {
-  background-color: rgb(var(--color-primary-500) / 0.18);
-  border-color: rgb(var(--color-primary-300) / 0.65);
-  box-shadow: var(--card-shadow-hover), 0 0 0 1px rgb(var(--color-primary-300) / 0.2);
-}
-
-:global(html.dark) .quick-action-card:hover .quick-action-icon-shell,
-:global(html.dark) .quick-action-card:focus-visible .quick-action-icon-shell {
-  background-color: rgb(var(--color-primary-500) / 0.45);
-  color: rgb(var(--color-ink));
-  box-shadow: 0 0 0 2px rgb(var(--color-primary-300) / 0.55), 0 8px 24px rgb(var(--color-primary-500) / 0.25);
 }
 
 .quick-action-icon-shell {

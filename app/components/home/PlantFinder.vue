@@ -529,7 +529,10 @@ watch(activeLocale, () => {
   100% { transform: scale(2.1); opacity: 0; }
 }
 
-.sprout-svg { color: #ecfdf5; filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.45)); }
+.sprout-svg {
+  color: rgb(var(--color-primary-100));
+  filter: drop-shadow(0 2px 10px rgb(var(--color-primary-400) / 0.45));
+}
 
 .sprout-stem,
 .sprout-leaf-l,
@@ -684,7 +687,7 @@ watch(activeLocale, () => {
 .opt-btn.is-selected {
   border-color: #fff;
   background: #fff;
-  color: rgb(var(--color-primary-700, 21 128 61));
+  color: rgb(var(--color-primary-700));
   box-shadow: 0 16px 34px -14px rgba(0, 0, 0, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
@@ -734,7 +737,7 @@ watch(activeLocale, () => {
 }
 .opt-btn:hover .opt-icon-wrap { transform: scale(1.1) rotate(-6deg); background: rgba(255, 255, 255, 0.26); }
 .opt-btn.is-selected .opt-icon-wrap {
-  background: rgb(var(--color-primary-50, 240 253 244));
+  background: rgb(var(--color-primary-50));
   transform: scale(1.06);
 }
 .opt-icon { transition: transform .4s cubic-bezier(.34,1.56,.64,1); }
@@ -843,7 +846,7 @@ watch(activeLocale, () => {
   inline-size: 9px;
   block-size: 9px;
   border-radius: 9999px;
-  background: rgb(var(--color-primary-600, 22 163 74));
+  background: rgb(var(--color-primary-600));
 }
 @keyframes score-fill {
   from { --score: 0; }

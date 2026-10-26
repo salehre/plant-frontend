@@ -42,6 +42,25 @@ function tabShow(tab: MobileTab) {
 }
 
 const statIcons = ['lucide:globe', 'lucide:trees', 'lucide:map-pin', 'lucide:earth']
+const TILT_MAX_DEG = 9
+
+function onStatCardMove(event: PointerEvent) {
+  if (event.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const card = event.currentTarget as HTMLElement
+  const rect = card.getBoundingClientRect()
+  const x = (event.clientX - rect.left) / rect.width - 0.5
+  const y = (event.clientY - rect.top) / rect.height - 0.5
+
+  card.style.setProperty('--tilt-x', `${(-y * 2 * TILT_MAX_DEG).toFixed(2)}deg`)
+  card.style.setProperty('--tilt-y', `${(x * 2 * TILT_MAX_DEG).toFixed(2)}deg`)
+}
+
+function onStatCardLeave(event: PointerEvent) {
+  const card = event.currentTarget as HTMLElement
+  card.style.removeProperty('--tilt-x')
+  card.style.removeProperty('--tilt-y')
+}
 
 const confidenceLabel = computed(() => {
   const value = Number(route.query.confidence)
@@ -492,7 +511,13 @@ onUnmounted(() => {
 
       <!-- ========== آمار سریع: دسکتاپ ========== -->
       <div class="grid grid-cols-2 gap-3 max-md:hidden sm:grid-cols-4 sm:gap-4">
-        <div v-for="stat in detail.quickStats" :key="stat.label" class="glass-card group flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-ink/5 p-4 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary-500/30 hover:shadow-md">
+        <div
+          v-for="stat in detail.quickStats"
+          :key="stat.label"
+          class="glass-card plant-stat-card group flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-ink/5 p-4 text-center hover:border-primary-500/30 hover:shadow-md"
+          @pointermove="onStatCardMove"
+          @pointerleave="onStatCardLeave"
+        >
           <span class="text-base font-black text-ink transition-transform duration-300 group-hover:scale-110">{{ stat.value }}</span>
           <span class="text-[0.65rem] font-bold uppercase tracking-wider text-ink-muted">{{ stat.label }}</span>
         </div>
@@ -791,6 +816,67 @@ onUnmounted(() => {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
+.plant-detail-page .plant-stat-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.plant-detail-page .plant-stat-card.is-visible {
+  transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(1, 1, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .plant-detail-page .plant-stat-card.is-visible:hover {
+    transform: perspective(700px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale3d(0.97, 0.97, 0.97);
+    transition:
+      opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.12s ease-out,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+}
+
+@property --plant-stat-border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.plant-detail-page .plant-stat-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--plant-stat-border-angle),
+    transparent 0%,
+    transparent 55%,
+    rgb(var(--color-primary-300)) 80%,
+    rgb(var(--color-primary-500)) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.plant-detail-page .plant-stat-card:hover::before {
+  opacity: 1;
+  animation: plant-stat-border-spin 2.4s linear infinite;
+}
+
+@keyframes plant-stat-border-spin {
+  to { --plant-stat-border-angle: 360deg; }
+}
+
 /* ========== دکمه‌های بالای صفحه (هیرو موبایل) ========== */
 
 .hero-action {
@@ -1019,6 +1105,16 @@ onUnmounted(() => {
 
 /* ========== کاهش حرکت برای دسترس‌پذیری ========== */
 @media (prefers-reduced-motion: reduce) {
+  .plant-detail-page .plant-stat-card,
+  .plant-detail-page .plant-stat-card:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .plant-detail-page .plant-stat-card:hover::before {
+    animation: none;
+  }
+
   .plant-detail-page *,
   .plant-detail-page *::before,
   .plant-detail-page *::after {
