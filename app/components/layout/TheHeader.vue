@@ -41,8 +41,7 @@ function onSearch() {
         <Icon
           name="lucide:search"
           class="app-search-icon pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
-        >
-        </Icon>
+        />
         <input
           v-model="query"
           type="search"
