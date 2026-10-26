@@ -210,3 +210,295 @@ function subscribeToNewsletter() {
     </div>
   </footer>
 </template>
+
+<style scoped>
+/* ═══════════════════════════════════════════
+   ۱. ورود کل فوتر (Fade + Slide)
+   ═══════════════════════════════════════════ */
+footer {
+  animation: footerReveal 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 80ms;
+}
+
+@keyframes footerReveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۲. تصویر تزئینی برگ پشت‌زمینه
+   ═══════════════════════════════════════════ */
+img[src="/images/plants/foot.webp"] {
+  animation: leafBreathe 14s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes leafBreathe {
+  0% {
+    transform: scale(1.05) translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.15) translateY(-2%);
+    opacity: 0.6;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۳. ورود آبشاری ستون‌ها (Staggered Columns)
+   ═══════════════════════════════════════════ */
+.grid > div:nth-child(1) {
+  animation: colUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 120ms;
+}
+.grid > div:nth-child(2) {
+  animation: colUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 200ms;
+}
+.grid > div:nth-child(3) {
+  animation: colUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 280ms;
+}
+.grid > div:nth-child(4) {
+  animation: colUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 360ms;
+}
+
+@keyframes colUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۴. آیکون‌های شبکه اجتماعی (Spring Bounce)
+   ═══════════════════════════════════════════ */
+.flex.gap-2\.5 > a {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 250ms ease,
+    color 250ms ease,
+    box-shadow 300ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flex.gap-2\.5 > a:hover {
+    transform: translateY(-4px) scale(1.12);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow:
+      0 0 0 2px rgba(255, 255, 255, 0.2),
+      0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .flex.gap-2\.5 > a:active {
+    transform: translateY(-1px) scale(0.95);
+    transition-duration: 80ms;
+  }
+
+  /* انیمیشن چرخش آیکون */
+  .flex.gap-2\.5 > a:hover :deep(.size-\[18px\]) {
+    animation: iconSpinSpring 450ms ease;
+  }
+}
+
+@keyframes iconSpinSpring {
+  0%   { transform: rotate(0deg) scale(1); }
+  30%  { transform: rotate(-20deg) scale(1.15); }
+  60%  { transform: rotate(15deg) scale(0.9); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* ═══════════════════════════════════════════
+   ۵. لینک‌های ستون‌ها (Underline Growth)
+   ═══════════════════════════════════════════ */
+ul.flex.flex-col > li > a {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+ul.flex.flex-col > li > a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  inset-inline-start: 0;
+  height: 1.5px;
+  width: 0%;
+  background: linear-gradient(90deg, #86efac, #fff);
+  border-radius: 1px;
+  transition: width 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:dir(rtl) ul.flex.flex-col > li > a::after {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  ul.flex.flex-col > li > a:hover {
+    color: #fff;
+  }
+
+  ul.flex.flex-col > li > a:hover::after {
+    width: 105%;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۶. فرم خبرنامه (Focus Glowing Input + Shine Button)
+   ═══════════════════════════════════════════ */
+form[method="post"],
+form[@submit.prevent] {
+  position: relative;
+}
+
+form input[type="email"] {
+  transition:
+    box-shadow 300ms ease,
+    border-color 300ms ease,
+    background-color 300ms ease;
+}
+
+form input[type="email"]:focus {
+  box-shadow:
+    0 0 0 3px rgba(134, 239, 172, 0.25),
+    inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: rgba(134, 239, 172, 0.5);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+/* درخشش دکمه ارسال */
+button[type="submit"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    background-color 250ms ease,
+    transform 200ms ease,
+    box-shadow 250ms ease;
+}
+
+button[type="submit"]::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 70%
+  );
+  animation: buttonShine 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes buttonShine {
+  0%, 100% {
+    inset-inline-start: -100%;
+  }
+  30% {
+    inset-inline-start: 110%;
+  }
+  60% {
+    inset-inline-start: 110%;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 12px 28px rgba(21, 128, 61, 0.3),
+      0 0 0 2px rgba(134, 239, 172, 0.3);
+    background-color: #059669;
+  }
+
+  button[type="submit"]:active {
+    transform: translateY(-1px);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۷. نوار پایین (Bottom Bar)
+   ═══════════════════════════════════════════ */
+footer .border-t {
+  animation: bottomFadeIn 600ms ease-out 700ms both;
+}
+
+@keyframes bottomFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۸. دکمه زبان در پایین (Hover Glow)
+   ═══════════════════════════════════════════ */
+button[aria-label*="English"],
+button[aria-label*="فارسی"] {
+  transition:
+    transform 250ms ease,
+    color 200ms ease,
+    background-color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button[aria-label*="English"]:hover,
+  button[aria-label*="فارسی"]:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ۹. دسترس‌پذیری
+   ═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  footer,
+  img[src="/images/plants/foot.webp"],
+  .grid > div,
+  .flex.gap-2\.5 > a,
+  ul.flex.flex-col > li > a,
+  button[type="submit"],
+  button[type="submit"]::after,
+  footer .border-t,
+  button[aria-label*="English"],
+  button[aria-label*="فارسی"] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  button[type="submit"]::after {
+    display: none !important;
+  }
+}
+</style>
