@@ -387,27 +387,73 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
     <FaqSection />
 
     <!-- مشکلات رایج -->
-    <section>
-      <h2 class="mb-4 text-lg font-bold text-ink">
-        {{ t('home.popularDiseases') }}
-      </h2>
-      <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <NuxtLink
-          v-for="disease in diseases"
-          :key="disease.id"
-          to="/identify"
-          class="glass-card flex flex-col gap-3 p-2.5"
-        >
-          <SkeletonImage
-            :src="disease.image"
-            :alt="disease.name"
-            image-class="size-full object-cover"
-            class="h-28 w-full rounded-xl"
-          />
-          <span class="px-1.5 pb-1 text-sm font-bold text-ink">{{ disease.name }}</span>
-        </NuxtLink>
+<section class="diseases-section relative overflow-hidden">
+  <!-- پس‌زمینه با پالس‌های محو (حس هشدار ملایم) -->
+  <div class="disease-ambient absolute inset-0 -z-10 pointer-events-none" aria-hidden="true">
+    <span class="ambient-pulse pulse-1" />
+    <span class="ambient-pulse pulse-2" />
+    <span class="ambient-pulse pulse-3" />
+  </div>
+
+  <h2 class="section-title mb-4 text-lg font-bold text-ink">
+    {{ t('home.popularDiseases') }}
+  </h2>
+  
+  <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <NuxtLink
+      v-for="(disease, index) in diseases"
+      :key="disease.id"
+      to="/identify"
+      class="disease-card glass-card group relative flex flex-col gap-3 overflow-hidden p-2.5"
+      :style="{ '--card-index': index }"
+    >
+      <!-- افکت اسکن لیزری روی کارت -->
+      <span class="scan-line absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-status-danger/60 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      
+      <!-- هاله قرمز/هشداردهنده دور کارت -->
+      <div class="disease-glow absolute -inset-px rounded-[inherit] bg-gradient-to-tr from-status-danger/0 via-status-danger/0 to-status-danger/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      <!-- کانتینر تصویر با افکت‌ها -->
+      <div class="image-wrapper relative overflow-hidden rounded-xl">
+        <SkeletonImage
+          :src="disease.image"
+          :alt="disease.name"
+          image-class="disease-image size-full object-cover transition-transform duration-700 ease-out"
+          class="h-28 w-full"
+        />
+        
+        <!-- لایه قرمز شفاف روی تصویر (حس بیماری/هشدار) -->
+        <div class="image-overlay absolute inset-0 bg-gradient-to-t from-status-danger/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        
+        <!-- ذرات معلق روی تصویر -->
+        <div class="spores absolute inset-0 pointer-events-none">
+          <span class="spore spore-1" />
+          <span class="spore spore-2" />
+          <span class="spore spore-3" />
+        </div>
+
+        <!-- بج "شناسایی سریع" -->
+        <span class="identify-badge absolute end-2 top-2 inline-flex items-center gap-1 rounded-md bg-status-danger/90 px-2 py-0.5 text-[10px] font-bold text-white opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
+          <Icon name="lucide:microscope" class="size-2.5" />
+          شناسایی
+        </span>
       </div>
-    </section>
+
+      <!-- نام بیماری -->
+      <span class="disease-name relative px-1.5 pb-1 text-sm font-bold text-ink transition-colors duration-300 group-hover:text-status-danger">
+        {{ disease.name }}
+        <!-- خط زیرین انیمیشنی -->
+        <span class="name-underline absolute bottom-0 start-0 h-0.5 w-0 bg-status-danger transition-all duration-500 group-hover:w-full" />
+      </span>
+
+      <!-- فلش جهت‌نما -->
+      <Icon
+        name="lucide:arrow-up-right"
+        class="card-arrow absolute end-2 top-2 size-4 text-status-danger opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+      />
+    </NuxtLink>
+  </div>
+</section>
 
     <!-- بلاگ -->
     <BlogSection />
@@ -929,5 +975,366 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ===================================================
+   1. پس‌زمینهambient با پالس‌های هشداردهنده
+   =================================================== */
+.diseases-section {
+  position: relative;
+  animation: sectionReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.disease-ambient {
+  overflow: hidden;
+}
+
+.ambient-pulse {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+  animation: ambientPulse 8s ease-in-out infinite;
+}
+
+.pulse-1 {
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.pulse-2 {
+  width: 250px;
+  height: 250px;
+  bottom: -100px;
+  right: -50px;
+  animation-delay: -3s;
+}
+
+.pulse-3 {
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  animation-delay: -6s;
+}
+
+@keyframes ambientPulse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(20px, -15px) scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+/* ===================================================
+   2. عنوان بخش
+   =================================================== */
+.section-title {
+  animation: titleSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #ef4444, #f87171);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: titleUnderline 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+:dir(rtl) .section-title::after {
+  transform-origin: right;
+}
+
+@keyframes titleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes titleUnderline {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ===================================================
+   3. کارت‌های بیماری - ورود آبشاری
+   =================================================== */
+.disease-card {
+  --card-index: 0;
+  
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.3s + var(--card-index, 0) * 0.1s);
+  
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease,
+    background-color 0.3s ease;
+  
+  will-change: transform;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.disease-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 20px 40px -12px rgba(239, 68, 68, 0.15),
+    0 8px 16px -4px rgba(0, 0, 0, 0.08);
+}
+
+.disease-card:active {
+  transform: translateY(-2px) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* ===================================================
+   4. اسکن لیزری قرمز
+   =================================================== */
+.scan-line {
+  z-index: 10;
+  animation: scanMove 2s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.disease-card:hover .scan-line {
+  animation-play-state: running;
+}
+
+@keyframes scanMove {
+  0%, 100% {
+    top: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  50% {
+    top: 100%;
+  }
+}
+
+/* ===================================================
+   5. هاله هشداردهنده دور کارت
+   =================================================== */
+.disease-glow {
+  z-index: 5;
+  transition: background 0.5s ease;
+}
+
+.disease-card:hover .disease-glow {
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(239, 68, 68, 0.12),
+    transparent 40%
+  );
+}
+
+/* ===================================================
+   6. تصویر بیماری + زوم + ذرات
+   =================================================== */
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.disease-image {
+  will-change: transform;
+}
+
+.disease-card:hover .disease-image {
+  transform: scale(1.12);
+}
+
+.image-overlay {
+  z-index: 5;
+}
+
+/* ذرات معلق (هاگ/اسپور) */
+.spores {
+  z-index: 8;
+}
+
+.spore {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.6);
+  opacity: 0;
+  animation: sporeFloat 3s ease-in-out infinite;
+}
+
+.spore-1 {
+  top: 20%;
+  left: 30%;
+  animation-delay: 0s;
+}
+
+.spore-2 {
+  top: 60%;
+  left: 70%;
+  animation-delay: -1s;
+}
+
+.spore-3 {
+  top: 40%;
+  left: 50%;
+  animation-delay: -2s;
+}
+
+.disease-card:hover .spore {
+  animation: sporeFloatActive 2s ease-in-out infinite;
+}
+
+@keyframes sporeFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes sporeFloatActive {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-8px) scale(1.2);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(4px) scale(0.8);
+    opacity: 0.4;
+  }
+}
+
+/* ===================================================
+   7. بج شناسایی سریع
+   =================================================== */
+.identify-badge {
+  transform: translateY(-4px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.disease-card:hover .identify-badge {
+  transform: translateY(0);
+}
+
+/* ===================================================
+   8. نام بیماری + خط زیرین
+   =================================================== */
+.disease-name {
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.name-underline {
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ===================================================
+   9. فلش جهت‌نما
+   =================================================== */
+.card-arrow {
+  transform: rotate(0deg);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.disease-card:hover .card-arrow {
+  transform: rotate(45deg) translateX(2px);
+}
+
+:dir(rtl) .card-arrow {
+  transform: rotate(0deg);
+}
+
+:dir(rtl) .disease-card:hover .card-arrow {
+  transform: rotate(-45deg) translateX(-2px);
+}
+
+/* ===================================================
+   10. کاهش حرکت (Accessibility)
+   =================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .diseases-section,
+  .section-title,
+  .section-title::after,
+  .disease-card,
+  .scan-line,
+  .ambient-pulse,
+  .disease-image,
+  .spore,
+  .identify-badge,
+  .name-underline,
+  .card-arrow {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .disease-card {
+    opacity: 1;
+  }
+  
+  .spore {
+    display: none;
+  }
+}
+
+/* ===================================================
+   11. دارک مود
+   =================================================== */
+:is(.dark) .ambient-pulse {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, transparent 70%);
+}
+
+:is(.dark) .disease-card:hover {
+  box-shadow:
+    0 20px 40px -12px rgba(239, 68, 68, 0.25),
+    0 8px 16px -4px rgba(0, 0, 0, 0.3);
+}
+
+:is(.dark) .spore {
+  background: rgba(248, 113, 113, 0.7);
 }
 </style>
