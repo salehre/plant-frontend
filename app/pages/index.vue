@@ -118,7 +118,7 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
                 <Icon name="lucide:arrow-right" class="hero-cta-arrow relative z-10 size-4 rtl:-scale-x-100" />
               </NuxtLink>
             </span>
-            <span class="hero-cta-shell relative hidden sm:inline-flex">
+            <span class="hero-cta-shell hero-cta-shell--secondary relative hidden sm:inline-flex">
               <span class="hero-cta-ping" aria-hidden="true" />
               <NuxtLink
                 to="/plants"
@@ -512,6 +512,10 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
   animation: hero-cta-scan 3.2s 1.2s ease-in-out infinite;
 }
 
+.hero-cta-shell--secondary .hero-cta-scan {
+  animation-delay: 2.8s;
+}
+
 @keyframes hero-cta-scan {
   0% {
     left: -25%;
@@ -536,6 +540,10 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
   border-radius: 16px;
   pointer-events: none;
   animation: hero-cta-ping 2.8s ease-out infinite;
+}
+
+.hero-cta-shell--secondary .hero-cta-ping {
+  animation-delay: 1.4s;
 }
 
 @keyframes hero-cta-ping {
