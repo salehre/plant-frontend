@@ -190,7 +190,7 @@ function onCardLeave(event: PointerEvent) {
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.28em;
-  color: rgb(21 128 61);
+  color: rgb(var(--color-primary-500));
   text-transform: uppercase;
   animation: kicker-in 0.5s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -230,7 +230,7 @@ function onCardLeave(event: PointerEvent) {
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgb(var(--color-surface) / 0.72);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   box-shadow:
@@ -269,7 +269,7 @@ function onCardLeave(event: PointerEvent) {
   z-index: 0;
   background: radial-gradient(
     350px circle at var(--mx) var(--my),
-    rgba(74, 222, 128, 0.12),
+    rgb(var(--color-primary-400) / 0.12),
     transparent 70%
   );
   opacity: 0;
@@ -309,7 +309,7 @@ function onCardLeave(event: PointerEvent) {
 
 /* گرادیان داینامیک از طریق CSS fallback */
 .faq-card.is-open {
-  border-color: rgba(34, 197, 94, 0.32);
+  border-color: rgb(var(--color-primary-500) / 0.32);
 }
 
 /* ========================================================
@@ -321,7 +321,12 @@ function onCardLeave(event: PointerEvent) {
   inset-inline-start: 0;
   width: 3px;
   border-radius: 0 999px 999px 0;
-  background: linear-gradient(180deg, #4ade80 0%, #16a34a 60%, #0d9488 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--color-primary-300)),
+    rgb(var(--color-primary-500)) 60%,
+    rgb(var(--color-accent-500))
+  );
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
@@ -340,7 +345,7 @@ function onCardLeave(event: PointerEvent) {
   width: 0;
   height: 0;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(22, 163, 74, 0.22), transparent 70%);
+  background: radial-gradient(circle, rgb(var(--color-primary-500) / 0.22), transparent 70%);
   transform: translate(-50%, -50%);
   animation: ripple-expand 0.6s ease-out forwards;
   pointer-events: none;
@@ -375,7 +380,7 @@ function onCardLeave(event: PointerEvent) {
   flex-shrink: 0;
   place-items: center;
   border-radius: 999px;
-  background: rgba(240, 253, 244, 0.95);
+  background: rgb(var(--color-primary-50) / 0.95);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
   transition:
     background-color 0.3s ease,
@@ -388,7 +393,7 @@ function onCardLeave(event: PointerEvent) {
   width: 11px;
   height: 2px;
   border-radius: 999px;
-  background: rgb(21 128 61);
+  background: rgb(var(--color-primary-700));
   transition:
     transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity 0.3s ease,
@@ -401,10 +406,10 @@ function onCardLeave(event: PointerEvent) {
 
 /* باز شدن: خط عمودی محو می‌شود و خط افقی می‌ماند. */
 .faq-card.is-open .faq-icon {
-  background: rgb(22 163 74);
+  background: rgb(var(--color-primary-600));
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 0.3),
-    0 4px 14px -4px rgba(22, 163, 74, 0.55);
+    0 4px 14px -4px rgb(var(--color-primary-500) / 0.55);
 }
 
 .faq-card.is-open .faq-icon-bar {
@@ -441,8 +446,8 @@ function onCardLeave(event: PointerEvent) {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(34, 197, 94, 0.3),
-    rgba(34, 197, 94, 0.08),
+    rgb(var(--color-primary-500) / 0.3),
+    rgb(var(--color-primary-500) / 0.08),
     transparent
   );
   transform: scaleX(0);
@@ -491,7 +496,7 @@ function onCardLeave(event: PointerEvent) {
 }
 
 .faq-card.is-open .faq-q {
-  color: rgb(21 101 52);
+  color: rgb(var(--color-primary-500));
 }
 
 /* ========================================================
@@ -501,7 +506,7 @@ function onCardLeave(event: PointerEvent) {
   .faq-card:hover {
     box-shadow:
       0 6px 20px -6px rgba(0, 0, 0, 0.07),
-      0 0 0 1px rgba(34, 197, 94, 0.12);
+      0 0 0 1px rgb(var(--color-primary-500) / 0.12);
     transform:
       perspective(900px)
       rotateX(var(--ty))
@@ -511,8 +516,8 @@ function onCardLeave(event: PointerEvent) {
 
   .faq-card.is-open:hover {
     box-shadow:
-      0 16px 40px -20px rgba(22, 163, 74, 0.35),
-      0 0 0 1px rgba(34, 197, 94, 0.28);
+      0 16px 40px -20px rgb(var(--color-primary-600) / 0.35),
+      0 0 0 1px rgb(var(--color-primary-500) / 0.28);
     transform:
       perspective(900px)
       rotateX(var(--ty))
@@ -537,7 +542,7 @@ function onCardLeave(event: PointerEvent) {
 }
 
 .faq-card:has(.faq-trigger:focus-visible) {
-  outline: 3px solid rgba(34, 197, 94, 0.5);
+  outline: 3px solid rgb(var(--color-primary-500) / 0.5);
   outline-offset: 3px;
 }
 
