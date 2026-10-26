@@ -128,11 +128,6 @@ function onCardLeave(event: PointerEvent) {
             :aria-controls="`faq-panel-${i}`"
             @click="onTriggerClick($event, i)"
           >
-            <!-- شماره‌گذار متحرک -->
-            <span class="faq-num" aria-hidden="true">
-              <span class="faq-num-text">{{ String(i + 1).padStart(2, '0') }}</span>
-            </span>
-
             <span class="faq-q min-w-0 flex-1 text-sm font-bold text-ink sm:text-base">
               {{ item.q }}
             </span>
@@ -364,64 +359,9 @@ function onCardLeave(event: PointerEvent) {
   }
 }
 
-/* ========================================================
-   شماره‌گذار متحرک
-   ======================================================== */
 .faq-trigger {
   position: relative;
   z-index: 2;
-}
-
-.faq-num {
-  position: relative;
-  display: grid;
-  width: 2.4rem;
-  height: 2.4rem;
-  flex-shrink: 0;
-  place-items: center;
-  border-radius: 12px;
-  background: rgba(240, 253, 244, 0.95);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
-  overflow: hidden;
-  transition:
-    background-color 0.3s ease,
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.3s ease;
-}
-
-.faq-num-text {
-  position: relative;
-  z-index: 1;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  color: rgb(21 128 61);
-  transition: color 0.25s ease;
-}
-
-/* گرادیان متحرک وقتی باز است */
-.faq-num::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #16a34a, #0d9488);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.faq-card.is-open .faq-num {
-  transform: scale(1.08);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),
-    0 4px 14px -4px rgba(22, 163, 74, 0.5);
-}
-
-.faq-card.is-open .faq-num::before {
-  opacity: 1;
-}
-
-.faq-card.is-open .faq-num-text {
-  color: #fff;
 }
 
 /* ========================================================
@@ -459,13 +399,12 @@ function onCardLeave(event: PointerEvent) {
   transform: rotate(90deg);
 }
 
-/* باز شدن: مینوس + چرخش */
+/* باز شدن: خط عمودی محو می‌شود و خط افقی می‌ماند. */
 .faq-card.is-open .faq-icon {
   background: rgb(22 163 74);
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 0.3),
     0 4px 14px -4px rgba(22, 163, 74, 0.55);
-  transform: rotate(135deg);
 }
 
 .faq-card.is-open .faq-icon-bar {
@@ -521,7 +460,7 @@ function onCardLeave(event: PointerEvent) {
 
 .faq-a {
   padding: 0.85rem 1rem 1.1rem;
-  padding-inline-start: 3.75rem;
+  padding-inline-start: 1rem;
   opacity: 0;
   transform: translateY(-8px);
   filter: blur(3px);
@@ -533,7 +472,7 @@ function onCardLeave(event: PointerEvent) {
 
 @media (sm) {
   .faq-a {
-    padding-inline-start: 4.75rem;
+    padding-inline-start: 1.5rem;
   }
 }
 
@@ -586,14 +525,6 @@ function onCardLeave(event: PointerEvent) {
   }
 
   .faq-card.is-open:hover .faq-icon {
-    transform: rotate(135deg) scale(1.1);
-  }
-
-  .faq-card:hover .faq-num {
-    transform: scale(1.05);
-  }
-
-  .faq-card.is-open:hover .faq-num {
     transform: scale(1.1);
   }
 }
@@ -627,8 +558,6 @@ function onCardLeave(event: PointerEvent) {
   .faq-accent,
   .faq-icon,
   .faq-icon-bar,
-  .faq-num,
-  .faq-num-text,
   .faq-q,
   .faq-panel,
   .faq-divider,
