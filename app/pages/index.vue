@@ -143,34 +143,91 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
     </section>
 
     <!-- ======= دسترسی سریع ======= -->
-    <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
-      <NuxtLink
-        v-for="action in quickActions"
-        :key="action.to"
-        :to="action.to"
-        class="quick-action-card glass-card group flex flex-col items-center gap-3 p-4 text-center last:col-span-2 sm:last:col-span-1"
+     <section
+    class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5"
+    style="perspective: 1200px;"
+  >
+    <NuxtLink
+      v-for="(action, idx) in quickActions"
+      :key="action.to"
+      :to="action.to"
+      class="quick-action-card group relative flex flex-col items-center gap-3 overflow-visible rounded-[28px] border border-white/40 bg-white/10 p-5 text-center shadow-2xl shadow-black/[0.02] backdrop-blur-3xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-4 hover:scale-[1.04] hover:bg-white/30 hover:shadow-[0_30px_60px_-15px_rgba(59,130,246,0.15),0_0_0_1px_rgba(255,255,255,0.5)_inset,_0_8px_24px_rgba(0,0,0,0.05)] active:scale-[0.96] active:duration-150 last:col-span-2 sm:last:col-span-1"
+      :style="{ animationDelay: `${idx * 0.08}s` }"
+    >
+      <!-- نور نرم از پشت در hover -->
+      <div
+        class="pointer-events-none absolute -top-8 left-1/2 h-24 w-48 -translate-x-1/2 rounded-full bg-gradient-to-b from-primary-400/30 to-transparent opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+      />
+
+      <!-- درخشش سطح شیشه -->
+      <div
+        class="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/20 via-transparent to-transparent opacity-60"
+      />
+
+      <!-- پوسته آیکون -->
+      <span
+        class="quick-action-icon-shell relative z-10 flex size-[72px] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-white/80 via-white/40 to-white/10 text-primary-600 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.06)] ring-1 ring-white/30 transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110 group-hover:shadow-[0_12px_24px_rgba(59,130,246,0.2)] group-hover:text-primary-700"
+        :class="`shell--${action.animation}`"
+      >
+        <!-- ذرات مدار (Orbit) -->
+        <template v-if="action.animation === 'orbit'">
+          <span class="orbit-dot" style="animation-delay: 0s;" />
+          <span class="orbit-dot" style="animation-delay: -1.3s;" />
+          <span class="orbit-dot" style="animation-delay: -2.6s;" />
+        </template>
+
+        <!-- لیزر سینمایی -->
+        <span
+          v-if="action.animation === 'scan'"
+          class="quick-action-scan-line"
+          aria-hidden="true"
+        />
+        <span
+          v-if="action.animation === 'scan'"
+          class="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-primary-200/20 to-transparent"
+        />
+
+        <!-- هاله درخشان (Glow) -->
+        <template v-if="action.animation === 'glow'">
+          <span class="absolute inset-[-6px] rounded-[32px] bg-gradient-to-tr from-primary-300/60 via-fuchsia-300/40 to-rose-300/60 opacity-70 blur-xl" />
+          <span class="absolute inset-[-3px] rounded-[28px] bg-gradient-to-tr from-primary-200/50 to-fuchsia-200/50 opacity-90 blur-lg" />
+        </template>
+
+        <!-- مرز چرخان گرادیان -->
+        <span
+          v-if="action.animation === 'gradient'"
+          class="absolute inset-[-2px] -z-10 rounded-[28px] bg-gradient-to-tr from-blue-400 via-violet-400 to-rose-400 opacity-80"
+          style="animation: rotate 3s linear infinite;"
+        />
+
+        <Icon
+          :name="action.icon"
+          class="quick-action-icon relative z-10 size-8 transition-transform duration-300 ease-out group-hover:-translate-y-0.5"
+          :class="`icon--${action.animation}`"
+        />
+      </span>
+
+      <!-- متن -->
+      <span
+        class="relative z-10 flex flex-col gap-1 transition-transform duration-300 group-hover:-translate-y-0.5"
       >
         <span
-          class="quick-action-icon-shell relative flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors duration-300 group-hover:bg-primary-100 group-hover:text-primary-800 group-focus-visible:bg-primary-100"
-          :class="`quick-action-icon-shell--${action.animation}`"
+          class="text-base font-black text-slate-800 transition-colors duration-300 group-hover:text-primary-700"
+          :class="{ 'bg-gradient-to-r from-blue-600 via-violet-600 to-rose-500 bg-clip-text text-transparent': action.animation === 'gradient' }"
         >
-          <span
-            v-if="action.animation === 'scan'"
-            class="quick-action-scan-line"
-            aria-hidden="true"
-          />
-          <Icon
-            :name="action.icon"
-            class="quick-action-icon relative z-10 size-6"
-            :class="`quick-action-icon--${action.animation}`"
-          />
+          {{ t(action.label) }}
         </span>
-        <span class="flex flex-col gap-0.5">
-          <span class="text-sm font-bold text-ink">{{ t(action.label) }}</span>
-          <span class="text-[11px] text-ink-muted">{{ t(action.hint) }}</span>
+        <span class="text-[11px] font-medium leading-tight text-slate-400/90 transition-colors duration-300 group-hover:text-slate-500">
+          {{ t(action.hint) }}
         </span>
-      </NuxtLink>
-    </section>
+      </span>
+
+      <!-- خط زیرین درخشان -->
+      <div
+        class="absolute bottom-4 left-1/2 h-[2px] w-12 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-primary-300 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      />
+    </NuxtLink>
+  </section>
 
     <!-- ======= گیاهان شاخص ======= -->
     <section class="glass-card p-4 sm:p-5">
@@ -631,6 +688,165 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 
   .hero-cta-link {
     translate: none !important;
+  }
+}
+
+/* ---------- ورود سینمایی (Stagger) ---------- */
+.quick-action-card {
+  opacity: 0;
+  transform: translateY(30px) rotateX(12deg);
+  animation: cardReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+/* ---------- چرخش مرز گرادیان ---------- */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ---------- اسکن لیزری پیشرفته ---------- */
+.quick-action-scan-line {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #60a5fa,
+    #93c5fd,
+    #38bdf8,
+    #60a5fa,
+    transparent
+  );
+  box-shadow:
+    0 0 10px 2px #60a5fa,
+    0 0 20px 4px rgba(96, 165, 250, 0.5),
+    0 0 30px 6px rgba(96, 165, 250, 0.2);
+  z-index: 20;
+  animation: laserMove 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes laserMove {
+  0% {
+    top: 18%;
+    opacity: 0.5;
+    filter: brightness(0.8);
+  }
+  100% {
+    top: 78%;
+    opacity: 1;
+    filter: brightness(1.3);
+  }
+}
+
+/* ---------- ذرات مدار (Orbit) ---------- */
+.orbit-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff, #3b82f6);
+  box-shadow: 0 0 6px 1px #60a5fa, 0 0 10px 2px rgba(59, 130, 246, 0.7);
+  animation: orbitMove 3.5s linear infinite;
+}
+
+.orbit-dot:nth-child(2) { animation-delay: -1.3s; animation-duration: 4.2s; }
+.orbit-dot:nth-child(3) { animation-delay: -2.6s; animation-duration: 5s; }
+
+@keyframes orbitMove {
+  from {
+    transform: rotate(0deg) translateX(22px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(22px) rotate(-360deg);
+  }
+}
+
+/* ---------- انیمیشن‌های آیکون ---------- */
+.icon--scan {
+  animation: scanHeart 2s ease-in-out infinite;
+}
+@keyframes scanHeart {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.06) translateY(-1px); }
+}
+
+.icon--glow {
+  filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.6))
+          drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(236,72,153,0.5))
+            drop-shadow(0 0 8px rgba(59,130,246,0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(236,72,153,0.9))
+            drop-shadow(0 0 16px rgba(59,130,246,0.8));
+  }
+}
+
+.icon--orbit {
+  animation: floatWobble 2.4s ease-in-out infinite;
+}
+@keyframes floatWobble {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-3px) rotate(3deg); }
+}
+
+.icon--gradient {
+  background: linear-gradient(110deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientSlide 3s linear infinite;
+}
+@keyframes gradientSlide {
+  to { background-position: 200% center; }
+}
+
+.icon--magnetic {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.group:hover .icon--magnetic {
+  transform: translateY(-8px) scale(1.18) rotate(-6deg);
+}
+
+/* ---------- سازگاری با گرادیان (نباید ببُرد) ---------- */
+.shell--gradient {
+  overflow: visible !important;
+}
+
+/* ---------- کاهش حرکت برای دسترسی ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .quick-action-card,
+  .quick-action-scan-line,
+  .orbit-dot,
+  .icon--scan,
+  .icon--glow,
+  .icon--orbit,
+  .icon--gradient,
+  .icon--magnetic {
+    animation: none !important;
+    transition: none !important;
+  }
+  .quick-action-card {
+    opacity: 1;
+    transform: none;
   }
 }
 </style>
