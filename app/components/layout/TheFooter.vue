@@ -364,7 +364,7 @@ ul.flex.flex-col > li > a::after {
 }
 
 /* ═══════════════════════════════════════════
-   ۶. فرم خبرنامه (Focus Glowing Input + Shine Button)
+   ۶. فرم خبرنامه
    ═══════════════════════════════════════════ */
 form[method="post"],
 form[@submit.prevent] {
@@ -386,57 +386,13 @@ form input[type="email"]:focus {
   background: rgba(255, 255, 255, 0.98);
 }
 
-/* درخشش دکمه ارسال */
 button[type="submit"] {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  transition:
-    background-color 250ms ease,
-    transform 200ms ease,
-    box-shadow 250ms ease;
-}
-
-button[type="submit"]::after {
-  content: '';
-  position: absolute;
-  inset-inline-start: -100%;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.2) 50%,
-    transparent 70%
-  );
-  animation: buttonShine 2.5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes buttonShine {
-  0%, 100% {
-    inset-inline-start: -100%;
-  }
-  30% {
-    inset-inline-start: 110%;
-  }
-  60% {
-    inset-inline-start: 110%;
-  }
+  transition: background-color 250ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   button[type="submit"]:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      0 12px 28px rgb(var(--color-primary-600) / 0.3),
-      0 0 0 2px rgb(var(--color-primary-300) / 0.3);
     background-color: rgb(var(--color-primary-500));
-  }
-
-  button[type="submit"]:active {
-    transform: translateY(-1px);
   }
 }
 
@@ -488,7 +444,6 @@ button[aria-label*="فارسی"] {
   .flex.gap-2\.5 > a,
   ul.flex.flex-col > li > a,
   button[type="submit"],
-  button[type="submit"]::after,
   footer .border-t,
   button[aria-label*="English"],
   button[aria-label*="فارسی"] {
@@ -497,8 +452,5 @@ button[aria-label*="فارسی"] {
     transform: none !important;
   }
 
-  button[type="submit"]::after {
-    display: none !important;
-  }
 }
 </style>
