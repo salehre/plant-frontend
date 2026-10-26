@@ -8,9 +8,9 @@ const { t } = useI18n()
 <template>
   <NuxtLink
     :to="`/blog/${props.post.slug}`"
-    class="glass-card group flex flex-col overflow-hidden"
+    class="glass-card group flex h-full flex-col overflow-hidden"
   >
-    <div class="aspect-[16/10] overflow-hidden bg-primary-50">
+    <div class="aspect-[16/10] w-full flex-none overflow-hidden bg-primary-50">
       <img
         :src="props.post.image"
         :alt="props.post.title"

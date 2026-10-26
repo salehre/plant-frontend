@@ -56,6 +56,37 @@ const [senderPhone, senderPhoneAttrs] = defineField('phone')
 const [subject, subjectAttrs] = defineField('subject')
 const [message, messageAttrs] = defineField('message')
 
+function onNameInput(event: Event) {
+  const input = event.target as HTMLInputElement
+  const clean = input.value.replace(/\p{N}/gu, '')
+  if (input.value !== clean) {
+    const caret = input.value.slice(0, input.selectionStart ?? input.value.length).replace(/\p{N}/gu, '').length
+    input.value = clean
+    input.setSelectionRange(caret, caret)
+  }
+  name.value = clean
+}
+
+function onEmailInput(event: Event) {
+  const input = event.target as HTMLInputElement
+  const clean = Array.from(input.value)
+    .filter(character => (character.codePointAt(0) ?? 0) <= 0x7F)
+    .join('')
+  if (input.value !== clean) input.value = clean
+  senderEmail.value = clean
+}
+
+function onPhoneInput(event: Event) {
+  const input = event.target as HTMLInputElement
+  const clean = onlyDigits(input.value)
+  if (input.value !== clean) {
+    const caret = onlyDigits(input.value.slice(0, input.selectionStart ?? input.value.length)).length
+    input.value = clean
+    input.setSelectionRange(caret, caret)
+  }
+  senderPhone.value = clean
+}
+
 const sending = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
@@ -157,12 +188,13 @@ const onSubmit = handleSubmit(async (values) => {
             >{{ t('contact.name') }}</label>
             <input
               id="contact-name"
-              v-model="name"
+              :value="name"
               v-bind="nameAttrs"
               type="text"
               autocomplete="name"
               class="field"
               :aria-invalid="!!errors.name"
+              @input="onNameInput"
             >
             <p
               v-if="errors.name"
@@ -179,7 +211,7 @@ const onSubmit = handleSubmit(async (values) => {
             >{{ t('contact.email') }}</label>
             <input
               id="contact-email"
-              v-model="senderEmail"
+              :value="senderEmail"
               v-bind="senderEmailAttrs"
               type="email"
               dir="ltr"
@@ -187,6 +219,7 @@ const onSubmit = handleSubmit(async (values) => {
               placeholder="you@example.com"
               class="field text-start"
               :aria-invalid="!!errors.email"
+              @input="onEmailInput"
             >
             <p
               v-if="errors.email"
@@ -208,15 +241,16 @@ const onSubmit = handleSubmit(async (values) => {
             </label>
             <input
               id="contact-phone"
-              v-model="senderPhone"
+              :value="senderPhone"
               v-bind="senderPhoneAttrs"
               type="tel"
               dir="ltr"
-              inputmode="tel"
+              inputmode="numeric"
               autocomplete="tel"
               placeholder="09123456789"
               class="field text-start"
               :aria-invalid="!!errors.phone"
+              @input="onPhoneInput"
             >
             <p
               v-if="errors.phone"
