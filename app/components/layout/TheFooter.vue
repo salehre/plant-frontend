@@ -343,7 +343,7 @@ ul.flex.flex-col > li > a::after {
   inset-inline-start: 0;
   height: 1.5px;
   width: 0%;
-  background: linear-gradient(90deg, #86efac, #fff);
+  background: linear-gradient(90deg, rgb(var(--color-primary-300)), #fff);
   border-radius: 1px;
   transition: width 350ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -380,9 +380,9 @@ form input[type="email"] {
 
 form input[type="email"]:focus {
   box-shadow:
-    0 0 0 3px rgba(134, 239, 172, 0.25),
+    0 0 0 3px rgb(var(--color-primary-300) / 0.25),
     inset 0 2px 4px rgba(0, 0, 0, 0.05);
-  border-color: rgba(134, 239, 172, 0.5);
+  border-color: rgb(var(--color-primary-300) / 0.5);
   background: rgba(255, 255, 255, 0.98);
 }
 
@@ -430,9 +430,9 @@ button[type="submit"]::after {
   button[type="submit"]:hover {
     transform: translateY(-3px);
     box-shadow:
-      0 12px 28px rgba(21, 128, 61, 0.3),
-      0 0 0 2px rgba(134, 239, 172, 0.3);
-    background-color: #059669;
+      0 12px 28px rgb(var(--color-primary-600) / 0.3),
+      0 0 0 2px rgb(var(--color-primary-300) / 0.3);
+    background-color: rgb(var(--color-primary-500));
   }
 
   button[type="submit"]:active {
