@@ -52,6 +52,10 @@ function clearSearch() {
   search.value = ''
 }
 
+function formatPlantCount(count: number) {
+  return activeLocale.value === 'fa' ? toPersianDigits(count) : String(count)
+}
+
 const plantOptions = computed(() => getMockPlants(activeLocale.value).map(p => ({ label: p.name, value: p.slug })))
 
 const schema = toTypedSchema(z.object({
@@ -172,14 +176,14 @@ onMounted(() => {
       class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
       <div class="animate-blob absolute -top-24 -start-24 size-72 rounded-full bg-primary-100/50 blur-[90px]" />
-      <div class="animate-blob-delayed absolute -end-24 top-40 size-80 rounded-full bg-emerald-100/50 blur-[100px]" />
+      <div class="animate-blob-delayed absolute -end-24 top-40 size-80 rounded-full bg-accent-100/50 blur-[100px]" />
       <Icon
         name="lucide:leaf"
         class="animate-float absolute end-[8%] top-6 size-6 text-primary-200/60"
       />
       <Icon
-        name="lucide:sprout"
-        class="animate-float-delayed absolute start-[4%] top-48 size-5 text-emerald-200/60"
+        name="lucide:trees"
+        class="animate-float-delayed absolute start-[4%] top-48 size-5 text-primary-200/60"
       />
     </div>
 
@@ -189,10 +193,10 @@ onMounted(() => {
       :class="mounted ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'"
     >
       <div class="flex items-center gap-3">
-        <span class="relative flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 via-emerald-500 to-teal-500 text-white shadow-lg shadow-primary-200/50">
+        <span class="relative flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-lg shadow-primary-900/15">
           <span class="absolute inset-0 animate-ping rounded-2xl bg-primary-400/20 [animation-duration:2.5s]" />
           <Icon
-            name="lucide:flower-2"
+            name="lucide:trees"
             class="animate-float relative size-5"
           />
         </span>
@@ -202,14 +206,14 @@ onMounted(() => {
           </h1>
           <p class="mt-0.5 flex items-center gap-1.5 text-xs text-ink-muted">
             <span class="relative flex size-1.5">
-              <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-              <span class="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
+              <span class="absolute inline-flex size-full animate-ping rounded-full bg-primary-400 opacity-60" />
+              <span class="relative inline-flex size-1.5 rounded-full bg-primary-500" />
             </span>
             <span
               :key="counts.all"
               class="animate-pop inline-block font-bold text-ink"
             >
-              {{ toPersianDigits(counts.all) }}
+              {{ formatPlantCount(counts.all) }}
             </span>
             {{ t('pages.myPlants.plantCount') }}
           </p>
@@ -231,10 +235,10 @@ onMounted(() => {
 
     <!-- جستجو و فیلتر -->
     <div
-      class="mb-6 flex flex-col gap-3 transition-all delay-100 duration-700 sm:flex-row sm:items-center"
+      class="mb-6 flex flex-col gap-3 transition-all delay-100 duration-700 sm:flex-row sm:items-start"
       :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
     >
-      <div class="group relative sm:w-72">
+      <div class="group relative w-full sm:w-72 sm:shrink-0">
         <Icon
           name="lucide:search"
           class="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted transition-all duration-300 group-focus-within:scale-110 group-focus-within:text-primary-500"
@@ -267,16 +271,16 @@ onMounted(() => {
         </Transition>
       </div>
 
-      <div class="flex gap-2 overflow-x-auto pb-1">
+      <div class="flex min-w-0 flex-1 flex-wrap gap-2 overflow-visible px-1 py-1">
         <button
           v-for="(option, idx) in statusOptions"
           :key="option"
           type="button"
-          class="chip group !rounded-full shrink-0 !px-3.5 !py-1.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95"
+          class="chip group relative z-0 !shrink-0 !rounded-full !px-3.5 !py-1.5 transition-all duration-300 hover:z-10 hover:-translate-y-0.5 hover:shadow-md focus-visible:z-10 active:scale-95"
           :style="{ transitionDelay: `${idx * 30}ms` }"
           :class="[
             mounted ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
-            statusFilter === option ? 'chip--active !shadow-md !shadow-primary-200/40 scale-[1.03]' : 'hover:border-primary-200 hover:bg-white',
+            statusFilter === option ? 'chip--active !shadow-md !shadow-primary-200/40 scale-[1.03]' : 'hover:border-primary-200 hover:bg-surface',
           ]"
           @click="statusFilter = option"
         >
@@ -297,7 +301,7 @@ onMounted(() => {
             class="animate-pop inline-flex min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-black"
             :class="statusFilter === option ? 'bg-white/25' : 'bg-ink/5'"
           >
-            {{ toPersianDigits(counts[option]) }}
+            {{ formatPlantCount(counts[option]) }}
           </span>
         </button>
       </div>
@@ -318,21 +322,21 @@ onMounted(() => {
         class="plant-card-item"
       >
         <div
-          class="tilt-card shine group relative overflow-hidden rounded-[22px] border border-white/70 bg-white/80 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] backdrop-blur-md transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(16,185,129,0.3)]"
+          class="tilt-card plant-card-surface shine group relative overflow-hidden rounded-[22px] border backdrop-blur-md transition-shadow duration-500"
           @mousemove="handleTilt"
           @mouseleave="resetTilt"
         >
           <!-- تصویر -->
           <NuxtLink
             :to="`/my-plants/${p.id}`"
-            class="relative block h-48 overflow-hidden bg-gradient-to-br from-primary-50 via-emerald-50/50 to-teal-50"
+            class="relative block h-48 overflow-hidden bg-gradient-to-br from-primary-50 via-surface to-accent-50"
           >
             <!-- اسکلت + شیمر -->
             <div
               v-if="imageStates[p.id] !== 'loaded' && imageStates[p.id] !== 'error'"
               class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 overflow-hidden"
             >
-              <span class="animate-float flex size-10 items-center justify-center rounded-2xl bg-white shadow-sm">
+              <span class="animate-float flex size-10 items-center justify-center rounded-2xl bg-surface shadow-sm">
                 <Icon
                   name="lucide:leaf"
                   class="size-5 animate-pulse text-primary-300"
@@ -345,13 +349,13 @@ onMounted(() => {
             <!-- خطا -->
             <div
               v-if="imageStates[p.id] === 'error'"
-              class="absolute inset-0 z-20 flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-primary-50 to-emerald-50 text-ink-muted/50"
+              class="absolute inset-0 z-20 flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-primary-50 to-accent-50 text-ink-muted/70"
             >
               <Icon
                 name="lucide:image-off"
                 class="animate-float size-8"
               />
-              <span class="text-[11px]">no image</span>
+              <span class="text-[11px]">{{ t('pages.myPlants.imageUnavailable') }}</span>
             </div>
 
             <img
@@ -397,7 +401,7 @@ onMounted(() => {
           <!-- حذف -->
           <button
             :aria-label="t('common.delete')"
-            class="absolute end-3 top-3 z-30 flex size-8 items-center justify-center rounded-xl bg-white/90 text-ink-muted shadow-lg backdrop-blur-md transition-all duration-300 hover:rotate-12 hover:scale-110 hover:bg-rose-500 hover:text-white hover:shadow-rose-200 active:scale-90 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+            class="absolute end-3 top-3 z-30 flex size-8 items-center justify-center rounded-xl bg-surface/90 text-ink-muted shadow-lg backdrop-blur-md transition-all duration-300 hover:rotate-12 hover:scale-110 hover:bg-status-danger hover:text-white active:scale-90 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
             @click="removePlant(p.id, p.nickname)"
           >
             <Icon
@@ -462,7 +466,7 @@ onMounted(() => {
           </div>
 
           <!-- خط پایین رنگی -->
-          <span class="absolute inset-x-0 bottom-0 h-[3px] origin-right scale-x-0 bg-gradient-to-l from-primary-500 via-emerald-400 to-teal-400 transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />
+          <span class="absolute inset-x-0 bottom-0 h-[3px] origin-right scale-x-0 bg-gradient-to-l from-primary-500 via-primary-400 to-accent-400 transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />
         </div>
       </div>
     </TransitionGroup>
@@ -471,14 +475,14 @@ onMounted(() => {
     <div
       v-else
       :key="statusFilter + search"
-      class="animate-fadeUp relative flex flex-col items-center gap-4 overflow-hidden rounded-[26px] border border-dashed border-primary-200 bg-white/60 py-16 text-center backdrop-blur-sm sm:py-20"
+      class="animate-fadeUp relative flex flex-col items-center gap-4 overflow-hidden rounded-[26px] border border-dashed border-primary-200 bg-surface/60 py-16 text-center backdrop-blur-sm sm:py-20"
     >
       <div class="pointer-events-none absolute inset-0">
         <span class="animate-float absolute start-[15%] top-8 text-primary-200"><Icon
           name="lucide:leaf"
           class="size-5"
         /></span>
-        <span class="animate-float-delayed absolute end-[12%] top-14 text-emerald-200"><Icon
+        <span class="animate-float-delayed absolute end-[12%] top-14 text-accent-300/70"><Icon
           name="lucide:sparkles"
           class="size-5"
         /></span>
@@ -490,19 +494,19 @@ onMounted(() => {
 
       <div class="relative">
         <span class="absolute inset-0 -m-4 animate-ping rounded-[28px] bg-primary-100/40 [animation-duration:2.8s]" />
-        <span class="animate-float relative flex size-20 items-center justify-center rounded-[24px] bg-gradient-to-br from-white to-primary-50 shadow-xl shadow-primary-100/50 ring-1 ring-white">
+        <span class="animate-float relative flex size-20 items-center justify-center rounded-[24px] bg-gradient-to-br from-surface to-primary-50 shadow-xl shadow-primary-900/10 ring-1 ring-ink/5">
           <Icon
             name="lucide:sprout"
             class="size-10 text-primary-400"
           />
         </span>
-        <span class="animate-bounce absolute -end-2 -top-2 flex size-7 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg [animation-delay:0.2s]">
+        <span class="animate-bounce absolute -end-2 -top-2 flex size-7 items-center justify-center rounded-full bg-primary-600 text-white shadow-lg [animation-delay:0.2s]">
           <Icon
             name="lucide:plus"
             class="size-3.5"
           />
         </span>
-        <span class="animate-bounce absolute -bottom-1 -start-3 flex size-6 items-center justify-center rounded-full bg-white text-primary-500 shadow-md [animation-delay:0.6s]">
+        <span class="animate-bounce absolute -bottom-1 -start-3 flex size-6 items-center justify-center rounded-full bg-surface text-primary-500 shadow-md [animation-delay:0.6s]">
           <Icon
             name="lucide:leaf"
             class="size-3"
@@ -555,7 +559,7 @@ onMounted(() => {
             v-bind="nicknameAttrs"
             type="text"
             class="w-full rounded-2xl border px-3.5 py-2.5 text-sm outline-none transition-all duration-300 focus:shadow-lg focus:shadow-primary-100/50 focus-visible:ring-2 focus-visible:ring-primary-400"
-            :class="errors.nickname ? 'animate-shake border-status-danger bg-rose-50/30' : 'border-ink/10 bg-white focus:border-primary-300'"
+            :class="errors.nickname ? 'animate-shake border-status-danger bg-status-danger/5' : 'border-ink/10 bg-surface focus:border-primary-300'"
             :placeholder="t('pages.myPlants.nicknamePlaceholder')"
           >
           <Transition
@@ -581,7 +585,7 @@ onMounted(() => {
 
         <div class="animate-fadeUp" style="animation-delay: 0.12s">
           <label class="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-ink">
-            <span class="flex size-6 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"><Icon
+            <span class="flex size-6 items-center justify-center rounded-lg bg-primary-50 text-primary-600"><Icon
               name="lucide:flower"
               class="size-3.5"
             /></span>
@@ -615,7 +619,7 @@ onMounted(() => {
 
         <div class="animate-fadeUp" style="animation-delay: 0.19s">
           <label class="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-ink">
-            <span class="flex size-6 items-center justify-center rounded-lg bg-amber-50 text-amber-600"><Icon
+            <span class="flex size-6 items-center justify-center rounded-lg bg-primary-50 text-primary-600"><Icon
               name="lucide:map-pin"
               class="size-3.5"
             /></span>
@@ -626,7 +630,7 @@ onMounted(() => {
             v-bind="locationAttrs"
             type="text"
             class="w-full rounded-2xl border px-3.5 py-2.5 text-sm outline-none transition-all duration-300 focus:shadow-lg focus:shadow-primary-100/50 focus-visible:ring-2 focus-visible:ring-primary-400"
-            :class="errors.location ? 'animate-shake border-status-danger bg-rose-50/30' : 'border-ink/10 bg-white focus:border-primary-300'"
+            :class="errors.location ? 'animate-shake border-status-danger bg-status-danger/5' : 'border-ink/10 bg-surface focus:border-primary-300'"
             :placeholder="t('pages.myPlants.locationPlaceholder')"
           >
           <Transition
@@ -686,6 +690,15 @@ onMounted(() => {
 }
 
 /* ── Tilt ── */
+.plant-card-surface {
+  border-color: rgb(var(--color-ink) / 0.1);
+  background-color: rgb(var(--color-surface) / 0.9);
+  box-shadow: 0 8px 30px -12px rgb(var(--color-ink) / 0.12);
+}
+.plant-card-surface:hover {
+  box-shadow: 0 20px 50px -15px rgb(var(--color-primary-500) / 0.3);
+}
+
 .tilt-card {
   transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 0.35s ease, box-shadow 0.4s ease, translate 0.35s ease;
