@@ -800,6 +800,7 @@
     "success": "Your message was sent. Thanks for getting in touch 🌿",
     "error": "Couldn't send your message. Please try again.",
     "errors": {
+      "required": "This field is required",
       "nameMin": "Name must be at least 2 characters",
       "phoneInvalid": "Enter a valid mobile number (e.g. 09123456789)",
       "subjectMin": "Subject must be at least 3 characters",
