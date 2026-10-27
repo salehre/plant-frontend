@@ -101,7 +101,7 @@ function resetFilters() {
 </script>
 
 <template>
-  <div class="relative mx-auto max-w-6xl">
+  <div class="relative mx-auto max-w-6xl pt-3">
     <!-- ✨ پس‌زمینه‌ی تزئینی (هاله‌های محو) -->
     <div
       aria-hidden="true"
@@ -118,7 +118,7 @@ function resetFilters() {
       <!-- هدر -->
       <header class="mb-8">
         <div class="reveal flex items-center gap-3" style="--i: 0">
-          <h1 class="bg-gradient-to-l from-primary-700 via-primary-600 to-emerald-500 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
+          <h1 class="bg-gradient-to-l from-primary-700 pt-3 via-primary-600 to-emerald-500 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
             {{ t('nav.catalog') }}
           </h1>
           <Icon
@@ -215,7 +215,7 @@ function resetFilters() {
               { model: 'genus', options: genusDropdownOptions, placeholder: t('pages.catalog.genus') },
             ]"
             :key="dd.model"
-            class="reveal sm:w-56"
+            class="reveal relative z-0 focus-within:z-30 sm:w-56"
             :style="{ '--i': i }"
           >
             <AppDropdown

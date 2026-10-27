@@ -11,7 +11,7 @@ const uiStore = useUiStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const showAddModal = ref(false)
-const mounted = ref(false)
+const mounted = ref(ref)
 
 // جستجو و فیلتر
 const search = ref('')
@@ -28,9 +28,10 @@ const statusDot: Record<string, string> = {
   needs_attention: 'bg-amber-200',
   sick: 'bg-rose-200',
 }
+// ✅ آیکون‌های حالت (تغییر شد)
 const statusIcon: Record<string, string> = {
-  healthy: 'lucide:heart-pulse',
-  needs_attention: 'lucide:triangle-alert',
+  healthy: 'lucide:leaf',
+  needs_attention: 'lucide:alert-triangle',
   sick: 'lucide:thermometer',
 }
 
@@ -73,6 +74,14 @@ const [nickname, nicknameAttrs] = defineField('nickname')
 const [plantSlug] = defineField('plantSlug')
 const [location, locationAttrs] = defineField('location')
 
+// ✅ نگاشت آیکون فیلتر (افزودجدی)
+const filterIconMap = {
+  all: 'lucide:home',
+  healthy: 'lucide:leaf',
+  needs_attention: 'lucide:alert-triangle',
+  sick: 'lucide:thermometer',
+}
+
 const onSubmit = handleSubmit((values) => {
   const plant = mockPlants.find(p => p.slug === values.plantSlug)
   userPlantsStore.addPlant({
@@ -101,7 +110,6 @@ const imageStates = reactive<Record<string, 'loading' | 'loaded' | 'error'>>({})
 
 function onImageLoad(e: Event, id: string) {
   const img = e.target as HTMLImageElement
-  // لود شدن placeholder نادیده گرفته میشه
   if (img.dataset.src)
     return
   imageStates[id] = 'loaded'
@@ -222,12 +230,12 @@ onMounted(() => {
 
       <AppButton
         variant="primary"
-        class="btn-shine group !rounded-2xl !px-4 !py-2.5 !shadow-lg !shadow-primary-200/50 transition-all duration-300 hover:!shadow-xl hover:!shadow-primary-300/50 active:scale-95"
+        class="btn-shine group rounded-2xl px-4 py-2.5 bg-primary-600 text-white font-medium transition-all duration-300 hover:shadow-xl hover:shadow-primary-300/50 active:scale-95"
         @click="showAddModal = true"
       >
         <Icon
           name="lucide:plus"
-          class="size-4 transition-transform duration-500 group-hover:rotate-[135deg] group-hover:scale-110"
+          class="size-4 mr-2 transition-transform duration-300 hover:rotate-60 hover:scale-110"
         />
         {{ $t('common.add') }}
       </AppButton>
@@ -271,43 +279,37 @@ onMounted(() => {
         </Transition>
       </div>
 
-      <div class="flex min-w-0 flex-1 flex-wrap gap-2 overflow-visible px-1 py-1">
+      <div
+        class="flex min-w-0 flex-1 flex-wrap gap-2 overflow-visible px-1 py-1"
+        :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
+      >
         <button
           v-for="(option, idx) in statusOptions"
           :key="option"
           type="button"
           class="chip group relative z-0 !shrink-0 !rounded-full !px-3.5 !py-1.5 transition-all duration-300 hover:z-10 hover:-translate-y-0.5 hover:shadow-md focus-visible:z-10 active:scale-95"
           :style="{ transitionDelay: `${idx * 30}ms` }"
-          :class="[
-            mounted ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
-            statusFilter === option ? 'chip--active !shadow-md !shadow-primary-200/40 scale-[1.03]' : 'hover:border-primary-200 hover:bg-surface',
-          ]"
           @click="statusFilter = option"
         >
-          <span
-            v-if="option !== 'all'"
-            class="relative flex size-1.5 rounded-full"
-            :class="statusDot[option]"
-          >
+          <span class="flex items-center gap-1">
+            <!-- ✅ آیکون وضعیت روی هر فیلتر -->
+            <span v-if="option !== 'all'" class="relative size-3.5 rounded-full" :class="statusDot[option]">
+              <Icon :name="filterIconMap[option]" class="absolute inset-0 flex items-center justify-center size-3.5" style="color: #fff" />
+            </span>
+            <span>{{ option === 'all' ? $t('common.all') : healthLabel(option) }}</span>
             <span
-              v-if="statusFilter === option"
-              class="absolute inline-flex size-full animate-ping rounded-full opacity-60"
-              :class="statusDot[option]"
-            />
-          </span>
-          {{ option === 'all' ? $t('common.all') : healthLabel(option) }}
-          <span
-            :key="counts[option]"
-            class="animate-pop inline-flex min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-black"
-            :class="statusFilter === option ? 'bg-white/25' : 'bg-ink/5'"
-          >
-            {{ formatPlantCount(counts[option]) }}
+              :key="counts[option]"
+              class="animate-pop inline-flex min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-black"
+              :class="statusFilter === option ? 'bg-white/25' : 'bg-ink/5'"
+            >
+              {{ formatPlantCount(counts[option]) }}
+            </span>
           </span>
         </button>
       </div>
     </div>
 
-    <!-- گرید کارت‌ها با انیمیشن FLIP -->
+    <!-- گريد کارت‌ها با انیمیشن FLIP -->
     <TransitionGroup
       v-if="filteredPlants.length"
       name="plant-card"
@@ -338,7 +340,7 @@ onMounted(() => {
             >
               <span class="animate-float flex size-10 items-center justify-center rounded-2xl bg-surface shadow-sm">
                 <Icon
-                  name="lucide:leaf"
+                  name="lucide:seedling"
                   class="size-5 animate-pulse text-primary-300"
                 />
               </span>
@@ -400,7 +402,7 @@ onMounted(() => {
 
           <!-- حذف -->
           <button
-            :aria-label="t('common.delete')"
+            :aria-label="t('common-delete')"
             class="absolute end-3 top-3 z-30 flex size-8 items-center justify-center rounded-xl bg-surface/90 text-ink-muted shadow-lg backdrop-blur-md transition-all duration-300 hover:rotate-12 hover:scale-110 hover:bg-status-danger hover:text-white active:scale-90 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
             @click="removePlant(p.id, p.nickname)"
           >
@@ -479,15 +481,15 @@ onMounted(() => {
     >
       <div class="pointer-events-none absolute inset-0">
         <span class="animate-float absolute start-[15%] top-8 text-primary-200"><Icon
-          name="lucide:leaf"
+          name="lucide:seedling"
           class="size-5"
         /></span>
         <span class="animate-float-delayed absolute end-[12%] top-14 text-accent-300/70"><Icon
-          name="lucide:sparkles"
+          name="lucide:star"
           class="size-5"
         /></span>
         <span class="animate-float absolute bottom-10 start-[25%] text-primary-100 [animation-delay:0.8s]"><Icon
-          name="lucide:flower"
+          name="lucide:rose"
           class="size-6"
         /></span>
       </div>
@@ -496,7 +498,7 @@ onMounted(() => {
         <span class="absolute inset-0 -m-4 animate-ping rounded-[28px] bg-primary-100/40 [animation-duration:2.8s]" />
         <span class="animate-float relative flex size-20 items-center justify-center rounded-[24px] bg-gradient-to-br from-surface to-primary-50 shadow-xl shadow-primary-900/10 ring-1 ring-ink/5">
           <Icon
-            name="lucide:sprout"
+            name="lucide:seedling"
             class="size-10 text-primary-400"
           />
         </span>
@@ -525,12 +527,11 @@ onMounted(() => {
 
       <AppButton
         variant="primary"
-        class="btn-shine group relative !rounded-2xl !px-5 !py-2.5 transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-95"
-        @click="showAddModal = true"
+        class="btn-shine group relative rounded-2xl px-5 py-2.5 transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.95]"
       >
         <Icon
           name="lucide:plus"
-          class="size-4 transition-transform duration-500 group-hover:rotate-180"
+          class="size-4 transition-transform duration-300 group-hover:rotate-180"
         />
         {{ t('pages.myPlants.addFirst') }}
       </AppButton>
@@ -658,8 +659,7 @@ onMounted(() => {
           type="submit"
           variant="primary"
           block
-          class="btn-shine group animate-fadeUp !rounded-2xl !py-3 !text-sm !font-bold !shadow-lg !shadow-primary-200/50 transition-all duration-300 hover:!shadow-xl active:scale-[0.98]"
-          style="animation-delay: 0.26s"
+          class="btn-shine group rounded-2xl py-3 text-sm font-bold shadow-lg shadow-primary-200/50 transition-all duration-300 hover:!shadow-xl active:scale-[0.98]"
         >
           <Icon
             name="lucide:check"

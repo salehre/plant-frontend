@@ -28,7 +28,8 @@ function select(value: string) {
 <template>
   <div
     ref="target"
-    class="relative"
+    class="relative z-0"
+    :class="{ 'z-40': open }"
   >
     <button
       type="button"
