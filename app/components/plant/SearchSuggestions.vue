@@ -52,6 +52,8 @@ function pick(name: string) {
           @click="pick(s.name)"
         >
           <img
+            loading="lazy"
+            decoding="async"
             :src="s.images[0]"
             :alt="s.name"
             class="size-8 rounded-md object-cover"

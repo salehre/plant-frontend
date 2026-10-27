@@ -16,6 +16,8 @@ watch(() => props.src, () => { failed.value = false })
   <span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-100 text-primary-700">
     <img
       v-if="props.src && !failed"
+      loading="lazy"
+      decoding="async"
       :src="props.src"
       :alt="props.name || ''"
       class="size-full object-cover"

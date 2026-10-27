@@ -100,6 +100,8 @@ function isActive(to: string) {
 
     <div class="relative overflow-hidden rounded-2xl bg-primary-900 p-4 text-white">
       <img
+        loading="lazy"
+        decoding="async"
         src="/images/plants/footer.webp"
         alt=""
         class="pointer-events-none absolute inset-0 size-full object-cover"

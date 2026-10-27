@@ -17,6 +17,8 @@ const statusClass: Record<string, string> = {
   >
     <div class="relative">
       <img
+          loading="lazy"
+          decoding="async"
           :src="props.userPlant.photo"
           :alt="props.userPlant.nickname"
           class="size-14 rounded-md object-cover"

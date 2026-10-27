@@ -43,6 +43,8 @@ function subscribeToNewsletter() {
   <footer class="relative overflow-hidden rounded-t-lg bg-primary-900 pb-24 text-white md:pb-0">
     <!-- تزئین برگ -->
     <img
+      loading="lazy"
+      decoding="async"
       src="/images/plants/foot.webp"
       alt=""
       class="pointer-events-none absolute inset-0 size-full object-cover"
@@ -58,6 +60,8 @@ function subscribeToNewsletter() {
             class="inline-flex items-center gap-2.5"
           >
           <img
+            loading="lazy"
+            decoding="async"
             src="/images/logo.png"
             :alt="$t('brand.name')"
             class="h-10 w-auto object-contain"

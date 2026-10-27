@@ -68,6 +68,8 @@ const rows = computed(() => [
           >
             <div class="flex items-center gap-2">
               <img
+                loading="lazy"
+                decoding="async"
                 :src="plant.images[0]"
                 :alt="plant.name"
                 class="size-10 rounded-md object-cover"

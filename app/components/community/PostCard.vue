@@ -43,6 +43,8 @@ function relativeTime(iso: string) {
     <div class="flex items-center gap-3 p-4">
       <NuxtLink :to="`/community/${props.post.author.id}`">
         <img
+            loading="lazy"
+            decoding="async"
             :src="props.post.author.avatar"
             :alt="props.post.author.name"
             class="size-10 rounded-full object-cover"
@@ -119,6 +121,8 @@ function relativeTime(iso: string) {
             class="flex items-start gap-2"
         >
           <img
+              loading="lazy"
+              decoding="async"
               :src="c.author.avatar"
               :alt="c.author.name"
               class="size-7 shrink-0 rounded-full object-cover"

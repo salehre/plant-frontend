@@ -71,6 +71,8 @@ function chatAbout(id: string) {
         >
           <div class="flex items-center gap-3">
             <img
+              loading="lazy"
+              decoding="async"
               :src="plant.photo"
               alt=""
               class="size-14 shrink-0 rounded-xl object-cover"

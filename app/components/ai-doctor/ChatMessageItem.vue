@@ -36,6 +36,8 @@ const showActions = computed(() => !isUser.value && !props.message.failed && !pr
       @click="emit('preview', message.image)"
     >
       <img
+        loading="lazy"
+        decoding="async"
         :src="message.image"
         :alt="$t('aiDoctor.userImageAlt')"
         class="max-h-56 w-full object-cover"

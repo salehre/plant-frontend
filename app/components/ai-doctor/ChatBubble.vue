@@ -78,6 +78,8 @@ const actionClass = 'flex size-8 items-center justify-center rounded-lg text-ink
       @click="emit('preview', message.image)"
     >
       <img
+        loading="lazy"
+        decoding="async"
         :src="message.image"
         :alt="$t('aiDoctor.userImageAlt')"
         class="max-h-56 w-full object-cover"

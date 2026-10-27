@@ -18,6 +18,8 @@ function formatCount(value: number) {
   <div class="glass-card p-4">
     <div class="flex items-center gap-3">
       <img
+          loading="lazy"
+          decoding="async"
           :src="props.user.avatar"
           :alt="props.user.name"
           class="size-14 rounded-full object-cover"
