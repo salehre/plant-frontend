@@ -11,21 +11,35 @@ const uiStore = useUiStore()
 const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const showAddModal = ref(false)
+const mounted = ref(false)
 
-// جستجو و فیلتر وضعیت
+// جستجو و فیلتر
 const search = ref('')
 const statusFilter = ref<'all' | 'healthy' | 'needs_attention' | 'sick'>('all')
 const statusOptions = ['all', 'healthy', 'needs_attention', 'sick'] as const
+
 const statusBadge: Record<string, string> = {
-  healthy: 'bg-primary-50 text-primary-700',
-  needs_attention: 'bg-accent-50 text-accent-700',
-  sick: 'bg-status-danger/10 text-status-danger',
+  healthy: 'bg-emerald-500/95 text-white',
+  needs_attention: 'bg-amber-500/95 text-white',
+  sick: 'bg-rose-500/95 text-white',
+}
+const statusDot: Record<string, string> = {
+  healthy: 'bg-emerald-300',
+  needs_attention: 'bg-amber-200',
+  sick: 'bg-rose-200',
 }
 const statusIcon: Record<string, string> = {
   healthy: 'lucide:heart-pulse',
-  needs_attention: 'lucide:alert-triangle',
+  needs_attention: 'lucide:triangle-alert',
   sick: 'lucide:thermometer',
 }
+
+const counts = computed(() => ({
+  all: userPlantsStore.plants.length,
+  healthy: userPlantsStore.plants.filter(p => p.healthStatus === 'healthy').length,
+  needs_attention: userPlantsStore.plants.filter(p => p.healthStatus === 'needs_attention').length,
+  sick: userPlantsStore.plants.filter(p => p.healthStatus === 'sick').length,
+}))
 
 const filteredPlants = computed(() =>
   userPlantsStore.plants.filter(p =>
@@ -33,6 +47,10 @@ const filteredPlants = computed(() =>
     && (!search.value.trim() || p.nickname.includes(search.value.trim()) || p.location.includes(search.value.trim())),
   ),
 )
+
+function clearSearch() {
+  search.value = ''
+}
 
 const plantOptions = computed(() => getMockPlants(activeLocale.value).map(p => ({ label: p.name, value: p.slug })))
 
@@ -73,20 +91,30 @@ function removePlant(id: string, nickName: string) {
   uiStore.showToast(t('pages.myPlants.removedToast', { name: nickName }), 'info')
 }
 
-// ── Lazy image loading with IntersectionObserver ──
+// ─── Lazy image ───
+const PLACEHOLDER = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 const imageStates = reactive<Record<string, 'loading' | 'loaded' | 'error'>>({})
 
-function onImageLoad(id: string) {
+function onImageLoad(e: Event, id: string) {
+  const img = e.target as HTMLImageElement
+  // لود شدن placeholder نادیده گرفته میشه
+  if (img.dataset.src)
+    return
   imageStates[id] = 'loaded'
 }
-
 function onImageError(id: string) {
   imageStates[id] = 'error'
 }
 
-// directive for intersection observer lazy loading
 const vLazyImg = {
   mounted(el: HTMLImageElement) {
+    if (typeof IntersectionObserver === 'undefined') {
+      if (el.dataset.src) {
+        el.src = el.dataset.src
+        el.removeAttribute('data-src')
+      }
+      return
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -100,275 +128,411 @@ const vLazyImg = {
           }
         })
       },
-      { rootMargin: '100px' },
+      { rootMargin: '200px 0px', threshold: 0.05 },
     )
     observer.observe(el)
+    // @ts-ignore
+    el._observer = observer
+  },
+  unmounted(el: HTMLImageElement) {
+    // @ts-ignore
+    el._observer?.disconnect?.()
   },
 }
 
-// ── Stagger animation ──
-const containerRef = ref<HTMLElement>()
-const isVisible = ref(false)
+// ─── Tilt سه‌بعدی ───
+function handleTilt(e: MouseEvent) {
+  if (window.matchMedia('(hover: none)').matches)
+    return
+  const el = e.currentTarget as HTMLElement
+  const r = el.getBoundingClientRect()
+  const px = (e.clientX - r.left) / r.width - 0.5
+  const py = (e.clientY - r.top) / r.height - 0.5
+  el.style.setProperty('--rx', `${(-py * 7).toFixed(2)}deg`)
+  el.style.setProperty('--ry', `${(px * 9).toFixed(2)}deg`)
+}
+function resetTilt(e: MouseEvent) {
+  const el = e.currentTarget as HTMLElement
+  el.style.setProperty('--rx', '0deg')
+  el.style.setProperty('--ry', '0deg')
+}
 
 onMounted(() => {
-  if (!containerRef.value)
-    return
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        isVisible.value = true
-        observer.disconnect()
-      }
-    },
-    { threshold: 0.05 },
-  )
-  observer.observe(containerRef.value)
+  requestAnimationFrame(() => {
+    mounted.value = true
+  })
 })
 </script>
 
 <template>
-  <div>
-    <!-- Header -->
-    <div class="mb-6 flex items-center justify-between">
+  <div class="relative">
+    <!-- بک‌گراند شناور -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+    >
+      <div class="animate-blob absolute -top-24 -start-24 size-72 rounded-full bg-primary-100/50 blur-[90px]" />
+      <div class="animate-blob-delayed absolute -end-24 top-40 size-80 rounded-full bg-emerald-100/50 blur-[100px]" />
+      <Icon
+        name="lucide:leaf"
+        class="animate-float absolute end-[8%] top-6 size-6 text-primary-200/60"
+      />
+      <Icon
+        name="lucide:sprout"
+        class="animate-float-delayed absolute start-[4%] top-48 size-5 text-emerald-200/60"
+      />
+    </div>
+
+    <!-- هدر -->
+    <div
+      class="mb-6 flex items-center justify-between transition-all duration-700"
+      :class="mounted ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'"
+    >
       <div class="flex items-center gap-3">
-        <span class="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-emerald-500 text-white shadow-md">
+        <span class="relative flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 via-emerald-500 to-teal-500 text-white shadow-lg shadow-primary-200/50">
+          <span class="absolute inset-0 animate-ping rounded-2xl bg-primary-400/20 [animation-duration:2.5s]" />
           <Icon
             name="lucide:flower-2"
-            class="size-5"
+            class="animate-float relative size-5"
           />
         </span>
         <div>
-          <h1 class="text-2xl font-bold text-ink">
+          <h1 class="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-ink">
             {{ t('nav.myPlants') }}
           </h1>
-          <p class="text-xs text-ink-muted">
-            {{ toPersianDigits(userPlantsStore.plants.length) }} {{ t('pages.myPlants.plantCount') }}
+          <p class="mt-0.5 flex items-center gap-1.5 text-xs text-ink-muted">
+            <span class="relative flex size-1.5">
+              <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+              <span class="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
+            </span>
+            <span
+              :key="counts.all"
+              class="animate-pop inline-block font-bold text-ink"
+            >
+              {{ toPersianDigits(counts.all) }}
+            </span>
+            {{ t('pages.myPlants.plantCount') }}
           </p>
         </div>
       </div>
+
       <AppButton
         variant="primary"
-        class="group"
+        class="btn-shine group !rounded-2xl !px-4 !py-2.5 !shadow-lg !shadow-primary-200/50 transition-all duration-300 hover:!shadow-xl hover:!shadow-primary-300/50 active:scale-95"
         @click="showAddModal = true"
       >
         <Icon
           name="lucide:plus"
-          class="size-4 transition-transform duration-300 group-hover:rotate-90"
+          class="size-4 transition-transform duration-500 group-hover:rotate-[135deg] group-hover:scale-110"
         />
         {{ $t('common.add') }}
       </AppButton>
     </div>
 
     <!-- جستجو و فیلتر -->
-    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-      <div class="relative sm:w-72">
+    <div
+      class="mb-6 flex flex-col gap-3 transition-all delay-100 duration-700 sm:flex-row sm:items-center"
+      :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
+    >
+      <div class="group relative sm:w-72">
         <Icon
           name="lucide:search"
-          class="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
+          class="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted transition-all duration-300 group-focus-within:scale-110 group-focus-within:text-primary-500"
         />
         <input
           v-model="search"
           type="text"
           :placeholder="$t('common.searchPlaceholder')"
-          class="field !ps-10 transition-shadow duration-200 focus:shadow-md focus:shadow-primary-100/40"
+          class="field !rounded-2xl !py-2.5 !ps-10 !pe-10 transition-all duration-300 focus:!border-primary-300 focus:shadow-lg focus:shadow-primary-100/50"
         >
+        <Transition
+          enter-active-class="transition-all duration-200"
+          enter-from-class="scale-50 opacity-0"
+          enter-to-class="scale-100 opacity-100"
+          leave-active-class="transition-all duration-150"
+          leave-from-class="scale-100 opacity-100"
+          leave-to-class="scale-50 opacity-0"
+        >
+          <button
+            v-if="search"
+            type="button"
+            class="absolute end-2.5 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full bg-ink/5 text-ink-muted transition-all hover:rotate-90 hover:bg-ink/10 hover:text-ink"
+            @click="clearSearch"
+          >
+            <Icon
+              name="lucide:x"
+              class="size-3.5"
+            />
+          </button>
+        </Transition>
       </div>
+
       <div class="flex gap-2 overflow-x-auto pb-1">
         <button
-          v-for="option in statusOptions"
+          v-for="(option, idx) in statusOptions"
           :key="option"
           type="button"
-          class="chip transition-all duration-200"
-          :class="{ 'chip--active scale-[1.03] shadow-sm': statusFilter === option }"
+          class="chip group !rounded-full shrink-0 !px-3.5 !py-1.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95"
+          :style="{ transitionDelay: `${idx * 30}ms` }"
+          :class="[
+            mounted ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
+            statusFilter === option ? 'chip--active !shadow-md !shadow-primary-200/40 scale-[1.03]' : 'hover:border-primary-200 hover:bg-white',
+          ]"
           @click="statusFilter = option"
         >
+          <span
+            v-if="option !== 'all'"
+            class="relative flex size-1.5 rounded-full"
+            :class="statusDot[option]"
+          >
+            <span
+              v-if="statusFilter === option"
+              class="absolute inline-flex size-full animate-ping rounded-full opacity-60"
+              :class="statusDot[option]"
+            />
+          </span>
           {{ option === 'all' ? $t('common.all') : healthLabel(option) }}
-          ({{ toPersianDigits(option === 'all' ? userPlantsStore.plants.length : userPlantsStore.plants.filter(p => p.healthStatus === option).length) }})
+          <span
+            :key="counts[option]"
+            class="animate-pop inline-flex min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-black"
+            :class="statusFilter === option ? 'bg-white/25' : 'bg-ink/5'"
+          >
+            {{ toPersianDigits(counts[option]) }}
+          </span>
         </button>
       </div>
     </div>
 
-    <!-- لیست گیاهان -->
-    <div
+    <!-- گرید کارت‌ها با انیمیشن FLIP -->
+    <TransitionGroup
       v-if="filteredPlants.length"
-      ref="containerRef"
+      name="plant-card"
+      tag="div"
+      appear
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3"
     >
       <div
         v-for="(p, index) in filteredPlants"
         :key="p.id"
-        class="group relative overflow-hidden rounded-2xl border border-white/60 bg-white/70 shadow-md backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-100/30"
-        :class="isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'"
-        :style="{ transitionDelay: `${Math.min(index * 80, 600)}ms` }"
+        :style="{ '--i': index % 9 }"
+        class="plant-card-item"
       >
-        <!-- تصویر -->
-        <NuxtLink
-          :to="`/my-plants/${p.id}`"
-          class="relative block overflow-hidden bg-gradient-to-br from-primary-50 to-emerald-50"
+        <div
+          class="tilt-card shine group relative overflow-hidden rounded-[22px] border border-white/70 bg-white/80 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] backdrop-blur-md transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(16,185,129,0.3)]"
+          @mousemove="handleTilt"
+          @mouseleave="resetTilt"
         >
-          <!-- Skeleton loader -->
-          <div
-            v-if="imageStates[p.id] !== 'loaded'"
-            class="absolute inset-0 z-10 flex items-center justify-center"
-          >
-            <div class="flex flex-col items-center gap-2">
-              <div class="size-8 animate-pulse rounded-full bg-primary-100" />
-              <div class="h-2 w-16 animate-pulse rounded-full bg-primary-100" />
-            </div>
-            <!-- Shimmer effect -->
-            <div class="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-          </div>
-
-          <!-- Error state -->
-          <div
-            v-if="imageStates[p.id] === 'error'"
-            class="absolute inset-0 z-20 flex items-center justify-center bg-primary-50/80"
-          >
-            <Icon
-              name="lucide:image-off"
-              class="size-8 text-ink-muted/40"
-            />
-          </div>
-
-          <img
-            v-lazy-img
-            :data-src="p.photo"
-            :alt="p.nickname"
-            class="h-48 w-full object-cover transition-all duration-500 group-hover:scale-110"
-            :class="imageStates[p.id] === 'loaded' ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'"
-            loading="lazy"
-            @load="onImageLoad(p.id)"
-            @error="onImageError(p.id)"
-          >
-
-          <!-- Gradient overlay -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        </NuxtLink>
-
-        <!-- دکمه حذف -->
-        <button
-          :aria-label="t('common.delete')"
-          class="absolute end-3 top-3 z-30 flex size-8 items-center justify-center rounded-xl bg-white/90 text-ink-muted shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-status-danger hover:text-white hover:shadow-lg"
-          @click="removePlant(p.id, p.nickname)"
-        >
-          <Icon
-            name="lucide:trash-2"
-            class="size-4"
-          />
-        </button>
-
-        <!-- بج وضعیت روی تصویر -->
-        <div class="absolute start-3 top-3 z-20">
-          <span
-            class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm backdrop-blur-sm"
-            :class="statusBadge[p.healthStatus]"
-          >
-            <Icon
-              :name="statusIcon[p.healthStatus]"
-              class="size-3"
-            />
-            {{ healthLabel(p.healthStatus) }}
-          </span>
-        </div>
-
-        <!-- اطلاعات -->
-        <div class="p-4">
+          <!-- تصویر -->
           <NuxtLink
             :to="`/my-plants/${p.id}`"
-            class="group/link flex items-center gap-1 font-bold text-ink transition-colors hover:text-primary-600"
+            class="relative block h-48 overflow-hidden bg-gradient-to-br from-primary-50 via-emerald-50/50 to-teal-50"
           >
-            {{ p.nickname }}
-            <Icon
-              name="lucide:arrow-up-right"
-              class="size-3.5 opacity-0 transition-all duration-200 group-hover/link:opacity-100 rtl:-scale-x-100"
-            />
-          </NuxtLink>
-
-          <div class="mt-1.5 flex items-center gap-1.5 text-xs text-ink-muted">
-            <Icon
-              name="lucide:map-pin"
-              class="size-3"
-            />
-            {{ p.location }}
-          </div>
-
-          <!-- پایین کارت -->
-          <div class="mt-3 flex items-center justify-between border-t border-ink/5 pt-3">
-            <span
-              v-if="p.nextWateringAt"
-              class="flex items-center gap-1.5 text-xs font-medium text-primary-600"
+            <!-- اسکلت + شیمر -->
+            <div
+              v-if="imageStates[p.id] !== 'loaded' && imageStates[p.id] !== 'error'"
+              class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 overflow-hidden"
             >
-              <span class="relative flex size-5 items-center justify-center">
-                <span class="absolute inline-flex size-full animate-ping rounded-full bg-primary-200 opacity-40" />
+              <span class="animate-float flex size-10 items-center justify-center rounded-2xl bg-white shadow-sm">
                 <Icon
-                  name="lucide:droplets"
-                  class="relative size-3.5"
+                  name="lucide:leaf"
+                  class="size-5 animate-pulse text-primary-300"
                 />
               </span>
-              {{ toJalaliDate(p.nextWateringAt) }}
-            </span>
-            <span
-              v-else
-              class="text-xs text-ink-muted/50"
-            >—</span>
+              <div class="h-2 w-20 animate-pulse rounded-full bg-primary-100" />
+              <div class="shimmer absolute inset-0" />
+            </div>
 
+            <!-- خطا -->
+            <div
+              v-if="imageStates[p.id] === 'error'"
+              class="absolute inset-0 z-20 flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-primary-50 to-emerald-50 text-ink-muted/50"
+            >
+              <Icon
+                name="lucide:image-off"
+                class="animate-float size-8"
+              />
+              <span class="text-[11px]">no image</span>
+            </div>
+
+            <img
+              v-lazy-img
+              :src="PLACEHOLDER"
+              :data-src="p.photo"
+              :alt="p.nickname"
+              loading="lazy"
+              decoding="async"
+              class="size-full object-cover transition-all duration-[900ms] ease-out group-hover:rotate-[0.5deg] group-hover:scale-[1.08]"
+              :class="imageStates[p.id] === 'loaded' ? 'scale-100 opacity-100 blur-0' : 'scale-[1.04] opacity-0 blur-[6px]'"
+              @load="onImageLoad($event, p.id)"
+              @error="onImageError(p.id)"
+            >
+
+            <!-- گرادیان هاور -->
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <div class="pointer-events-none absolute inset-x-4 bottom-3 flex translate-y-3 items-center gap-1 text-[11px] font-medium text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+              <Icon
+                name="lucide:eye"
+                class="size-3.5"
+              />
+              {{ t('common.details') }}
+            </div>
+          </NuxtLink>
+
+          <!-- بج وضعیت -->
+          <div class="absolute start-3 top-3 z-20">
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full py-1 pe-2.5 ps-1.5 text-[11px] font-bold shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-105"
+              :class="statusBadge[p.healthStatus]"
+            >
+              <span class="flex size-5 items-center justify-center rounded-full bg-white/25">
+                <Icon
+                  :name="statusIcon[p.healthStatus]"
+                  class="size-3"
+                />
+              </span>
+              {{ healthLabel(p.healthStatus) }}
+            </span>
+          </div>
+
+          <!-- حذف -->
+          <button
+            :aria-label="t('common.delete')"
+            class="absolute end-3 top-3 z-30 flex size-8 items-center justify-center rounded-xl bg-white/90 text-ink-muted shadow-lg backdrop-blur-md transition-all duration-300 hover:rotate-12 hover:scale-110 hover:bg-rose-500 hover:text-white hover:shadow-rose-200 active:scale-90 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+            @click="removePlant(p.id, p.nickname)"
+          >
+            <Icon
+              name="lucide:trash-2"
+              class="size-4"
+            />
+          </button>
+
+          <!-- اطلاعات -->
+          <div class="relative p-4">
             <NuxtLink
               :to="`/my-plants/${p.id}`"
-              class="flex items-center gap-1 rounded-lg bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary-600 transition-all duration-200 hover:bg-primary-100 hover:shadow-sm"
+              class="group/link flex items-center gap-1 font-extrabold text-ink transition-colors duration-200 hover:text-primary-600"
             >
-              {{ t('common.details') }}
+              <span class="truncate">{{ p.nickname }}</span>
               <Icon
-                name="lucide:chevron-left"
-                class="size-3 rtl:rotate-180"
+                name="lucide:arrow-up-left"
+                class="size-4 shrink-0 -translate-x-1 text-primary-500 opacity-0 transition-all duration-300 group-hover/link:translate-x-0 group-hover/link:opacity-100 rtl:rotate-90"
               />
             </NuxtLink>
+
+            <div class="mt-1.5 flex items-center gap-1.5 text-xs text-ink-muted">
+              <span class="flex size-5 items-center justify-center rounded-md bg-primary-50 text-primary-600 transition-colors duration-300 group-hover:bg-primary-100">
+                <Icon
+                  name="lucide:map-pin"
+                  class="size-3"
+                />
+              </span>
+              <span class="truncate">{{ p.location }}</span>
+            </div>
+
+            <div class="mt-3.5 flex items-center justify-between border-t border-dashed border-ink/10 pt-3">
+              <span
+                v-if="p.nextWateringAt"
+                class="group/water flex items-center gap-1.5 text-xs font-bold text-primary-700"
+              >
+                <span class="relative flex size-6 items-center justify-center rounded-full bg-primary-50 transition-colors duration-300 group-hover/water:bg-primary-100">
+                  <span class="absolute inline-flex size-full animate-ping rounded-full bg-primary-300/40 [animation-duration:1.8s]" />
+                  <Icon
+                    name="lucide:droplets"
+                    class="animate-wiggle relative size-3.5"
+                  />
+                </span>
+                {{ toJalaliDate(p.nextWateringAt) }}
+              </span>
+              <span
+                v-else
+                class="text-xs text-ink-muted/40"
+              >—</span>
+
+              <NuxtLink
+                :to="`/my-plants/${p.id}`"
+                class="flex items-center gap-0.5 rounded-xl bg-primary-50 px-2.5 py-1.5 text-[11px] font-bold text-primary-700 transition-all duration-300 hover:gap-1.5 hover:bg-primary-600 hover:text-white hover:shadow-lg hover:shadow-primary-200 active:scale-95"
+              >
+                {{ t('common.details') }}
+                <Icon
+                  name="lucide:chevron-left"
+                  class="size-3 rtl:rotate-180"
+                />
+              </NuxtLink>
+            </div>
           </div>
+
+          <!-- خط پایین رنگی -->
+          <span class="absolute inset-x-0 bottom-0 h-[3px] origin-right scale-x-0 bg-gradient-to-l from-primary-500 via-emerald-400 to-teal-400 transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />
         </div>
       </div>
-    </div>
+    </TransitionGroup>
 
-    <!-- حالت خالی -->
+    <!-- خالی -->
     <div
       v-else
-      class="flex flex-col items-center gap-4 py-20 text-center"
+      :key="statusFilter + search"
+      class="animate-fadeUp relative flex flex-col items-center gap-4 overflow-hidden rounded-[26px] border border-dashed border-primary-200 bg-white/60 py-16 text-center backdrop-blur-sm sm:py-20"
     >
+      <div class="pointer-events-none absolute inset-0">
+        <span class="animate-float absolute start-[15%] top-8 text-primary-200"><Icon
+          name="lucide:leaf"
+          class="size-5"
+        /></span>
+        <span class="animate-float-delayed absolute end-[12%] top-14 text-emerald-200"><Icon
+          name="lucide:sparkles"
+          class="size-5"
+        /></span>
+        <span class="animate-float absolute bottom-10 start-[25%] text-primary-100 [animation-delay:0.8s]"><Icon
+          name="lucide:flower"
+          class="size-6"
+        /></span>
+      </div>
+
       <div class="relative">
-        <span class="flex size-20 items-center justify-center rounded-3xl bg-primary-50">
+        <span class="absolute inset-0 -m-4 animate-ping rounded-[28px] bg-primary-100/40 [animation-duration:2.8s]" />
+        <span class="animate-float relative flex size-20 items-center justify-center rounded-[24px] bg-gradient-to-br from-white to-primary-50 shadow-xl shadow-primary-100/50 ring-1 ring-white">
           <Icon
             name="lucide:sprout"
-            class="size-10 text-primary-300"
+            class="size-10 text-primary-400"
           />
         </span>
-        <!-- Floating particles -->
-        <span class="absolute -end-2 -top-2 flex size-6 animate-bounce items-center justify-center rounded-full bg-emerald-100 text-emerald-500 [animation-delay:0.2s]">
-          <Icon name="lucide:plus" class="size-3" />
+        <span class="animate-bounce absolute -end-2 -top-2 flex size-7 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg [animation-delay:0.2s]">
+          <Icon
+            name="lucide:plus"
+            class="size-3.5"
+          />
         </span>
-        <span class="absolute -bottom-1 -start-3 flex size-5 animate-bounce items-center justify-center rounded-full bg-primary-100 text-primary-500 [animation-delay:0.5s]">
-          <Icon name="lucide:leaf" class="size-2.5" />
+        <span class="animate-bounce absolute -bottom-1 -start-3 flex size-6 items-center justify-center rounded-full bg-white text-primary-500 shadow-md [animation-delay:0.6s]">
+          <Icon
+            name="lucide:leaf"
+            class="size-3"
+          />
         </span>
       </div>
-      <div>
-        <p class="font-medium text-ink">
+
+      <div class="relative">
+        <p class="font-extrabold text-ink">
           {{ userPlantsStore.plants.length ? $t('pages.catalog.empty') : t('pages.myPlants.empty') }}
         </p>
-        <p class="mt-1 text-sm text-ink-muted">
+        <p class="mx-auto mt-1.5 max-w-xs text-sm leading-7 text-ink-muted">
           {{ t('pages.myPlants.emptyHint') }}
         </p>
       </div>
+
       <AppButton
         variant="primary"
-        class="mt-2"
+        class="btn-shine group relative !rounded-2xl !px-5 !py-2.5 transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-95"
         @click="showAddModal = true"
       >
         <Icon
           name="lucide:plus"
-          class="size-4"
+          class="size-4 transition-transform duration-500 group-hover:rotate-180"
         />
         {{ t('pages.myPlants.addFirst') }}
       </AppButton>
     </div>
 
-    <!-- مودال افزودن گیاه -->
+    <!-- مودال -->
     <AppModal
       v-model="showAddModal"
       :title="t('pages.myPlants.addPlant')"
@@ -378,42 +542,49 @@ onMounted(() => {
         novalidate
         @submit="onSubmit"
       >
-        <!-- نام مستعار -->
-        <div>
-          <label class="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
-            <Icon name="lucide:tag" class="size-3.5 text-primary-500" />
+        <div class="animate-fadeUp" style="animation-delay: 0.05s">
+          <label class="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-ink">
+            <span class="flex size-6 items-center justify-center rounded-lg bg-primary-50 text-primary-600"><Icon
+              name="lucide:tag"
+              class="size-3.5"
+            /></span>
             {{ t('pages.myPlants.nickname') }}
           </label>
           <input
             v-model="nickname"
             v-bind="nicknameAttrs"
             type="text"
-            class="w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-all duration-200 focus:shadow-md focus:shadow-primary-100/40 focus-visible:ring-2 focus-visible:ring-primary-400"
-            :class="errors.nickname ? 'border-status-danger' : 'border-ink/10'"
+            class="w-full rounded-2xl border px-3.5 py-2.5 text-sm outline-none transition-all duration-300 focus:shadow-lg focus:shadow-primary-100/50 focus-visible:ring-2 focus-visible:ring-primary-400"
+            :class="errors.nickname ? 'animate-shake border-status-danger bg-rose-50/30' : 'border-ink/10 bg-white focus:border-primary-300'"
             :placeholder="t('pages.myPlants.nicknamePlaceholder')"
           >
           <Transition
-            enter-active-class="transition-all duration-200"
+            enter-active-class="transition-all duration-300"
             enter-from-class="-translate-y-1 opacity-0"
             enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition-all duration-150"
+            leave-active-class="transition-all duration-200"
             leave-from-class="translate-y-0 opacity-100"
             leave-to-class="-translate-y-1 opacity-0"
           >
             <p
               v-if="errors.nickname"
-              class="mt-1.5 flex items-center gap-1 text-xs text-status-danger"
+              class="mt-1.5 flex items-center gap-1 text-xs font-medium text-status-danger"
             >
-              <Icon name="lucide:alert-circle" class="size-3" />
+              <Icon
+                name="lucide:circle-alert"
+                class="size-3.5 animate-pop"
+              />
               {{ errors.nickname ? t(errors.nickname) : '' }}
             </p>
           </Transition>
         </div>
 
-        <!-- نوع گیاه -->
-        <div>
-          <label class="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
-            <Icon name="lucide:flower" class="size-3.5 text-primary-500" />
+        <div class="animate-fadeUp" style="animation-delay: 0.12s">
+          <label class="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-ink">
+            <span class="flex size-6 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"><Icon
+              name="lucide:flower"
+              class="size-3.5"
+            /></span>
             {{ t('pages.myPlants.plantType') }}
           </label>
           <AppDropdown
@@ -422,50 +593,58 @@ onMounted(() => {
             :placeholder="t('pages.myPlants.choosePlant')"
           />
           <Transition
-            enter-active-class="transition-all duration-200"
+            enter-active-class="transition-all duration-300"
             enter-from-class="-translate-y-1 opacity-0"
             enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition-all duration-150"
+            leave-active-class="transition-all duration-200"
             leave-from-class="translate-y-0 opacity-100"
             leave-to-class="-translate-y-1 opacity-0"
           >
             <p
               v-if="errors.plantSlug"
-              class="mt-1.5 flex items-center gap-1 text-xs text-status-danger"
+              class="mt-1.5 flex items-center gap-1 text-xs font-medium text-status-danger"
             >
-              <Icon name="lucide:alert-circle" class="size-3" />
+              <Icon
+                name="lucide:circle-alert"
+                class="size-3.5 animate-pop"
+              />
               {{ errors.plantSlug ? t(errors.plantSlug) : '' }}
             </p>
           </Transition>
         </div>
 
-        <!-- مکان -->
-        <div>
-          <label class="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
-            <Icon name="lucide:map-pin" class="size-3.5 text-primary-500" />
+        <div class="animate-fadeUp" style="animation-delay: 0.19s">
+          <label class="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-ink">
+            <span class="flex size-6 items-center justify-center rounded-lg bg-amber-50 text-amber-600"><Icon
+              name="lucide:map-pin"
+              class="size-3.5"
+            /></span>
             {{ t('pages.myPlants.location') }}
           </label>
           <input
             v-model="location"
             v-bind="locationAttrs"
             type="text"
-            class="w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-all duration-200 focus:shadow-md focus:shadow-primary-100/40 focus-visible:ring-2 focus-visible:ring-primary-400"
-            :class="errors.location ? 'border-status-danger' : 'border-ink/10'"
+            class="w-full rounded-2xl border px-3.5 py-2.5 text-sm outline-none transition-all duration-300 focus:shadow-lg focus:shadow-primary-100/50 focus-visible:ring-2 focus-visible:ring-primary-400"
+            :class="errors.location ? 'animate-shake border-status-danger bg-rose-50/30' : 'border-ink/10 bg-white focus:border-primary-300'"
             :placeholder="t('pages.myPlants.locationPlaceholder')"
           >
           <Transition
-            enter-active-class="transition-all duration-200"
+            enter-active-class="transition-all duration-300"
             enter-from-class="-translate-y-1 opacity-0"
             enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition-all duration-150"
+            leave-active-class="transition-all duration-200"
             leave-from-class="translate-y-0 opacity-100"
             leave-to-class="-translate-y-1 opacity-0"
           >
             <p
               v-if="errors.location"
-              class="mt-1.5 flex items-center gap-1 text-xs text-status-danger"
+              class="mt-1.5 flex items-center gap-1 text-xs font-medium text-status-danger"
             >
-              <Icon name="lucide:alert-circle" class="size-3" />
+              <Icon
+                name="lucide:circle-alert"
+                class="size-3.5 animate-pop"
+              />
               {{ errors.location ? t(errors.location) : '' }}
             </p>
           </Transition>
@@ -475,9 +654,13 @@ onMounted(() => {
           type="submit"
           variant="primary"
           block
-          class="!rounded-xl !py-3 !text-sm !font-semibold"
+          class="btn-shine group animate-fadeUp !rounded-2xl !py-3 !text-sm !font-bold !shadow-lg !shadow-primary-200/50 transition-all duration-300 hover:!shadow-xl active:scale-[0.98]"
+          style="animation-delay: 0.26s"
         >
-          <Icon name="lucide:check" class="size-4" />
+          <Icon
+            name="lucide:check"
+            class="size-4 transition-transform duration-300 group-hover:scale-125"
+          />
           {{ $t('common.save') }}
         </AppButton>
       </form>
@@ -485,10 +668,203 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
-@keyframes shimmer {
+<style scoped>
+/* ── ورود کارت‌ها + جابه‌جایی نرم فیلتر ── */
+.plant-card-move {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.plant-card-enter-active {
+  animation: cardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 75ms);
+}
+.plant-card-leave-active {
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.plant-card-leave-to {
+  opacity: 0;
+  transform: scale(0.94) translateY(12px);
+}
+
+/* ── Tilt ── */
+.tilt-card {
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.35s ease, box-shadow 0.4s ease, translate 0.35s ease;
+  transform-style: preserve-3d;
+}
+.tilt-card:hover {
+  translate: 0 -6px;
+}
+
+/* ── برق کشویی روی کارت و دکمه ── */
+.shine {
+  position: relative;
+}
+.shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.55) 50%, transparent 58%);
+  transform: translateX(-130%);
+  transition: transform 0.9s ease;
+}
+.shine:hover::after {
+  transform: translateX(130%);
+}
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: translateX(-150%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.btn-shine:hover::before {
+  transform: translateX(150%);
+}
+
+/* ── شیمر اسکلت ── */
+.shimmer {
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.7) 50%, transparent 80%);
+  background-size: 200% 100%;
+  animation: shimmerMove 1.4s infinite linear;
+}
+
+/* ── کی‌فریم‌ها ── */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes shimmerMove {
+  0% {
+    background-position: 180% 0;
+  }
   100% {
-    transform: translateX(100%);
+    background-position: -80% 0;
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(4deg);
+  }
+}
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(28px, -22px) scale(1.1);
+  }
+  66% {
+    transform: translate(-18px, 18px) scale(0.92);
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-float {
+  animation: float 5.5s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 7s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+.animate-blob {
+  animation: blob 12s ease-in-out infinite;
+}
+.animate-blob-delayed {
+  animation: blob 15s ease-in-out infinite reverse;
+}
+.animate-pop {
+  animation: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-shake {
+  animation: shake 0.4s ease;
+}
+.group:hover .animate-wiggle,
+.animate-wiggle {
+  animation: wiggle 2.2s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .tilt-card {
+    transform: none !important;
   }
 }
 </style>
