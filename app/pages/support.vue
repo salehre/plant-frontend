@@ -1,166 +1,157 @@
 <script setup lang="ts">
-import type { Directive } from 'vue'
-
 definePageMeta({ layout: 'default' })
 
-const { t, te, locale } = useI18n()
+const { t } = useI18n()
 useHead(() => ({ title: t('support.nav') }))
 
-// تعداد سؤال‌ها باید با آرایه‌ی home.faq.items در fa.json و en.json یکی باشد.
+const ctaSection = ref<HTMLElement | null>(null)
+
+function onCtaPointerMove(event: PointerEvent) {
+  if (event.pointerType !== 'mouse' || !ctaSection.value) return
+
+  const rect = ctaSection.value.getBoundingClientRect()
+  const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2
+  const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2
+
+  ctaSection.value.style.setProperty('--far-x', `${-x * 7}px`)
+  ctaSection.value.style.setProperty('--far-y', `${-y * 7}px`)
+  ctaSection.value.style.setProperty('--near-x', `${-x * 14}px`)
+  ctaSection.value.style.setProperty('--near-y', `${-y * 14}px`)
+}
+
+function onCtaPointerLeave() {
+  if (!ctaSection.value) return
+
+  ctaSection.value.style.removeProperty('--far-x')
+  ctaSection.value.style.removeProperty('--far-y')
+  ctaSection.value.style.removeProperty('--near-x')
+  ctaSection.value.style.removeProperty('--near-y')
+}
+
+// تعداد سؤال‌ها باید با آرایه‌ی home.faq.items در fa.json و en.json یکی باشد
 const FAQ_COUNT = 6
 
 const topics = computed(() =>
-  Array.from({ length: FAQ_COUNT }, (_, id) => ({
-    id,
-    q: t(`home.faq.items[${id}].q`),
-    a: t(`home.faq.items[${id}].a`),
+  Array.from({ length: FAQ_COUNT }, (_, index) => ({
+    id: `faq-${index}`,
+    q: t(`home.faq.items[${index}].q`),
+    a: t(`home.faq.items[${index}].a`),
   })),
 )
 
 const query = ref('')
-const searchInput = ref<HTMLInputElement | null>(null)
 
 const filtered = computed(() => {
-  const normalizedQuery = query.value.trim().toLocaleLowerCase()
+  const search = query.value.trim().toLowerCase()
 
-  if (!normalizedQuery) return topics.value
+  if (!search) return topics.value
 
-  return topics.value.filter(({ q, a }) =>
-    `${q} ${a}`.toLocaleLowerCase().includes(normalizedQuery),
+  return topics.value.filter(item =>
+    `${item.q} ${item.a}`.toLowerCase().includes(search),
   )
 })
 
-const openIndex = ref<number | null>(null)
+const openQuestion = ref<string | null>(null)
 
-function toggle(id: number) {
-  openIndex.value = openIndex.value === id ? null : id
+function toggleQuestion(id: string) {
+  openQuestion.value = openQuestion.value === id ? null : id
 }
 
-function clearQuery() {
-  query.value = ''
-  searchInput.value?.focus()
-}
-
-// اگر سؤال بازشده با جستجو از نتایج حذف شد، آکاردئون آن بسته شود.
-watch(filtered, (items) => {
-  if (
-    openIndex.value !== null
-    && !items.some(item => item.id === openIndex.value)
-  ) {
-    openIndex.value = null
-  }
+watch(query, () => {
+  openQuestion.value = null
 })
 
-// کلید اختیاری support.clearSearch — اگر در فایل ترجمه نباشد از متن پیش‌فرض استفاده می‌شود
-const clearSearchLabel = computed(() =>
-  te('support.clearSearch')
-    ? t('support.clearSearch')
-    : locale.value.startsWith('fa') ? 'پاک کردن جستجو' : 'Clear search',
-)
-
 const cards = [
-  { to: '/terms', icon: 'lucide:scroll-text', title: 'components.theFooter.terms', hint: 'support.cards.termsHint' },
-  { to: '/blog', icon: 'lucide:book-open', title: 'pages.blog.title', hint: 'support.cards.guideHint' },
-  { to: '/contact', icon: 'lucide:messages-square', title: 'contact.title', hint: 'support.cards.contactHint' },
-  { to: '/tickets/new', icon: 'lucide:triangle-alert', title: 'tickets.newTicket', hint: 'support.cards.reportHint' },
+  {
+    to: '/terms',
+    icon: 'lucide:scroll-text',
+    title: 'components.theFooter.terms',
+    hint: 'support.cards.termsHint',
+  },
+  {
+    to: '/blog',
+    icon: 'lucide:book-open',
+    title: 'pages.blog.title',
+    hint: 'support.cards.guideHint',
+  },
+  {
+    to: '/contact',
+    icon: 'lucide:messages-square',
+    title: 'contact.title',
+    hint: 'support.cards.contactHint',
+  },
+  {
+    to: '/tickets/new',
+    icon: 'lucide:triangle-alert',
+    title: 'tickets.newTicket',
+    hint: 'support.cards.reportHint',
+  },
 ]
-
-// دایرکتیو v-reveal: وقتی عنصر وارد دید کاربر شد، با انیمیشن نمایش داده می‌شود
-const revealObservers = new WeakMap<HTMLElement, IntersectionObserver>()
-
-const vReveal: Directive<HTMLElement, number | undefined> = {
-  mounted(el, binding) {
-    el.classList.add('reveal')
-    if (typeof binding.value === 'number') {
-      el.style.setProperty('--reveal-delay', `${binding.value}ms`)
-    }
-    if (!('IntersectionObserver' in window)) {
-      el.classList.add('reveal--in')
-      return
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            el.classList.add('reveal--in')
-            observer.disconnect()
-          }
-        }
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
-    )
-    observer.observe(el)
-    revealObservers.set(el, observer)
-  },
-  unmounted(el) {
-    revealObservers.get(el)?.disconnect()
-    revealObservers.delete(el)
-  },
-}
 </script>
 
 <template>
-  <div class="support-page mx-auto flex max-w-6xl flex-col gap-8">
+  <div class="support-page mx-auto flex max-w-6xl flex-col gap-8 pb-6">
     <!-- هیرو و جستجو -->
-    <section class="support-hero relative overflow-hidden rounded-[19px] bg-primary-900 text-white">
+    <section class="support-hero relative isolate overflow-hidden rounded-[19px] bg-primary-900 text-white">
       <img
         src="/images/plants/header.webp"
         alt=""
         aria-hidden="true"
-        class="hero-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
+        class="support-hero__image absolute inset-0 size-full object-cover opacity-60"
       >
-      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary-900 via-primary-900/70 to-primary-900/30" />
 
-      <!-- هاله‌های نور شناور -->
-      <div aria-hidden="true" class="hero-glow hero-glow--1" />
-      <div aria-hidden="true" class="hero-glow hero-glow--2" />
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-gradient-to-br from-primary-900/60 via-primary-900/65 to-primary-900/95"
+      />
+
+      <span
+        aria-hidden="true"
+        class="support-hero__orb support-hero__orb--one pointer-events-none absolute -end-16 -top-20 size-64 rounded-full bg-primary-300/20 blur-3xl"
+      />
+      <span
+        aria-hidden="true"
+        class="support-hero__orb support-hero__orb--two pointer-events-none absolute -bottom-24 -start-10 size-72 rounded-full bg-accent-300/15 blur-3xl"
+      />
 
       <div class="relative mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-10 sm:px-6 sm:py-14">
-        <h1 class="hero-anim hero-anim--1 text-2xl font-extrabold sm:text-4xl">
+        <h1 class="support-hero__title text-2xl font-extrabold leading-tight sm:text-4xl">
           {{ t('support.title') }}
         </h1>
 
-        <p class="hero-anim hero-anim--2 max-w-xl text-sm leading-7 text-white/80">
+        <p class="support-hero__subtitle max-w-xl text-sm leading-7 text-white/80">
           {{ t('support.subtitle') }}
         </p>
 
         <form
-          class="hero-anim hero-anim--3 hero-search relative max-w-2xl rounded-xl bg-surface shadow-xl shadow-black/10 ring-1 ring-white/20"
+          class="support-search relative max-w-2xl"
           role="search"
           :aria-label="t('support.searchPlaceholder')"
           @submit.prevent
         >
-          <input
-            ref="searchInput"
-            v-model="query"
-            type="search"
-            name="q"
-            autocomplete="off"
-            :aria-label="t('support.searchPlaceholder')"
-            :placeholder="t('support.searchPlaceholder')"
-            class="h-12 w-full rounded-xl border-0 bg-transparent ps-4 text-sm text-ink outline-none transition-[padding] duration-300 placeholder:text-ink-muted/70"
-            :class="query ? 'pe-20' : 'pe-12'"
-          >
-          <Icon
-            name="lucide:search"
-            aria-hidden="true"
-            class="search-icon pointer-events-none absolute end-4 top-1/2 size-5 -translate-y-1/2 text-ink-muted"
-          />
-          <Transition name="pop">
-            <button
-              v-if="query"
-              type="button"
-              :aria-label="clearSearchLabel"
-              class="clear-btn absolute end-11 top-1/2 flex size-6 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-ink/10 hover:text-ink"
-              @click="clearQuery"
+          <div class="support-search__shell relative rounded-2xl bg-surface shadow-lg shadow-black/10">
+            <label
+              for="support-search"
+              class="sr-only"
             >
+              {{ t('support.searchPlaceholder') }}
+            </label>
+
+            <input
+              id="support-search"
+              v-model="query"
+              type="search"
+              :placeholder="t('support.searchPlaceholder')"
+              class="h-12 w-full rounded-2xl border-0 bg-surface pe-14 ps-4 text-sm text-ink outline-none placeholder:text-ink-muted/70"
+            >
+
+            <span class="support-search__icon pointer-events-none absolute end-2 top-1/2 flex size-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
               <Icon
-                name="lucide:x"
-                aria-hidden="true"
-                class="size-3.5"
+                name="lucide:search"
+                class="size-4"
               />
-            </button>
-          </Transition>
+            </span>
+          </div>
         </form>
       </div>
     </section>
@@ -171,145 +162,167 @@ const vReveal: Directive<HTMLElement, number | undefined> = {
         v-for="(card, index) in cards"
         :key="card.to"
         :to="card.to"
-        :style="{ '--d': `${350 + index * 90}ms` }"
-        class="support-card glass-card group relative flex flex-col gap-3 overflow-hidden p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
+        class="support-card group glass-card relative isolate flex min-h-[146px] overflow-hidden rounded-2xl p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 sm:min-h-[158px] sm:p-5"
+        :style="{ '--card-delay': `${index * 85}ms` }"
       >
-        <span class="flex size-11 items-center justify-center rounded-xl bg-primary-50 text-primary-700 transition-all duration-300 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary-600/30 dark:bg-primary-900/40 dark:text-primary-300">
-          <Icon
-            :name="card.icon"
-            aria-hidden="true"
-            class="size-5"
-          />
-        </span>
-        <span>
-          <span class="block text-sm font-bold text-ink">{{ t(card.title) }}</span>
-          <span class="mt-0.5 block text-xs leading-5 text-ink-muted">{{ t(card.hint) }}</span>
-        </span>
+        <span
+          aria-hidden="true"
+          class="support-card__glow pointer-events-none absolute -end-10 -top-10 size-32 rounded-full bg-primary-200/60 blur-3xl"
+        />
+
+        <div class="support-card__content relative z-10 flex w-full flex-col gap-3">
+          <span class="support-card__icon flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+            <Icon
+              :name="card.icon"
+              class="size-5"
+            />
+          </span>
+
+          <span>
+            <span class="block text-sm font-bold text-ink">
+              {{ t(card.title) }}
+            </span>
+            <span class="mt-0.5 block text-xs leading-5 text-ink-muted">
+              {{ t(card.hint) }}
+            </span>
+          </span>
+        </div>
       </NuxtLink>
     </section>
 
     <!-- پرسش‌های پرتکرار -->
     <section
       id="topics"
-      v-reveal
       class="scroll-mt-24"
-      aria-labelledby="support-topics-heading"
     >
-      <h2
-        id="support-topics-heading"
-        class="mb-3 text-lg font-bold text-ink"
-      >
+      <h2 class="faq-heading mb-3 flex items-center gap-2 text-lg font-bold text-ink">
+        <span class="flex size-8 items-center justify-center rounded-lg bg-primary-700 text-white">
+          <Icon
+            name="lucide:sparkles"
+            class="size-4"
+          />
+        </span>
+
         {{ t('support.popularTopics') }}
+
+        <span class="hidden h-px flex-1 bg-gradient-to-r from-ink/10 to-transparent sm:block" />
       </h2>
 
-      <Transition
-        name="result-state"
-        mode="out-in"
+      <TransitionGroup
+        v-if="filtered.length"
+        name="faq-list"
+        tag="div"
+        appear
+        class="glass-card relative divide-y divide-ink/5 overflow-hidden"
       >
         <div
-          v-if="filtered.length"
-          key="faq-results"
-          class="glass-card overflow-hidden"
+          v-for="(item, index) in filtered"
+          :key="item.id"
+          class="faq-row"
+          :style="{ '--faq-delay': `${Math.min(index * 55, 275)}ms` }"
         >
-          <TransitionGroup
-            name="faq-list"
-            tag="div"
-            class="faq-items divide-y divide-ink/5"
-            appear
+          <button
+            :id="`${item.id}-question`"
+            type="button"
+            class="faq-trigger group flex w-full items-center gap-3 px-4 py-4 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+            :class="{ 'faq-trigger--open': openQuestion === item.id }"
+            :aria-expanded="openQuestion === item.id"
+            :aria-controls="`${item.id}-panel`"
+            @click="toggleQuestion(item.id)"
           >
-            <div
-              v-for="(item, index) in filtered"
-              :key="item.id"
-              :style="{ '--i': index }"
+            <span
+              class="faq-question-icon flex size-10 shrink-0 items-center justify-center rounded-xl"
+              :class="{ 'faq-question-icon--open': openQuestion === item.id }"
             >
-              <button
-                :id="`topic-trigger-${item.id}`"
-                type="button"
-                class="group flex w-full items-center gap-3 px-4 py-4 text-start transition-colors duration-300 hover:bg-primary-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:hover:bg-primary-900/20"
-                :class="{ 'bg-primary-50/60 dark:bg-primary-900/25': openIndex === item.id }"
-                :aria-expanded="openIndex === item.id"
-                :aria-controls="`topic-panel-${item.id}`"
-                @click="toggle(item.id)"
-              >
-                <span
-                  aria-hidden="true"
-                  class="flex size-10 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ease-[cubic-bezier(.34,1.56,.64,1)]"
-                  :class="openIndex === item.id
-                    ? '-rotate-6 scale-105 bg-primary-600 text-white shadow-md shadow-primary-600/30'
-                    : 'bg-primary-50 text-primary-700 group-hover:scale-105 dark:bg-primary-900/40 dark:text-primary-300'"
-                >
-                  <Icon
-                    name="lucide:circle-help"
-                    class="size-5"
-                  />
-                </span>
+              <Icon
+                name="lucide:circle-help"
+                class="size-5"
+              />
+            </span>
 
-                <span
-                  class="flex-1 text-sm font-bold transition-colors duration-300"
-                  :class="openIndex === item.id ? 'text-primary-700 dark:text-primary-300' : 'text-ink'"
-                >
-                  {{ item.q }}
-                </span>
+            <span class="flex-1 text-sm font-bold leading-6 text-ink">
+              {{ item.q }}
+            </span>
 
-                <Icon
-                  name="lucide:chevron-down"
-                  aria-hidden="true"
-                  class="size-4 shrink-0 text-ink-muted transition-transform duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]"
-                  :class="{ 'rotate-180': openIndex === item.id }"
-                />
-              </button>
+            <span
+              class="faq-chevron flex size-8 shrink-0 items-center justify-center rounded-full border"
+              :class="{ 'faq-chevron--open': openQuestion === item.id }"
+            >
+              <Icon
+                name="lucide:chevron-down"
+                class="size-4"
+              />
+            </span>
+          </button>
 
-              <div
-                :id="`topic-panel-${item.id}`"
-                class="topic-panel"
-                :class="{ 'topic-panel--open': openIndex === item.id }"
-                :aria-hidden="openIndex !== item.id"
-                :aria-labelledby="`topic-trigger-${item.id}`"
-                role="region"
-              >
-                <div class="topic-panel__inner min-h-0 overflow-hidden">
-                  <p class="px-4 pb-4 ps-[4.25rem] text-sm leading-7 text-ink-muted">
-                    {{ item.a }}
-                  </p>
-                </div>
-              </div>
+          <div
+            :id="`${item.id}-panel`"
+            class="faq-panel"
+            :class="{ 'faq-panel--open': openQuestion === item.id }"
+            role="region"
+            :aria-labelledby="`${item.id}-question`"
+            :aria-hidden="openQuestion !== item.id"
+          >
+            <div class="faq-panel__inner">
+              <p class="px-4 pb-4 ps-[4.25rem] text-sm leading-7 text-ink-muted">
+                {{ item.a }}
+              </p>
             </div>
-          </TransitionGroup>
+          </div>
         </div>
+      </TransitionGroup>
 
-        <div
-          v-else
-          key="no-results"
-          role="status"
-          class="glass-card flex flex-col items-center gap-3 px-4 py-10 text-center"
+      <Transition
+        name="support-fade"
+        mode="out-in"
+      >
+        <p
+          v-if="!filtered.length"
+          key="empty"
+          class="glass-card flex flex-col items-center gap-3 px-4 py-9 text-center text-sm text-ink-muted"
         >
-          <span class="no-results-icon flex size-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 dark:bg-primary-900/40 dark:text-primary-300">
+          <span class="flex size-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
             <Icon
               name="lucide:search-x"
-              aria-hidden="true"
               class="size-6"
             />
           </span>
-          <p class="text-sm text-ink-muted">
-            {{ t('support.noResults') }}
-          </p>
-        </div>
+
+          {{ t('support.noResults') }}
+        </p>
       </Transition>
     </section>
 
     <!-- هنوز کمک می‌خوای؟ -->
     <section
-      v-reveal="80"
-      class="support-cta relative isolate overflow-hidden rounded-2xl bg-primary-50 p-5 dark:bg-primary-900/30 sm:p-6"
+      ref="ctaSection"
+      class="support-cta relative isolate overflow-hidden rounded-2xl bg-primary-50 p-6 dark:bg-primary-900/20 sm:p-8"
+      @pointermove="onCtaPointerMove"
+      @pointerleave="onCtaPointerLeave"
     >
-      <Icon
-        name="lucide:leaf"
-        aria-hidden="true"
-        class="cta-leaf pointer-events-none absolute -bottom-4 -start-4 size-28 text-primary-200/60"
-      />
+      <div aria-hidden="true" class="cta-gradient" />
+      <div aria-hidden="true" class="cta-aurora" />
+      <div aria-hidden="true" class="cta-dots" />
 
-      <div class="relative flex flex-wrap items-center gap-4">
-        <span class="cta-icon-wrap relative flex size-11 shrink-0 items-center justify-center rounded-xl bg-surface text-primary-700">
+      <div aria-hidden="true" class="cta-layer cta-layer--far">
+        <div class="cta-blob cta-blob--one" />
+        <div class="cta-blob cta-blob--two" />
+        <div class="cta-ring cta-ring--one" />
+        <div class="cta-ring cta-ring--two" />
+      </div>
+
+      <div aria-hidden="true" class="cta-layer cta-layer--near">
+        <Icon name="lucide:leaf" class="cta-leaf cta-leaf--one" />
+        <Icon name="lucide:leaf" class="cta-leaf cta-leaf--two" />
+        <Icon name="lucide:leaf" class="cta-leaf cta-leaf--three" />
+        <Icon name="lucide:sparkles" class="cta-sparkle cta-sparkle--one" />
+        <Icon name="lucide:sparkle" class="cta-sparkle cta-sparkle--two" />
+      </div>
+
+      <div aria-hidden="true" class="cta-card-sheen" />
+
+      <div class="cta-stagger relative z-[2] flex flex-wrap items-center gap-4 sm:gap-5">
+        <span class="cta-icon-wrap relative flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/90 text-primary-700 shadow-lg shadow-primary-900/10 backdrop-blur dark:bg-white/10 dark:text-primary-200">
           <Icon
             name="lucide:headset"
             aria-hidden="true"
@@ -321,16 +334,27 @@ const vReveal: Directive<HTMLElement, number | undefined> = {
           <p class="font-bold text-ink">
             {{ t('support.stillNeedHelp') }}
           </p>
-          <p class="text-sm text-ink-muted">
+          <p class="mt-1 text-sm leading-6 text-ink-muted">
             {{ t('support.stillNeedHelpText') }}
           </p>
         </div>
 
         <NuxtLink
           to="/contact"
-          class="support-contact-link inline-flex items-center gap-2 whitespace-nowrap rounded-xl bg-primary-700 px-5 py-2.5 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
+          class="support-contact-link relative isolate inline-flex w-full items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-xl bg-primary-700 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-primary-700/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:w-auto"
         >
-          {{ t('components.theFooter.contact') }}
+          <span
+            aria-hidden="true"
+            class="cta-button-shine"
+          />
+          <span class="relative z-10">
+            {{ t('components.theFooter.contact') }}
+          </span>
+          <Icon
+            name="lucide:arrow-left"
+            aria-hidden="true"
+            class="cta-arrow relative z-10 size-4 rtl:rotate-180"
+          />
         </NuxtLink>
       </div>
     </section>
@@ -338,439 +362,644 @@ const vReveal: Directive<HTMLElement, number | undefined> = {
 </template>
 
 <style scoped>
-/* ---------- کی‌فریم‌ها ---------- */
-@keyframes rise-blur {
-  0% {
+.support-page {
+  --support-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* هیرو */
+.support-hero {
+  animation: support-rise 720ms var(--support-ease) both;
+}
+
+.support-hero__image {
+  transform-origin: center;
+  animation: hero-drift 22s ease-in-out infinite alternate;
+}
+
+.support-hero__title {
+  animation: support-rise 650ms var(--support-ease) 80ms both;
+}
+
+.support-hero__subtitle {
+  animation: support-rise 650ms var(--support-ease) 170ms both;
+}
+
+.support-search {
+  animation: support-rise 650ms var(--support-ease) 260ms both;
+}
+
+.support-hero__orb {
+  animation: ambient-float 9s ease-in-out infinite alternate;
+}
+
+.support-hero__orb--two {
+  animation-delay: -4s;
+  animation-direction: alternate-reverse;
+}
+
+.support-search__shell {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition:
+    transform 260ms var(--support-ease),
+    box-shadow 260ms ease,
+    border-color 260ms ease;
+}
+
+.support-search__shell:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.16),
+    0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.support-search__icon {
+  transform: translateY(-50%);
+  transition:
+    transform 260ms var(--support-ease),
+    background-color 260ms ease,
+    color 260ms ease;
+}
+
+.support-search__shell:focus-within .support-search__icon {
+  transform: translateY(-50%) rotate(-7deg) scale(1.06);
+  background-color: rgb(var(--color-primary-700));
+  color: white;
+}
+
+/* کارت‌ها */
+.support-card {
+  transition:
+    transform 280ms var(--support-ease),
+    box-shadow 280ms ease,
+    border-color 280ms ease;
+}
+
+.support-card:hover,
+.support-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgb(var(--color-primary-500) / 0.28);
+  box-shadow: 0 14px 32px rgb(var(--color-ink) / 0.09);
+}
+
+.support-card__content {
+  animation: support-rise 640ms var(--support-ease) var(--card-delay, 0ms) both;
+}
+
+.support-card__glow {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 350ms ease,
+    transform 500ms var(--support-ease);
+}
+
+.support-card:hover .support-card__glow,
+.support-card:focus-visible .support-card__glow {
+  opacity: 0.8;
+  transform: scale(1.15);
+}
+
+.support-card__icon {
+  transition:
+    transform 300ms var(--support-ease),
+    background-color 260ms ease,
+    color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.support-card:hover .support-card__icon,
+.support-card:focus-visible .support-card__icon {
+  transform: rotate(-5deg) scale(1.07);
+  background-color: rgb(var(--color-primary-700));
+  color: white;
+  box-shadow: 0 8px 18px rgb(var(--color-primary-700) / 0.2);
+}
+
+/* تیتر و لیست FAQ */
+.faq-heading {
+  animation: support-rise 600ms var(--support-ease) 300ms both;
+}
+
+.faq-list-appear-active,
+.faq-list-enter-active,
+.faq-list-leave-active {
+  transition:
+    opacity 260ms ease,
+    transform 340ms var(--support-ease);
+  transition-delay: var(--faq-delay, 0ms);
+}
+
+.faq-list-appear-from,
+.faq-list-enter-from {
+  opacity: 0;
+  transform: translateY(9px) scale(0.99);
+}
+
+.faq-list-leave-to {
+  opacity: 0;
+  transform: translateY(-5px) scale(0.995);
+}
+
+.faq-list-leave-active {
+  pointer-events: none;
+}
+
+.faq-list-move {
+  transition: transform 340ms var(--support-ease);
+}
+
+.faq-trigger {
+  transition: background-color 220ms ease;
+}
+
+.faq-trigger:hover,
+.faq-trigger--open {
+  background-color: rgb(var(--color-primary-500) / 0.055);
+}
+
+.faq-question-icon {
+  background-color: rgb(var(--color-primary-50));
+  color: rgb(var(--color-primary-700));
+  box-shadow: inset 0 0 0 1px rgb(var(--color-primary-500) / 0.12);
+  transition:
+    transform 280ms var(--support-ease),
+    background-color 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.faq-trigger:hover .faq-question-icon {
+  transform: rotate(-5deg) scale(1.04);
+}
+
+.faq-question-icon--open {
+  background-color: rgb(var(--color-primary-700));
+  color: white;
+  box-shadow: 0 6px 14px rgb(var(--color-primary-700) / 0.2);
+}
+
+.faq-chevron {
+  color: rgb(var(--color-ink-muted));
+  border-color: rgb(var(--color-ink) / 0.1);
+  background-color: rgb(var(--color-surface));
+  transition:
+    transform 300ms var(--support-ease),
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.faq-chevron--open {
+  transform: rotate(180deg);
+  border-color: rgb(var(--color-primary-700));
+  background-color: rgb(var(--color-primary-700));
+  color: white;
+}
+
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 360ms var(--support-ease),
+    opacity 240ms ease;
+}
+
+.faq-panel--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.faq-panel__inner {
+  min-height: 0;
+  overflow: hidden;
+  transform: translateY(-5px);
+  transition: transform 320ms var(--support-ease);
+}
+
+.faq-panel--open .faq-panel__inner {
+  transform: translateY(0);
+}
+
+.support-fade-enter-active,
+.support-fade-leave-active {
+  transition:
+    opacity 240ms ease,
+    transform 300ms var(--support-ease);
+}
+
+.support-fade-enter-from,
+.support-fade-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* بخش تماس */
+.support-cta {
+  --far-x: 0px;
+  --far-y: 0px;
+  --near-x: 0px;
+  --near-y: 0px;
+  border: 1px solid rgb(var(--color-primary-500) / 0.16);
+  box-shadow: 0 8px 28px rgb(var(--color-ink) / 0.045);
+  animation: support-rise 760ms var(--support-ease) 420ms both;
+  transition:
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+}
+
+.support-cta:hover {
+  border-color: rgb(var(--color-primary-500) / 0.3);
+  box-shadow: 0 16px 38px rgb(var(--color-ink) / 0.09);
+}
+
+.cta-gradient,
+.cta-aurora,
+.cta-dots,
+.cta-layer,
+.cta-card-sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cta-gradient {
+  z-index: 0;
+  background: linear-gradient(
+    125deg,
+    rgb(var(--color-primary-100) / 0.72),
+    rgb(var(--color-surface) / 0.92) 52%,
+    rgb(var(--color-accent-50) / 0.7)
+  );
+}
+
+:global(.dark) .cta-gradient {
+  background: linear-gradient(
+    125deg,
+    rgb(var(--color-primary-800) / 0.78),
+    rgb(var(--color-surface) / 0.72) 52%,
+    rgb(var(--color-accent-900) / 0.42)
+  );
+}
+
+.cta-aurora {
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 18% 120%, rgb(var(--color-primary-400) / 0.24), transparent 58%),
+    radial-gradient(ellipse at 82% -30%, rgb(var(--color-accent-300) / 0.2), transparent 54%);
+  opacity: 0.9;
+  animation: cta-aurora 12s ease-in-out infinite alternate;
+}
+
+.cta-dots {
+  z-index: 0;
+  color: rgb(var(--color-primary-800) / 0.1);
+  background-image: radial-gradient(currentColor 0.75px, transparent 0.75px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(135deg, #000 0%, transparent 68%);
+  mask-image: linear-gradient(135deg, #000 0%, transparent 68%);
+}
+
+.cta-layer {
+  z-index: 1;
+  overflow: visible;
+  transition: transform 450ms var(--support-ease);
+  will-change: transform;
+}
+
+.cta-layer--far {
+  transform: translate3d(var(--far-x), var(--far-y), 0);
+}
+
+.cta-layer--near {
+  transform: translate3d(var(--near-x), var(--near-y), 0);
+}
+
+.cta-blob {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgb(var(--color-primary-400) / 0.2), transparent 70%);
+  filter: blur(2px);
+  animation: cta-blob-float 11s ease-in-out infinite alternate;
+}
+
+.cta-blob--one {
+  top: -5rem;
+  inset-inline-end: 8%;
+  width: 12rem;
+}
+
+.cta-blob--two {
+  bottom: -7rem;
+  inset-inline-start: 22%;
+  width: 15rem;
+  background: radial-gradient(circle, rgb(var(--color-accent-300) / 0.2), transparent 70%);
+  animation-delay: -5s;
+  animation-direction: alternate-reverse;
+}
+
+.cta-ring {
+  position: absolute;
+  width: 7rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(var(--color-primary-500) / 0.2);
+  border-radius: 9999px;
+  animation: cta-ring-float 8s ease-in-out infinite;
+}
+
+.cta-ring--one {
+  top: 16%;
+  inset-inline-start: 38%;
+}
+
+.cta-ring--two {
+  top: 42%;
+  inset-inline-end: 7%;
+  width: 4rem;
+  animation-delay: -4s;
+}
+
+.cta-leaf {
+  position: absolute;
+  transform-origin: 50% 100%;
+  color: rgb(var(--color-primary-600) / 0.2);
+  animation: leaf-sway 7s ease-in-out infinite;
+}
+
+.cta-leaf--one {
+  bottom: -1.25rem;
+  inset-inline-start: 3%;
+  width: 5rem;
+  height: 5rem;
+}
+
+.cta-leaf--two {
+  top: 18%;
+  inset-inline-end: 28%;
+  width: 2rem;
+  height: 2rem;
+  animation-delay: -2s;
+}
+
+.cta-leaf--three {
+  bottom: 8%;
+  inset-inline-end: 4%;
+  width: 3rem;
+  height: 3rem;
+  animation-delay: -4s;
+}
+
+.cta-sparkle {
+  position: absolute;
+  color: rgb(var(--color-accent-600) / 0.58);
+  animation: sparkle-float 4s ease-in-out infinite;
+}
+
+.cta-sparkle--one {
+  top: 18%;
+  inset-inline-end: 18%;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.cta-sparkle--two {
+  bottom: 24%;
+  inset-inline-start: 28%;
+  width: 1rem;
+  height: 1rem;
+  animation-delay: -2s;
+}
+
+.cta-card-sheen {
+  z-index: 1;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.25) 50%, transparent 65%);
+  background-size: 220% 100%;
+  animation: cta-sheen 10s ease-in-out 1s infinite;
+}
+
+.cta-stagger {
+  animation: support-rise 680ms var(--support-ease) 140ms both;
+}
+
+.cta-icon-wrap {
+  transition:
+    transform 300ms var(--support-ease),
+    box-shadow 300ms ease;
+}
+
+.support-cta:hover .cta-icon-wrap {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgb(var(--color-ink) / 0.1);
+}
+
+.cta-icon-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  animation: icon-ring 3.8s ease-out 700ms infinite;
+}
+
+.cta-headset {
+  transition: transform 260ms var(--support-ease);
+}
+
+.support-cta:hover .cta-headset {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.support-contact-link {
+  transition:
+    transform 240ms var(--support-ease),
+    box-shadow 240ms ease,
+    background-color 240ms ease;
+}
+
+.support-contact-link:hover,
+.support-contact-link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgb(var(--color-ink) / 0.18);
+}
+
+.support-contact-link:active {
+  transform: translateY(0);
+}
+
+.cta-button-shine {
+  position: absolute;
+  top: -50%;
+  bottom: -50%;
+  left: -45%;
+  width: 35%;
+  transform: translateX(-150%) rotate(18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: transform 700ms var(--support-ease);
+}
+
+.support-contact-link:hover .cta-button-shine,
+.support-contact-link:focus-visible .cta-button-shine {
+  transform: translateX(500%) rotate(18deg);
+}
+
+.cta-arrow {
+  transition: scale 240ms var(--support-ease);
+}
+
+.support-contact-link:hover .cta-arrow,
+.support-contact-link:focus-visible .cta-arrow {
+  scale: 1.12;
+}
+
+/* انیمیشن‌ها */
+@keyframes support-rise {
+  from {
     opacity: 0;
-    transform: translate3d(0, 20px, 0);
-    filter: blur(10px);
+    transform: translate3d(0, 14px, 0);
   }
 
-  60% {
-    filter: blur(0);
-  }
-
-  100% {
+  to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-    filter: blur(0);
   }
 }
 
-@keyframes pop-in {
-  0% {
-    opacity: 0;
-    transform: translateY(26px) scale(0.94);
+@keyframes cta-aurora {
+  from {
+    transform: translate3d(-2%, 1%, 0) scale(1);
+    opacity: 0.72;
   }
 
-  55% {
+  to {
+    transform: translate3d(2%, -1%, 0) scale(1.08);
     opacity: 1;
   }
+}
 
-  75% {
-    transform: translateY(-4px) scale(1.01);
+@keyframes cta-blob-float {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.96);
   }
 
+  to {
+    transform: translate3d(-12px, 8px, 0) scale(1.06);
+  }
+}
+
+@keyframes cta-ring-float {
+  0%,
   100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    opacity: 0.34;
+    transform: translateY(0) scale(0.96);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: translateY(-8px) scale(1.04);
+  }
+}
+
+@keyframes cta-sheen {
+  0%,
+  72%,
+  100% {
+    background-position: 120% 0;
+  }
+
+  88% {
+    background-position: -20% 0;
   }
 }
 
 @keyframes hero-drift {
   from {
-    transform: scale(1.12) translateY(-2%);
+    transform: scale(1.04) translate3d(0, 0, 0);
   }
 
   to {
-    transform: scale(1.02) translateY(0);
+    transform: scale(1.1) translate3d(0, -0.5%, 0);
   }
 }
 
-@keyframes glow-float {
+@keyframes ambient-float {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(10px, -12px, 0) scale(1.06);
+  }
+}
+
+@keyframes leaf-sway {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: rotate(-12deg) translateY(0);
   }
 
   50% {
-    transform: translate(14px, -14px) scale(1.1);
+    transform: rotate(-17deg) translateY(-5px);
   }
 }
 
-@keyframes leaf-float {
+@keyframes sparkle-float {
   0%,
   100% {
-    transform: rotate(-12deg) translate(0, 0);
+    opacity: 0.55;
+    transform: translateY(0) rotate(0);
   }
 
   50% {
-    transform: rotate(-5deg) translate(6px, -12px);
+    opacity: 1;
+    transform: translateY(-5px) rotate(12deg);
   }
 }
 
-@keyframes headset-bob {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  30% {
-    transform: translateY(-2px) rotate(-6deg);
-  }
-
-  60% {
-    transform: translateY(0) rotate(4deg);
-  }
-}
-
-@keyframes ring-pulse {
+@keyframes icon-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 30%, transparent);
+    opacity: 0.45;
+    transform: scale(0.9);
   }
 
-  70%,
+  75%,
   100% {
-    box-shadow: 0 0 0 14px transparent;
-  }
-}
-
-@keyframes icon-wobble {
-  0% {
     opacity: 0;
-    transform: scale(0.3) rotate(-20deg);
-  }
-
-  60% {
-    opacity: 1;
-    transform: scale(1.12) rotate(6deg);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: scale(1.55);
   }
 }
 
-/* ---------- هیرو ---------- */
-.support-hero {
-  isolation: isolate;
-}
-
-.hero-bg {
-  will-change: transform;
-  animation: hero-drift 2.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.hero-glow {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(70px);
-  pointer-events: none;
-}
-
-.hero-glow--1 {
-  top: -6rem;
-  background: rgb(255 255 255 / 14%);
-  animation: glow-float 9s ease-in-out infinite;
-  inline-size: 18rem;
-  block-size: 18rem;
-  inset-inline-end: 8%;
-}
-
-.hero-glow--2 {
-  bottom: -5rem;
-  background: rgb(74 222 128 / 18%);
-  animation: glow-float 11s ease-in-out 1.4s infinite reverse;
-  inline-size: 14rem;
-  block-size: 14rem;
-  inset-inline-start: 12%;
-}
-
-.hero-anim {
-  animation: rise-blur 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.hero-anim--1 {
-  animation-delay: 0.08s;
-}
-
-.hero-anim--2 {
-  animation-delay: 0.2s;
-}
-
-.hero-anim--3 {
-  animation-delay: 0.34s;
-}
-
-/* ---------- جستجو ---------- */
-.hero-search {
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1),
-    box-shadow 0.35s ease;
-}
-
-.hero-search:focus-within {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 0 4px rgb(255 255 255 / 22%),
-    0 24px 48px -12px rgb(0 0 0 / 35%);
-}
-
-/* دکمه‌ی پاک‌کردن پیش‌فرض مرورگر مخفی شود تا با دکمه‌ی سفارشی تداخل نکند */
-.hero-search input[type='search']::-webkit-search-cancel-button {
-  display: none;
-}
-
-.search-icon {
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    color 0.3s ease;
-}
-
-.hero-search:focus-within .search-icon {
-  transform: translateY(-50%) scale(1.15);
-}
-
-.clear-btn {
-  transform: translateY(-50%);
-}
-
-.pop-enter-active {
-  transition:
-    opacity 0.25s ease,
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.pop-leave-active {
-  transition:
-    opacity 0.15s ease,
-    transform 0.15s ease;
-}
-
-.pop-enter-from,
-.pop-leave-to {
-  opacity: 0;
-  transform: translateY(-50%) scale(0.4) rotate(-90deg);
-}
-
-/* ---------- کارت‌ها ---------- */
-.support-card {
-  will-change: transform;
-  animation: pop-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--d, 0ms);
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1),
-    box-shadow 0.35s ease;
-}
-
-/* برق کشویی (sheen) هنگام هاور */
-.support-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(115deg, transparent 32%, rgb(255 255 255 / 50%) 50%, transparent 68%);
-  transform: translateX(-130%);
-  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-:global(.dark) .support-card::before {
-  background: linear-gradient(115deg, transparent 32%, rgb(255 255 255 / 10%) 50%, transparent 68%);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .support-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px -14px rgb(15 23 42 / 22%);
-  }
-
-  .support-card:hover::before {
-    transform: translateX(130%);
-  }
-}
-
-.support-card:active {
-  transform: translateY(-1px) scale(0.97);
-  transition-duration: 0.08s;
-}
-
-/* ---------- آکاردئون ---------- */
-.faq-items {
-  position: relative;
-}
-
-.faq-list-enter-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: calc(var(--i, 0) * 40ms);
-}
-
-.faq-list-leave-active {
-  position: absolute;
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-  inset-inline: 0;
-}
-
-.faq-list-enter-from {
-  opacity: 0;
-  transform: translateY(10px) scale(0.99);
-}
-
-.faq-list-leave-to {
-  opacity: 0;
-  transform: scale(0.98);
-}
-
-.faq-list-move {
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.topic-panel {
-  display: grid;
-  opacity: 0;
-  grid-template-rows: 0fr;
-  transition:
-    grid-template-rows 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.25s ease;
-}
-
-.topic-panel--open {
-  opacity: 1;
-  grid-template-rows: 1fr;
-}
-
-.topic-panel__inner {
-  min-height: 0;
-  overflow: hidden;
-}
-
-.topic-panel__inner > p {
-  opacity: 0;
-  transform: translateY(-8px);
-  transition:
-    opacity 0.3s ease 0.06s,
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
-}
-
-.topic-panel--open .topic-panel__inner > p {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ---------- تعویض وضعیت نتیجه / عدم نتیجه ---------- */
-.result-state-enter-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.result-state-leave-active {
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-}
-
-.result-state-enter-from {
-  opacity: 0;
-  transform: translateY(8px) scale(0.99);
-}
-
-.result-state-leave-to {
-  opacity: 0;
-  transform: translateY(-6px) scale(0.99);
-}
-
-.no-results-icon {
-  animation: icon-wobble 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
-}
-
-/* ---------- نمایش هنگام اسکرول ---------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  filter: blur(6px);
-  transition:
-    opacity 0.7s ease var(--reveal-delay, 0ms),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
-    filter 0.7s ease var(--reveal-delay, 0ms);
-}
-
-.reveal--in {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-
-/* ---------- CTA ---------- */
-.cta-leaf {
-  animation: leaf-float 7s ease-in-out infinite;
-}
-
-.cta-icon-wrap::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 0.75rem;
-  animation: ring-pulse 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  pointer-events: none;
-}
-
-.cta-headset {
-  animation: headset-bob 3.2s ease-in-out infinite;
-}
-
-.support-contact-link {
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1),
-    box-shadow 0.3s ease,
-    background-color 0.3s ease;
-}
-
-.support-contact-link::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 30%) 50%, transparent 65%);
-  transform: translateX(-130%);
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.support-contact-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 30px -10px rgb(21 128 61 / 50%);
-}
-
-.support-contact-link:hover::after {
-  transform: translateX(130%);
-}
-
-.support-contact-link:active {
-  transform: translateY(0) scale(0.96);
-}
-
-/* ---------- کاهش حرکت برای کاربران حساس ---------- */
+/* رعایت تنظیم کاهش حرکت سیستم کاربر */
 @media (prefers-reduced-motion: reduce) {
   .support-page *,
   .support-page *::before,
   .support-page *::after {
-    transition-delay: 0ms !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 
-  .reveal {
-    opacity: 1 !important;
+  .support-card:hover,
+  .support-card:focus-visible,
+  .support-search__shell:focus-within,
+  .support-cta:hover .cta-icon-wrap,
+  .support-contact-link:hover,
+  .support-contact-link:focus-visible,
+  .support-contact-link:active {
     transform: none !important;
-    filter: none !important;
+  }
+
+  .support-contact-link:hover .cta-arrow,
+  .support-contact-link:focus-visible .cta-arrow {
+    scale: 1;
   }
 }
 </style>
