@@ -50,11 +50,13 @@ plantStore.genus = (route.query.genus as string) ?? 'all'
 
 const showAdvanced = ref(!!route.query.family || !!route.query.genus)
 
-await plantStore.fetchFilterOptions(t('errors.plantFilters'))
-await useAsyncData(
-  `plant-list-${activeLocale.value}`,
-  () => plantStore.fetchList(activeLocale.value, t('errors.plantList')).then(() => true),
-)
+await Promise.all([
+  plantStore.fetchFilterOptions(t('errors.plantFilters')),
+  useAsyncData(
+    `plant-list-${activeLocale.value}`,
+    () => plantStore.fetchList(activeLocale.value, t('errors.plantList')).then(() => true),
+  ),
+])
 
 watch(
   [() => plantStore.query, () => plantStore.category, () => plantStore.difficulty, () => plantStore.light, () => plantStore.genus, () => activeLocale.value],
@@ -152,7 +154,7 @@ function resetFilters() {
             mode="out-in"
           >
             <Icon
-              :key="showAdvanced"
+              :key="String(showAdvanced)"
               :name="showAdvanced ? 'lucide:x' : 'lucide:sliders-horizontal'"
               class="size-4"
             />
@@ -209,8 +211,8 @@ function resetFilters() {
         >
           <div
             v-for="(dd, i) in [
-              { model: 'difficulty', options: difficulties },
-              { model: 'light', options: lightOptions },
+              { model: 'difficulty', options: difficulties, placeholder: undefined },
+              { model: 'light', options: lightOptions, placeholder: undefined },
               { model: 'family', options: familyDropdownOptions, placeholder: t('pages.catalog.family') },
               { model: 'genus', options: genusDropdownOptions, placeholder: t('pages.catalog.genus') },
             ]"
