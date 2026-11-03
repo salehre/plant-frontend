@@ -114,7 +114,7 @@ function onEnter(e: KeyboardEvent) {
               role="combobox"
               aria-expanded="true"
               aria-controls="chat-search-list"
-              :aria-activedescendant="results[active] ? `chat-search-${results[active].conv.id}` : undefined"
+              :aria-activedescendant="results[active]?.conv.id ? `chat-search-${results[active]?.conv.id}` : undefined"
               autocomplete="off"
               :placeholder="t('aiDoctor.searchChats')"
               :aria-label="t('aiDoctor.searchChats')"

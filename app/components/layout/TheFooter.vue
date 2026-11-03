@@ -370,8 +370,7 @@ ul.flex.flex-col > li > a::after {
 /* ═══════════════════════════════════════════
    ۶. فرم خبرنامه
    ═══════════════════════════════════════════ */
-form[method="post"],
-form[@submit.prevent] {
+form {
   position: relative;
 }
 

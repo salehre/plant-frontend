@@ -151,57 +151,86 @@ function connect(id: string) {
     </article>
 
     <!-- اتصال گیاه -->
-    <div class="mt-auto flex flex-col gap-2">
+    <div class="mt-auto flex flex-col">
+      <!-- دکمه افزودن گیاه (زمانی که هیچ گیاهی وجود ندارد) -->
       <NuxtLink
         v-if="!options.length"
         to="/my-plants"
-        class="flex items-center justify-center gap-2 rounded-2xl border border-ink/10 px-4 py-3 text-sm font-medium text-ink transition-colors hover:bg-primary-50 hover:text-primary-700"
+        class="group relative flex items-center justify-center gap-2 overflow-hidden rounded-2xl border border-ink/10 px-4 py-3 text-sm font-medium text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 hover:shadow-md hover:shadow-primary-500/10 active:translate-y-0 active:scale-[0.98]"
       >
         <Icon
           name="lucide:plus"
-          class="size-4"
+          class="size-4 transition-transform duration-300 ease-out group-hover:rotate-90 group-hover:scale-125"
         />
-        {{ t('pages.myPlants.addPlant') }}
+        <span>{{ t('pages.myPlants.addPlant') }}</span>
       </NuxtLink>
 
       <template v-else-if="available.length">
-        <ul
-          v-if="listOpen"
-          class="flex max-h-56 flex-col gap-1 overflow-y-auto rounded-2xl border border-ink/5 p-1.5"
+        <!-- کانتینر بازشو با انیمیشن روان ارتفاع و مات شدن -->
+        <div
+          class="grid transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          :class="listOpen ? 'grid-rows-[1fr] opacity-100 mb-2' : 'grid-rows-[0fr] opacity-0 mb-0 pointer-events-none'"
         >
-          <li
-            v-for="plant in available"
-            :key="plant.id"
-          >
-            <button
-              type="button"
-              class="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-start transition-colors hover:bg-primary-50"
-              @click="connect(plant.id)"
+          <div class="overflow-hidden min-h-0">
+            <ul
+              class="flex max-h-56 flex-col gap-1 overflow-y-auto rounded-2xl border border-ink/5 bg-surface p-1.5 shadow-md shadow-ink/5 transition-transform duration-300"
+              :class="listOpen ? 'translate-y-0 scale-100' : 'translate-y-2 scale-95'"
             >
-              <img
-                :src="plant.photo"
-                alt=""
-                class="size-9 shrink-0 rounded-lg object-cover"
+              <li
+                v-for="(plant, index) in available"
+                :key="plant.id"
+                class="transition-all duration-300 ease-out"
+                :style="{ transitionDelay: listOpen ? `${Math.min(index * 40, 240)}ms` : '0ms' }"
+                :class="listOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1.5'"
               >
-              <span class="min-w-0 flex-1">
-                <span class="block truncate text-sm font-medium text-ink">{{ plant.nickname }}</span>
-                <span class="block truncate text-xs text-ink-muted">{{ plant.species }}</span>
-              </span>
-              <Icon
-                name="lucide:plus"
-                class="size-4 shrink-0 text-primary-700"
-              />
-            </button>
-          </li>
-        </ul>
+                <button
+                  type="button"
+                  class="group/item flex w-full items-center gap-3 rounded-xl px-2 py-2 text-start transition-all duration-200 hover:bg-primary-50 active:scale-[0.98]"
+                  @click="connect(plant.id)"
+                >
+                  <img
+                    :src="plant.photo"
+                    alt=""
+                    class="size-9 shrink-0 rounded-lg object-cover transition-transform duration-300 group-hover/item:scale-105"
+                  >
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm font-medium text-ink transition-colors group-hover/item:text-primary-800">{{ plant.nickname }}</span>
+                    <span class="block truncate text-xs text-ink-muted">{{ plant.species }}</span>
+                  </span>
+                  <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-50/60 transition-all duration-200 group-hover/item:bg-primary-100 group-hover/item:scale-110">
+                    <Icon
+                      name="lucide:plus"
+                      class="size-4 text-primary-700 transition-transform duration-200 group-hover/item:rotate-90"
+                    />
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
 
+        <!-- دکمه اتصال گیاه -->
         <button
           type="button"
-          class="flex items-center justify-center gap-2 rounded-2xl border border-ink/10 px-4 py-3 text-sm font-medium transition-colors text-primary-50 bg-primary-700 hover:bg-primary-600"
+          class="group relative flex items-center justify-center gap-2 overflow-hidden rounded-2xl border border-ink/10 px-4 py-3 text-sm font-medium text-primary-50 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary-700/30 active:translate-y-0 active:scale-[0.98]"
+          :class="listOpen ? 'bg-primary-800 ring-2 ring-primary-500/20' : 'bg-primary-700 hover:bg-primary-600'"
           :aria-expanded="listOpen"
           @click="listOpen = !listOpen"
         >
-          {{ connected.length ? t('aiDoctor.panel.connectAnother') : t('aiDoctor.panel.connect') }}
+          <!-- افکت موج نوری (Shine) هنگام هاور -->
+          <span
+            class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-in-out group-hover:translate-x-full"
+          />
+
+          <!-- آیکون مثبت که با باز شدن منو به ضربدر تبدیل می‌شود -->
+          <Icon
+            name="lucide:plus"
+            class="relative size-4 transition-transform duration-300 ease-out"
+            :class="listOpen ? 'rotate-45 scale-110 text-primary-200' : 'group-hover:rotate-90 group-hover:scale-125'"
+          />
+          <span class="relative">
+            {{ connected.length ? t('aiDoctor.panel.connectAnother') : t('aiDoctor.panel.connect') }}
+          </span>
         </button>
       </template>
     </div>

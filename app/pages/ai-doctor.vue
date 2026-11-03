@@ -277,10 +277,10 @@ onMounted(() => {
     <!-- سایدبار تاریخچه (کشو برای موبایل و تبلت) -->
     <Teleport to="body">
       <Transition
-        enter-active-class="transition-opacity duration-200"
-        enter-from-class="opacity-0"
-        leave-active-class="transition-opacity duration-150"
-        leave-to-class="opacity-0"
+        enter-active-class="mobile-history-enter-active"
+        enter-from-class="mobile-history-enter-from"
+        leave-active-class="mobile-history-leave-active"
+        leave-to-class="mobile-history-leave-to"
       >
         <div
           v-if="historyOpen"
@@ -551,3 +551,48 @@ onMounted(() => {
     />
   </div>
 </template>
+
+<style scoped>
+body {
+  overscroll-behavior: none;
+}
+
+.mobile-history-enter-active,
+.mobile-history-leave-active {
+  transition: opacity 200ms ease;
+}
+
+.mobile-history-enter-active > aside,
+.mobile-history-leave-active > aside {
+  transition: transform 200ms ease;
+}
+
+.mobile-history-leave-active,
+.mobile-history-leave-active > aside {
+  transition-duration: 150ms;
+}
+
+.mobile-history-enter-from,
+.mobile-history-leave-to {
+  opacity: 0;
+}
+
+.mobile-history-enter-from > aside,
+.mobile-history-leave-to > aside {
+  transform: translateX(-100%);
+}
+
+.mobile-history-enter-from:dir(rtl) > aside,
+.mobile-history-leave-to:dir(rtl) > aside {
+  transform: translateX(100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-history-enter-active,
+  .mobile-history-leave-active,
+  .mobile-history-enter-active > aside,
+  .mobile-history-leave-active > aside {
+    transition: none;
+  }
+}
+</style>
