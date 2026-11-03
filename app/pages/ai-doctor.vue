@@ -68,6 +68,22 @@ function onSubmit(payload: { text: string; image?: string }) {
   aiDoctorStore.send(payload.text, payload.image, activeLocale.value);
 }
 
+// کارت‌های پیشنهادی حالت خالی؛ «سوالات بیشتر» فقط ورودی رو فوکوس می‌کنه
+const suggestions = [
+  { key: 'diagnose', icon: 'lucide:stethoscope', color: 'text-primary-600' },
+  { key: 'watering', icon: 'lucide:droplet', color: 'text-sky-500' },
+  { key: 'care', icon: 'lucide:leaf', color: 'text-primary-600' },
+  { key: 'more', icon: 'lucide:circle-help', color: 'text-ink' },
+] as const;
+
+function onSuggestion(key: (typeof suggestions)[number]['key']) {
+  if (key === 'more') {
+    promptInput.value?.focus();
+    return;
+  }
+  onSubmit({ text: t(`aiDoctor.suggestions.${key}Prompt`) });
+}
+
 function onRegenerate() {
   conversation.value?.pin();
   aiDoctorStore.regenerate(activeLocale.value);
@@ -399,7 +415,7 @@ onMounted(() => {
       >
         <template #empty>
           <div
-            class="m-auto flex w-full max-w-xl flex-col items-center py-4 text-center"
+            class="m-auto flex w-full max-w-3xl flex-col items-center py-4 text-center"
           >
             <div class="flex flex-col items-center gap-4">
               <img
@@ -423,6 +439,30 @@ onMounted(() => {
                 </p>
               </div>
             </div>
+
+            <!-- کارت‌های پیشنهادی -->
+            <ul
+              class="mt-8 flex flex-wrap items-center justify-center gap-3"
+              :aria-label="t('aiDoctor.suggestions.label')"
+            >
+              <li
+                v-for="item in suggestions"
+                :key="item.key"
+              >
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-2.5 rounded-full border border-ink/5 bg-surface px-5 py-3 text-sm font-bold text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary-500/30 hover:shadow-md active:scale-95 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  @click="onSuggestion(item.key)"
+                >
+                  <Icon
+                    :name="item.icon"
+                    class="size-5 shrink-0"
+                    :class="item.color"
+                  />
+                  {{ t(`aiDoctor.suggestions.${item.key}`) }}
+                </button>
+              </li>
+            </ul>
           </div>
         </template>
 

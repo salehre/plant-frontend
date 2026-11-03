@@ -73,12 +73,7 @@ function connect(id: string) {
       v-if="!connected.length"
       class="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-ink/15 px-4 py-8 text-center"
     >
-      <span class="flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-white/10">
-        <Icon
-          name="lucide:sprout"
-          class="size-6"
-        />
-      </span>
+      <ChatPlantIllustration class="h-28 w-auto" />
       <p class="text-xs leading-6 text-ink-muted">
         {{ t('aiDoctor.panel.emptyText') }}
       </p>

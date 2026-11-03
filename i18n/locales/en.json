@@ -226,6 +226,16 @@
     "greetingAnon": "Hi 🌿",
     "welcomeText": "How can I help your plants today?",
     "welcomeTextPlant": "I'll help using what I know about {name}. Ask anything about its health, watering or growth.",
+    "suggestions": {
+      "label": "Quick suggestions",
+      "diagnose": "Diagnose a problem",
+      "diagnosePrompt": "My plant is showing signs of disease. Can you help me figure out what's wrong?",
+      "watering": "Watering advice",
+      "wateringPrompt": "How often and how much should I water my plant?",
+      "care": "Care guide",
+      "carePrompt": "What should I know about caring for my plant properly (light, temperature, soil and fertilizing)?",
+      "more": "More questions"
+    },
     "inputPlaceholder": "Describe your plant's problem...",
     "send": "Send",
     "attachImage": "Add a photo",
