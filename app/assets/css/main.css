@@ -772,3 +772,21 @@ button.rounded-xl {
 .rounded-3xl {
   border-radius: var(--radius-control);
 }
+
+/* ===================================================
+   توقف انیمیشن‌ها و رندر سکشن‌های خارج از دید
+   - v-offscreen-pause (دایرکتیو) یا observeOffscreen() روی المنت، data-offscreen می‌ذاره
+   - .cv-auto رندر سکشن‌های پایین صفحه رو تا نزدیک شدن بهشون عقب می‌ندازه
+   =================================================== */
+[data-offscreen],
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
+
+.cv-auto {
+  content-visibility: auto;
+  /* اندازه‌ی تقریبی تا اسکرول‌بار نپره؛ `auto` بعد از اولین رندر، اندازه‌ی واقعی رو یادش می‌مونه */
+  contain-intrinsic-size: auto 500px;
+}

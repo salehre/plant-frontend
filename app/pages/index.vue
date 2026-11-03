@@ -5,6 +5,7 @@ import { getMockDiseases } from '~/services/mock/diseases.mock'
 const homeRoot = ref<HTMLElement | null>(null)
 let revealObserver: IntersectionObserver | null = null
 let revealSetupStarted = false
+let offscreenTargets: HTMLElement[] = []
 
 const plantStore = usePlantStore()
 const blogStore = useBlogStore()
@@ -44,8 +45,14 @@ async function setupSectionReveal() {
     (element): element is HTMLElement => element instanceof HTMLElement,
   )
 
+  offscreenTargets = targets
   targets.forEach((element, index) => {
     element.classList.add('home-section-reveal')
+    // هیرو و گرید «دسترسی سریع» (index 0 و 1) بالای صفحه‌ن و کارت‌های دومی hover با overflow-visible دارن
+    // که content-visibility کلیپشون می‌کنه؛ از سکشن سوم به بعد رندر تا نزدیک شدن عقب می‌افته
+    if (index > 1) element.classList.add('cv-auto')
+    // انیمیشن‌های infinite داخل سکشن وقتی از دید خارج شد متوقف می‌شن
+    observeOffscreen(element)
     element.style.setProperty('--reveal-delay', `${(index % 5) * 60}ms`)
   })
 
@@ -78,6 +85,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   revealObserver?.disconnect()
+  offscreenTargets.forEach(unobserveOffscreen)
+  offscreenTargets = []
 })
 
 const featuredShown = computed(() => featured.value.slice(0, 4))

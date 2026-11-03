@@ -60,60 +60,68 @@ export default defineNuxtPlugin(async () => {
     }
   }
 
-  // ---- گیاهان من + وظایف مراقبت + تاریخچه + علاقه‌مندی‌ها ----
-  await seed('گیاهان من', () => {
-    const userPlants = useUserPlantsStore()
-    userPlants.plants = buildDemoUserPlants()
-    userPlants.tasks = buildDemoTasks()
-  })
-  await seed('تاریخچه', () => {
-    useHistoryStore().entries = buildDemoHistory()
-  })
-  await seed('علاقه‌مندی‌ها', () => {
-    useWishlistStore().slugs = [...demoWishlistSlugs]
-  })
+  // این سیدها روی استورهای جدا کار می‌کنن و به هم وابسته نیستن، پس موازی اجرا می‌شن.
+  // هر seed خطای خودش رو می‌گیره، برای همین Promise.all هیچ‌وقت reject نمی‌شه.
+  await Promise.all([
+    // ---- گیاهان من + وظایف مراقبت ----
+    seed('گیاهان من', () => {
+      const userPlants = useUserPlantsStore()
+      userPlants.plants = buildDemoUserPlants()
+      userPlants.tasks = buildDemoTasks()
+    }),
 
-  // ---- انجمن: فالو، لایک و یک کامنت از طرف کاربر دمو ----
-  await seed('انجمن', () => {
-    const community = useCommunityStore()
-    community.posts = getMockPosts().map((post) => {
-      const shouldLike = demoCommunity.likedPostIds.includes(post.id) && !post.likedByMe
-      return shouldLike ? { ...post, likedByMe: true, likesCount: post.likesCount + 1 } : post
-    })
-    community.comments = {}
-    community.followingIds = new Set(demoCommunity.followingIds)
-    // اول کامنت‌های seed بارگذاری می‌شن تا اضافه‌کردن کامنت جدید اون‌ها رو پاک نکنه
-    community.loadComments(demoCommunity.comment.postId)
-    community.addComment(demoCommunity.comment.postId, demoCommunity.comment.content)
-  })
+    // ---- تاریخچه ----
+    seed('تاریخچه', () => {
+      useHistoryStore().entries = buildDemoHistory()
+    }),
 
-  // ---- تیکت‌ها: seed خودِ استور (ensureSeeded) موقع ورود به صفحه‌ی تیکت‌ها دوباره ۳ تیکت می‌سازه ----
-  await seed('تیکت‌ها', () => {
-    const tickets = useTicketStore()
-    delete tickets.byUser[DEMO_ACCOUNT.email]
-    delete tickets.seeded[DEMO_ACCOUNT.email]
-  })
+    // ---- علاقه‌مندی‌ها ----
+    seed('علاقه‌مندی‌ها', () => {
+      useWishlistStore().slugs = [...demoWishlistSlugs]
+    }),
 
-  // ---- حساب کاربری دمو ----
-  await seed('حساب کاربری', async () => {
-    const auth = useAuthStore()
-    auth.profiles[DEMO_ACCOUNT.email] = { ...demoProfile }
-    auth.avatars[DEMO_ACCOUNT.email] = demoAvatar()
+    // ---- انجمن: فالو، لایک و یک کامنت از طرف کاربر دمو ----
+    seed('انجمن', () => {
+      const community = useCommunityStore()
+      community.posts = getMockPosts().map((post) => {
+        const shouldLike = demoCommunity.likedPostIds.includes(post.id) && !post.likedByMe
+        return shouldLike ? { ...post, likedByMe: true, likesCount: post.likesCount + 1 } : post
+      })
+      community.comments = {}
+      community.followingIds = new Set(demoCommunity.followingIds)
+      // اول کامنت‌های seed بارگذاری می‌شن تا اضافه‌کردن کامنت جدید اون‌ها رو پاک نکنه
+      community.loadComments(demoCommunity.comment.postId)
+      community.addComment(demoCommunity.comment.postId, demoCommunity.comment.content)
+    }),
 
-    // به ساختار auth.user اعتماد نمی‌کنیم: مقدار قدیمی/خراب (مثلاً رشته‌ی "[object Object]" که نسخه‌های
-    // قبلی استور توی localStorage می‌نوشتن) ایمیل نداره و حساب‌نشده حساب می‌شه.
-    const rawUser = auth.user as unknown
-    const currentEmail = rawUser && typeof rawUser === 'object' && typeof (rawUser as { email?: unknown }).email === 'string'
-      ? (rawUser as { email: string }).email.trim().toLowerCase()
-      : ''
+    // ---- تیکت‌ها: seed خودِ استور (ensureSeeded) موقع ورود به صفحه‌ی تیکت‌ها دوباره ۳ تیکت می‌سازه ----
+    seed('تیکت‌ها', () => {
+      const tickets = useTicketStore()
+      delete tickets.byUser[DEMO_ACCOUNT.email]
+      delete tickets.seeded[DEMO_ACCOUNT.email]
+    }),
 
-    // اگه کاربر واقعی دیگه‌ای لاگین باشه، خرابش نمی‌کنیم
-    if (!currentEmail || currentEmail === DEMO_ACCOUNT.email) {
-      const ok = await auth.login(DEMO_ACCOUNT.email, DEMO_ACCOUNT.password)
-      if (ok && !DEMO_AUTO_LOGIN) auth.logout()
-      auth.error = ''
-    }
-  })
+    // ---- حساب کاربری دمو ----
+    seed('حساب کاربری', async () => {
+      const auth = useAuthStore()
+      auth.profiles[DEMO_ACCOUNT.email] = { ...demoProfile }
+      auth.avatars[DEMO_ACCOUNT.email] = demoAvatar()
+
+      // به ساختار auth.user اعتماد نمی‌کنیم: مقدار قدیمی/خراب (مثلاً رشته‌ی "[object Object]" که نسخه‌های
+      // قبلی استور توی localStorage می‌نوشتن) ایمیل نداره و حساب‌نشده حساب می‌شه.
+      const rawUser = auth.user as unknown
+      const currentEmail = rawUser && typeof rawUser === 'object' && typeof (rawUser as { email?: unknown }).email === 'string'
+        ? (rawUser as { email: string }).email.trim().toLowerCase()
+        : ''
+
+      // اگه کاربر واقعی دیگه‌ای لاگین باشه، خرابش نمی‌کنیم
+      if (!currentEmail || currentEmail === DEMO_ACCOUNT.email) {
+        const ok = await auth.login(DEMO_ACCOUNT.email, DEMO_ACCOUNT.password)
+        if (ok && !DEMO_AUTO_LOGIN) auth.logout()
+        auth.error = ''
+      }
+    }),
+  ])
 
   try {
     localStorage.setItem(FLAG_KEY, DEMO_SEED_VERSION)

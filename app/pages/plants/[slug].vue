@@ -436,6 +436,7 @@ onUnmounted(() => {
 
         <div class="mt-auto pt-2">
           <button
+            v-offscreen-pause
             type="button"
             class="btn-shimmer group relative flex h-11 w-full sm:w-auto items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-primary-600 px-6 font-bold text-white shadow-md shadow-primary-600/20 transition-all hover:bg-primary-500 hover:shadow-lg hover:shadow-primary-600/30 active:scale-95"
             @click="addToGarden"
@@ -462,6 +463,7 @@ onUnmounted(() => {
 
           <span
             v-if="confidenceLabel"
+            v-offscreen-pause
             class="badge-shimmer relative inline-flex shrink-0 items-center gap-1.5 overflow-hidden rounded-full border border-primary-500/20 bg-primary-500/10 px-3 py-1 text-xs font-black text-primary-700 shadow-sm"
           >
             <Icon name="lucide:badge-check" class="size-4 text-primary-600" />

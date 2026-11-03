@@ -94,6 +94,7 @@ watch(activeLocale, () => {
 
 <template>
   <section
+    v-offscreen-pause
     class="finder-scene relative isolate flex min-h-[400px] flex-col justify-center overflow-hidden rounded-2xl p-6 text-white sm:min-h-[460px] sm:p-10"
     aria-labelledby="plant-finder-title"
   >

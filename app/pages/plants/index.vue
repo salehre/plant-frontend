@@ -68,8 +68,11 @@ watch(
   () => plantStore.family,
   async () => {
     plantStore.genus = 'all'
-    await plantStore.fetchFilterOptions(t('errors.plantFilters'))
-    await plantStore.fetchList(activeLocale.value, t('errors.plantList'))
+    // گزینه‌های فیلتر و لیست نتایج به هم وابسته نیستن (هر دو فقط family/genus فعلی رو می‌خونن)
+    await Promise.all([
+      plantStore.fetchFilterOptions(t('errors.plantFilters')),
+      plantStore.fetchList(activeLocale.value, t('errors.plantList')),
+    ])
   },
 )
 
@@ -106,6 +109,7 @@ function resetFilters() {
   <div class="relative mx-auto max-w-6xl pt-3">
     <!-- ✨ پس‌زمینه‌ی تزئینی (هاله‌های محو) -->
     <div
+      v-offscreen-pause
       aria-hidden="true"
       class="pointer-events-none absolute inset-x-0 -top-16 h-56"
     >
@@ -311,6 +315,7 @@ function resetFilters() {
         <div
           v-else
           key="empty"
+          v-offscreen-pause
           class="flex flex-col items-center gap-5 py-20 text-center"
         >
           <div class="relative">

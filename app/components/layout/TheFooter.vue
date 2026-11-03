@@ -40,7 +40,7 @@ function subscribeToNewsletter() {
 </script>
 
 <template>
-  <footer class="relative overflow-hidden rounded-t-lg bg-primary-900 pb-24 text-white md:pb-0">
+  <footer v-offscreen-pause class="relative overflow-hidden rounded-t-lg bg-primary-900 pb-24 text-white md:pb-0">
     <!-- تزئین برگ -->
     <img
       loading="lazy"
@@ -174,10 +174,10 @@ function subscribeToNewsletter() {
 
       <!-- نوار پایین -->
       <div class="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/10 pt-5 text-xs text-white/60">
-        <p>
+        <!-- <p>
           {{ t('components.theFooter.poweredBy') }}
           <span class="text-white">صالح رضایی</span>
-        </p>
+        </p> -->
         <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <button
             type="button"

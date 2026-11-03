@@ -180,6 +180,7 @@ onMounted(() => {
   <div class="relative">
     <!-- بک‌گراند شناور -->
     <div
+      v-offscreen-pause
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >

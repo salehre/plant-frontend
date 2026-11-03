@@ -92,7 +92,7 @@ const cards = [
 <template>
   <div class="support-page mx-auto flex max-w-6xl flex-col gap-8 pb-6">
     <!-- هیرو و جستجو -->
-    <section class="support-hero relative isolate overflow-hidden rounded-[19px] bg-primary-900 text-white">
+    <section v-offscreen-pause class="support-hero relative isolate overflow-hidden rounded-[19px] bg-primary-900 text-white">
       <img
         src="/images/plants/header.webp"
         alt=""
@@ -296,7 +296,8 @@ const cards = [
     <!-- هنوز کمک می‌خوای؟ -->
     <section
       ref="ctaSection"
-      class="support-cta relative isolate overflow-hidden rounded-2xl bg-primary-50 p-6 dark:bg-primary-900/20 sm:p-8"
+      v-offscreen-pause
+      class="cv-auto support-cta relative isolate overflow-hidden rounded-2xl bg-primary-50 p-6 dark:bg-primary-900/20 sm:p-8"
       @pointermove="onCtaPointerMove"
       @pointerleave="onCtaPointerLeave"
     >

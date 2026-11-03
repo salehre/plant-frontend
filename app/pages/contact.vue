@@ -180,6 +180,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="contact-page mx-auto max-w-6xl">
     <div
+      v-offscreen-pause
       class="contact-atmosphere"
       aria-hidden="true"
     >
@@ -482,7 +483,8 @@ onBeforeUnmount(() => {
 
     <!-- آدرس و نقشه -->
     <section
-      class="reveal contact-location glass-card mt-6 grid grid-cols-1 gap-6 overflow-hidden p-5 sm:p-8 md:grid-cols-5"
+      v-offscreen-pause
+      class="cv-auto reveal contact-location glass-card mt-6 grid grid-cols-1 gap-6 overflow-hidden p-5 sm:p-8 md:grid-cols-5"
       style="--enter-delay: 520ms"
       :aria-label="t('contact.addressLabel')"
     >

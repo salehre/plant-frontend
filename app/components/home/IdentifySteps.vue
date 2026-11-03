@@ -14,7 +14,7 @@ function formatNumber(value: number) {
 </script>
 
 <template>
-  <section class="relative isolate overflow-hidden rounded-[32px] bg-primary-900 px-4 py-12 text-white shadow-2xl sm:px-8 sm:py-16">
+  <section v-offscreen-pause class="relative isolate overflow-hidden rounded-[32px] bg-primary-900 px-4 py-12 text-white shadow-2xl sm:px-8 sm:py-16">
 
     <!-- فضای زنده پس‌زمینه -->
     <div
