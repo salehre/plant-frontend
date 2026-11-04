@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { getMockDiseases } from '~/services/mock/diseases.mock'
 
 const homeRoot = ref<HTMLElement | null>(null)
@@ -13,7 +13,7 @@ const { t, locale } = useI18n()
 const activeLocale = computed(() => locale.value === 'fa' ? 'fa' : 'en')
 const diseases = computed(() => getMockDiseases(activeLocale.value))
 const featured = computed(() => plantStore.featured)
-const { status: homeStatus } = useAsyncData(
+useAsyncData(
   'home-page-content',
   async () => {
     await Promise.all([
@@ -24,11 +24,6 @@ const { status: homeStatus } = useAsyncData(
   },
   { watch: [activeLocale] },
 )
-const homePending = computed(() => homeStatus.value === 'pending')
-const homePagePending = useState('home-page-pending', () => true)
-watch(homePending, (pending) => {
-  homePagePending.value = pending
-}, { immediate: true })
 
 async function setupSectionReveal() {
   if (revealSetupStarted) return
@@ -75,12 +70,8 @@ async function setupSectionReveal() {
   targets.forEach(element => revealObserver?.observe(element))
 }
 
-watch(homePending, (pending) => {
-  if (!pending) setupSectionReveal()
-}, { flush: 'post' })
-
 onMounted(() => {
-  if (!homePending.value) setupSectionReveal()
+  setupSectionReveal()
 })
 
 onBeforeUnmount(() => {
@@ -137,9 +128,7 @@ function onHeroCtaAnimationEnd(event: AnimationEvent) {
 </script>
 
 <template>
-  <HomePageSkeleton v-if="homePending" />
   <div
-    v-else
     ref="homeRoot"
     class="home-page flex flex-col gap-10"
   >

@@ -265,10 +265,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <PlantDetailSkeleton v-if="plantStore.loading" />
-
   <div
-    v-else-if="plant && detail"
+    v-if="plant && detail"
     ref="pageRoot"
     class="plant-detail-page text-readable pb-10"
   >
