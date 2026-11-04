@@ -645,7 +645,77 @@
       "sinceDate": "In your care since {date}",
       "careTasks": "Care tasks",
       "noTasks": "No care tasks have been scheduled for this plant.",
-      "notFound": "We couldn't find this plant."
+      "notFound": "We couldn't find this plant.",
+      "checkup": {
+        "title": "Add a new photo of your plant",
+        "hint": "Ideally shoot from the same angle as the previous photo for a more accurate comparison.",
+        "newPhoto": "New photo",
+        "previousPhoto": "Previous photo",
+        "newPhotoEmpty": "Your new photo will appear here once you pick one",
+        "dropTitle": "Drag and drop a photo or choose one from your gallery",
+        "takePhoto": "Take photo",
+        "fromGallery": "Choose from gallery",
+        "invalidFile": "Only image files are supported.",
+        "fileTooLarge": "The photo must be 8 MB or smaller.",
+        "processFailed": "We couldn't read that photo. Try another one.",
+        "analyzeFailed": "The check-up failed. Please try again.",
+        "resultTitle": "AI check-up result",
+        "idleText": "Once you add a new photo, the two photos are compared and your plant's check-up result shows up here.",
+        "analyzing": "Comparing the photos…",
+        "analyzingHint": "This takes a few seconds.",
+        "detailsTitle": "Analysis details",
+        "leaves": {
+          "label": "Leaf condition",
+          "healthier": "Healthier",
+          "same": "No change",
+          "worse": "Worse"
+        },
+        "disease": {
+          "label": "Signs of disease",
+          "none": "None detected",
+          "suspected": "Possible"
+        },
+        "action": {
+          "label": "Urgent action needed",
+          "none": "No",
+          "soon": "Soon",
+          "urgent": "Yes"
+        },
+        "verdict": {
+          "improving": {
+            "title": "Your plant is recovering!",
+            "text": "Yellow leaves have decreased and the plant looks healthier. To keep improving, we suggest continuing your current care routine."
+          },
+          "stable": {
+            "title": "Your plant is stable",
+            "text": "We didn't see a noticeable change between the two photos and the plant looks healthy. Keep up the same care."
+          },
+          "needs_review": {
+            "title": "Your plant needs a closer look",
+            "text": "There are a few early signs of stress on the leaves. It's worth re-checking its light and watering."
+          },
+          "declining": {
+            "title": "Your plant is getting worse",
+            "text": "Leaf damage has increased compared with the previous photo. Act soon, and talk to the plant doctor if the signs continue."
+          }
+        },
+        "nextTitle": "Suggested next step",
+        "next": {
+          "monitorSoil": "Keep checking the soil moisture over the next week",
+          "checkLight": "Check the plant's light and move it a little",
+          "adjustWatering": "Adjust the watering schedule and take another photo in 3 days",
+          "inspectLeaves": "Inspect the damaged leaves and keep the plant away from others"
+        },
+        "more": "Show more details",
+        "less": "Hide details",
+        "moreConfidence": "Analysis confidence: {value}",
+        "moreDisclaimer": "This result is an AI estimate and doesn't replace an expert's opinion.",
+        "askDoctor": "Ask the plant doctor",
+        "saveClose": "Save result and close",
+        "saved": "{name}'s check-up was saved",
+        "relatedTask": "Related task: {task}",
+        "photoAlt": "Photo of {name}"
+      }
     },
     "blog": {
       "title": "Blog",

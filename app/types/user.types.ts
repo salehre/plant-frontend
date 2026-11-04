@@ -24,6 +24,13 @@ export interface User {
   bio?: string
 }
 
+/** عکس‌های ثبت‌شده‌ی یک گیاه (برای مقایسه‌ی «قبلی / جدید» توی بررسی وضعیت) */
+export interface PlantPhoto {
+  id: string
+  url: string
+  takenAt: string
+}
+
 export interface UserPlant {
   id: string
   plantSlug: string
@@ -34,6 +41,7 @@ export interface UserPlant {
   healthStatus: 'healthy' | 'needs_attention' | 'sick'
   lastWateredAt: string | null
   nextWateringAt: string | null
+  photos?: PlantPhoto[]
 }
 
 export type TaskType = 'water' | 'fertilize' | 'prune' | 'repot' | 'mist'

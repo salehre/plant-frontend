@@ -45,6 +45,9 @@ const seedTasks: CareTask[] = [
   { id: 't5', userPlantId: 'up1', type: 'mist', dueDate: '2026-08-02', done: false },
 ]
 
+/** حداکثر تعداد عکس نگه‌داشته‌شده برای هر گیاه (localStorage ظرفیت محدود داره) */
+const MAX_PHOTOS = 8
+
 export const useUserPlantsStore = defineStore('userPlants', {
   state: () => ({
     // useLocalStorage: تا وصل‌شدن Backend، گیاه‌ها/تسک‌هایی که کاربر اضافه می‌کنه
@@ -72,6 +75,16 @@ export const useUserPlantsStore = defineStore('userPlants', {
         image: plant.photo,
         slug: plant.plantSlug || undefined,
       })
+    },
+    /** ذخیره‌ی نتیجه‌ی بررسی: عکس جدید به تاریخچه اضافه می‌شه و وضعیت سلامت گیاه به‌روز می‌شه */
+    saveCheckup(id: string, photoUrl: string, healthStatus: UserPlant['healthStatus']) {
+      const plant = this.plants.find(p => p.id === id)
+      if (!plant) return false
+      const photos = [...(plant.photos ?? []), { id: `ph${Date.now()}`, url: photoUrl, takenAt: new Date().toISOString() }]
+      plant.photos = photos.slice(-MAX_PHOTOS)
+      plant.photo = photoUrl
+      plant.healthStatus = healthStatus
+      return true
     },
     removePlant(id: string) {
       this.plants = this.plants.filter(p => p.id !== id)
